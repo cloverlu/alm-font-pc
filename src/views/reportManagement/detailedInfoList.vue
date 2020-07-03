@@ -229,16 +229,15 @@ export default {
       } else {
         return "否";
       }
-    },
-    handleSelectionChange(val) {
-      console.log(val.length);
-      this.multipleSelection = val;
-      if (val.length > 0) {
-        this.flag = false;
-      } else {
-        this.flag = true;
-      }
     }
+    // handleSelectionChange(val) {
+    //   this.multipleSelection = val;
+    //   if (val && val.length > 0) {
+    //     this.flag = false;
+    //   } else {
+    //     this.flag = true;
+    //   }
+    // }
   }
 };
 </script>
