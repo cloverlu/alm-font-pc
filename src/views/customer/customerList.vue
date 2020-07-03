@@ -53,68 +53,19 @@
 
 <script>
 import { filterParams } from "../../utils/utils";
+import { getCustomers } from "../../api/customer";
 export default {
   name: "customerList",
   data() {
     return {
-      tableData: [
-        {
-          id: 1,
-          custName: "王小虎",
-          custCode: "上海市普陀区金沙江路 1518 弄aaaaaaaaaaaaaaaa"
-        },
-        {
-          id: 2,
-          custName: "王er虎",
-          custCode: "上海市普陀区金沙江路 1518 弄aaaaaaaaaaaaaaaa"
-        },
-        {
-          id: 3,
-          custName: "王小虎",
-          custCode: "上海市普陀区金沙江路 1518 弄aaaaaaaaaaaaaaaa"
-        },
-        {
-          id: 4,
-          custName: "王小虎",
-          custCode: "上海市普陀区金沙江路 1518 弄aaaaaaaaaaaaaaaa"
-        },
-        {
-          id: 5,
-          custName: "王小虎",
-          custCode: "上海市普陀区金沙江路 1518 弄aaaaaaaaaaaaaaaa"
-        },
-        {
-          id: 6,
-          custName: "王小虎",
-          custCode: "上海市普陀区金沙江路 1518 弄aaaaaaaaaaaaaaaa"
-        },
-        {
-          id: 7,
-          custName: "王小虎",
-          custCode: "上海市普陀区金沙江路 1518 弄aaaaaaaaaaaaaaaa"
-        },
-        {
-          id: 8,
-          custName: "王小虎",
-          custCode: "上海市普陀区金沙江路 1518 弄aaaaaaaaaaaaaaaa"
-        },
-        {
-          id: 9,
-          custName: "王小虎",
-          custCode: "上海市普陀区金沙江路 1518 弄aaaaaaaaaaaaaaaa"
-        },
-        {
-          id: 10,
-          custName: "王小虎",
-          custCode: "上海市普陀区金沙江路 1518 弄aaaaaaaaaaaaaaaa"
-        }
-      ],
+      tableData: [],
       currentPageIndex: 1,
       currentPageSize: 10,
-      total: 400,
+      total: 10,
       currentItem: 1,
       searchForm: {
-        custName: "1"
+        custName: "",
+        queryType: 3
       },
       formLabelWidth: "72px"
     };
@@ -138,6 +89,15 @@ export default {
     onSubmit: function() {
       console.log(filterParams(this.searchForm));
       console.log(this.currentPageSize, this.currentPageIndex);
+      getCustomers(this, {
+        ...filterParams(this.searchForm)
+        // pageSize: this.pageSize,
+        // pageNo: this.pageNo
+      }).then(res => {
+        this.tableData = res.data.data;
+        this.total = res.data.total;
+        console.log(res);
+      });
     },
     link(row) {
       console.log(row);

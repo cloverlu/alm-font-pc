@@ -40,11 +40,26 @@
           </el-form-item>
 
           <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
+          <el-button type="primary" size="mini" @click="download" :disabled="flag">下载</el-button>
         </el-form>
       </div>
       <div class="userTable">
         <div class="tableBox">
-          <el-table stripe :data="tableData" border style="width: 99.9%" :fit="true">
+          <el-table
+            stripe
+            :data="tableData"
+            border
+            style="width: 99.9%"
+            :fit="true"
+            @selection-change="handleSelectionChange"
+          >
+            <el-table-column
+              header-align="center"
+              type="selection"
+              width="55px"
+              :selectable="selectable"
+            ></el-table-column>
+            <!-- v-if="row.bizstatus == 'inReview' || row.bizstatus == 'already'" -->
             <el-table-column
               header-align="center"
               prop="bizType"
@@ -101,18 +116,29 @@ export default {
           noticeDate: "2020/02/12",
           endDate: "2020/12/12",
           bizStatus: "shouldDo"
+        },
+        {
+          id: 1,
+          bizType: "m1",
+          custName: "m1",
+          billNo: "23123242",
+          noticeDate: "2020/02/12",
+          endDate: "2020/12/12",
+          bizStatus: "inReview"
         }
       ],
       currentPageIndex: 1,
       currentPageSize: 10,
-      total: 400,
+      total: 10,
       currentItem: 1,
+      flag: true,
       searchForm: {
         bizType: "m1",
         bizStatus: "shouldDo",
         custName: "xx"
       },
-      formLabelWidth: "72px"
+      formLabelWidth: "72px",
+      multipleSelection: []
     };
   },
   mounted() {
@@ -134,6 +160,27 @@ export default {
     onSubmit: function() {
       console.log(filterParams(this.searchForm));
       console.log(this.currentPageSize, this.currentPageIndex);
+    },
+    download() {
+      console.log("111");
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+      if (val && val.length > 0) {
+        this.flag = false;
+      } else {
+        this.flag = true;
+      }
+      console.log("val", this.multipleSelection);
+    },
+    selectable(row) {
+      let flag = true;
+      if (row.bizStatus == "inReview" || row.bizStatus == "already") {
+        flag = true;
+      } else {
+        flag = false;
+      }
+      return flag;
     },
     returnType(row) {
       switch (row.bizType) {
@@ -227,7 +274,7 @@ export default {
           margin-top: 13px;
           min-width: 30px;
           margin-left: 0;
-          margin-right: 5%;
+          margin-right: 10px;
           text-align: center;
           .el-button--primary {
             background: rgba(78, 120, 222, 1);

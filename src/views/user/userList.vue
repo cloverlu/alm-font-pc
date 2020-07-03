@@ -39,7 +39,14 @@
       </div>
       <div class="userTable">
         <div class="tableBox">
-          <el-table stripe :data="tableData" border style="width: 99.9%" :fit="true">
+          <el-table
+            stripe
+            :data="tableData"
+            border
+            style="width: 99.9%"
+            :fit="true"
+            :cell-dblclick="dblclick"
+          >
             <el-table-column
               cell-class-name
               header-align="center"
@@ -90,10 +97,10 @@
     >
       <el-form :model="form" ref="editForm">
         <el-form-item label="所属机构" prop="orgName" :label-width="formLabelWidth">
-          <el-input v-model="form.orgName" clearable></el-input>
+          <el-input v-model="form.orgName" clearable :disabled="type == 2"></el-input>
         </el-form-item>
         <el-form-item label="用户名称" prop="emplName" :label-width="formLabelWidth">
-          <el-input v-model="form.emplName" clearable></el-input>
+          <el-input v-model="form.emplName" clearable :disabled="type == 2"></el-input>
         </el-form-item>
         <el-form-item label="用户编码" prop="emplCode" :label-width="formLabelWidth">
           <el-input v-model="form.emplCode" clearable></el-input>
@@ -101,13 +108,20 @@
         <el-form-item label="通知标识" prop="noticeFlag" :label-width="formLabelWidth">
           <el-input v-model="form.noticeFlag" clearable></el-input>
         </el-form-item>
-        <el-form-item label="岗位名称" prop="postName" :label-width="formLabelWidth">
-          <el-input v-model="form.postName" clearable></el-input>
+        <el-form-item label="岗位名称" prop="postCode" :label-width="formLabelWidth">
+          <!-- <el-input v-model="form.postName" clearable></el-input> -->
+          <el-checkbox-group v-model="form.postCode">
+            <el-checkbox
+              v-for="item in postNameList"
+              :label="item.subCode"
+              :key="item.subCode"
+            >{{ item.showName }}</el-checkbox>
+          </el-checkbox-group>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="editOk('editForm')">确 认</el-button>
-        <el-button @click="() => editCancel('editForm', 2)">重 置</el-button>
+        <el-button @click="() => editCancel('editForm', 2)">取 消</el-button>
       </div>
     </el-dialog>
     <el-dialog
@@ -128,7 +142,14 @@
 
 <script>
 import { filterParams } from "../../utils/utils";
-import { getUsers } from "../../api/users";
+import {
+  getUsers,
+  addUser,
+  getPostList,
+  getUserDetail,
+  updateUser,
+  deleteUser
+} from "../../api/users";
 export default {
   name: "userList",
   data() {
@@ -136,11 +157,19 @@ export default {
       tableData: [],
       pageNo: 1,
       pageSize: 10,
-      total: 400,
+      total: 10,
       currentItem: 1,
       type: 1,
       dialogFormVisible: false,
       dialogVisible: false,
+      postNameList: [
+        // "系统管理岗" ,"第二经营主责任人岗","主管岗","贷后管理岗","贷后检查岗"
+        { showName: "系统管理岗", subCode: "10" },
+        { showName: "第二经营主责任人岗", subCode: "20" },
+        { showName: "主管岗", subCode: "21" },
+        { showName: "贷后管理岗", subCode: "22" },
+        { showName: "贷后检查岗", subCode: "23" }
+      ],
       searchForm: {
         orgName: "",
         postName: "",
@@ -149,7 +178,7 @@ export default {
       },
       form: {
         orgName: "",
-        postName: "",
+        postCode: [],
         emplName: "",
         emplCode: "",
         noticeFlag: ""
@@ -158,13 +187,15 @@ export default {
     };
   },
   mounted() {
-    // 进入页面先调用查询接口
+    // this.getPostListArr();
+    // // 进入页面先调用查询接口
     this.onSubmit();
   },
   methods: {
     // 修改分页大小
     handleSizeChange: function(e) {
       this.pageSize = e;
+      this.pageNo = 1;
       this.onSubmit();
       console.log("pageSize", this.pageSize);
     },
@@ -176,42 +207,48 @@ export default {
     },
     // 表单查询
     onSubmit: function() {
-      console.log(filterParams(this.searchForm));
-      // const date = JSON.stringify(filterParams(this.searchForm));
-      console.log(this.pageSize, this.pageNo);
       getUsers(this, {
         ...filterParams(this.searchForm),
         pageSize: this.pageSize,
         pageNo: this.pageNo
       }).then(res => {
         this.tableData = res.data.data;
-        console.log(res);
+        this.total = res.data.total;
       });
-      // this.$axios.get(`/alm/employee/getListByParams`, {
-      //   params: filterParams(this.searchForm)
-      // });
+    },
+    // 获取岗位列表
+    getPostListArr() {
+      getPostList(this).then(res => {
+        if (res && res.data && res.data.data) {
+          this.postNameList = res.data.data;
+          console.log(res.data.data);
+        }
+      });
     },
     // 新建按钮-触发弹窗
     add: function() {
       this.currentItem = {};
       this.dialogFormVisible = true;
       this.type = 1;
-      this.form = {};
+      this.form = {
+        postCode: []
+      };
       console.log(1);
     },
     // 编辑按钮-触发弹窗
     handleEdit: function(item) {
       this.currentItem = item.id;
-      this.dialogFormVisible = true;
-      this.type = 2;
-      this.form = {
-        orgName: item.orgName,
-        postName: item.postName,
-        emplName: item.emplName,
-        emplCode: item.emplCode,
-        noticeFlag: item.noticeFlag
-      };
-      console.log(item.id, this.currentItem);
+      getUserDetail(this, { id: item.id }).then(res => {
+        console.log(res.data.data);
+        this.form.orgName = res.data.data.orgName;
+        this.form.emplName = res.data.data.emplName;
+        this.form.emplCode = res.data.data.emplCode;
+        this.form.noticeFlag = res.data.data.noticeFlag;
+        this.form.postCode = res.data.data.postCode.split(",");
+        this.dialogFormVisible = true;
+        this.type = 2;
+        console.log(this.type == 2);
+      });
     },
     // 删除按钮-触发弹窗
     handleDelete: function(item) {
@@ -221,8 +258,9 @@ export default {
     },
     // 新建编辑弹窗的 重置按钮
     editCancel: function(refname) {
-      // this.dialogFormVisible = false;
-      this.form = {};
+      this.form = {
+        postCode: []
+      };
       this.$refs[refname].resetFields();
       this.dialogFormVisible = false;
       this.type = 1;
@@ -230,16 +268,31 @@ export default {
     },
     // 新建编辑弹窗的 确认按钮
     editOk: function(refname) {
+      this.form.postCode = this.form.postCode.join(",");
       if (this.type === 1) {
         // 新建
         console.log("新建");
+        addUser(this, {
+          ...filterParams(this.form)
+        }).then(() => {
+          this.onSubmit();
+        });
       } else {
         // 编辑
         console.log("编辑");
+        updateUser(this, {
+          ...filterParams(this.form),
+          id: this.currentItem
+        }).then(() => {
+          this.onSubmit();
+        });
       }
+
       this.dialogFormVisible = false;
       this.$refs[refname].resetFields();
-      this.form = {};
+      this.form = {
+        postCode: []
+      };
       this.type = 1;
     },
     // 删除弹窗的 取消按钮
@@ -249,8 +302,19 @@ export default {
     },
     // 删除弹窗的 确认按钮
     deleteOk: function() {
-      this.dialogVisible = false;
-      this.currentItem = "";
+      deleteUser(this, { id: this.currentItem })
+        .then(res => {
+          console.log(res);
+          this.dialogVisible = false;
+          this.currentItem = "";
+        })
+        .then(() => {
+          this.onSubmit();
+        });
+    },
+    // 双击复制
+    dblclick(row, column, cell) {
+      console.log(cell);
     }
   }
 };
@@ -500,7 +564,7 @@ export default {
       .el-form {
         width: 421px;
         margin: auto;
-        height: 224px;
+        // height: 224px;
         .el-form-item {
           height: 28px;
           margin-bottom: 21px;
@@ -509,13 +573,17 @@ export default {
             line-height: 38px;
           }
           .el-form-item__content {
-            height: 28px;
+            // height: 28px;
             .el-input {
               height: 28px;
               .el-input__inner {
                 height: 28px;
                 margin-top: -2px;
               }
+            }
+            .el-checkbox-group {
+              height: 28px;
+              line-height: 28px;
             }
           }
         }

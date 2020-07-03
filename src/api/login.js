@@ -1,4 +1,5 @@
 // 登陆
-const login = ({ $axios }, data) => $axios.get(`/alm/empl/logInOrlogOut`, data);
+const login = ({ $axios }, data) =>
+  $axios.post(`/alm/empl/logInOrlogOut`, data);
 
 export { login };
