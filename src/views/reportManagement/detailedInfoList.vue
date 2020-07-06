@@ -16,140 +16,108 @@
           size="mini"
           class="demo-form-inline formBox"
         >
-          <el-form-item label="开始日期" class="formItem4">
-            <!-- <el-input v-model="searchForm.custName" clearable></el-input> -->
-            <el-date-picker
-              v-model="searchForm.startDate"
-              style="width:100%"
-              type="date"
-              placeholder="选择日期"
-              clearable
-            ></el-date-picker>
-          </el-form-item>
-          <el-form-item label="结束日期" class="formItem4">
-            <el-date-picker
-              v-model="searchForm.endDate"
-              style="width:100%"
-              type="date"
-              placeholder="选择日期"
-              clearable
-            ></el-date-picker>
-          </el-form-item>
-          <el-form-item label="机构名称" class="formItem4">
-            <el-input v-model="searchForm.orgName" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="管户名称" class="formItem4">
-            <el-input v-model="searchForm.emplName" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="检查类型" class="formItem4">
-            <el-select v-model="searchForm.bizType" clearable style="width:100%">
-              <el-option label="类型1" value="1"></el-option>
-              <el-option label="类型2" value="2"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="完成状态" class="formItem4">
-            <el-select v-model="searchForm.bizStatus" clearable style="width:100%">
-              <el-option label="已完成" value="1"></el-option>
-              <el-option label="进行中" value="2"></el-option>
-            </el-select>
-          </el-form-item>
-          <div class="btn">
-            <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
-            <el-button size="mini" @click="output">导出</el-button>
-          </div>
+          <el-row :gutter="20">
+            <el-col :span="6">
+              <el-form-item label="开始日期" class="formItem4">
+                <el-date-picker
+                  v-model="searchForm.startDate"
+                  style="width:100%"
+                  type="date"
+                  placeholder="选择日期"
+                  clearable
+                ></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="结束日期" class="formItem4">
+                <el-date-picker
+                  v-model="searchForm.endDate"
+                  style="width:100%"
+                  type="date"
+                  placeholder="选择日期"
+                  clearable
+                ></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="机构名称" class="formItem4">
+                <el-input v-model="searchForm.orgName" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="管户名称" class="formItem4">
+                <el-input v-model="searchForm.emplName" clearable></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="6">
+              <el-form-item label="检查类型" class="formItem4">
+                <el-select v-model="searchForm.bizType" clearable style="width:100%">
+                  <el-option label="小企业授信业务首次跟踪检查" value="m1"></el-option>
+                  <el-option label="小企业授信业务贷后例行检查" value="m2"></el-option>
+                  <el-option label="小企业授信业务贷后全面检查" value="m3"></el-option>
+                  <el-option label="小企业授信业务还款资金落实情况检查" value="m4"></el-option>
+                  <el-option label="小企业法人快捷贷首次检查" value="m5"></el-option>
+                  <el-option label="小企业法人快捷贷贷后日常检查" value="m6"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="完成状态" class="formItem4">
+                <el-select v-model="searchForm.bizStatus" clearable style="width:100%">
+                  <el-option label="已完成" value="complete"></el-option>
+                  <el-option label="进行中" value="inReview"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <div class="btn">
+                <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
+                <el-button size="mini" @click="onClear">重置</el-button>
+                <el-button type="primary" size="mini" @click="output">导出</el-button>
+              </div>
+            </el-col>
+          </el-row>
         </el-form>
       </div>
       <div class="userTable">
         <div class="tableBox">
           <el-table stripe :data="tableData" border style="width: 99.9%" :fit="true">
             <!-- <el-table-column header-align="center" type="selection" width="55px"></el-table-column> -->
-            <el-table-column header-align="center" prop="orgName" label="机构名称" min-width="10%"></el-table-column>
+            <el-table-column header-align="center" prop="orgName" label="机构名称" min-width="19%"></el-table-column>
             <el-table-column
               header-align="center"
-              prop="custCode"
-              :formatter="() => returnBoolean('custCode')"
+              prop="bizType"
+              :formatter="returnType"
               label="检查类型"
               min-width="8%"
             ></el-table-column>
             <el-table-column
               header-align="center"
-              prop="custCode"
-              :formatter="() => returnBoolean('custCode')"
+              prop="bizStatus"
+              :formatter="returnStatus"
               label="完成状态"
               min-width="8%"
             ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="custCode"
-              :formatter="() => returnBoolean('custCode')"
-              label="管户客户经理"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="custCode"
-              :formatter="() => returnBoolean('custCode')"
-              label="客户名称"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="custCode"
-              :formatter="() => returnBoolean('custCode')"
-              label="借据编号"
-              min-width="9%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="custCode"
-              :formatter="() => returnBoolean('custCode')"
-              label="借据金额"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="custCode"
-              :formatter="() => returnBoolean('custCode')"
-              label="借据起期"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="custCode"
-              :formatter="() => returnBoolean('custCode')"
-              label="借据止期"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="custCode"
-              :formatter="() => returnBoolean('custCode')"
-              label="借据余额"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="custCode"
-              :formatter="() => returnBoolean('custCode')"
-              label="完成时间"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="custCode"
-              :formatter="() => returnBoolean('custCode')"
-              label="应完成时间"
-              min-width="8%"
-            ></el-table-column>
+            <el-table-column header-align="center" prop="emplName" label="管户客户经理" min-width="9%"></el-table-column>
+            <el-table-column header-align="center" prop="custName" label="客户名称" min-width="8%"></el-table-column>
+            <el-table-column header-align="center" prop="billNo" label="借据编号" min-width="9%"></el-table-column>
+            <el-table-column header-align="center" prop="billAmout" label="借据金额" min-width="8%"></el-table-column>
+            <el-table-column header-align="center" prop="billBeginDate" label="借据起期" min-width="8%"></el-table-column>
+            <el-table-column header-align="center" prop="billEndDate" label="借据止期" min-width="8%"></el-table-column>
+            <el-table-column header-align="center" prop="billBlance" label="借据余额" min-width="8%"></el-table-column>
+            <el-table-column header-align="center" prop="dealDate" label="完成时间" min-width="8%"></el-table-column>
+            <el-table-column header-align="center" prop="bizEndDate" label="应完成时间" min-width="8%"></el-table-column>
           </el-table>
         </div>
         <div class="block">
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page="currentPageIndex"
+            :current-page="pageNo"
             :page-sizes="[10, 20, 40]"
-            :page-size="currentPageSize"
+            :page-size="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total"
           ></el-pagination>
@@ -161,19 +129,14 @@
 
 <script>
 import { filterParams } from "../../utils/utils";
+import { getReportFormList } from "../../api/report";
 export default {
   name: "detailedInfoList",
   data() {
     return {
-      tableData: [
-        {
-          id: 1,
-          orgName: "王小虎",
-          custCode: "1"
-        }
-      ],
-      currentPageIndex: 1,
-      currentPageSize: 10,
+      tableData: [],
+      pageNo: 1,
+      pageSize: 10,
       total: 400,
       currentItem: 1,
       searchForm: {
@@ -197,13 +160,13 @@ export default {
   methods: {
     // 修改分页大小
     handleSizeChange: function(e) {
-      this.currentPageSize = e;
-      console.log("pageSize", this.currentPageSize);
+      this.pageSize = e;
+      this.onSubmit();
     },
     // 翻页
     handleCurrentChange: function(e) {
-      this.currentPageIndex = e;
-      console.log("pageIndex", this.currentPageIndex);
+      this.pageNo = e;
+      this.onSubmit();
     },
     // 表单查询
     onSubmit: function() {
@@ -217,17 +180,47 @@ export default {
           "L"
         );
       }
-      console.log(filterParams(this.searchForm));
-      console.log(this.currentPageSize, this.currentPageIndex);
+      getReportFormList(this, {
+        ...filterParams(this.searchForm),
+        pageSize: this.pageSize,
+        pageNo: this.pageNo
+      }).then(res => {
+        this.tableData = res.data.data;
+        this.total = res.data.total;
+      });
     },
+    // 重置
+    onClear() {
+      this.searchForm = {};
+    },
+    // 下载
     output() {
       console.log(this.multipleSelection);
     },
-    returnBoolean(type) {
-      if (type === "1") {
-        return "是";
-      } else {
-        return "否";
+    returnType(row) {
+      switch (row.bizType) {
+        case "m1":
+          return "小企业授信业务首次跟踪检查";
+        case "m2":
+          return "小企业授信业务贷后例行检查";
+        case "m3":
+          return "小企业授信业务贷后全面检查";
+        case "m4":
+          return "小企业授信业务还款资金落实情况检查";
+        case "m5":
+          return "小企业法人快捷贷首次检查";
+        case "m6":
+          return "小企业法人快捷贷贷后日常检查";
+      }
+    },
+    returnStatus(row) {
+      switch (row.bizStatus) {
+        case "new":
+          return "新增";
+        case "inReview":
+          return "审批中";
+        case "complete":
+          return "完成";
       }
     }
     // handleSelectionChange(val) {
@@ -276,15 +269,16 @@ export default {
         width: 100%;
         font-size: 12px;
         padding-left: 14px;
+        padding-right: 14px;
         font-family: Source Han Sans CN;
         font-weight: 500;
         color: rgba(102, 102, 102, 1);
         opacity: 1;
         .formItem4 {
           display: inline-block;
-          width: 24%;
+          width: 100%;
           margin: 0;
-          padding-right: 10px;
+          // padding-right: 10px;
         }
         /deep/.el-form-item {
           margin-bottom: 0;
@@ -299,10 +293,11 @@ export default {
         .btn {
           display: inline-block;
           box-sizing: border-box;
-          // width: calc(16% - 14px);
+          width: 100%;
+          text-align: right;
           height: 100%;
           line-height: 50px;
-          padding-left: 20px;
+          // padding-left: 20px;
           /deep/.el-button {
             width: 66px;
             height: 28px;
@@ -311,6 +306,9 @@ export default {
             margin-left: 0;
             margin-right: 20px;
             text-align: center;
+            &:last-of-type {
+              margin-right: 0;
+            }
             .el-button--primary {
               background: rgba(78, 120, 222, 1);
               /deep/span {

@@ -19,21 +19,32 @@
           size="mini"
           class="demo-form-inline formBox"
         >
-          <el-form-item label="所属机构" class="formItem5">
-            <el-input v-model="searchForm.orgName" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="岗位名称" class="formItem5">
-            <el-input v-model="searchForm.postName" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="用户名称" class="formItem5">
-            <el-input v-model="searchForm.emplName" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="用户编码" class="formItem5">
-            <el-input v-model="searchForm.emplCode" clearable></el-input>
-          </el-form-item>
+          <el-row :gutter="20">
+            <el-col :span="6">
+              <el-form-item label="所属机构" class="formItem5">
+                <el-input v-model="searchForm.orgName" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="岗位名称" class="formItem5">
+                <el-input v-model="searchForm.postName" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="用户名称" class="formItem5">
+                <el-input v-model="searchForm.emplName" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="用户编码" class="formItem5">
+                <el-input v-model="searchForm.emplCode" clearable></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <div class="btn">
             <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
-            <el-button size="mini" @click="() => add(1)">新增</el-button>
+            <el-button size="mini" @click="onClear">重置</el-button>
+            <el-button type="primary" size="mini" @click="() => add()">新增</el-button>
           </div>
         </el-form>
       </div>
@@ -97,13 +108,13 @@
     >
       <el-form :model="form" ref="editForm">
         <el-form-item label="所属机构" prop="orgName" :label-width="formLabelWidth">
-          <el-input v-model="form.orgName" clearable :disabled="type == 2"></el-input>
+          <el-input v-model="form.orgName" clearable></el-input>
         </el-form-item>
         <el-form-item label="用户名称" prop="emplName" :label-width="formLabelWidth">
           <el-input v-model="form.emplName" clearable :disabled="type == 2"></el-input>
         </el-form-item>
         <el-form-item label="用户编码" prop="emplCode" :label-width="formLabelWidth">
-          <el-input v-model="form.emplCode" clearable></el-input>
+          <el-input v-model="form.emplCode" clearable :disabled="type == 2"></el-input>
         </el-form-item>
         <el-form-item label="通知标识" prop="noticeFlag" :label-width="formLabelWidth">
           <el-input v-model="form.noticeFlag" clearable></el-input>
@@ -235,6 +246,10 @@ export default {
       };
       console.log(1);
     },
+    // 重置
+    onClear() {
+      this.searchForm = {};
+    },
     // 编辑按钮-触发弹窗
     handleEdit: function(item) {
       this.currentItem = item.id;
@@ -346,22 +361,24 @@ export default {
     width: 100%;
     .userForm {
       box-sizing: border-box;
-      height: 53px;
+      height: 100px;
       width: 100%;
       .formBox {
         box-sizing: border-box;
+        position: relative;
         height: 100%;
         line-height: 53px;
         width: 100%;
         font-size: 12px;
         padding-left: 14px;
+        padding-right: 14px;
         font-family: Source Han Sans CN;
         font-weight: 500;
         color: rgba(102, 102, 102, 1);
         opacity: 1;
         .formItem5 {
           display: inline-block;
-          width: 20%;
+          width: 100%;
           margin: 0;
           padding-right: 10px;
         }
@@ -377,20 +394,24 @@ export default {
         }
         .btn {
           display: inline-block;
+          text-align: right;
           box-sizing: border-box;
-          width: calc(16% - 14px);
-          height: 100%;
-          line-height: 53px;
-          padding-left: 20px;
+          width: 100%;
+          height: 47px;
+          line-height: 47px;
+          // padding-left: 20px;
           /deep/.el-button {
-            width: 45%;
+            // width: 45%;
             // width: 66px;
             height: 28px;
             margin-top: 13px;
-            min-width: 30px;
+            min-width: 60px;
             margin-left: 0;
-            margin-right: 5%;
+            margin-right: 20px;
             text-align: center;
+            &:last-of-type {
+              margin-right: 0;
+            }
             .el-button--primary {
               background: rgba(78, 120, 222, 1);
               /deep/span {
@@ -421,7 +442,7 @@ export default {
     }
     .userTable {
       box-sizing: border-box;
-      min-height: calc(100% - 53px);
+      min-height: calc(100% - 100px);
       width: 100%;
       padding: 10px 14px;
       // overflow: auto;

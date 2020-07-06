@@ -16,11 +16,16 @@
           size="mini"
           class="demo-form-inline formBox"
         >
-          <el-form-item label="客户名称" class="formItem5">
-            <el-input v-model="searchForm.custName" clearable></el-input>
-          </el-form-item>
-
-          <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
+          <el-row :gutter="20">
+            <el-col :span="6">
+              <el-form-item label="客户名称" class="formItem5">
+                <el-input v-model="searchForm.custName" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
+            </el-col>
+          </el-row>
         </el-form>
       </div>
       <div class="userTable">
@@ -39,9 +44,9 @@
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page="currentPageIndex"
+            :current-page="pageNo"
             :page-sizes="[10, 20, 40]"
-            :page-size="currentPageSize"
+            :page-size="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total"
           ></el-pagination>
@@ -59,13 +64,16 @@ export default {
   data() {
     return {
       tableData: [],
-      currentPageIndex: 1,
-      currentPageSize: 10,
+      pageNo: 1,
+      pageSize: 10,
       total: 10,
       currentItem: 1,
       searchForm: {
         custName: "",
-        queryType: 3
+        queryType: "3",
+        emplCode: "",
+        emplName: "qqq",
+        orgName: "南京市"
       },
       formLabelWidth: "72px"
     };
@@ -77,22 +85,24 @@ export default {
   methods: {
     // 修改分页大小
     handleSizeChange: function(e) {
-      this.currentPageSize = e;
-      console.log("pageSize", this.currentPageSize);
+      this.pageSize = e;
+      this.onSubmit();
+      console.log("pageSize", this.pageSize);
     },
     // 翻页
     handleCurrentChange: function(e) {
-      this.currentPageIndex = e;
-      console.log("pageIndex", this.currentPageIndex);
+      this.pageNo = e;
+      this.onSubmit();
+      console.log("pageIndex", this.pageNo);
     },
     // 表单查询
     onSubmit: function() {
       console.log(filterParams(this.searchForm));
-      console.log(this.currentPageSize, this.currentPageIndex);
+      console.log(this.pageSize, this.pageNo);
       getCustomers(this, {
-        ...filterParams(this.searchForm)
-        // pageSize: this.pageSize,
-        // pageNo: this.pageNo
+        ...filterParams(this.searchForm),
+        pageSize: this.pageSize,
+        pageNo: this.pageNo
       }).then(res => {
         this.tableData = res.data.data;
         this.total = res.data.total;
@@ -144,15 +154,16 @@ export default {
         width: 100%;
         font-size: 12px;
         padding-left: 14px;
+        padding-right: 14px;
         font-family: Source Han Sans CN;
         font-weight: 500;
         color: rgba(102, 102, 102, 1);
         opacity: 1;
         .formItem5 {
           display: inline-block;
-          width: 25%;
+          width: 100%;
           margin: 0;
-          padding-right: 10px;
+          // padding-right: 10px;
         }
         /deep/.el-form-item {
           margin-bottom: 0;

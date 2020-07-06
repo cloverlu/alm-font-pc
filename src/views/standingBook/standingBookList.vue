@@ -19,27 +19,44 @@
           size="mini"
           class="demo-form-inline formBox"
         >
-          <el-form-item label="机构名称" class="formItem5">
-            <el-input v-model="searchForm.orgName" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="借据编号" class="formItem5">
-            <el-input v-model="searchForm.billNo" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="客户名称" class="formItem5">
-            <el-input v-model="searchForm.custName" clearable></el-input>
-          </el-form-item>
-          <div class="btn">
+          <el-row :gutter="20">
+            <el-col :span="6">
+              <el-form-item label="机构名称" class="formItem5">
+                <el-input v-model="searchForm.orgName" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="借据编号" class="formItem5">
+                <el-input v-model="searchForm.billNo" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="客户名称" class="formItem5">
+                <el-input v-model="searchForm.custName" clearable></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="24">
+              <div class="btn">
+                <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
+                <el-button size="mini" @click="onClear">重置</el-button>
+                <el-upload
+                  class="upload-demo fileUpload"
+                  ref="upload"
+                  action="http://20.147.168.83:9001/loanReceipt/uploadExcel"
+                  :auto-upload="true"
+                  :on-success="sendSuccess"
+                >
+                  <el-button slot="trigger" size="small" type="primary" @click="submitUpload">导入</el-button>
+                </el-upload>
+              </div>
+            </el-col>
+          </el-row>
+
+          <!-- <div class="btn">
             <el-button type="primary" size="small" @click="onSubmit">查询</el-button>
-            <el-upload
-              class="upload-demo fileUpload"
-              ref="upload"
-              action="http://20.147.168.83:9001/loanReceipt/uploadExcel"
-              :auto-upload="true"
-              :on-success="sendSuccess"
-            >
-              <el-button slot="trigger" size="small" type="primary" @click="submitUpload">导入</el-button>
-            </el-upload>
-          </div>
+          </div>-->
         </el-form>
         <!-- <el-upload
           class="upload-demo fileUpload"
@@ -158,6 +175,10 @@ export default {
       console.log(filterParams(this.searchForm));
       console.log(this.currentPageSize, this.currentPageIndex);
     },
+    // 重置
+    onClear() {
+      this.searchForm = {};
+    },
     sendSuccess() {
       this.$message({
         message: "文件导入操作成功",
@@ -202,7 +223,7 @@ export default {
     width: 100%;
     .userForm {
       box-sizing: border-box;
-      height: 53px;
+      height: 100px;
       width: 100%;
       .formBox {
         box-sizing: border-box;
@@ -211,16 +232,17 @@ export default {
         width: 100%;
         font-size: 12px;
         padding-left: 14px;
+        padding-right: 14px;
         font-family: Source Han Sans CN;
         font-weight: 500;
         color: rgba(102, 102, 102, 1);
         opacity: 1;
         .formItem5 {
           display: inline-block;
-          width: 24%;
-          max-width: 280px;
+          width: 100%;
+          // max-width: 280px;
           margin: 0;
-          padding-right: 10px;
+          // padding-right: 10px;
         }
         /deep/.el-form-item {
           margin-bottom: 0;
@@ -235,19 +257,20 @@ export default {
         .btn {
           display: inline-block;
           box-sizing: border-box;
-          width: 200px;
-          height: 100%;
-          line-height: 53px;
+          width: 100%;
+          text-align: right;
+          height: 47px;
+          line-height: 47px;
           // padding-left: 20px;
           /deep/.el-button {
             width: 66px;
             height: 28px;
             // line-height: 28px;
-            margin-top: 12px;
+            // margin-top: 12px;
             // min-width: 30px;
             // max-width: 66px;
-            margin-left: 0;
-            margin-right: 5%;
+            margin-left: 20px;
+            // margin-right: 5%;
             text-align: center;
             .el-button--primary {
               background: rgba(78, 120, 222, 1);
@@ -269,18 +292,18 @@ export default {
         // margin-left: 14px;
         position: relative;
         // width: 500px;
-        height: 53px;
+        height: 45px;
         /deep/.el-upload {
           // width: 100px;
-          height: 53px;
-          line-height: 53px;
-          padding-top: 2px;
+          height: 45px;
+          line-height: 47px;
+          // padding-top: 2px;
           /deep/.el-button {
             width: 66px;
             height: 28px;
-            margin-top: 12px;
-            margin-left: 0;
-            margin-right: 5%;
+            // margin-top: 13px;
+            margin-left: 20px;
+            // margin-right: 5%;
             text-align: center;
             .el-button--primary {
               background: rgba(78, 120, 222, 1);

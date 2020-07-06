@@ -17,7 +17,7 @@
           class="demo-form-inline formBox"
         >
           <el-form-item label="机构名称" class="formItem5">
-            <el-input v-model="searchForm.custName" clearable></el-input>
+            <el-input v-model="searchForm.orgName" clearable></el-input>
           </el-form-item>
 
           <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
@@ -29,28 +29,103 @@
             <el-table-column header-align="center" prop="orgName" label="机构名称" min-width="15%"></el-table-column>
             <el-table-column
               header-align="center"
-              prop="returnBoolean(custCode)"
+              prop="completeNumOfM1"
               label="首次检查按时完成"
               min-width="8%"
             ></el-table-column>
-            <el-table-column header-align="center" prop="custCode" label="首次检查超时完成" min-width="8%"></el-table-column>
-            <el-table-column header-align="center" prop="custCode" label="首次检查未完成" min-width="8%"></el-table-column>
-            <el-table-column header-align="center" prop="custCode" label="例行检查按时完成" min-width="8%"></el-table-column>
-            <el-table-column header-align="center" prop="custCode" label="例行检查超时完成" min-width="8%"></el-table-column>
-            <el-table-column header-align="center" prop="custCode" label="例行检查未完成" min-width="8%"></el-table-column>
-            <el-table-column header-align="center" prop="custCode" label="全面检查按时完成" min-width="8%"></el-table-column>
-            <el-table-column header-align="center" prop="custCode" label="全面检查超时完成" min-width="8%"></el-table-column>
-            <el-table-column header-align="center" prop="custCode" label="全面检查未完成" min-width="8%"></el-table-column>
-            <el-table-column header-align="center" prop="custCode" label="还款资金落实" min-width="8%"></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="overTimeCompleteNumOfM1"
+              label="首次检查超时完成"
+              min-width="8%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="notCompleteNumOfM1"
+              label="首次检查未完成"
+              min-width="8%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="completeNumOfM2"
+              label="例行检查按时完成"
+              min-width="8%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="overTimeCompleteNumOfM2"
+              label="例行检查超时完成"
+              min-width="8%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="notCompleteNumOfM2"
+              label="例行检查未完成"
+              min-width="8%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="completeNumOfM3"
+              label="全面检查按时完成"
+              min-width="8%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="overTimeCompleteNumOfM3"
+              label="全面检查超时完成"
+              min-width="8%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="notCompleteNumOfM3"
+              label="全面检查未完成"
+              min-width="8%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="completeNumOfM4"
+              label="还款资金落实按时完成"
+              min-width="8%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="overTimeCompleteNumOfM4"
+              label="还款资金落实超时完成"
+              min-width="8%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="notCompleteNumOfM4"
+              label="还款资金落实未完成"
+              min-width="8%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="completeNumOfM6"
+              label="日常检查按时完成"
+              min-width="8%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="overTimeCompleteNumOfM6"
+              label="日常检查超时完成"
+              min-width="8%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="notCompleteNumOfM6"
+              label="日常检查未完成"
+              min-width="8%"
+            ></el-table-column>
           </el-table>
         </div>
         <div class="block">
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page="currentPageIndex"
+            :current-page="pageNo"
             :page-sizes="[10, 20, 40]"
-            :page-size="currentPageSize"
+            :page-size="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total"
           ></el-pagination>
@@ -62,23 +137,18 @@
 
 <script>
 import { filterParams } from "../../utils/utils";
+import { getReportFormStatistics } from "../../api/report";
 export default {
   name: "statisticalInfoList",
   data() {
     return {
-      tableData: [
-        {
-          id: 1,
-          orgName: "王小虎",
-          custCode: "1"
-        }
-      ],
-      currentPageIndex: 1,
-      currentPageSize: 10,
-      total: 400,
+      tableData: [],
+      pageNo: 1,
+      pageSize: 10,
+      total: 10,
       currentItem: 1,
       searchForm: {
-        custName: "1"
+        orgName: ""
       },
       formLabelWidth: "72px"
     };
@@ -90,18 +160,28 @@ export default {
   methods: {
     // 修改分页大小
     handleSizeChange: function(e) {
-      this.currentPageSize = e;
-      console.log("pageSize", this.currentPageSize);
+      this.pageSize = e;
+      console.log("pageSize", this.pageSize);
+      this.onSubmit();
     },
     // 翻页
     handleCurrentChange: function(e) {
-      this.currentPageIndex = e;
-      console.log("pageIndex", this.currentPageIndex);
+      this.pageNo = e;
+      console.log("pageIndex", this.pageNo);
+      this.onSubmit();
     },
     // 表单查询
     onSubmit: function() {
       console.log(filterParams(this.searchForm));
-      console.log(this.currentPageSize, this.currentPageIndex);
+      console.log(this.pageSize, this.pageNo);
+      getReportFormStatistics(this, {
+        ...filterParams(this.searchForm),
+        pageSize: this.pageSize,
+        pageNo: this.pageNo
+      }).then(res => {
+        this.tableData = res.data.data;
+        this.total = res.data.total;
+      });
     },
     returnBoolean(type) {
       switch (type) {

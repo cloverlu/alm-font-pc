@@ -16,31 +16,41 @@
           size="mini"
           class="demo-form-inline formBox"
         >
-          <el-form-item label="业务名称" class="formItem5">
-            <el-select v-model="searchForm.bizType" clearable style="width:100%">
-              <el-option label="小企业授信业务首次跟踪检查" value="m1"></el-option>
-              <el-option label="小企业授信业务贷后例行检查" value="m2"></el-option>
-              <el-option label="小企业授信业务贷后全面检查" value="m3"></el-option>
-              <el-option label="小企业授信业务还款资金落实情况检查" value="m4"></el-option>
-              <el-option label="小企业法人快捷贷首次检查" value="m5"></el-option>
-              <el-option label="小企业法人快捷贷贷后日常检查" value="m6"></el-option>
-            </el-select>
-          </el-form-item>
+          <el-row :gutter="20">
+            <el-col :span="8">
+              <el-form-item label="业务名称" class="formItem5">
+                <el-select v-model="searchForm.bizType" clearable style="width:100%">
+                  <el-option label="小企业授信业务首次跟踪检查" value="m1"></el-option>
+                  <el-option label="小企业授信业务贷后例行检查" value="m2"></el-option>
+                  <el-option label="小企业授信业务贷后全面检查" value="m3"></el-option>
+                  <el-option label="小企业授信业务还款资金落实情况检查" value="m4"></el-option>
+                  <el-option label="小企业法人快捷贷首次检查" value="m5"></el-option>
+                  <el-option label="小企业法人快捷贷贷后日常检查" value="m6"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="状态" class="formItem5">
+                <el-select v-model="searchForm.bizStatus" clearable style="width:100%">
+                  <el-option label="应做" value="shouldDo"></el-option>
+                  <el-option label="未做" value="notDo"></el-option>
+                  <el-option label="审核中" value="inReview"></el-option>
+                  <el-option label="已做" value="already"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="客户名称" class="formItem5">
+                <el-input v-model="searchForm.custName" clearable></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
 
-          <el-form-item label="状态" class="formItem5">
-            <el-select v-model="searchForm.bizStatus" clearable style="width:100%">
-              <el-option label="应做" value="shouldDo"></el-option>
-              <el-option label="未做" value="notDo"></el-option>
-              <el-option label="审核中" value="inReview"></el-option>
-              <el-option label="已做" value="already"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="客户名称" class="formItem5">
-            <el-input v-model="searchForm.custName" clearable></el-input>
-          </el-form-item>
-
-          <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
-          <el-button type="primary" size="mini" @click="download" :disabled="flag">下载</el-button>
+          <div class="btn">
+            <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
+            <el-button size="mini" @click="onClear">重置</el-button>
+            <el-button type="primary" size="mini" @click="download" :disabled="flag">下载</el-button>
+          </div>
         </el-form>
       </div>
       <div class="userTable">
@@ -161,6 +171,10 @@ export default {
       console.log(filterParams(this.searchForm));
       console.log(this.currentPageSize, this.currentPageIndex);
     },
+    //
+    onClear() {
+      this.searchForm = {};
+    },
     download() {
       console.log("111");
     },
@@ -239,7 +253,7 @@ export default {
     width: 100%;
     .userForm {
       box-sizing: border-box;
-      height: 53px;
+      height: 100px;
       width: 100%;
       .formBox {
         box-sizing: border-box;
@@ -248,15 +262,16 @@ export default {
         width: 100%;
         font-size: 12px;
         padding-left: 14px;
+        padding-right: 14px;
         font-family: Source Han Sans CN;
         font-weight: 500;
         color: rgba(102, 102, 102, 1);
         opacity: 1;
         .formItem5 {
           display: inline-block;
-          width: 25%;
-          margin-right: 20px;
-          max-width: 310px;
+          width: 100%;
+          // margin-right: 20px;
+          // min-width: 310px;
         }
         /deep/.el-form-item {
           margin-bottom: 0;
@@ -268,24 +283,35 @@ export default {
             width: calc(100% - 60px);
           }
         }
-        /deep/.el-button {
-          width: 66px;
-          height: 28px;
-          margin-top: 13px;
-          min-width: 30px;
-          margin-left: 0;
-          margin-right: 10px;
-          text-align: center;
-          .el-button--primary {
-            background: rgba(78, 120, 222, 1);
-            /deep/span {
-              font-size: 14px;
-              font-family: Segoe UI;
-              font-weight: 400;
-              color: rgba(255, 255, 255, 1);
-              opacity: 1;
-              text-align: center;
-              padding: 0;
+        .btn {
+          display: inline-block;
+          text-align: right;
+          box-sizing: border-box;
+          width: 100%;
+          height: 47px;
+          line-height: 47px;
+          /deep/.el-button {
+            width: 66px;
+            height: 28px;
+            margin-top: 13px;
+            min-width: 30px;
+            margin-left: 0;
+            margin-right: 10px;
+            text-align: center;
+            &:last-of-type {
+              margin-right: 0;
+            }
+            .el-button--primary {
+              background: rgba(78, 120, 222, 1);
+              /deep/span {
+                font-size: 14px;
+                font-family: Segoe UI;
+                font-weight: 400;
+                color: rgba(255, 255, 255, 1);
+                opacity: 1;
+                text-align: center;
+                padding: 0;
+              }
             }
           }
         }

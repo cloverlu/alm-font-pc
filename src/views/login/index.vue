@@ -29,7 +29,7 @@
 </template>
 
 <script>
-// import { login } from "../../api/login";
+import { login } from "../../api/login";
 export default {
   // 组件名称
   name: "Login",
@@ -59,7 +59,7 @@ export default {
         emplCode: this.emplCode,
         password: this.password
       };
-      this.$axios.post(`/alm/empl/logInOrlogOut`, { ...params }).then(res => {
+      login(this, { ...params }).then(res => {
         if (res.data.returnCode === "200000") {
           const { emplCode, emplName, menuList } = res.data.data;
           console.log(res.data.data);
@@ -77,24 +77,6 @@ export default {
           });
         }
       });
-      // login(this, { ...params }).then(res => {
-      //   if (res.data.returnCode === "200000") {
-      //     const { emplCode, emplName, menuList } = res.data.data;
-      //     console.log(res.data.data);
-      //     // this.$cookies.set("emplCode", emplCode);
-      //     // this.$cookies.set("emplName", emplName);
-      //     // this.$cookies.set("menuList", JSON.stringify(menuList));
-      //     localStorage.setItem("emplCode", emplCode);
-      //     localStorage.setItem("emplName", emplName);
-      //     localStorage.setItem("menuList", JSON.stringify(menuList));
-      //     this.$router.push("/Layout/user/index");
-      //   } else {
-      //     this.$message({
-      //       message: "登陆失败",
-      //       type: "error"
-      //     });
-      //   }
-      // });
     }
   },
   mounted() {}
