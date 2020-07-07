@@ -63,23 +63,14 @@ export default {
   name: "iouList",
   data() {
     return {
-      tableData: [
-        {
-          id: 1,
-          custName: "m1",
-          billAmout: "10000",
-          billBlance: "3000",
-          billNo: "23123242",
-          billBeginDate: "2020/02/12",
-          billEndDate: "2020/12/12"
-        }
-      ],
+      tableData: [],
       pageNo: 1,
       pageSize: 10,
       total: 400,
       currentItem: 1,
       searchForm: {
         custName: "",
+        billNo: "",
         queryType: "2",
         emplCode: "",
         emplName: "qqq"
@@ -91,7 +82,12 @@ export default {
     // 进入页面先调用查询接口
     const { custName } = this.$route.query;
     if (custName) {
-      this.searchForm = { custName };
+      this.searchForm = {
+        custName,
+        queryType: "2",
+        emplCode: "",
+        emplName: "qqq"
+      };
     }
     this.onSubmit();
   },

@@ -129,7 +129,10 @@
 
 <script>
 import { filterParams } from "../../utils/utils";
-import { getReportFormList } from "../../api/report";
+import {
+  getReportFormList
+  //  outPutReport
+} from "../../api/report";
 export default {
   name: "detailedInfoList",
   data() {
@@ -137,7 +140,7 @@ export default {
       tableData: [],
       pageNo: 1,
       pageSize: 10,
-      total: 400,
+      total: 10,
       currentItem: 1,
       searchForm: {
         startDate: "",
@@ -161,11 +164,13 @@ export default {
     // 修改分页大小
     handleSizeChange: function(e) {
       this.pageSize = e;
+      console.log(111);
       this.onSubmit();
     },
     // 翻页
     handleCurrentChange: function(e) {
       this.pageNo = e;
+      console.log(222);
       this.onSubmit();
     },
     // 表单查询
@@ -195,7 +200,20 @@ export default {
     },
     // 下载
     output() {
-      console.log(this.multipleSelection);
+      const queryFormValues = this.searchForm;
+      // 调用接口
+      let queryStr = "";
+      Object.keys(queryFormValues).forEach(key => {
+        if (Boolean(queryFormValues[key]) !== false) {
+          queryStr += `&${key}=${queryFormValues[key]}`;
+        }
+      });
+      console.log(queryStr);
+      const url = `http://20.147.168.82:9001/postLoan/business/exportReportFormList?${queryStr}`;
+      window.location.href = url;
+      // outPutReport(this, {
+      //   ...filterParams(this.searchForm)
+      // });
     },
     returnType(row) {
       switch (row.bizType) {

@@ -69,7 +69,6 @@
               width="55px"
               :selectable="selectable"
             ></el-table-column>
-            <!-- v-if="row.bizstatus == 'inReview' || row.bizstatus == 'already'" -->
             <el-table-column
               header-align="center"
               prop="bizType"
@@ -99,9 +98,9 @@
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page="currentPageIndex"
+            :current-page="pageNo"
             :page-sizes="[10, 20, 40]"
-            :page-size="currentPageSize"
+            :page-size="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total"
           ></el-pagination>
@@ -113,39 +112,21 @@
 
 <script>
 import { filterParams } from "../../utils/utils";
+import { getTaskList } from "../../api/processManagement";
 export default {
   name: "processManagement",
   data() {
     return {
-      tableData: [
-        {
-          id: 1,
-          bizType: "m1",
-          custName: "m1",
-          billNo: "23123242",
-          noticeDate: "2020/02/12",
-          endDate: "2020/12/12",
-          bizStatus: "shouldDo"
-        },
-        {
-          id: 1,
-          bizType: "m1",
-          custName: "m1",
-          billNo: "23123242",
-          noticeDate: "2020/02/12",
-          endDate: "2020/12/12",
-          bizStatus: "inReview"
-        }
-      ],
-      currentPageIndex: 1,
-      currentPageSize: 10,
+      tableData: [],
+      pageNo: 1,
+      pageSize: 10,
       total: 10,
       currentItem: 1,
       flag: true,
       searchForm: {
-        bizType: "m1",
-        bizStatus: "shouldDo",
-        custName: "xx"
+        bizType: "",
+        bizStatus: "",
+        custName: ""
       },
       formLabelWidth: "72px",
       multipleSelection: []
@@ -158,25 +139,41 @@ export default {
   methods: {
     // 修改分页大小
     handleSizeChange: function(e) {
-      this.currentPageSize = e;
-      console.log("pageSize", this.currentPageSize);
+      this.pageSize = e;
+      console.log("pageSize", this.pageSize);
     },
     // 翻页
     handleCurrentChange: function(e) {
-      this.currentPageIndex = e;
-      console.log("pageIndex", this.currentPageIndex);
+      this.pageNo = e;
+      console.log("pageIndex", this.pageNo);
     },
     // 表单查询
     onSubmit: function() {
       console.log(filterParams(this.searchForm));
-      console.log(this.currentPageSize, this.currentPageIndex);
+      console.log(this.pageSize, this.pageNo);
+      getTaskList(this, {
+        ...filterParams(this.searchForm),
+        emplName: "金林" || localStorage.getItem("emplName"),
+        pageSize: this.pageSize,
+        pageNo: this.pageNo
+      }).then(res => {
+        this.tableData = res.data.data;
+        this.total = res.data.total;
+      });
     },
     //
     onClear() {
       this.searchForm = {};
+      this.multipleSelection = [];
     },
     download() {
-      console.log("111");
+      // console.log("111");
+      const arr = this.multipleSelection.map(item => item.bizId);
+      arr.map(item => {
+        window.open([
+          "http://20.147.168.86:9001/postLoan/model/downPdfFile?bizId=" + item
+        ]);
+      });
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;

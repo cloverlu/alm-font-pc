@@ -55,9 +55,9 @@
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page="currentPageIndex"
+            :current-page="pageNo"
             :page-sizes="[10, 20, 40]"
-            :page-size="currentPageSize"
+            :page-size="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total"
           ></el-pagination>
@@ -83,9 +83,9 @@ export default {
           endDate: "2020/12/12"
         }
       ],
-      currentPageIndex: 1,
-      currentPageSize: 10,
-      total: 400,
+      pageNo: 1,
+      pageSize: 10,
+      total: 10,
       currentItem: 1,
       searchForm: {
         custName: "1"
@@ -100,18 +100,18 @@ export default {
   methods: {
     // 修改分页大小
     handleSizeChange: function(e) {
-      this.currentPageSize = e;
-      console.log("pageSize", this.currentPageSize);
+      this.pageSize = e;
+      console.log("pageSize", this.pageSize);
     },
     // 翻页
     handleCurrentChange: function(e) {
-      this.currentPageIndex = e;
-      console.log("pageIndex", this.currentPageIndex);
+      this.pageNo = e;
+      console.log("pageIndex", this.pageNo);
     },
     // 表单查询
     onSubmit: function() {
       console.log(filterParams(this.searchForm));
-      console.log(this.currentPageSize, this.currentPageIndex);
+      console.log(this.pageSize, this.pageNo);
     },
     returnType(row) {
       switch (row.bizType) {

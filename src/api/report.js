@@ -6,4 +6,8 @@ const getReportFormStatistics = ({ $axios }, data) =>
 const getReportFormList = ({ $axios }, data) =>
   $axios.post(`/alm/postLoan/business/reportFormList`, data);
 
-export { getReportFormStatistics, getReportFormList };
+// 导出
+const outPutReport = ({ $axios }, data) =>
+  $axios.post(`/alm/postLoan/business/exportReportFormList`, data);
+
+export { getReportFormStatistics, getReportFormList, outPutReport };

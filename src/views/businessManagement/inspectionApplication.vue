@@ -23,76 +23,21 @@
               el-option(label="小企业法人快捷贷贷后日常检查" value="m6")
           el-button(type="primary" size="mini" @click="onSave" class="btn") 保存
       .contentBody
-        el-card(class='card' v-if="form.checkType == 'm4'")
-          el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
-            el-form-item(label="客户名称 :" class="formItem2")
-              el-input(v-model="form.custName" clearable)
-            el-form-item(label="贷款金额 :" class="formItem2")
-              el-input(v-model="form.loanAmout" clearable)
-            el-form-item(label="贷款余额 :" class="formItem2")
-              el-input(v-model="form.loanBalance" clearable)
-            el-form-item(label="贷款期限 :" class="formItem2")
-              el-input(v-model="form.loanLength" clearable)
-            el-form-item(label="还款方式 :" class="formItem2")
-              el-input(v-model="form.repayKind" clearable)
-            el-form-item(label="还款日期 :" class="formItem2")
-              el-date-picker(v-model="form.repayDate" style="width:100%" type="date" placeholder="选择日期" clearable)
-            el-form-item(label="还款金额 :" class="formItem2")
-              el-input(v-model="form.repayAmout" clearable)
+        .type(v-if="form.checkType == 'm1'")
+          div-m1
+        .type(v-if="form.checkType == 'm2'")
+          div-m2
+        .type(v-if="form.checkType == 'm3'")
+        .type(v-if="form.checkType == 'm4'")
+          div-m4
+        .type(v-if="form.checkType == 'm5'")
+          div-m5
+        .type(v-if="form.checkType == 'm6'")
 
-        el-card(class='card' v-if="form.checkType == 'm4'")
-          .cardTitle
-            span(class='blue')
-            span(class='title') 检查阶段
-          .cardContent
-            el-checkbox-group(v-model="check" @change='onChange')
-              el-checkbox(label="第一阶段" disabled)
-              el-checkbox(label="第二阶段")
-              el-checkbox(label="第三阶段")
-            
-          el-form(:model="form" v-for='item in check' :key='item' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
-            el-form-item(label="还款意愿 :" class="formItem2")
-              el-input(v-model="form.payIntention" clearable)
-            el-form-item(label="检查地点 :" class="formItem2")
-              el-input(v-model="form.checkAddr" clearable)
-            el-form-item(label="接待人员 :" class="formItem2")
-              el-input(v-model="form.staff" clearable)
-            el-form-item(label="还款资金来源 :" class="formItem2")
-              el-input(v-model="form.amoutSource" clearable)
-            el-form-item(label="预计还款/付息时间 :" class="formItem2")
-              el-date-picker(v-model="form.expectRepayDate" style="width:100%" type="date" placeholder="选择日期" clearable)
-            el-form-item(label="还款资金落实情况说明 :" class="formItem2")
-              el-input(v-model="form.practicableMsg" type="textarea" :rows="2" clearable)
-
-        el-card(class='card' v-if="form.checkType == 'm4'")
-          .cardTitle
-            span(class='blue')
-            span(class='title') 影像维护
-          .uploadBox(v-for='(item,index) in list' :key='item.index')
-            .imgTitle {{item.title}}
-            el-upload(action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
-              i(class="el-icon-plus")
-              //- 
-        el-card(class='card' v-if="form.checkType == 'm5'")
-          el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
-            el-form-item(label="客户名称 :" class="formItem2")
-              el-input(v-model="form.custName" clearable)
-            el-form-item(label="合同编号 :" class="formItem2")
-              el-input(v-model="form.contractNo" clearable)
-            el-form-item(label="授信业务小类 :" class="formItem2")
-              el-input(v-model="form.creditSubLoanKind" clearable)
-            el-form-item(label="贷款金额 :" class="formItem2")
-              el-input(v-model="form.loanAmout" clearable)
-            el-form-item(label="贷款期限 :" class="formItem2")
-              el-input(v-model="form.loanLength" clearable)
-            el-form-item(label="贷款支付方式 :" class="formItem2")
-              el-input(v-model="form.repayKind" clearable)
-            el-form-item(label="约定用途 :" class="formItem2")
-              el-input(v-model="form.loanPurpose" type="textarea" :rows="2" clearable)
-            el-form-item(label="放款日期 :" class="formItem2")
-              el-date-picker(v-model="form.loanDate" style="width:100%" type="date" placeholder="选择日期" clearable)
+        
         .footer
           el-button(type="warning" @click='onSubmit') 提交
+
     .content2(v-show="activeName == 'second'")
       .textContent
         el-form(label-position="top" label-width="80px" :model="approval")
@@ -124,11 +69,32 @@
 
 <script>
 import { filterParams } from "../../utils/utils";
+import DivM1 from "./components/DivM1.vue";
+import DivM2 from "./components/DivM2.vue";
+import DivM4 from "./components/DivM4.vue";
+import DivM5 from "./components/DivM5.vue";
+
 export default {
   name: "iouList",
+  components: {
+    "div-m1": DivM1,
+    "div-m2": DivM2,
+    "div-m4": DivM4,
+    "div-m5": DivM5
+  },
   data() {
     return {
       activeName: "first",
+      options: [
+        {
+          label: "是",
+          value: 1
+        },
+        {
+          label: "否",
+          value: 0
+        }
+      ],
       form: {
         // card 1
         checkType: "m1", // 检查类型
@@ -159,7 +125,149 @@ export default {
         suggest: "" // 检查结论及措施建议
         // emplName: "" // 检查人员
       },
-      list: [
+      list1: [
+        {
+          title: "《小企业授信业务额度借款支用单》",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "《小企业贷款受托支付申请书》或自主支付清单",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "《小企业贷款受托支付申请书》",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "汇款凭证",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "账户流水",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "受托支付合同",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "入库单",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "贷款购买标的（如原材料、机器设备等）",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "企业大门",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "企业经营场地或生产车间",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "检查人员现场检查影像等",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "其他",
+          url: "",
+          dimension: "",
+          longitude: ""
+        }
+      ],
+      list2: [
+        {
+          title: "财务报表",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "纳税材料",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "水电费材料",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "银行流水",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "其他经营材料",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "企业办公场所（含企业大门）",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "企业生产车间（含重要生产或经营工序）",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "企业重要生产或经营设备、存货",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "检查人员现场检查的影像",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "抵押物影像",
+          url: "",
+          dimension: "",
+          longitude: ""
+        },
+        {
+          title: "其他",
+          url: "",
+          dimension: "",
+          longitude: ""
+        }
+      ],
+      list4: [
         {
           title: "其他",
           url: "",
@@ -180,7 +288,7 @@ export default {
     if (custName) {
       this.form = { custName };
     }
-    this.onSubmit();
+    // this.onSubmit();
   },
   methods: {
     // 保存
@@ -299,15 +407,19 @@ export default {
     box-sizing: border-box;
     width: 100%;
     padding: 10px 40px 0;
-
-    .card {
+    .type {
       width: 100%;
-      margin-bottom: 10px;
-      .formItem2 {
-        box-sizing: border-box;
-        width: 50%;
-        margin: 0;
-        padding-right: 20px;
+      height: 100%;
+      .card {
+        width: 100%;
+        margin-bottom: 10px;
+        position: relative;
+        .formItem2 {
+          box-sizing: border-box;
+          width: 50%;
+          margin: 0;
+          padding-right: 20px;
+        }
         /deep/.el-form-item__label {
           padding: 10px 0 0;
           font-size: 16px;
@@ -315,64 +427,147 @@ export default {
         }
         /deep/.el-form-item__content {
           width: 100%;
-          max-width: 542px;
-          min-width: 300px;
+          // max-width: 542px;
+          // min-width: 300px;
         }
-      }
-      .cardTitle {
-        margin: 0;
-        padding: 0;
-        height: 28px;
-        width: 100%;
-        position: relative;
-        .blue {
-          position: absolute;
-          top: 2px;
-          width: 3px;
-          height: 20px;
-          background-color: rgba(78, 120, 222, 1);
-        }
-        .title {
-          position: absolute;
-          font-size: 20px;
-          font-weight: 500;
-          color: rgba(10, 10, 10, 1);
-          top: 2px;
-          left: 10px;
-          height: 20px;
-          line-height: 20px;
-        }
-      }
-      .cardContent {
-        margin-top: 5px;
-        .el-checkbox {
-          margin-right: 8px;
-        }
-      }
-      .checkForm {
-        border-bottom: 1px dashed #ccc;
-      }
-      .uploadBox {
-        // height: 175px;
-        .imgTitle {
-          font-size: 16px;
-          color: rgba(10, 10, 10, 1);
-          padding: 16px 0 16px;
-        }
-        /deep/.el-upload--picture-card {
-          width: 92px;
-          height: 92px;
+        .cardTitle {
+          margin: 0;
+          padding: 0;
+          height: 28px;
+          width: 100%;
           position: relative;
-          .el-icon-plus {
+          .blue {
             position: absolute;
-            top: -30px;
-            left: 38px;
-            height: 16px;
-            width: 16px;
+            top: 2px;
+            width: 3px;
+            height: 20px;
+            background-color: rgba(78, 120, 222, 1);
+          }
+          .title {
+            position: absolute;
+            font-size: 20px;
+            font-weight: 500;
+            color: rgba(10, 10, 10, 1);
+            top: 2px;
+            left: 10px;
+            height: 20px;
+            line-height: 20px;
+          }
+        }
+        .cardTitle1 {
+          margin: 0;
+          padding: 0;
+          height: 30px;
+          width: 100%;
+          position: relative;
+          .blue {
+            position: absolute;
+            top: 2px;
+            width: 3px;
+            height: 18px;
+            background-color: rgba(78, 120, 222, 1);
+          }
+          .title {
+            position: absolute;
+            font-size: 18px;
+            font-weight: 500;
+            color: rgba(96, 98, 102, 1);
+            top: 1px;
+            left: 10px;
+            height: 20px;
+            line-height: 20px;
+          }
+        }
+        .cardTitle2 {
+          height: 31px;
+          font-size: 16px;
+          line-height: 31px;
+          color: rgba(96, 98, 102, 1);
+        }
+        .cardContent {
+          margin-top: 5px;
+          .el-checkbox {
+            margin-right: 8px;
+          }
+        }
+        .left {
+          width: 50%;
+          display: inline-block;
+          .formItem2 {
+            width: 100%;
+          }
+          .notes {
+            width: 98%;
+            font-size: 14px;
+            line-height: 24px;
+            color: rgba(96, 98, 102, 1);
+          }
+          .blueTitle {
+            font-size: 18px;
+            line-height: 31px;
+            color: rgba(78, 120, 222, 1);
+          }
+        }
+        .right {
+          position: absolute;
+          width: 50%;
+          display: inline-block;
+          .formItem2 {
+            width: 100%;
+          }
+          .blueTitle {
+            font-size: 18px;
+            line-height: 31px;
+            color: rgba(78, 120, 222, 1);
+          }
+        }
+        .blueTitle {
+          font-size: 18px;
+          line-height: 31px;
+          color: rgba(78, 120, 222, 1);
+        }
+        .blueTitle1 {
+          font-size: 18px;
+          line-height: 31px;
+          color: rgba(78, 120, 222, 1);
+        }
+        .blackTitle {
+          height: 31px;
+          font-size: 16px;
+          line-height: 31px;
+          color: rgba(10, 10, 10, 1);
+        }
+        .checkForm {
+          // border-bottom: 1px dashed #ccc;
+          // .blueTitle {
+          //   font-size: 18px;
+          //   line-height: 31px;
+          //   color: rgba(78, 120, 222, 1);
+          // }
+        }
+        .uploadBox {
+          // height: 175px;
+          .imgTitle {
+            font-size: 16px;
+            color: rgba(10, 10, 10, 1);
+            padding: 16px 0 16px;
+          }
+          /deep/.el-upload--picture-card {
+            width: 92px;
+            height: 92px;
+            position: relative;
+            .el-icon-plus {
+              position: absolute;
+              top: -30px;
+              left: 38px;
+              height: 16px;
+              width: 16px;
+            }
           }
         }
       }
     }
+
     // .footer {
     //   text-align: center;
     //   height: 76px;
@@ -427,8 +622,8 @@ export default {
       }
       /deep/.el-form-item__content {
         width: 100%;
-        max-width: 542px;
-        min-width: 300px;
+        // max-width: 542px;
+        // min-width: 300px;
         /deep/.el-input__inner {
           font-size: 16px;
           color: rgba(10, 10, 10, 1);

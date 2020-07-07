@@ -61,13 +61,25 @@ export default {
       };
       login(this, { ...params }).then(res => {
         if (res.data.returnCode === "200000") {
-          const { emplCode, emplName, menuList } = res.data.data;
+          const {
+            emplCode,
+            emplName,
+            menuList,
+            noticeFlag,
+            orgCode,
+            orgName,
+            postCode
+          } = res.data.data;
           console.log(res.data.data);
           // this.$cookies.set("emplCode", emplCode);
           // this.$cookies.set("emplName", emplName);
           // this.$cookies.set("menuList", JSON.stringify(menuList));
           localStorage.setItem("emplCode", emplCode);
           localStorage.setItem("emplName", emplName);
+          localStorage.setItem("noticeFlag", noticeFlag);
+          localStorage.setItem("orgCode", orgCode);
+          localStorage.setItem("orgName", orgName);
+          localStorage.setItem("postCode", postCode);
           localStorage.setItem("menuList", JSON.stringify(menuList));
           this.$router.push("/Layout/user/index");
         } else {

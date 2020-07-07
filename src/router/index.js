@@ -46,12 +46,12 @@ const routes = [
         path: "standingBook/index",
         component: () => import("@/views/standingBook/standingBookList"),
       },
-      // 统计信息--报表管理
+      // 报表管理--明细信息
       {
         path: "reportManagement/detailedInfoList",
         component: () => import("@/views/reportManagement/detailedInfoList"),
       },
-      // 统计信息--报表管理
+      // 报表管理--统计信息
       {
         path: "reportManagement/statisticalInfoList",
         component: () => import("@/views/reportManagement/statisticalInfoList"),

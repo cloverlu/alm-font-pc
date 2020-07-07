@@ -27,7 +27,14 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="岗位名称" class="formItem5">
-                <el-input v-model="searchForm.postName" clearable></el-input>
+                <el-select v-model="searchForm.postCode" style="width: 100%" multiple>
+                  <el-option
+                    v-for="item in postNameList"
+                    :key="item.subCode"
+                    :label="item.showName"
+                    :value="item.subCode"
+                  ></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -50,21 +57,8 @@
       </div>
       <div class="userTable">
         <div class="tableBox">
-          <el-table
-            stripe
-            :data="tableData"
-            border
-            style="width: 99.9%"
-            :fit="true"
-            :cell-dblclick="dblclick"
-          >
-            <el-table-column
-              cell-class-name
-              header-align="center"
-              prop="orgName"
-              label="所属机构"
-              min-width="12%"
-            ></el-table-column>
+          <el-table stripe :data="tableData" border style="width: 99.9%" :fit="true">
+            <el-table-column header-align="center" prop="orgName" label="所属机构" min-width="12%"></el-table-column>
             <el-table-column header-align="center" prop="emplName" label="用户名称" min-width="14%"></el-table-column>
             <el-table-column
               header-align="center"
@@ -120,7 +114,6 @@
           <el-input v-model="form.noticeFlag" clearable></el-input>
         </el-form-item>
         <el-form-item label="岗位名称" prop="postCode" :label-width="formLabelWidth">
-          <!-- <el-input v-model="form.postName" clearable></el-input> -->
           <el-checkbox-group v-model="form.postCode">
             <el-checkbox
               v-for="item in postNameList"
@@ -174,16 +167,15 @@ export default {
       dialogFormVisible: false,
       dialogVisible: false,
       postNameList: [
-        // "系统管理岗" ,"第二经营主责任人岗","主管岗","贷后管理岗","贷后检查岗"
-        { showName: "系统管理岗", subCode: "10" },
-        { showName: "第二经营主责任人岗", subCode: "20" },
-        { showName: "主管岗", subCode: "21" },
-        { showName: "贷后管理岗", subCode: "22" },
-        { showName: "贷后检查岗", subCode: "23" }
+        // { showName: "系统管理岗", subCode: "10" },
+        // { showName: "第二经营主责任人岗", subCode: "20" },
+        // { showName: "主管岗", subCode: "21" },
+        // { showName: "贷后管理岗", subCode: "22" },
+        // { showName: "贷后检查岗", subCode: "23" }
       ],
       searchForm: {
         orgName: "",
-        postName: "",
+        postCode: [],
         emplName: "",
         emplCode: ""
       },
@@ -198,7 +190,7 @@ export default {
     };
   },
   mounted() {
-    // this.getPostListArr();
+    this.getPostListArr();
     // // 进入页面先调用查询接口
     this.onSubmit();
   },
@@ -208,20 +200,22 @@ export default {
       this.pageSize = e;
       this.pageNo = 1;
       this.onSubmit();
-      console.log("pageSize", this.pageSize);
     },
     // 翻页
     handleCurrentChange: function(e) {
       this.pageNo = e;
       this.onSubmit();
-      console.log("pageIndex", this.pageNo);
     },
     // 表单查询
     onSubmit: function() {
-      getUsers(this, {
-        ...filterParams(this.searchForm),
+      const params = {
+        ...this.searchForm,
+        postCode: this.searchForm.postCode.join(","),
         pageSize: this.pageSize,
         pageNo: this.pageNo
+      };
+      getUsers(this, {
+        ...filterParams(params)
       }).then(res => {
         this.tableData = res.data.data;
         this.total = res.data.total;
@@ -248,7 +242,9 @@ export default {
     },
     // 重置
     onClear() {
-      this.searchForm = {};
+      this.searchForm = {
+        postCode: []
+      };
     },
     // 编辑按钮-触发弹窗
     handleEdit: function(item) {
@@ -326,10 +322,6 @@ export default {
         .then(() => {
           this.onSubmit();
         });
-    },
-    // 双击复制
-    dblclick(row, column, cell) {
-      console.log(cell);
     }
   }
 };
@@ -357,16 +349,17 @@ export default {
     border-bottom: 1px solid rgba(231, 231, 231, 1);
   }
   .userContent {
-    min-height: calc(100% - 35px);
+    height: calc(100% - 35px);
     width: 100%;
     .userForm {
       box-sizing: border-box;
       height: 100px;
+      max-height: 186px;
       width: 100%;
       .formBox {
         box-sizing: border-box;
         position: relative;
-        height: 100%;
+        height: 100px;
         line-height: 53px;
         width: 100%;
         font-size: 12px;
@@ -386,6 +379,7 @@ export default {
           margin-bottom: 0;
           /deep/.el-form-item__label {
             font-size: 12px;
+            // padding: 0;
           }
           /deep/.el-form-item__content {
             margin-top: 13px;
@@ -394,6 +388,9 @@ export default {
         }
         .btn {
           display: inline-block;
+          position: absolute;
+          right: 14px;
+          bottom: 0;
           text-align: right;
           box-sizing: border-box;
           width: 100%;
@@ -442,7 +439,8 @@ export default {
     }
     .userTable {
       box-sizing: border-box;
-      min-height: calc(100% - 100px);
+      height: calc(100% - 100px);
+      min-height: calc(100% - 140px);
       width: 100%;
       padding: 10px 14px;
       // overflow: auto;
