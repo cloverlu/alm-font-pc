@@ -5,7 +5,7 @@
   时间：2020年07月07日 16:40:13
 -->
 <template lang="pug">
-  <div class="m2">
+  <div class="m5">
     el-card(class='card')
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
         el-form-item(label="客户名称 :" class="formItem2")
@@ -359,42 +359,5 @@ export default {
   }
   .checkForm {
   }
-  .uploadBox {
-    // height: 175px;
-    .imgTitle {
-      font-size: 16px;
-      color: rgba(10, 10, 10, 1);
-      padding: 16px 0 16px;
-    }
-    /deep/.el-upload--picture-card {
-      width: 92px;
-      height: 92px;
-      position: relative;
-      .el-icon-plus {
-        position: absolute;
-        top: 31px;
-        left: 31px;
-        height: 16px;
-        width: 16px;
-      }
-    }
-  }
-}
-</style>
-<style lang="scss">
-.el-scrollbar {
-  .el-select-dropdown__wrap {
-    .el-select-dropdown__list {
-      .el-select-dropdown__item {
-        line-height: 34px;
-        padding-left: 15px;
-      }
-    }
-  }
-}
-.el-input__inner {
-  padding-left: 10px;
-  color: rgba(10, 10, 10, 1);
-  font-size: 16px;
 }
 </style>

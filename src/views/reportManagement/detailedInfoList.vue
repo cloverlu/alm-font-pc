@@ -164,6 +164,7 @@ export default {
     // 修改分页大小
     handleSizeChange: function(e) {
       this.pageSize = e;
+      this.pageNo = 1;
       console.log(111);
       this.onSubmit();
     },
@@ -197,6 +198,8 @@ export default {
     // 重置
     onClear() {
       this.searchForm = {};
+      this.pageNo = 1;
+      this.pageSize = 10;
     },
     // 下载
     output() {

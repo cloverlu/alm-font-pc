@@ -5,7 +5,7 @@
   时间：2020年07月07日 16:40:13
 -->
 <template lang="pug">
-  <div class="m2">
+  <div class="m4">
     el-card(class='card')
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
         el-form-item(label="客户名称 :" class="formItem2")
@@ -29,23 +29,23 @@
       span(class='title') 检查阶段
     .cardContent
       el-checkbox-group(v-model="check" @change='onChange')
-        el-checkbox(label="第一阶段" disabled)
+        el-checkbox(label="第一阶段")
         el-checkbox(label="第二阶段")
         el-checkbox(label="第三阶段")
       
-    el-form(:model="form" v-for='item in check' :key='item' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
+    el-form(:model="form" v-for='(item,index) in form.stageData' :key='index' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
       el-form-item(label="还款意愿 :" class="formItem2")
-        el-input(v-model="form.payIntention" clearable)
+        el-input(v-model="item.payIntention" clearable)
       el-form-item(label="检查地点 :" class="formItem2")
-        el-input(v-model="form.checkAddr" clearable)
+        el-input(v-model="item.checkAddr" clearable)
       el-form-item(label="接待人员 :" class="formItem2")
-        el-input(v-model="form.staff" clearable)
+        el-input(v-model="item.staff" clearable)
       el-form-item(label="还款资金来源 :" class="formItem2")
-        el-input(v-model="form.amoutSource" clearable)
+        el-input(v-model="item.amoutSource" clearable)
       el-form-item(label="预计还款/付息时间 :" class="formItem2")
-        el-date-picker(v-model="form.expectRepayDate" style="width:100%" type="date" placeholder="选择日期" clearable)
+        el-date-picker(v-model="item.expectRepayDate" style="width:100%" type="date" placeholder="选择日期" clearable)
       el-form-item(label="还款资金落实情况说明 :" class="formItem2")
-        el-input(v-model="form.practicableMsg" type="textarea" :rows="2" clearable)
+        el-input(v-model="item.practicableMsg" type="textarea" :rows="3" clearable)
 
   el-card(class='card')
     .cardTitle
@@ -92,12 +92,35 @@ export default {
         repayAmout: "200000", // 还款金额
 
         // card 2
-        payIntention: "张三", // 还款意愿
-        checkAddr: "xxxxxxxx", // 检查地点
-        staff: "李四", // 接待人员
-        amoutSource: "银联", // 还款资金来源
-        expectRepayDate: "2020-5-20", // 预计还款/付息时间
-        practicableMsg: "xxxx" // 还款资金落实情况说明
+        stageData: [
+          // {
+          //   checkStage: "第一阶段", // 检查阶段
+          //   payIntention: "", // 还款意愿
+          //   checkAddr: "", // 检查地点
+          //   staff: "", // 接待人员
+          //   amoutSource: "", // 还款资金来源
+          //   expectRepayDate: "2020-5-20", // 预计还款/付息时间
+          //   practicableMsg: "" // 还款资金落实情况说明
+          // },
+          // {
+          //   checkStage: "第二阶段", // 检查阶段
+          //   payIntention: "", // 还款意愿
+          //   checkAddr: "", // 检查地点
+          //   staff: "", // 接待人员
+          //   amoutSource: "", // 还款资金来源
+          //   expectRepayDate: "2020-5-20", // 预计还款/付息时间
+          //   practicableMsg: "" // 还款资金落实情况说明
+          // },
+          // {
+          //   checkStage: "第三阶段", // 检查阶段
+          //   payIntention: "", // 还款意愿
+          //   checkAddr: "", // 检查地点
+          //   staff: "", // 接待人员
+          //   amoutSource: "", // 还款资金来源
+          //   expectRepayDate: "2020-5-20", // 预计还款/付息时间
+          //   practicableMsg: "" // 还款资金落实情况说明
+          // }
+        ] //还款资金落实阶段数组
       },
       list4: [
         {
@@ -107,7 +130,7 @@ export default {
           longitude: ""
         }
       ],
-      check: ["第一阶段"],
+      check: [],
       dialogImageUrl: "",
       dialogVisible: false,
       formLabelWidth: "72px"
@@ -155,6 +178,44 @@ export default {
     // 阶段多选框
     onChange() {
       console.log(this.check);
+      if (this.check.length === 0) {
+        console.log(1);
+        this.form.stageData = [];
+      } else {
+        // this.check.map(item => {
+        //   if (item == "第一阶段") {
+        //     this.form.stageData.push({
+        //       checkStage: "第一阶段", // 检查阶段
+        //       payIntention: "", // 还款意愿
+        //       checkAddr: "", // 检查地点
+        //       staff: "", // 接待人员
+        //       amoutSource: "", // 还款资金来源
+        //       expectRepayDate: "2020-5-20", // 预计还款/付息时间
+        //       practicableMsg: "" // 还款资金落实情况说明
+        //     });
+        //   } else if (item == "第二阶段") {
+        //     this.form.stageData.push({
+        //       checkStage: "第二阶段", // 检查阶段
+        //       payIntention: "", // 还款意愿
+        //       checkAddr: "", // 检查地点
+        //       staff: "", // 接待人员
+        //       amoutSource: "", // 还款资金来源
+        //       expectRepayDate: "2020-5-20", // 预计还款/付息时间
+        //       practicableMsg: "" // 还款资金落实情况说明
+        //     });
+        //   } else if (item == "第三阶段") {
+        //     this.form.stageData.push({
+        //       checkStage: "第三阶段", // 检查阶段
+        //       payIntention: "", // 还款意愿
+        //       checkAddr: "", // 检查地点
+        //       staff: "", // 接待人员
+        //       amoutSource: "", // 还款资金来源
+        //       expectRepayDate: "2020-5-20", // 预计还款/付息时间
+        //       practicableMsg: "" // 还款资金落实情况说明
+        //     });
+        //   }
+        // });
+      }
     },
     // 图片上传
     handleRemove(file, fileList) {
@@ -304,42 +365,5 @@ export default {
   }
   .checkForm {
   }
-  .uploadBox {
-    // height: 175px;
-    .imgTitle {
-      font-size: 16px;
-      color: rgba(10, 10, 10, 1);
-      padding: 16px 0 16px;
-    }
-    /deep/.el-upload--picture-card {
-      width: 92px;
-      height: 92px;
-      position: relative;
-      .el-icon-plus {
-        position: absolute;
-        top: 31px;
-        left: 31px;
-        height: 16px;
-        width: 16px;
-      }
-    }
-  }
-}
-</style>
-<style lang="scss">
-.el-scrollbar {
-  .el-select-dropdown__wrap {
-    .el-select-dropdown__list {
-      .el-select-dropdown__item {
-        line-height: 34px;
-        padding-left: 15px;
-      }
-    }
-  }
-}
-.el-input__inner {
-  padding-left: 10px;
-  color: rgba(10, 10, 10, 1);
-  font-size: 16px;
 }
 </style>

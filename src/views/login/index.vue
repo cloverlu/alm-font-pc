@@ -81,7 +81,15 @@ export default {
           localStorage.setItem("orgName", orgName);
           localStorage.setItem("postCode", postCode);
           localStorage.setItem("menuList", JSON.stringify(menuList));
-          this.$router.push("/Layout/user/index");
+          menuList.map(item => {
+            if (item.children && item.children.length) {
+              item.children.map(i => {
+                (i.path = `/Layout/${i.path}`), (i.index = `${i.path}`);
+              });
+            }
+          });
+          let first = menuList[0].children[0].path;
+          this.$router.push(first);
         } else {
           this.$message({
             message: "登陆失败",

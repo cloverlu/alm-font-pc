@@ -681,25 +681,5 @@ export default {
   }
   .checkForm {
   }
-  .uploadBox {
-    // height: 175px;
-    .imgTitle {
-      font-size: 16px;
-      color: rgba(10, 10, 10, 1);
-      padding: 16px 0 16px;
-    }
-    /deep/.el-upload--picture-card {
-      width: 92px;
-      height: 92px;
-      position: relative;
-      .el-icon-plus {
-        position: absolute;
-        top: 31px;
-        left: 31px;
-        height: 16px;
-        width: 16px;
-      }
-    }
-  }
 }
 </style>

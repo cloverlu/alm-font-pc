@@ -1,6 +1,6 @@
 // 查询
 const getTaskList = ({ $axios }, data) =>
-  $axios.get(`/alm/postLoan/business/noticeCheckList`, { params: data });
+  $axios.post(`/alm/postLoan/business/postLoanChecklistForPc`, data);
 
 // 修改
 const changeTask = ({ $axios }, data) =>

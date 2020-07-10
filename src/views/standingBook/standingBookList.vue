@@ -178,6 +178,8 @@ export default {
     // 重置
     onClear() {
       this.searchForm = {};
+      this.pageNo = 1;
+      this.pageSize = 10;
     },
     sendSuccess() {
       this.$message({

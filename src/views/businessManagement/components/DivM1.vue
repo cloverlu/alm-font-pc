@@ -5,7 +5,7 @@
   时间：2020年07月07日 16:40:13
 -->
 <template lang="pug">
-  <div class="m2">
+  <div class="m1">
     el-card(class='card')
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
         el-form-item(label="客户名称 :" class="formItem2")
@@ -21,7 +21,7 @@
         el-form-item(label="放款金额 :" class="formItem2")
           el-input(v-model="form.loanAmout" clearable)
         el-form-item(label="约定用途 :" class="formItem2")
-          el-input(v-model="form.loanPurpose" type="textarea" :rows="2" clearable)
+          el-input(v-model="form.loanPurpose" type="textarea" :rows="3" clearable)
 
     el-card(class='card')
       .left
@@ -31,9 +31,9 @@
         
         el-form(:model="form" v-for='item in check' :key='item' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
           el-form-item(label="要求 :" class="formItem2")
-            el-input(v-model="form.requireCheck" type="textarea" :rows="2" clearable)
+            el-input(v-model="form.requireCheck" type="textarea" :rows="3" clearable)
           el-form-item(label="落实情况 :" class="formItem2")
-            el-input(v-model="form.checked" type="textarea" :rows="2" clearable)
+            el-input(v-model="form.checked" type="textarea" :rows="3" clearable)
       .right
         .cardTitle
           span(class='blue')
@@ -41,44 +41,42 @@
         
         el-form(:model="form" v-for='item in check' :key='item' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
           el-form-item(label="要求 :" class="formItem2")
-            el-input(v-model="form.requireCheck" type="textarea" :rows="2" clearable)
+            el-input(v-model="form.requireCheck" type="textarea" :rows="3" clearable)
           el-form-item(label="落实情况 :" class="formItem2")
-            el-input(v-model="form.checked" type="textarea" :rows="2" clearable)
+            el-input(v-model="form.checked" type="textarea" :rows="3" clearable)
 
     el-card(class='card')
       .left
         el-form(:model="form" v-for='item in check' :key='item' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
           el-form-item(label="检查地点 :" class="formItem2")
-            el-input(v-model="form.requireCheck" clearable)
+            el-input(v-model="form.checkAddr" clearable)
           el-form-item(label="检查配合程度 :" class="formItem2")
-            el-input(v-model="form.checked" type="textarea" :rows="2" clearable)
+            el-input(v-model="form.cooperate" type="textarea" :rows="3" clearable)
       .right
         el-form(:model="form" v-for='item in check' :key='item' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
           el-form-item(label="接待人员 :" class="formItem2")
-            el-input(v-model="form.requireCheck" clearable)
+            el-input(v-model="form.staff" clearable)
           el-form-item(label="生产经营场所变动情况 :" class="formItem2")
-            el-input(v-model="form.checked" type="textarea" :rows="2" clearable)
+            el-input(v-model="form.addrChangedMsg" type="textarea" :rows="3" clearable)
     el-card(class='card')
       .left
         .cardTitle
           span(class='blue')
           span(class='title') 检查内容
-        
         el-form(:model="form" v-for='item in check' :key='item' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
           el-form-item(label="资金使用情况详细说明 :" class="formItem2")
-            el-input(v-model="form.requireCheck" type="textarea" :rows="2" clearable)
+            el-input(v-model="form.detailMsg4useAmout" type="textarea" :rows="3" clearable)
           el-form-item(label="提供纸质或影像资料的信息来源 :" class="formItem2")
-            el-input(v-model="form.checked" type="textarea" :rows="2" clearable)
+            el-input(v-model="form.msgSource" type="textarea" :rows="3" clearable)
             .notes ※注：1、贷款发放如采用贷款人受托支付方式，信息来源包括《小企业授信业务额度借款支用单》、《小企业贷款受托支付申请书》、汇款凭证、账户流水、合同、入库单、贷款购买标的(如原材料、机器设备等)等。2、贷款发放如采用借款人自主支付方式，信息来源包括《实际支付清单》、汇款凭证、合同、入库单、贷款购买标的( 如原材料、机器设备等)等。
       .right
         .cardTitle
           span(class='title') 
-        
         el-form(:model="form" v-for='item in check' :key='item' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
           el-form-item(label="是否按合同约定的用途使用信贷资金 :" class="formItem2")
-            el-input(v-model="form.requireCheck" type="textarea" :rows="2" clearable)
+            el-input(v-model="form.useAmoutByContract" type="textarea" :rows="2" clearable)
           el-form-item(label="情况说明 :" class="formItem2")
-            el-input(v-model="form.checked" type="textarea" :rows="2" clearable)
+            el-input(v-model="form.msg" type="textarea" :rows="2" clearable)
     el-card(class='card')
       .cardTitle
         span(class='blue')
@@ -124,12 +122,22 @@ export default {
         repayAmout: "200000", // 还款金额
 
         // card 2
-        payIntention: "张三", // 还款意愿
-        checkAddr: "xxxxxxxx", // 检查地点
-        staff: "李四", // 接待人员
-        amoutSource: "银联", // 还款资金来源
-        expectRepayDate: "2020-5-20", // 预计还款/付息时间
-        practicableMsg: "xxxx" // 还款资金落实情况说明
+        requireCheck: "", // 审批意见中首次跟踪检查要求
+        checked: "", // 审批意见中首次跟踪检查落实情况
+        specialRequireCheck: "李四", // 产品首次跟踪检查特殊要求
+        specialChecked: "银联", // 产品首次跟踪检查特殊落实情况
+
+        // card 3
+        staff: "", // 接待人员
+        addrChangedMsg: "", // 生产经营场所变动情况
+        cooperate: "", // 检查配合程度
+        checkAddr: "", // 检查地点
+
+        // card4
+        msg: "", //情况说明
+        useAmoutByContract: "", //是否按合同约定的用途使用信贷资金
+        msgSource: "", //提供纸质或影像资料的信息来源
+        detailMsg4useAmout: "" //资金使用情况详细说明
       },
       list1: [
         {
@@ -402,42 +410,5 @@ export default {
   }
   .checkForm {
   }
-  .uploadBox {
-    // height: 175px;
-    .imgTitle {
-      font-size: 16px;
-      color: rgba(10, 10, 10, 1);
-      padding: 16px 0 16px;
-    }
-    /deep/.el-upload--picture-card {
-      width: 92px;
-      height: 92px;
-      position: relative;
-      .el-icon-plus {
-        position: absolute;
-        top: 31px;
-        left: 31px;
-        height: 16px;
-        width: 16px;
-      }
-    }
-  }
-}
-</style>
-<style lang="scss">
-.el-scrollbar {
-  .el-select-dropdown__wrap {
-    .el-select-dropdown__list {
-      .el-select-dropdown__item {
-        line-height: 34px;
-        padding-left: 15px;
-      }
-    }
-  }
-}
-.el-input__inner {
-  padding-left: 10px;
-  color: rgba(10, 10, 10, 1);
-  font-size: 16px;
 }
 </style>

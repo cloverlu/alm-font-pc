@@ -245,6 +245,8 @@ export default {
       this.searchForm = {
         postCode: []
       };
+      this.pageNo = 1;
+      this.pageSize = 10;
     },
     // 编辑按钮-触发弹窗
     handleEdit: function(item) {

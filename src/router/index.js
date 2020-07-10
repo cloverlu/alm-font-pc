@@ -18,7 +18,7 @@ const routes = [
   },
   {
     path: "/",
-    redirect: "/Layout/user/index",
+    redirect: "/login",
   },
   {
     // path: "/index",

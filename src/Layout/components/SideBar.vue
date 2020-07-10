@@ -7,7 +7,6 @@
 <template>
   <div class="sideBar">
     <el-menu
-      default-active="1-1"
       class="el-menu-vertical-demo"
       background-color="#545c64"
       unique-opened
@@ -17,8 +16,23 @@
       active-text-color="#fff"
       router
       :default-openeds="open_list"
+      :default-active="defaultActive"
     >
-      <el-submenu index="1">
+      <el-submenu v-for="(item,index) in subMenuArr" :index="String(index)" :key="index">
+        <template slot="title">
+          <i :class="item.icon" style="color:#FFF"></i>
+          <span>{{item.name}}</span>
+        </template>
+        <el-menu-item-group>
+          <el-menu-item
+            v-for="i in item.children"
+            :index="i.index"
+            :key="i.index"
+            :route="i.path"
+          >{{i.name}}</el-menu-item>
+        </el-menu-item-group>
+      </el-submenu>
+      <!-- <el-submenu index="1">
         <template slot="title">
           <i class="el-icon el-icon-location"></i>
           <span>用户管理</span>
@@ -92,7 +106,7 @@
         <el-menu-item-group>
           <el-menu-item index="7-1" :route="{ path: '/Layout/customer/index' }">客户列表</el-menu-item>
         </el-menu-item-group>
-      </el-submenu>
+      </el-submenu>-->
     </el-menu>
   </div>
 </template>
@@ -101,7 +115,9 @@
 export default {
   data() {
     return {
-      open_list: ["1-1"]
+      open_list: [""],
+      subMenuArr: [],
+      defaultActive: ""
     };
   },
   methods: {
@@ -110,7 +126,45 @@ export default {
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
+    },
+    getPath() {
+      console.log("this.$route.path", this.$route.path);
+      this.defaultActive = this.$route.path;
+    },
+    getMenuList() {
+      const arr = JSON.parse(localStorage.getItem("menuList"));
+      arr.map(item => {
+        item.icon = "el-icon" + " iconfont " + item.icon;
+        if (item.children && item.children.length) {
+          item.children.map(i => {
+            (i.path = `/Layout/${i.path}`), (i.index = `${i.path}`);
+          });
+        }
+        return arr;
+      });
+      // for (let index = 0; index < arr.length; index++) {
+      //   const item = arr[index];
+      //   item.icon = "el-icon" + " " + item.icon;
+      //   if (item.children && item.children.length) {
+      //     for (let i = 0; i < item.children.length; i++) {
+      //       const element = item.children[i];
+      //       element.path = `{path: ${element.path}}`;
+      //       element.index = `${item}+'-'+${i + 1}`;
+      //     }
+      //   }
+      // }
+      this.subMenuArr = arr;
+      console.log("this.subMenuArr", this.subMenuArr);
     }
+  },
+  mounted() {
+    this.getMenuList();
+    this.getPath();
+    // console.log(this.$route.path);
+    // const { custName } = this.$route.query;
+  },
+  watch: {
+    $route: "getPath"
   }
 };
 </script>

@@ -28,15 +28,16 @@
         .type(v-if="form.checkType == 'm2'")
           div-m2
         .type(v-if="form.checkType == 'm3'")
+          div-m3
         .type(v-if="form.checkType == 'm4'")
           div-m4
         .type(v-if="form.checkType == 'm5'")
           div-m5
         .type(v-if="form.checkType == 'm6'")
-
-        
-        .footer
-          el-button(type="warning" @click='onSubmit') 提交
+          div-m6
+      //- 提交
+      .footer
+        el-button(type="warning" @click='onSubmit') 提交
 
     .content2(v-show="activeName == 'second'")
       .textContent
@@ -71,16 +72,20 @@
 import { filterParams } from "../../utils/utils";
 import DivM1 from "./components/DivM1.vue";
 import DivM2 from "./components/DivM2.vue";
+import DivM3 from "./components/DivM3.vue";
 import DivM4 from "./components/DivM4.vue";
 import DivM5 from "./components/DivM5.vue";
+import DivM6 from "./components/DivM6.vue";
 
 export default {
   name: "iouList",
   components: {
     "div-m1": DivM1,
     "div-m2": DivM2,
+    "div-m3": DivM3,
     "div-m4": DivM4,
-    "div-m5": DivM5
+    "div-m5": DivM5,
+    "div-m6": DivM6
   },
   data() {
     return {

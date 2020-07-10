@@ -111,10 +111,28 @@ export default {
     },
     link(row) {
       console.log(row);
-      this.$router.push({
-        path: "/Layout/businessManagement/iouList",
-        query: { custName: row.custName }
+      let flag = false;
+      const menuArr = JSON.parse(localStorage.getItem("menuList"));
+      menuArr.map(item => {
+        if (item.children && item.children.length) {
+          item.children.map(i => {
+            if (i.name == "借据列表") {
+              flag = true;
+            }
+          });
+        }
       });
+      if (flag) {
+        this.$router.push({
+          path: "/Layout/businessManagement/iouList",
+          query: { custName: row.custName }
+        });
+      } else {
+        this.$message({
+          message: "当前没有权限",
+          type: "warning"
+        });
+      }
     }
   }
 };

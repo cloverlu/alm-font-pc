@@ -20,7 +20,7 @@
       </div>
       <el-popconfirm
         confirmButtonText="确定"
-        @onConfirm="login"
+        @onConfirm="loginOut"
         cancelButtonText="取消"
         icon="el-icon-info"
         iconColor="red"
@@ -36,8 +36,23 @@
 export default {
   name: "Header",
   methods: {
-    login() {
-      console.log("xxx");
+    loginOut() {
+      localStorage.removeItem("emplCode");
+      localStorage.removeItem("emplName");
+      localStorage.removeItem("noticeFlag");
+      localStorage.removeItem("orgCode");
+      localStorage.removeItem("orgName");
+      localStorage.removeItem("postCode");
+      localStorage.removeItem("menuList");
+      this.$message({
+        message: "成功退出系统",
+        type: "success"
+      });
+      setTimeout(() => {
+        this.$router.push({
+          path: "/login"
+        });
+      }, 500);
     }
   }
 };

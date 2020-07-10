@@ -140,11 +140,14 @@ export default {
     // 修改分页大小
     handleSizeChange: function(e) {
       this.pageSize = e;
+      this.pageNo = 1;
+      this.onSubmit();
       console.log("pageSize", this.pageSize);
     },
     // 翻页
     handleCurrentChange: function(e) {
       this.pageNo = e;
+      this.onSubmit();
       console.log("pageIndex", this.pageNo);
     },
     // 表单查询
@@ -165,13 +168,15 @@ export default {
     onClear() {
       this.searchForm = {};
       this.multipleSelection = [];
+      this.pageNo = 1;
+      this.pageSize = 10;
     },
     download() {
       // console.log("111");
       const arr = this.multipleSelection.map(item => item.bizId);
       arr.map(item => {
         window.open([
-          "http://20.147.168.86:9001/postLoan/model/downPdfFile?bizId=" + item
+          "http://20.147.168.82:9001/postLoan/model/downPdfFile?bizId=" + item
         ]);
       });
     },
