@@ -21,23 +21,23 @@
               el-option(label="小企业授信业务还款资金落实情况检查" value="m4")
               el-option(label="小企业法人快捷贷首次检查" value="m5")
               el-option(label="小企业法人快捷贷贷后日常检查" value="m6")
-          el-button(type="primary" size="mini" @click="onSave" class="btn") 保存
+          el-button(type="primary" size="mini" @click="onSave" class="btn" ref="saveBtn") 保存
       .contentBody
         .type(v-if="form.checkType == 'm1'")
-          div-m1
+          DivM1(:detail="paramsM1" ref="DivM1")
         .type(v-if="form.checkType == 'm2'")
-          div-m2
+          DivM2(:detail="paramsM2" ref="DivM2")
         .type(v-if="form.checkType == 'm3'")
-          div-m3
+          DivM3(:detail="paramsM3" ref="DivM3")
         .type(v-if="form.checkType == 'm4'")
-          div-m4
+          DivM4(:detail="paramsM4" ref="DivM4")
         .type(v-if="form.checkType == 'm5'")
-          div-m5
+          DivM5(:detail="paramsM5" ref="DivM5")
         .type(v-if="form.checkType == 'm6'")
-          div-m6
+          DivM6(:detail="paramsM6" ref="DivM6")
       //- 提交
       .footer
-        el-button(type="warning" @click='onSubmit') 提交
+        el-button(type="warning" @click='onSubmit' ref="submitBtn") 提交
 
     .content2(v-show="activeName == 'second'")
       .textContent
@@ -80,44 +80,19 @@ import DivM6 from "./components/DivM6.vue";
 export default {
   name: "iouList",
   components: {
-    "div-m1": DivM1,
-    "div-m2": DivM2,
-    "div-m3": DivM3,
-    "div-m4": DivM4,
-    "div-m5": DivM5,
-    "div-m6": DivM6
+    DivM1,
+    DivM2,
+    DivM3,
+    DivM4,
+    DivM5,
+    DivM6
   },
   data() {
     return {
       activeName: "first",
-      options: [
-        {
-          label: "是",
-          value: 1
-        },
-        {
-          label: "否",
-          value: 0
-        }
-      ],
       form: {
         // card 1
-        checkType: "m1", // 检查类型
-        custName: "张三", // 客户名称  queryType为2时，必传；其他情况非必传
-        loanAmout: "300000", // 贷款金额
-        loanBalance: "20000", // 贷款余额
-        loanLength: "26个月", // 贷款期限
-        repayKind: "银行卡", // 还款方式
-        repayDate: "2020-06-15", // 还款日期
-        repayAmout: "200000", // 还款金额
-
-        // card 2
-        payIntention: "张三", // 还款意愿
-        checkAddr: "xxxxxxxx", // 检查地点
-        staff: "李四", // 接待人员
-        amoutSource: "银联", // 还款资金来源
-        expectRepayDate: "2020-5-20", // 预计还款/付息时间
-        practicableMsg: "xxxx" // 还款资金落实情况说明
+        checkType: "m1" // 检查类型
       },
       approval: {
         // 流程上报
@@ -130,157 +105,12 @@ export default {
         suggest: "" // 检查结论及措施建议
         // emplName: "" // 检查人员
       },
-      list1: [
-        {
-          title: "《小企业授信业务额度借款支用单》",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "《小企业贷款受托支付申请书》或自主支付清单",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "《小企业贷款受托支付申请书》",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "汇款凭证",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "账户流水",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "受托支付合同",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "入库单",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "贷款购买标的（如原材料、机器设备等）",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "企业大门",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "企业经营场地或生产车间",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "检查人员现场检查影像等",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "其他",
-          url: "",
-          dimension: "",
-          longitude: ""
-        }
-      ],
-      list2: [
-        {
-          title: "财务报表",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "纳税材料",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "水电费材料",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "银行流水",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "其他经营材料",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "企业办公场所（含企业大门）",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "企业生产车间（含重要生产或经营工序）",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "企业重要生产或经营设备、存货",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "检查人员现场检查的影像",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "抵押物影像",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "其他",
-          url: "",
-          dimension: "",
-          longitude: ""
-        }
-      ],
-      list4: [
-        {
-          title: "其他",
-          url: "",
-          dimension: "",
-          longitude: ""
-        }
-      ],
-      check: ["第一阶段"],
+      paramsM1: {},
+      paramsM2: {},
+      paramsM3: {},
+      paramsM4: {},
+      paramsM5: {},
+      paramsM6: {},
       dialogImageUrl: "",
       dialogVisible: false,
       formLabelWidth: "72px"
@@ -293,12 +123,35 @@ export default {
     if (custName) {
       this.form = { custName };
     }
+    this.paramsM1 = {
+      addrChangedMsg: "无变动",
+      billNo: "111",
+      checkAddr: "南京",
+      checked: "已落实1",
+      cooperate: "好",
+      custName: "孙骅",
+      detailMsg4useAmout: "用于购房",
+      loanAmout: "30000",
+      loanDate: "",
+      loanLength: "三年",
+      loanPurpose: "日常生活",
+      msg: "无异常情况",
+      msgSource: "支付宝",
+      payKind: "银行卡",
+      requireCheck: "落实到位1",
+      specialChecked: "已落实2",
+      specialRequireCheck: "落实到位2",
+      staff: "网二",
+      useAmoutByContract: "是"
+    };
     // this.onSubmit();
   },
   methods: {
     // 保存
     onSave() {
       console.log(filterParams(this.form));
+      // console.log(this.paramsM1)
+      console.log(filterParams(this.$refs.DivM2.form));
     },
     // 提交
     onSubmit: function() {

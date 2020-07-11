@@ -41,9 +41,9 @@
         
         el-form(:model="form" v-for='item in check' :key='item' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
           el-form-item(label="要求 :" class="formItem2")
-            el-input(v-model="form.requireCheck" type="textarea" :rows="3" clearable)
+            el-input(v-model="form.specialRequireCheck" type="textarea" :rows="3" clearable)
           el-form-item(label="落实情况 :" class="formItem2")
-            el-input(v-model="form.checked" type="textarea" :rows="3" clearable)
+            el-input(v-model="form.specialChecked" type="textarea" :rows="3" clearable)
 
     el-card(class='card')
       .left
@@ -89,12 +89,12 @@
 </template>
 
 <script>
-import { filterParams } from "../../../utils/utils";
+// import { filterParams } from "../../../utils/utils";
 export default {
   // 组件名称
-  name: "DivM2",
+  name: "DivM1",
   // 组件参数 接收来自父组件的数据
-  props: {},
+  props: ["detail"],
   // 局部注册的组件
   components: {},
   // 组件状态值
@@ -112,20 +112,20 @@ export default {
       ],
       form: {
         // card 1
-        checkType: "m1", // 检查类型
-        custName: "张三", // 客户名称  queryType为2时，必传；其他情况非必传
-        loanAmout: "300000", // 贷款金额
-        loanBalance: "20000", // 贷款余额
-        loanLength: "26个月", // 贷款期限
-        repayKind: "银行卡", // 还款方式
-        repayDate: "2020-06-15", // 还款日期
-        repayAmout: "200000", // 还款金额
+        // checkType: "", // 检查类型
+        custName: "", // 客户名称  queryType为2时，必传；其他情况非必传
+        loanAmout: "", // 贷款金额
+        loanBalance: "", // 贷款余额
+        loanLength: "", // 贷款期限
+        repayKind: "", // 还款方式
+        repayDate: "", // 还款日期
+        repayAmout: "", // 还款金额
 
         // card 2
         requireCheck: "", // 审批意见中首次跟踪检查要求
         checked: "", // 审批意见中首次跟踪检查落实情况
-        specialRequireCheck: "李四", // 产品首次跟踪检查特殊要求
-        specialChecked: "银联", // 产品首次跟踪检查特殊落实情况
+        specialRequireCheck: "", // 产品首次跟踪检查特殊要求
+        specialChecked: "", // 产品首次跟踪检查特殊落实情况
 
         // card 3
         staff: "", // 接待人员
@@ -222,26 +222,14 @@ export default {
   // 计算属性
   computed: {},
   // 侦听器
-  watch: {},
+  watch: {
+    detail: function(newVal) {
+      // console.log(1, newVal, oldVal);
+      this.form = newVal;
+    }
+  },
   // 组件方法
   methods: {
-    // 保存
-    onSave() {
-      console.log(filterParams(this.form));
-    },
-    // 提交
-    onSubmit: function() {
-      if (this.form.startDate) {
-        this.form.startDate = this.$moment(this.form.startDate).format("L");
-      }
-      console.log(filterParams(this.form));
-    },
-    onSubmitApproval() {
-      console.log(filterParams(this.approval));
-    },
-    handleClick() {
-      console.log(this.activeName);
-    },
     returnType(row) {
       switch (row.bizType) {
         case "m1":
@@ -257,10 +245,6 @@ export default {
         case "m6":
           return "小企业法人快捷贷贷后日常检查";
       }
-    },
-    // 阶段多选框
-    onChange() {
-      console.log(this.check);
     },
     // 图片上传
     handleRemove(file, fileList) {

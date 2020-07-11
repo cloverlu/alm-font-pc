@@ -62,9 +62,9 @@
 import { filterParams } from "../../../utils/utils";
 export default {
   // 组件名称
-  name: "DivM2",
+  name: "DivM4",
   // 组件参数 接收来自父组件的数据
-  props: {},
+  props: ["detail"],
   // 局部注册的组件
   components: {},
   // 组件状态值
@@ -139,7 +139,12 @@ export default {
   // 计算属性
   computed: {},
   // 侦听器
-  watch: {},
+  watch: {
+    detail: function(newVal) {
+      // console.log(1, newVal, oldVal);
+      this.form = newVal;
+    }
+  },
   // 组件方法
   methods: {
     // 保存
