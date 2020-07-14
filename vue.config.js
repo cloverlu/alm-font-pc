@@ -3,7 +3,7 @@ const path = require("path");
 module.exports = {
   devServer: {
     // mode: process.env.NODE_ENV == "development" ? "development" : "production",
-    publicPath: "",
+    publicPath: process.env.NODE_ENV === "production" ? "./" : "/",
     // 设置主机地址
     host: "localhost",
     // 设置默认端口
