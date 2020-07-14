@@ -16,13 +16,35 @@
       el-tab-pane(label="私人借款" name="three")
       el-tab-pane(label="应付票据" name="four")
     .content1(v-show="activeTab1 == 'first'")
-      form-content1
+      //- form-content1(:formContent1="params1" ref="formContent1")
+      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+        el-row(:gutter="20")
+          el-col(:span="12")
+            el-form-item(label="当前余额 :" style="width:96%")
+              el-input(v-model="form.colDebtBalance" clearable)
+          el-col(:span="12")
+            el-form-item(label="上期检查（或调查）时点余额 :" style="width:96%")
+              el-input(v-model="form.colDebtLastBalance" clearable)
+          el-col(:span="12")
+            el-form-item(label="如变动超过30%，原因 :" style="width:96%")
+              el-input(v-model="form.colDebtChang30Msg" type="textarea" :rows="3" clearable)
     .content1(v-show="activeTab1 == 'second'")
-      form-content1
+      //- form-content1(:formContent1="params1" ref="formContent1")
+      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+        el-row(:gutter="20")
+          el-col(:span="12")
+            el-form-item(label="当前余额 :" style="width:96%")
+              el-input(v-model="form.colDebtBalance" clearable)
+          el-col(:span="12")
+            el-form-item(label="上期检查（或调查）时点余额 :" style="width:96%")
+              el-input(v-model="form.colDebtLastBalance" clearable)
+          el-col(:span="12")
+            el-form-item(label="如变动超过30%，原因 :" style="width:96%")
+              el-input(v-model="form.colDebtChang30Msg" type="textarea" :rows="3" clearable)
     .content1(v-show="activeTab1 == 'three'")
-      form-content1
+      form-content1(:formContent1="params1" ref="formContent1")
     .content1(v-show="activeTab1 == 'four'")
-      form-content1
+      form-content1(:formContent1="params1" ref="formContent1")
     //- tab2
     .cardTitle1
       span(class='blue')
@@ -32,11 +54,11 @@
       el-tab-pane(label="银行借款" name="second")
       el-tab-pane(label="应付账款" name="three")
     .content1(v-show="activeTab2 == 'first'")
-      form-content2
+      form-content1(:formContent1="params2" ref="formContent2")
     .content1(v-show="activeTab2 == 'second'")
-      form-content2
+      form-content1(:formContent1="params2" ref="formContent2")
     .content1(v-show="activeTab2 == 'three'")
-      form-content2
+      form-content1(:formContent1="params2" ref="formContent2")
     //- tab3
     .cardTitle1
       span(class='blue')
@@ -47,13 +69,13 @@
       el-tab-pane(label="水、电、煤、气其中一项或多项" name="three")
       el-tab-pane(label="现金流" name="four")
     .content1(v-show="activeTab3 == 'first'")
-      form-content3
+      form-content3(:formContent1="params3" ref="formContent3")
     .content1(v-show="activeTab3 == 'second'")
-      form-content3
+      form-content3(:formContent1="params3" ref="formContent3")
     .content1(v-show="activeTab3 == 'three'")
-      form-content3
+      form-content3(:formContent1="params3" ref="formContent3")
     .content1(v-show="activeTab3 == 'four'")
-      form-content3
+      form-content3(:formContent1="params3" ref="formContent3")
     //- tab4
     .cardTitle1
       span(class='blue')
@@ -64,32 +86,32 @@
       el-tab-pane(label="纳税数额" name="three")
       el-tab-pane(label="利润" name="four")
     .content1(v-show="activeTab4 == 'first'")
-      form-content4
+      form-content4(:formContent1="params4" ref="formContent4")
     .content1(v-show="activeTab4 == 'second'")
-      form-content4
+      form-content4(:formContent1="params4" ref="formContent4")
     .content1(v-show="activeTab4 == 'three'")
-      form-content4
+      form-content4(:formContent1="params4" ref="formContent4")
     .content1(v-show="activeTab4 == 'four'")
-      form-content4
+      form-content4(:formContent1="params4" ref="formContent4")
 
 </template>
 
 <script>
-import FormContent1 from "./FormContent1";
-import FormContent2 from "./FormContent2";
-import FormContent3 from "./FormContent3";
-import FormContent4 from "./FormContent4";
+// import FormContent1 from "./FormContent1";
+// import FormContent2 from "./FormContent2";
+// import FormContent3 from "./FormContent3";
+// import FormContent4 from "./FormContent4";
 export default {
   // 组件名称
   name: "TabForm1",
   // 组件参数 接收来自父组件的数据
-  props: ["detail"],
+  props: ["contentDetail"],
   // 局部注册的组件
   components: {
-    "form-content1": FormContent1,
-    "form-content2": FormContent2,
-    "form-content3": FormContent3,
-    "form-content4": FormContent4
+    // "form-content1": FormContent1,
+    // "form-content2": FormContent2,
+    // "form-content3": FormContent3,
+    // "form-content4": FormContent4
   },
   // 组件状态值
   data() {
@@ -97,13 +119,66 @@ export default {
       activeTab1: "first",
       activeTab2: "first",
       activeTab3: "first",
-      activeTab4: "first"
+      activeTab4: "first",
+      form: {
+        // card 1
+        colDebtBalance: "", //当前余额
+        colDebtLastBalance: "", //应收票据上期检查（或调查）时点余额
+        colDebtChang30Msg: "", // 应收票据变动超过30%，原因
+        stockChangSitu: "", //存货上次全面检查或调查时余额
+        stockLastBalance: "", //存货本次检查存货变动情况
+        stockChang30Msg: "", // 存货变动超过30%，原因
+        loanForPsonBalance: "", //私人借款当前余额
+        loanForPsonLastBalance: "", //私人借款上期检查（或调查）时点余额
+        loanForPsonChang30Msg: "", // 私人借款变动超过30%，原因
+        payDebtBalance: "", //应付票据当前余额
+        payDebtLastBalance: "", //应付票据上期检查（或调查）时点余额
+        payDebtChang30Msg: "", // 应付票据变动超过30%，原因
+        // card 2
+        colCapitalBalance: "", //应收账款当前余额
+        colCapitalLastBalance: "", //应收账款上期检查（或调查）时点余额
+        colCapitalChang30Msg: "", // 应收账款变动超过30%，原因
+        loanForBankBalance: "", //银行借款当前余额
+        loanForBankLastBalance: "", //银行借款上期检查（或调查）时点余额
+        loanForBankChang30Msg: "", // 银行借款变动超过30%，原因
+        payCapitalBalance: "", //应付账款当前余额
+        payCapitalLastBalance: "", //应付账款上期检查（或调查）时点余额
+        payCapitalChang30Msg: "", // 应付账款变动超过30%，原因
+        // card 3
+        busInc3MSitu: "", //营业收入近三个月的情况
+        busIncChang30Msg: "", // 营业收入剔除季节性因素后变动超30%，原因
+        dailyExpen3MSitu: "", //近三个月的情况
+        dailyExpenChang30Msg: "", // 变动超过30%，原因
+        emplCost3M: "", //近三个月的情况
+        emplCostChang30Msg: "", // 变动超过30%，原因
+        cash3M: "", //近三个月的情况
+        cashChang30Msg: "", // 应收账款变动超过30%，原因
+        // card 4
+        materialCost3M: "", //营业收入近三个月的情况
+        materialCostChang30Msg: "", // 营业收入剔除季节性因素后变动超30%，原因
+        financeCost3M: "", //近三个月的情况
+        financeCostChang30Msg: "", // 变动超过30%，原因
+        payTaxAmout3M: "", //近三个月的情况
+        payTaxAmoutChang30Msg: "", // 变动超过30%，原因
+        profit3M: "", //近三个月的情况
+        profitChang30Msg: "" // 应收账款变动超过30%，原因
+      },
+      params1: {},
+      params2: {},
+      params3: {},
+      params4: {}
     };
   },
   // 计算属性
   computed: {},
   // 侦听器
-  watch: {},
+  watch: {
+    contentDetail: function(newVal) {
+      // console.log(1, newVal, oldVal);
+      this.params1 = newVal;
+      console.log("this.params1", this.params1);
+    }
+  },
   // 组件方法
   methods: {
     handleClick() {
@@ -119,6 +194,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../../assets/style/global.scss";
 .Tabform1 {
   width: 100%;
   height: 100%;

@@ -661,6 +661,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../../assets/style/global.scss";
 .card {
   width: 100%;
   margin-bottom: 10px;

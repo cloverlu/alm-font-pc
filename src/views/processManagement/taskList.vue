@@ -174,11 +174,25 @@ export default {
     download() {
       // console.log("111");
       const arr = this.multipleSelection.map(item => item.bizId);
-      arr.map(item => {
-        window.open([
-          "http://20.147.168.82:9001/postLoan/model/downPdfFile?bizId=" + item
-        ]);
-      });
+      const bizIdString = arr.join(",");
+      console.log("bizIdString", bizIdString);
+      var a = document.createElement("a");
+      //需要下载的数据内容,我这里放的就是BLOB，如果你有下载链接就不需要了
+      var url =
+        "http://20.147.168.86:9001/postLoan/model/downZipPdfFile?bizIds=" +
+        bizIdString;
+      var filename = "aaa.zip";
+      a.href = url;
+      a.download = filename;
+      a.click();
+      window.URL.revokeObjectURL(url);
+
+      // window.open([]);
+      // arr.map(item => {
+      //   window.open([
+      //     "http://20.147.168.82:9001/postLoan/model/downPdfFile?bizId=" + item
+      //   ]);
+      // });
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -231,6 +245,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/style/global.scss";
 .processManagement {
   box-sizing: border-box;
   width: 100%;
@@ -366,6 +381,7 @@ export default {
 </style>
 
 <style lang="scss">
+@import "../../assets/style/global.scss";
 .processManagement {
   .el-table__row td .cell {
     text-align: center !important;

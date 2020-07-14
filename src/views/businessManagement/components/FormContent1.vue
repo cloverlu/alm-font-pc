@@ -10,13 +10,13 @@
       el-row(:gutter="20")
         el-col(:span="12")
           el-form-item(label="当前余额 :" style="width:96%")
-            el-input(v-model="params.loanLength" clearable)
+            el-input(v-model="params.currentBalance" clearable)
         el-col(:span="12")
           el-form-item(label="上期检查（或调查）时点余额 :" style="width:96%")
-            el-input(v-model="params.loanLength" clearable)
+            el-input(v-model="params.lastBalance" clearable)
         el-col(:span="12")
           el-form-item(label="如变动超过30%，原因 :" style="width:96%")
-            el-input(v-model="params.loanLength" type="textarea" :rows="3" clearable)
+            el-input(v-model="params.Chang30Msg" type="textarea" :rows="3" clearable)
 </template>
 
 <script>
@@ -24,38 +24,49 @@ export default {
   // 组件名称
   name: "FormContent",
   // 组件参数 接收来自父组件的数据
-  props: {
-    info: {
-      type: Array,
-      default: () => []
-    },
-    detail: {
-      type: Object,
-      default: () => {}
-    },
-    type: {
-      type: Number,
-      default: () => 1
-    },
-    // 是否只读，只读的话disabled为true
-    read: {
-      type: Boolean,
-      default: () => false
-    }
-  },
+  props: ["formContent1"],
+  // props: {
+  //   info: {
+  //     type: Array,
+  //     default: () => []
+  //   },
+  //   detail: {
+  //     type: Object,
+  //     default: () => {}
+  //   },
+  //   type: {
+  //     type: Number,
+  //     default: () => 1
+  //   },
+  //   // 是否只读，只读的话disabled为true
+  //   read: {
+  //     type: Boolean,
+  //     default: () => false
+  //   }
+  // },
   // 局部注册的组件
   components: {},
   // 组件状态值
   data() {
     return {
       activeTab1: "first",
-      params: {}
+      params: {
+        currentBalance: "", //当前余额
+        lastBalance: "", //上期检查（或调查）时点余额
+        Chang30Msg: "" // 变动超过30%，原因
+      }
     };
   },
   // 计算属性
   computed: {},
   // 侦听器
-  watch: {},
+  watch: {
+    formContent1: function(newVal) {
+      // console.log(1, newVal, oldVal);
+      this.params = newVal;
+      console.log("this.params", this.params);
+    }
+  },
   // 组件方法
   methods: {
     handleClick() {
@@ -71,6 +82,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../../assets/style/global.scss";
 .formContent {
   width: 100%;
   height: 100%;

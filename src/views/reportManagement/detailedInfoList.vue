@@ -257,6 +257,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/style/global.scss";
 .detailedInfoList {
   box-sizing: border-box;
   width: 100%;

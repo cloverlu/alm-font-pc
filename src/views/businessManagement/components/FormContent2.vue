@@ -10,13 +10,13 @@
       el-row(:gutter="20")
         el-col(:span="12")
           el-form-item(label="当前余额 :" style="width:96%")
-            el-input(v-model="params.loanLength" clearable)
+            el-input(v-model="params.stockChangSitu" clearable)
         el-col(:span="12")
           el-form-item(label="上期检查（或调查）时点余额 :" style="width:96%")
-            el-input(v-model="params.loanLength" clearable)
+            el-input(v-model="params.stockLastBalance" clearable)
         el-col(:span="12")
           el-form-item(label="如变动超过30%，原因 :" style="width:96%")
-            el-input(v-model="params.loanLength" type="textarea" :rows="3" clearable)
+            el-input(v-model="params.stockChang30Msg" type="textarea" :rows="3" clearable)
 </template>
 
 <script>
@@ -49,7 +49,11 @@ export default {
   data() {
     return {
       activeTab1: "first",
-      params: {}
+      params: {
+        stockChangSitu: "", //存货上次全面检查或调查时余额
+        stockLastBalance: "", //存货本次检查存货变动情况
+        stockChang30Msg: "" // 存货变动超过30%，原因
+      }
     };
   },
   // 计算属性
@@ -71,6 +75,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../../assets/style/global.scss";
 .formContent {
   width: 100%;
   height: 100%;

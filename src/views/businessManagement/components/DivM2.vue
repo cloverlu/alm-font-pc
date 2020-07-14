@@ -644,6 +644,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../../assets/style/global.scss";
 .card {
   width: 100%;
   margin-bottom: 10px;
@@ -776,6 +777,7 @@ export default {
 }
 </style>
 <style lang="scss">
+@import "../../../assets/style/global.scss";
 /deep/.el-textarea__inner {
   font-size: 16px;
   font-family: Source Han Sans CN;

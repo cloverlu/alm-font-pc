@@ -10,10 +10,10 @@
       el-row(:gutter="20")
         el-col(:span="12")
           el-form-item(label="近三个月的情况 :" style="width:96%")
-            el-input(v-model="params.loanLength" type="textarea" :rows="3" clearable)
+            el-input(v-model="params.Inc3MSitu" type="textarea" :rows="3" clearable)
         el-col(:span="12")
           el-form-item(label="如剔除季节性因素后变动超30%，原因 :" style="width:96%")
-            el-input(v-model="params.loanLength" type="textarea" :rows="3" clearable)
+            el-input(v-model="params.Chang30Msg" type="textarea" :rows="3" clearable)
 </template>
 
 <script>
@@ -46,7 +46,10 @@ export default {
   data() {
     return {
       activeTab1: "first",
-      params: {}
+      params: {
+        Inc3MSitu: "", //近三个月的情况
+        Chang30Msg: "" //超过30%，原因
+      }
     };
   },
   // 计算属性
@@ -68,6 +71,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../../assets/style/global.scss";
 .formContent {
   width: 100%;
   height: 100%;

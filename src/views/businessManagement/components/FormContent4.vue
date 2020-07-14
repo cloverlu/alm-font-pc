@@ -10,13 +10,14 @@
       el-row(:gutter="20")
         el-col(:span="12")
           el-form-item(label="近三个月的情况 :" style="width:96%")
-            el-input(v-model="params.loanLength" type="textarea" :rows="3" clearable)
+            el-input(v-model="params.Inc3MSitu" type="textarea" :rows="3" clearable)
         el-col(:span="12")
           el-form-item(label="如剔除季节性因素后变动超30%，原因 :" style="width:96%")
-            el-input(v-model="params.loanLength" type="textarea" :rows="3" clearable)
+            el-input(v-model="params.Chang30Msg" type="textarea" :rows="3" clearable)
         el-col(:span="12")
           el-form-item(label="" style="width:96%")
-            el-input(v-model="params.loanLength" type="textarea" :rows="4" clearable placeholder='根据财务信息及现场检查情况,判断企业是否主营业务变动、生产经营异常(停产、半停产、员工数量骤减、设备开工率不足等)，主要原材料或货物的采购成本变动，销售异常，上下游核小客户变动等情况，并详细阐述异常情况对企业偿债能力的影响。' )
+            span(class="greyContent") 根据财务信息及现场检查情况,判断企业是否主营业务变动、生产经营异常(停产、半停产、员工数量骤减、设备开工率不足等)，主要原材料或货物的采购成本变动，销售异常，上下游核小客户变动等情况，并详细阐述异常情况对企业偿债能力的影响。
+            
 </template>
 
 <script>
@@ -49,7 +50,10 @@ export default {
   data() {
     return {
       activeTab1: "first",
-      params: {}
+      params: {
+        Inc3MSitu: "", //近三个月的情况
+        Chang30Msg: "" //超过30%，原因
+      }
     };
   },
   // 计算属性
@@ -71,8 +75,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../../assets/style/global.scss";
 .formContent {
   width: 100%;
   height: 100%;
+  .greyContent {
+    font-size: 16px;
+    line-height: 27px;
+    color: rgba(183, 183, 183, 1);
+  }
 }
 </style>

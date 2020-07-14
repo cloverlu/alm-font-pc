@@ -16,13 +16,13 @@
       el-tab-pane(label="私人借款" name="three")
       el-tab-pane(label="应付票据" name="four")
     .content1(v-show="activeTab1 == 'first'")
-      form-content1
+      form-content1()
     .content1(v-show="activeTab1 == 'second'")
-      form-content1
+      form-content1()
     .content1(v-show="activeTab1 == 'three'")
-      form-content1
+      form-content1()
     .content1(v-show="activeTab1 == 'four'")
-      form-content1
+      form-content1()
     //- tab2
     .cardTitle1
       span(class='blue')
@@ -32,11 +32,11 @@
       el-tab-pane(label="银行借款" name="second")
       el-tab-pane(label="应付账款" name="three")
     .content1(v-show="activeTab2 == 'first'")
-      form-content2
+      form-content1()
     .content1(v-show="activeTab2 == 'second'")
-      form-content2
+      form-content1()
     .content1(v-show="activeTab2 == 'three'")
-      form-content2
+      form-content1()
     //- tab3
     .cardTitle1
       span(class='blue')
@@ -47,13 +47,13 @@
       el-tab-pane(label="现金流" name="three")
       el-tab-pane(label="利润" name="four")
     .content1(v-show="activeTab3 == 'first'")
-      form-content3
+      form-content3()
     .content1(v-show="activeTab3 == 'second'")
-      form-content3
+      form-content3()
     .content1(v-show="activeTab3 == 'three'")
-      form-content3
+      form-content3()
     .content1(v-show="activeTab3 == 'four'")
-      form-content3
+      form-content3()
     //- tab4
     .cardTitle1
       span(class='blue')
@@ -63,16 +63,16 @@
       el-tab-pane(label="财务费用" name="second")
       el-tab-pane(label="纳税数额" name="three")
     .content1(v-show="activeTab4 == 'first'")
-      form-content4
+      form-content4()
     .content1(v-show="activeTab4 == 'second'")
-      form-content4
+      form-content4()
     .content1(v-show="activeTab4 == 'three'")
-      form-content4
+      form-content4()
 </template>
 
 <script>
 import FormContent1 from "./FormContent1";
-import FormContent2 from "./FormContent2";
+// import FormContent2 from "./FormContent2";
 import FormContent3 from "./FormContent3";
 import FormContent4 from "./FormContent4";
 export default {
@@ -83,7 +83,7 @@ export default {
   // 局部注册的组件
   components: {
     "form-content1": FormContent1,
-    "form-content2": FormContent2,
+    // "form-content2": FormContent2,
     "form-content3": FormContent3,
     "form-content4": FormContent4
   },
@@ -115,6 +115,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../../assets/style/global.scss";
 .Tabform2 {
   width: 100%;
   height: 100%;

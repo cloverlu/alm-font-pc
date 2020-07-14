@@ -134,6 +134,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/style/global.scss";
 .taskList {
   box-sizing: border-box;
   width: 100%;

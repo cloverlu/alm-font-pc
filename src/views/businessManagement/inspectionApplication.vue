@@ -27,7 +27,7 @@
           DivM1(:detail="paramsM1" ref="DivM1")
         .type(v-if="form.checkType == 'm2'")
           DivM2(:detail="paramsM2" ref="DivM2")
-        .type(v-if="form.checkType == 'm3'")
+        .type(v-if="form.checkType == 'm3'")  
           DivM3(:detail="paramsM3" ref="DivM3")
         .type(v-if="form.checkType == 'm4'")
           DivM4(:detail="paramsM4" ref="DivM4")
@@ -149,9 +149,9 @@ export default {
   methods: {
     // 保存
     onSave() {
-      console.log(filterParams(this.form));
-      // console.log(this.paramsM1)
-      console.log(filterParams(this.$refs.DivM2.form));
+      // console.log(filterParams(this.form));
+      console.log(this.$refs);
+      // console.log(filterParams(this.$refs.DivM2.form));
     },
     // 提交
     onSubmit: function() {
@@ -530,11 +530,13 @@ export default {
 </style>
 
 <style lang="scss">
+@import "../../assets/style/global.scss";
 .el-scrollbar {
-  .el-select-dropdown__wrap {
-    .el-select-dropdown__list {
-      .el-select-dropdown__item {
+  /deep/.el-select-dropdown__wrap {
+    /deep/.el-select-dropdown__list {
+      /deep/.el-select-dropdown__item {
         line-height: 34px;
+        height: 34px;
         padding-left: 15px;
       }
     }
