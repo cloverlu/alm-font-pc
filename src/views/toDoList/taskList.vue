@@ -46,7 +46,7 @@
             <el-table-column header-align="center" prop="endDate" label="截止时间" min-width="15%"></el-table-column>
             <el-table-column header-align="center" label="操作" min-width="15%">
               <template slot-scope="scope" width="120px">
-                <el-button size="mini" type="primary" @click="handleEdit(scope.row)">修改</el-button>
+                <el-button size="mini" type="primary" @click="handleEdit(scope.row)">编辑检查申请</el-button>
               </template>
             </el-table-column>
           </el-table>

@@ -133,9 +133,25 @@ export default {
     // 保存
     onSave() {
       // console.log(filterParams(this.form));
-      console.log(this.$refs);
-      saveEditModelBusiness();
       // console.log(filterParams(this.$refs.DivM2.form));
+      // const parmas = {
+      //   checkType: this.form.checkType
+      // };
+      let data = {};
+      if (this.form.checkType == "m1") {
+        data = this.$refs.DivM1.form;
+      }
+      console.log(data);
+      // saveEditModelBusiness(this, {
+      //   ...parmas
+      // }).then(res => {
+      //   if (res.data.returnCode === "200000") {
+      //     this.$message({
+      //       message: "检查申请编辑操作成功",
+      //       type: "success"
+      //     });
+      //   }
+      // });
     },
     // 提交
     onSubmit: function() {
@@ -143,6 +159,7 @@ export default {
         this.form.startDate = this.$moment(this.form.startDate).format("L");
       }
       console.log(filterParams(this.form));
+      saveEditModelBusiness();
     },
 
     onSubmitApproval() {

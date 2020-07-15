@@ -83,7 +83,7 @@
         span(class='title') 影像维护
       .uploadBox(v-for='(item,index) in list1' :key='item.index')
         .imgTitle {{item.title}}
-        el-upload(action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
+        el-upload(action="http://20.147.168.82:9001/postLoan/business/uploadModelFile" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
           i(class="el-icon-plus") 
   </div>
 </template>
@@ -112,14 +112,14 @@ export default {
       ],
       form: {
         // card 1
-        // checkType: "", // 检查类型
+        checkType: "m1", // 检查类型
         custName: "", // 客户名称  queryType为2时，必传；其他情况非必传
-        loanAmout: "", // 贷款金额
-        loanBalance: "", // 贷款余额
         loanLength: "", // 贷款期限
-        repayKind: "", // 还款方式
-        repayDate: "", // 还款日期
-        repayAmout: "", // 还款金额
+        billNo: "", //借据编号
+        payKind: "", //贷款支付方式
+        loanDate: "", //放款日期
+        loanAmout: "", //贷款金额
+        loanPurpose: "", //约定用途
 
         // card 2
         requireCheck: "", // 审批意见中首次跟踪检查要求

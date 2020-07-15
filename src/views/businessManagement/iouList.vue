@@ -40,6 +40,11 @@
             <el-table-column header-align="center" prop="billEndDate" label="借据止期" min-width="15%"></el-table-column>
             <el-table-column header-align="center" prop="billAmout" label="借据金额" min-width="15%"></el-table-column>
             <el-table-column header-align="center" prop="billBlance" label="借据余额" min-width="15%"></el-table-column>
+            <el-table-column header-align="center" label="借据信息" min-width="25%">
+              <template slot-scope="scope">
+                <el-button size="mini" type="primary" @click="link(scope.row)">发起检查申请</el-button>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
         <div class="block">
@@ -138,6 +143,9 @@ export default {
         case "m6":
           return "小企业法人快捷贷贷后日常检查";
       }
+    },
+    link() {
+      // 跳转检查申请
     }
   }
 };

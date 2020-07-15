@@ -44,9 +44,10 @@
                 <el-upload
                   class="upload-demo fileUpload"
                   ref="upload"
-                  action="http://20.147.168.83:9001/loanReceipt/uploadExcel"
+                  action="http://20.147.168.82:9001/loanReceipt/uploadExcel"
                   :auto-upload="true"
                   :on-success="sendSuccess"
+                  :on-error="sendError"
                 >
                   <el-button slot="trigger" size="small" type="primary" @click="submitUpload">导入</el-button>
                 </el-upload>
@@ -176,10 +177,25 @@ export default {
       this.pageNo = 1;
       this.pageSize = 10;
     },
-    sendSuccess() {
+    sendSuccess(res) {
+      console.log(res);
+      if (res.returnCode == "200000") {
+        this.$message({
+          message: "文件导入操作成功",
+          type: "success"
+        });
+        this.onSubmit();
+      } else {
+        this.$message({
+          message: res.returnMsg,
+          type: "error"
+        });
+      }
+    },
+    sendError() {
       this.$message({
-        message: "文件导入操作成功",
-        type: "success"
+        message: "文件格式或类型不对",
+        type: "error"
       });
     },
     submitUpload() {

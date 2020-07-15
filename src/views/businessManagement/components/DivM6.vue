@@ -347,7 +347,7 @@
         span(class='title') 影像维护
       .uploadBox(v-for='(item,index) in list6' :key='item.index')
         .imgTitle {{item.title}}
-        el-upload(action="http://20.147.168.82:9001/postLoan/business/uploadModelFile?bizId=" v-model="item.url" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
+        el-upload(action="http://20.147.168.82:9001/postLoan/business/uploadModelFile" v-model="item.url" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
           i(class="el-icon-plus") 
   </div>
 </template>
@@ -391,6 +391,7 @@ export default {
       ],
       form: {
         // card 1
+        checkType: "m6", // 检查类型
         checkModel: "", //贷后检查模式
         repayKind: "银行卡", // 还款方式
         lineAmout: "", //  授信金额

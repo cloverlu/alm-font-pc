@@ -12,7 +12,13 @@
         span(class='title') 张三有限责任公司
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
         el-form-item(label="检查类型 :" class="formItem2")
-          el-input(v-model="form.checkType" disabled)
+          el-select(v-model="form.checkType" disabled style="width:100%" )
+            el-option(label="小企业授信业务首次跟踪检查" value="m1")
+            el-option(label="小企业授信业务贷后例行检查" value="m2")
+            el-option(label="小企业授信业务贷后全面检查" value="m3")
+            el-option(label="小企业授信业务还款资金落实情况检查" value="m4")
+            el-option(label="小企业法人快捷贷首次检查" value="m5")
+            el-option(label="小企业法人快捷贷贷后日常检查" value="m6")
         el-form-item(label="授信额度金额 :" class="formItem2")
           el-input(v-model="form.lineAmout" disabled)
         el-form-item(label="客户名称 :" class="formItem2")
@@ -370,7 +376,7 @@
         span(class='title') 影像维护
       .uploadBox(v-for='(item,index) in list2' :key='item.index')
         .imgTitle {{item.title}}
-        el-upload(action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
+        el-upload(action="http://20.147.168.82:9001/postLoan/business/uploadModelFile" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
           i(class="el-icon-plus")  
   </div>
 </template>
@@ -399,7 +405,7 @@ export default {
       ],
       form: {
         // card 1
-        checkType: "", // 检查类型
+        checkType: "m2", // 检查类型
         lineAmout: "", // 授信额度金额
         custName: "", // 客户名称  queryType为2时，必传；其他情况非必传
         loanAmout: "", // 贷款金额

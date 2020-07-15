@@ -48,7 +48,7 @@
         span(class='title') 影像维护
       .uploadBox(v-for='(item,index) in list5' :key='item.index')
         .imgTitle {{item.title}}
-        el-upload(action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
+        el-upload(action="http://20.147.168.82:9001/postLoan/business/uploadModelFile" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
           i(class="el-icon-plus") 
   </div>
 </template>
@@ -77,7 +77,7 @@ export default {
       ],
       form: {
         // card 1
-        checkType: "m1", // 检查类型
+        checkType: "m5", // 检查类型
         custName: "张三", // 客户名称  queryType为2时，必传；其他情况非必传
         loanAmout: "300000", // 贷款金额
         loanBalance: "20000", // 贷款余额
