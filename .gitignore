@@ -2,6 +2,7 @@
 node_modules
 /dist
 /dist-pc
+/dist-pc.rar
 
 
 # local env files
