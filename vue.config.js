@@ -1,9 +1,11 @@
 const path = require("path");
 // 作为配置文件，直接导出配置对象即可
 module.exports = {
+  // 基本路径
+  publicPath: process.env.NODE_ENV === "production" ? "./" : "/",
+  // 输出文件目录
+  outputDir: "dist",
   devServer: {
-    // mode: process.env.NODE_ENV == "development" ? "development" : "production",
-    publicPath: process.env.NODE_ENV === "production" ? "./" : "/",
     // 设置主机地址
     host: "localhost",
     // 设置默认端口
@@ -12,7 +14,7 @@ module.exports = {
     proxy: {
       "/alm": {
         // alm开发环境API地址
-        target: "http://20.147.168.86:9001",
+        target: "http://20.147.168.82:9001",
         // 如果要代理 websockets
         ws: true,
         // 将主机标头的原点更改为目标URL
