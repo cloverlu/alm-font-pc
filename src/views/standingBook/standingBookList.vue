@@ -20,12 +20,12 @@
           class="demo-form-inline formBox"
         >
           <el-row :gutter="20">
-            <el-col :span="6">
+            <el-col :span="8">
               <el-form-item label="机构名称" class="formItem5">
                 <el-input v-model="searchForm.orgName" clearable></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
               <el-form-item label="借据编号" class="formItem5">
                 <el-input v-model="searchForm.billNo" clearable></el-input>
               </el-form-item>
@@ -53,22 +53,7 @@
               </div>
             </el-col>
           </el-row>
-
-          <!-- <div class="btn">
-            <el-button type="primary" size="small" @click="onSubmit">查询</el-button>
-          </div>-->
         </el-form>
-        <!-- <el-upload
-          class="upload-demo fileUpload"
-          ref="upload"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :on-preview="handlePreview"
-          :on-remove="handleRemove"
-          :file-list="fileList"
-          :auto-upload="true"
-        >
-          <el-button slot="trigger" size="small" type="primary" @click="submitUpload">导入</el-button>
-        </el-upload>-->
       </div>
       <div class="userTable">
         <div class="tableBox">
@@ -76,20 +61,27 @@
             <el-table-column
               cell-class-name
               header-align="center"
-              prop="custName"
-              label="客户名称"
+              prop="orgName"
+              label="机构名称"
               min-width="10%"
             ></el-table-column>
-            <el-table-column header-align="center" prop="creditKind" label="授信品种" min-width="13%"></el-table-column>
+            <el-table-column
+              cell-class-name
+              header-align="center"
+              prop="custName"
+              label="客户名称"
+              min-width="8%"
+            ></el-table-column>
+            <el-table-column header-align="center" prop="creditKind" label="授信品种" min-width="12%"></el-table-column>
             <el-table-column
               header-align="center"
               show-overflow-tooltip
               prop="creditSubLoanKind"
-              min-width="13%"
+              min-width="12%"
               label="信贷业务小类"
             ></el-table-column>
-            <el-table-column header-align="center" prop="billNo" label="借据编号" min-width="13%"></el-table-column>
-            <el-table-column header-align="center" prop="billAmout" label="借据金额" min-width="10%"></el-table-column>
+            <el-table-column header-align="center" prop="billNo" label="借据编号" min-width="12%"></el-table-column>
+            <el-table-column header-align="center" prop="billAmout" label="借据金额" min-width="8%"></el-table-column>
             <el-table-column header-align="center" prop="billLength" label="借据期限" min-width="10%"></el-table-column>
             <el-table-column
               header-align="center"
@@ -98,7 +90,7 @@
               min-width="10%"
             ></el-table-column>
             <el-table-column header-align="center" prop="billEndDate" label="借据止期" min-width="10%"></el-table-column>
-            <el-table-column header-align="center" prop="billBlance" label="借据余额" min-width="10%"></el-table-column>
+            <el-table-column header-align="center" prop="billBlance" label="借据余额" min-width="8%"></el-table-column>
           </el-table>
         </div>
         <div class="block">
@@ -119,29 +111,18 @@
 
 <script>
 import { filterParams } from "../../utils/utils";
+import { getCustomers } from "../../api/customer";
 export default {
   name: "standingBookList",
   data() {
     return {
-      tableData: [
-        {
-          id: 1,
-          custName: "2016-05-02",
-          creditKind: "王小虎",
-          billAmout: "2000000",
-          creditSubLoanKind: "管理员",
-          billNo: "短信",
-          billLength: "短信",
-          billBeginDate: "短信",
-          billEndDate: "短信",
-          billBlance: "短信"
-        }
-      ],
+      tableData: [],
       pageNo: 1,
       pageSize: 10,
       total: 10,
       searchForm: {
-        orgName: "1",
+        queryType: "1",
+        orgName: "",
         billNo: "",
         custName: ""
       },
@@ -163,21 +144,35 @@ export default {
     // 修改分页大小
     handleSizeChange: function(e) {
       this.pageSize = e;
+      this.pageNo = 1;
+      this.onSubmit();
       console.log("pageSize", this.pageSize);
     },
     // 翻页
     handleCurrentChange: function(e) {
       this.pageNo = e;
+      this.onSubmit();
       console.log("pageIndex", this.pageNo);
     },
     // 表单查询
     onSubmit: function() {
       console.log(filterParams(this.searchForm));
       console.log(this.pageSize, this.pageNo);
+      getCustomers(this, {
+        ...filterParams(this.searchForm),
+        pageSize: this.pageSize,
+        pageNo: this.pageNo
+      }).then(res => {
+        this.tableData = res.data.data;
+        this.total = res.data.total;
+        console.log(res);
+      });
     },
     // 重置
     onClear() {
-      this.searchForm = {};
+      this.searchForm = {
+        queryType: "1"
+      };
       this.pageNo = 1;
       this.pageSize = 10;
     },
@@ -190,12 +185,6 @@ export default {
     submitUpload() {
       this.$refs.upload.submit();
     }
-    // handleRemove(file, fileList) {
-    //   console.log(file, fileList);
-    // },
-    // handlePreview(file) {
-    //   console.log(file);
-    // }
   }
 };
 </script>

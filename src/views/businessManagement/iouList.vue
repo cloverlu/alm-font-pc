@@ -23,6 +23,7 @@
             <el-input v-model="searchForm.billNo" clearable></el-input>
           </el-form-item>
           <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
+          <el-button size="mini" @click="onClear">重置</el-button>
         </el-form>
       </div>
       <div class="userTable">
@@ -59,6 +60,7 @@
 
 <script>
 import { filterParams } from "../../utils/utils";
+import { getCustomers } from "../../api/customer";
 export default {
   name: "iouList",
   data() {
@@ -66,14 +68,14 @@ export default {
       tableData: [],
       pageNo: 1,
       pageSize: 10,
-      total: 400,
+      total: 10,
       currentItem: 1,
       searchForm: {
         custName: "",
         billNo: "",
-        queryType: "2",
-        emplCode: "",
-        emplName: "qqq"
+        queryType: "1",
+        emplCode: localStorage.getItem("emplCode"),
+        emplName: localStorage.getItem("emplName")
       },
       formLabelWidth: "72px"
     };
@@ -85,8 +87,8 @@ export default {
       this.searchForm = {
         custName,
         queryType: "2",
-        emplCode: "",
-        emplName: "qqq"
+        emplCode: localStorage.getItem("emplCode"),
+        emplName: localStorage.getItem("emplName")
       };
     }
     this.onSubmit();
@@ -106,6 +108,22 @@ export default {
     onSubmit: function() {
       console.log(filterParams(this.searchForm));
       console.log(this.pageSize, this.pageNo);
+      getCustomers(this, {
+        ...filterParams(this.searchForm),
+        pageSize: this.pageSize,
+        pageNo: this.pageNo
+      }).then(res => {
+        this.tableData = res.data.data;
+        this.total = res.data.total;
+        console.log(res);
+      });
+    },
+    onClear() {
+      this.searchForm = {
+        queryType: "1"
+      };
+      this.pageSize = 10;
+      this.pageNo = 1;
     },
     returnType(row) {
       switch (row.bizType) {
@@ -189,7 +207,7 @@ export default {
           margin-top: 13px;
           min-width: 30px;
           margin-left: 0;
-          margin-right: 5%;
+          margin-right: 15px;
           text-align: center;
           .el-button--primary {
             background: rgba(78, 120, 222, 1);

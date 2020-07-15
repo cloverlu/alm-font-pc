@@ -56,6 +56,7 @@
       <div class="userTable">
         <div class="tableBox">
           <el-table
+            ref="multipleTable"
             stripe
             :data="tableData"
             border
@@ -168,6 +169,7 @@ export default {
     onClear() {
       this.searchForm = {};
       this.multipleSelection = [];
+      this.$refs.multipleTable.clearSelection();
       this.pageNo = 1;
       this.pageSize = 10;
     },

@@ -21,6 +21,7 @@
           </el-form-item>
 
           <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
+          <el-button size="mini" @click="onClear">重置</el-button>
         </el-form>
       </div>
       <div class="userTable">
@@ -161,6 +162,7 @@ export default {
     // 修改分页大小
     handleSizeChange: function(e) {
       this.pageSize = e;
+      this.pageNo = 1;
       console.log("pageSize", this.pageSize);
       this.onSubmit();
     },
@@ -182,6 +184,11 @@ export default {
         this.tableData = res.data.data;
         this.total = res.data.total;
       });
+    },
+    onClear() {
+      this.searchForm = {};
+      this.pageSize = 10;
+      this.pageNo = 1;
     },
     returnBoolean(type) {
       switch (type) {
@@ -256,7 +263,7 @@ export default {
           margin-top: 13px;
           min-width: 30px;
           margin-left: 0;
-          margin-right: 5%;
+          margin-right: 15px;
           text-align: center;
           .el-button--primary {
             background: rgba(78, 120, 222, 1);
@@ -323,6 +330,18 @@ export default {
 .statisticalInfoList {
   .el-table__row td .cell {
     text-align: center !important;
+  }
+}
+.el-scrollbar {
+  /deep/.el-select-dropdown__wrap {
+    /deep/.el-select-dropdown__list {
+      /deep/.el-select-dropdown__item {
+        line-height: 34px;
+        height: 34px;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+    }
   }
 }
 </style>
