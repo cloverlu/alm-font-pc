@@ -66,8 +66,10 @@
             <el-col :span="6">
               <el-form-item label="完成状态" class="formItem4">
                 <el-select v-model="searchForm.bizStatus" clearable style="width:100%">
-                  <el-option label="已完成" value="complete"></el-option>
-                  <el-option label="进行中" value="inReview"></el-option>
+                  <el-option label="应做" value="shouldDo"></el-option>
+                  <el-option label="未做" value="notDo"></el-option>
+                  <el-option label="审核中" value="inReview"></el-option>
+                  <el-option label="已做" value="complete"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>

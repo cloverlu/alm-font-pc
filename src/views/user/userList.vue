@@ -100,19 +100,19 @@
       :before-close="() => editCancel('editForm', 2)"
     >
       <el-form :model="form" ref="editForm">
-        <el-form-item label="所属机构" prop="orgName" :label-width="formLabelWidth">
+        <el-form-item label="所属机构" :label-width="formLabelWidth">
           <el-input v-model="form.orgName" clearable></el-input>
         </el-form-item>
-        <el-form-item label="用户名称" prop="emplName" :label-width="formLabelWidth">
+        <el-form-item label="用户名称" :label-width="formLabelWidth">
           <el-input v-model="form.emplName" clearable :disabled="type == 2"></el-input>
         </el-form-item>
-        <el-form-item label="用户编码" prop="emplCode" :label-width="formLabelWidth">
+        <el-form-item label="用户编码" :label-width="formLabelWidth">
           <el-input v-model="form.emplCode" clearable :disabled="type == 2"></el-input>
         </el-form-item>
-        <el-form-item label="通知标识" prop="noticeFlag" :label-width="formLabelWidth">
+        <el-form-item label="通知标识" :label-width="formLabelWidth">
           <el-input v-model="form.noticeFlag" clearable></el-input>
         </el-form-item>
-        <el-form-item label="岗位名称" prop="postCode" :label-width="formLabelWidth">
+        <el-form-item label="岗位名称" :label-width="formLabelWidth">
           <el-checkbox-group v-model="form.postCode">
             <el-checkbox
               v-for="item in postNameList"
@@ -271,7 +271,11 @@ export default {
     // 新建编辑弹窗的 重置按钮
     editCancel: function(refname) {
       this.form = {
-        postCode: []
+        orgName: "",
+        postCode: [],
+        emplName: "",
+        emplCode: "",
+        noticeFlag: ""
       };
       this.$refs[refname].resetFields();
       this.dialogFormVisible = false;
@@ -287,6 +291,10 @@ export default {
         addUser(this, {
           ...filterParams(this.form)
         }).then(() => {
+          this.$message({
+            message: "新建用户成功",
+            type: "success"
+          });
           this.onSubmit();
         });
       } else {
@@ -296,14 +304,21 @@ export default {
           ...filterParams(this.form),
           id: this.currentItem
         }).then(() => {
+          this.$message({
+            message: "编辑用户成功",
+            type: "success"
+          });
           this.onSubmit();
         });
       }
-
       this.dialogFormVisible = false;
       this.$refs[refname].resetFields();
       this.form = {
-        postCode: []
+        orgName: "",
+        postCode: [],
+        emplName: "",
+        emplCode: "",
+        noticeFlag: ""
       };
       this.type = 1;
     },
@@ -559,6 +574,18 @@ export default {
 </style>
 
 <style lang="scss">
+.el-scrollbar {
+  /deep/.el-select-dropdown__wrap {
+    /deep/.el-select-dropdown__list {
+      /deep/.el-select-dropdown__item {
+        line-height: 34px;
+        height: 34px;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+    }
+  }
+}
 .el-dialog__wrapper {
   /deep/.el-dialog {
     background: rgba(255, 255, 255, 1);
