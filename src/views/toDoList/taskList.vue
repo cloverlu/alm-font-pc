@@ -69,6 +69,7 @@
 
 <script>
 import { filterParams } from "../../utils/utils";
+import { getTaskList } from "../../api/processManagement";
 export default {
   name: "taskList",
   data() {
@@ -88,7 +89,7 @@ export default {
       total: 10,
       currentItem: 1,
       searchForm: {
-        custName: "1"
+        bizType: ""
       },
       formLabelWidth: "72px"
     };
@@ -101,17 +102,29 @@ export default {
     // 修改分页大小
     handleSizeChange: function(e) {
       this.pageSize = e;
+      this.pageNo = 1;
+      this.onSubmit();
       console.log("pageSize", this.pageSize);
     },
     // 翻页
     handleCurrentChange: function(e) {
       this.pageNo = e;
+      this.onSubmit();
       console.log("pageIndex", this.pageNo);
     },
     // 表单查询
     onSubmit: function() {
       console.log(filterParams(this.searchForm));
       console.log(this.pageSize, this.pageNo);
+      getTaskList(this, {
+        ...filterParams(this.searchForm),
+        emplName: "金林" || localStorage.getItem("emplName"),
+        pageSize: this.pageSize,
+        pageNo: this.pageNo
+      }).then(res => {
+        this.tableData = res.data.data;
+        this.total = res.data.total;
+      });
     },
     returnType(row) {
       switch (row.bizType) {

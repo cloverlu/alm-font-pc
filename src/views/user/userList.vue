@@ -95,7 +95,6 @@
       title="用户信息"
       :visible="dialogFormVisible"
       width="698px"
-      height="379px"
       :append-to-body="true"
       v-alterELDialogMarginTop="{marginTop:'30vh'}"
       :before-close="() => editCancel('editForm', 2)"
@@ -588,8 +587,8 @@ export default {
         margin: auto;
         // height: 224px;
         .el-form-item {
-          height: 28px;
-          margin-bottom: 21px;
+          // height: 28px;
+          // margin-bottom: 21px;
           .el-form-item__label {
             height: 28px;
             line-height: 38px;
@@ -604,8 +603,11 @@ export default {
               }
             }
             .el-checkbox-group {
-              height: 28px;
+              // height: 28px;
               line-height: 28px;
+              .el-checkbox {
+                margin-left: 5px;
+              }
             }
           }
         }

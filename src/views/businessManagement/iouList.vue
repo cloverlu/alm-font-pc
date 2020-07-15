@@ -73,9 +73,7 @@ export default {
       searchForm: {
         custName: "",
         billNo: "",
-        queryType: "1",
-        emplCode: localStorage.getItem("emplCode"),
-        emplName: localStorage.getItem("emplName")
+        queryType: "1"
       },
       formLabelWidth: "72px"
     };
@@ -86,9 +84,7 @@ export default {
     if (custName) {
       this.searchForm = {
         custName,
-        queryType: "2",
-        emplCode: localStorage.getItem("emplCode"),
-        emplName: localStorage.getItem("emplName")
+        queryType: "2"
       };
     }
     this.onSubmit();
@@ -110,6 +106,8 @@ export default {
       console.log(this.pageSize, this.pageNo);
       getCustomers(this, {
         ...filterParams(this.searchForm),
+        emplCode: localStorage.getItem("emplCode"),
+        emplName: "金林" || localStorage.getItem("emplName"),
         pageSize: this.pageSize,
         pageNo: this.pageNo
       }).then(res => {

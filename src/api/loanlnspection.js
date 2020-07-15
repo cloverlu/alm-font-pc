@@ -1,17 +1,12 @@
-//待办事项1
-const getToDoList = ({ $axios }, data) =>
-  $axios.get(`/alm/postLoan/business/toDoList`, data)
+// 检查审批按钮
+const saveEditModelBusiness = ({ $axios }, data) =>
+  $axios.get(`/alm/postLoan/business/editModelBusiness`, data);
 
-// 贷后检查列表
-const getNoticeCheckList = ({ $axios }, data) =>
-  $axios.post(`/alm/postLoan/business/noticeCheckList`, data)
+// 流程上报按钮
+const approve = ({ $axios }, data) => $axios.post(`/alm/approve/save`, data);
 
-// 保存
-const SaveEditModelBusiness = ({ $axios }, data) =>
-  $axios.post(`/alm/postLoan/business/editModelBusiness`, data)
+// 检查审批详情
+const queryForDetail = ({ $axios }, data) =>
+  $axios.post(`/alm/postLoan/business/queryForBizDtail`, data);
 
-// 申请明细
-const queryForDtail = ({ $axios }, data) =>
-  $axios.post(`/alm/postLoan/business/queryForDtail`, data)
-
-export { getToDoList, getNoticeCheckList, SaveEditModelBusiness, queryForDtail }
+export { saveEditModelBusiness, approve, queryForDetail };

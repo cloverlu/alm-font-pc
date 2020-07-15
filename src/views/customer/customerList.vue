@@ -71,8 +71,6 @@ export default {
       searchForm: {
         custName: "",
         queryType: "3",
-        emplCode: "",
-        emplName: "qqq",
         orgName: "南京市"
       },
       formLabelWidth: "72px"
@@ -101,6 +99,8 @@ export default {
       console.log(this.pageSize, this.pageNo);
       getCustomers(this, {
         ...filterParams(this.searchForm),
+        emplCode: localStorage.getItem("emplCode"),
+        emplName: "金林" || localStorage.getItem("emplName"),
         pageSize: this.pageSize,
         pageNo: this.pageNo
       }).then(res => {

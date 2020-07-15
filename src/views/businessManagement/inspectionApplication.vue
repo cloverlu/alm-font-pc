@@ -70,6 +70,11 @@
 
 <script>
 import { filterParams } from "../../utils/utils";
+import {
+  saveEditModelBusiness,
+  approve,
+  queryForDetail
+} from "../../api/loanlnspection";
 import DivM1 from "./components/DivM1.vue";
 import DivM2 from "./components/DivM2.vue";
 import DivM3 from "./components/DivM3.vue";
@@ -121,36 +126,15 @@ export default {
     // 进入页面先调用查询接口
     const { custName } = this.$route.query;
     if (custName) {
-      this.form = { custName };
+      queryForDetail();
     }
-    this.paramsM1 = {
-      addrChangedMsg: "无变动",
-      billNo: "111",
-      checkAddr: "南京",
-      checked: "已落实1",
-      cooperate: "好",
-      custName: "孙骅",
-      detailMsg4useAmout: "用于购房",
-      loanAmout: "30000",
-      loanDate: "",
-      loanLength: "三年",
-      loanPurpose: "日常生活",
-      msg: "无异常情况",
-      msgSource: "支付宝",
-      payKind: "银行卡",
-      requireCheck: "落实到位1",
-      specialChecked: "已落实2",
-      specialRequireCheck: "落实到位2",
-      staff: "网二",
-      useAmoutByContract: "是"
-    };
-    // this.onSubmit();
   },
   methods: {
     // 保存
     onSave() {
       // console.log(filterParams(this.form));
       console.log(this.$refs);
+      saveEditModelBusiness();
       // console.log(filterParams(this.$refs.DivM2.form));
     },
     // 提交
@@ -160,8 +144,10 @@ export default {
       }
       console.log(filterParams(this.form));
     },
+
     onSubmitApproval() {
       console.log(filterParams(this.approval));
+      approve();
     },
     handleClick() {
       console.log(this.activeName);
