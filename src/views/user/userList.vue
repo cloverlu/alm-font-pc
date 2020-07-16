@@ -296,6 +296,16 @@ export default {
               message: "新建用户成功",
               type: "success"
             });
+            this.dialogFormVisible = false;
+            this.$refs[refname].resetFields();
+            this.form = {
+              orgName: "",
+              postCode: [],
+              emplName: "",
+              emplCode: "",
+              noticeFlag: ""
+            };
+            this.type = 1;
             this.onSubmit();
           } else {
             this.$message({
@@ -316,6 +326,16 @@ export default {
               message: "编辑用户成功",
               type: "success"
             });
+            this.dialogFormVisible = false;
+            this.$refs[refname].resetFields();
+            this.form = {
+              orgName: "",
+              postCode: [],
+              emplName: "",
+              emplCode: "",
+              noticeFlag: ""
+            };
+            this.type = 1;
             this.onSubmit();
           } else {
             this.$message({
@@ -325,16 +345,6 @@ export default {
           }
         });
       }
-      this.dialogFormVisible = false;
-      this.$refs[refname].resetFields();
-      this.form = {
-        orgName: "",
-        postCode: [],
-        emplName: "",
-        emplCode: "",
-        noticeFlag: ""
-      };
-      this.type = 1;
     },
     // 删除弹窗的 取消按钮
     deleteCancel: function() {
