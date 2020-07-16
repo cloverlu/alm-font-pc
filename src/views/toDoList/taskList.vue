@@ -46,7 +46,7 @@
             <el-table-column header-align="center" prop="endDate" label="截止时间" min-width="15%"></el-table-column>
             <el-table-column header-align="center" label="操作" min-width="15%">
               <template slot-scope="scope" width="120px">
-                <el-button size="mini" type="primary" @click="handleEdit(scope.row)">编辑检查申请</el-button>
+                <el-button size="mini" type="primary" @click="link(scope.row)">编辑检查申请</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -141,6 +141,13 @@ export default {
         case "m6":
           return "小企业法人快捷贷贷后日常检查";
       }
+    },
+    link() {
+      // 跳转检查申请
+      this.$router.push({
+        path: "/businessManagement/inspectionApplication",
+        query: { type: 2 }
+      });
     }
   }
 };

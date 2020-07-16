@@ -71,7 +71,7 @@ export default {
       searchForm: {
         custName: "",
         queryType: "3",
-        orgName: "南京市"
+        orgName: "南京"
       },
       formLabelWidth: "72px"
     };
@@ -124,7 +124,7 @@ export default {
       });
       if (flag) {
         this.$router.push({
-          path: "/Layout/businessManagement/iouList",
+          path: "/businessManagement/iouList",
           query: { custName: row.custName }
         });
       } else {

@@ -146,6 +146,10 @@ export default {
     },
     link() {
       // 跳转检查申请
+      this.$router.push({
+        path: "/businessManagement/inspectionApplication",
+        query: { type: 1 }
+      });
     }
   }
 };

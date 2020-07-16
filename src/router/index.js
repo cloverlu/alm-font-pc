@@ -2,7 +2,6 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Layout from "../Layout/index.vue";
 import Login from "../views/login/index.vue";
-import userList from "../views/user/userList.vue";
 
 Vue.use(VueRouter);
 
@@ -17,70 +16,156 @@ const routes = [
     component: Login,
   },
   {
-    path: "/",
-    redirect: "/login",
-  },
-  {
-    // path: "/index",
     path: "/Layout",
-
-    // 你可以选择不同的layout组件
+    // redirect: "/Layout",
+    redirect: "/toDoList/taskList",
+  },
+  // 待办提醒
+  {
+    path: "/toDoList",
     component: Layout,
-    name: "Layout",
-
-    // 这里开始对应的路由都会显示在app-main中 如上图所示
+    redirect: "/toDoList/taskList",
+    name: "待办提醒",
+    meta: { title: "待办提醒" },
     children: [
-      // 用户列表
       {
-        path: "user/index",
-        // component: () => import("@/views/user/userList"),
-        component: userList,
+        path: "taskList",
+        component: () => import("@/views/toDoList/taskList"),
+        name: "任务列表",
+        meta: { title: "任务列表", noCache: true },
       },
-      // 客户列表
+    ],
+  },
+  // 用户管理
+  {
+    path: "/user",
+    component: Layout,
+    redirect: "/user/index",
+    name: "用户管理",
+    meta: { title: "用户管理" },
+    children: [
       {
-        path: "customer/index",
+        path: "index",
+        component: () => import("@/views/user/userList"),
+        name: "用户列表",
+        meta: { title: "用户列表", noCache: true },
+      },
+    ],
+  },
+  // 客户管理
+  {
+    path: "/customer",
+    component: Layout,
+    redirect: "/customer/index",
+    name: "客户管理",
+    meta: { title: "客户管理" },
+    children: [
+      {
+        path: "index",
         component: () => import("@/views/customer/customerList"),
+        name: "客户列表",
+        meta: { title: "客户列表", noCache: true },
       },
-      // 台账列表
+    ],
+  },
+  // 台账管理
+  {
+    path: "/standingBook",
+    component: Layout,
+    redirect: "/standingBook/index",
+    name: "台账管理",
+    meta: { title: "台账管理" },
+    children: [
       {
-        path: "standingBook/index",
+        path: "index",
         component: () => import("@/views/standingBook/standingBookList"),
+        name: "借据台账",
+        meta: { title: "借据台账", noCache: true },
       },
-      // 报表管理--明细信息
+    ],
+  },
+  // 流程管理
+  {
+    path: "/processManagement",
+    component: Layout,
+    redirect: "/processManagement/taskList",
+    name: "流程管理",
+    meta: { title: "流程管理" },
+    children: [
       {
-        path: "reportManagement/detailedInfoList",
+        path: "taskList",
+        component: () => import("@/views/processManagement/taskList"),
+        name: "任务列表",
+        meta: { title: "任务列表", noCache: true },
+      },
+    ],
+  },
+  // 报表管理
+  {
+    path: "/reportManagement",
+    component: Layout,
+    redirect: "/reportManagement/detailedInfoList",
+    name: "报表管理",
+    meta: { title: "报表管理" },
+    children: [
+      {
+        path: "detailedInfoList",
         component: () => import("@/views/reportManagement/detailedInfoList"),
+        name: "明细信息",
+        meta: { title: "明细信息", noCache: true },
       },
-      // 报表管理--统计信息
       {
-        path: "reportManagement/statisticalInfoList",
+        path: "statisticalInfoList",
         component: () => import("@/views/reportManagement/statisticalInfoList"),
+        name: "统计信息",
+        meta: { title: "统计信息", noCache: true },
       },
-      // 任务列表--代办提醒
+    ],
+  },
+  // 业务管理
+  {
+    path: "/businessManagement",
+    component: Layout,
+    redirect: "/businessManagement/businessList",
+    name: "业务管理",
+    meta: { title: "业务管理" },
+    children: [
       {
-        path: "toDoList/taskList",
+        path: "businessList",
         component: () => import("@/views/toDoList/taskList"),
+        name: "业务列表",
+        meta: { title: "业务列表" },
+        // children: [
+        //   {
+        //     path: "inspectionApplication",
+        //     component: () =>
+        //       import("@/views/businessManagement/inspectionApplication"),
+        //     name: "检查申请",
+        //     meta: { title: "检查申请", noCache: true },
+        //   },
+        // ],
       },
-      // 业务列表--业务管理
       {
-        path: "businessManagement/businessList",
-        component: () => import("@/views/toDoList/taskList"),
+        path: "iouList",
+        component: () => import("@/views/businessManagement/iouList"),
+        name: "借据列表",
+        meta: { title: "借据列表", noCache: true },
+        // children: [
+        //   {
+        //     path: "inspectionApplication",
+        //     component: () =>
+        //       import("@/views/businessManagement/inspectionApplication"),
+        //     name: "检查申请",
+        //     meta: { title: "检查申请", noCache: true },
+        //   },
+        // ],
       },
-      // 检查申请--业务管理
       {
-        path: "businessManagement/inspectionApplication",
+        path: "inspectionApplication",
         component: () =>
           import("@/views/businessManagement/inspectionApplication"),
-      },
-      // 借据列表--业务管理
-      {
-        path: "businessManagement/iouList",
-        component: () => import("@/views/businessManagement/iouList"),
-      },
-      // 任务列表--流程管理
-      {
-        path: "processManagement/taskList",
-        component: () => import("@/views/processManagement/taskList"),
+        name: "检查申请",
+        meta: { title: "检查申请", noCache: true },
       },
     ],
   },

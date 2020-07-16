@@ -9,11 +9,16 @@
     <div class="breadcrumbBox">
       <i class="el-icon-menu"></i>
       <el-breadcrumb class="breadcrumbContent">
-        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item
+          v-for="item in levelList"
+          :key="item.path"
+          :to="item.path"
+        >{{item.meta.title}}</el-breadcrumb-item>
+        <!-- <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>
           <a href="/">活动管理</a>
         </el-breadcrumb-item>
-        <el-breadcrumb-item>活动列表</el-breadcrumb-item>
+        <el-breadcrumb-item>活动列表</el-breadcrumb-item>-->
       </el-breadcrumb>
     </div>
     <div class="content">
@@ -25,12 +30,42 @@
 <script>
 export default {
   name: "AppMain",
+  data() {
+    return {
+      levelList: []
+    };
+  },
+  watch: {
+    $route() {
+      this.getBreadcrumb();
+    }
+  },
+  created() {
+    this.getBreadcrumb();
+  },
   computed: {
     cachedViews() {
       return this.$store.state.tagsView.cachedViews;
     },
     key() {
       return this.$route.path;
+    }
+  },
+  methods: {
+    getBreadcrumb() {
+      let matched = this.$route.matched.filter(item => item.name);
+      // const first = matched[0];
+      // if (
+      //   first &&
+      //   first.name.trim().toLocaleLowerCase() !==
+      //     "Dashboard".toLocaleLowerCase()
+      // ) {
+      //   matched = [{ path: "/dashboard", meta: { title: "dashboard" } }].concat(
+      //     matched
+      //   );
+      // }
+      this.levelList = matched;
+      console.log("this.levelList", this.levelList);
     }
   }
 };
