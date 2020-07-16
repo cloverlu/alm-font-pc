@@ -84,7 +84,7 @@ export default {
           menuList.map(item => {
             if (item.children && item.children.length) {
               item.children.map(i => {
-                (i.path = `/Layout/${i.path}`), (i.index = `${i.path}`);
+                (i.path = `/${i.path}`), (i.index = `${i.path}`);
               });
             }
           });

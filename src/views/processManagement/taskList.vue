@@ -87,7 +87,7 @@
             <el-table-column header-align="center" prop="custName" label="客户名称" min-width="12%"></el-table-column>
             <el-table-column header-align="center" prop="billNo" label="借据编号" min-width="25%"></el-table-column>
             <el-table-column header-align="center" prop="noticeDate" label="提醒时间" min-width="15%"></el-table-column>
-            <el-table-column header-align="center" prop="endDate" label="截止时间" min-width="15%"></el-table-column>
+            <el-table-column header-align="center" prop="bizEndDate" label="截止时间" min-width="15%"></el-table-column>
             <el-table-column header-align="center" label="操作" min-width="15%">
               <template slot-scope="scope" width="120px">
                 <el-button size="mini" type="primary" @click="handleEdit(scope.row)">修改</el-button>
@@ -241,6 +241,12 @@ export default {
         case "already":
           return "已做";
       }
+    },
+    handleEdit(row) {
+      this.$router.push({
+        path: "/businessManagement/inspectionApplication",
+        query: { type: 1, bizId: row.bizId }
+      });
     }
   }
 };

@@ -290,12 +290,19 @@ export default {
         console.log("新建");
         addUser(this, {
           ...filterParams(this.form)
-        }).then(() => {
-          this.$message({
-            message: "新建用户成功",
-            type: "success"
-          });
-          this.onSubmit();
+        }).then(res => {
+          if (res.data.returnCode === "200000") {
+            this.$message({
+              message: "新建用户成功",
+              type: "success"
+            });
+            this.onSubmit();
+          } else {
+            this.$message({
+              message: res.data.returnMsg,
+              type: "error"
+            });
+          }
         });
       } else {
         // 编辑
@@ -303,12 +310,24 @@ export default {
         updateUser(this, {
           ...filterParams(this.form),
           id: this.currentItem
-        }).then(() => {
-          this.$message({
-            message: "编辑用户成功",
-            type: "success"
-          });
-          this.onSubmit();
+        }).then(res => {
+          if (res.data.returnCode === "200000") {
+            this.$message({
+              message: "编辑用户成功",
+              type: "success"
+            });
+            this.onSubmit();
+          } else {
+            this.$message({
+              message: res.data.returnMsg,
+              type: "error"
+            });
+          }
+          // this.$message({
+          //   message: "编辑用户成功",
+          //   type: "success"
+          // });
+          // this.onSubmit();
         });
       }
       this.dialogFormVisible = false;

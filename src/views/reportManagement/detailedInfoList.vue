@@ -20,7 +20,7 @@
             <el-col :span="6">
               <el-form-item label="开始日期" class="formItem4">
                 <el-date-picker
-                  v-model="searchForm.startDate"
+                  v-model="searchForm.beginDate"
                   style="width:100%"
                   type="date"
                   placeholder="选择日期"
@@ -145,7 +145,7 @@ export default {
       total: 10,
       currentItem: 1,
       searchForm: {
-        startDate: "",
+        beginDate: "",
         endDate: "",
         orgName: "",
         emplName: "",
@@ -178,9 +178,9 @@ export default {
     },
     // 表单查询
     onSubmit: function() {
-      if (this.searchForm.startDate) {
-        this.searchForm.startDate = this.$moment(
-          this.searchForm.startDate
+      if (this.searchForm.beginDate) {
+        this.searchForm.beginDate = this.$moment(
+          this.searchForm.beginDate
         ).format("L");
       }
       if (this.searchForm.endDate) {
@@ -205,7 +205,11 @@ export default {
     },
     // 下载
     output() {
-      const queryFormValues = this.searchForm;
+      const queryFormValues = {
+        ...this.searchForm,
+        pageNo: 1,
+        pageSize: this.total
+      };
       // 调用接口
       let queryStr = "";
       Object.keys(queryFormValues).forEach(key => {
@@ -238,8 +242,10 @@ export default {
     },
     returnStatus(row) {
       switch (row.bizStatus) {
-        case "new":
-          return "新增";
+        case "shouldDo":
+          return "应做";
+        case "notDo":
+          return "未做";
         case "inReview":
           return "审批中";
         case "complete":

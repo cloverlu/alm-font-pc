@@ -3,44 +3,44 @@ const todoListTitle = [
     id: 1,
     text: "业务审批流程待处理提醒",
     icon: "iconfont icontixing2",
-    warningNumber: 17
+    warningNumber: 17,
   },
   {
     id: 2,
     text: "贷后检查待处理提醒",
     icon: "iconfont icondaikuan2",
-    warningNumber: 188
+    warningNumber: 188,
   },
   {
     id: 3,
     text: "客户账户余额不足提醒",
     icon: "iconfont iconzhanghuyue2",
-    warningNumber: 100
+    warningNumber: 100,
   },
   {
     id: 4,
     text: "贷款到期提醒",
     icon: "iconfont icondaikuanshenqing1",
-    warningNumber: 1
+    warningNumber: 1,
   },
   {
     id: 5,
     text: "信贷运营监控预警核查提醒",
     icon: "iconfont iconguochengjiankong-jianduhecha2",
-    warningNumber: ""
+    warningNumber: "",
   },
   {
     id: 6,
     text: "信贷运营监控风险提示",
     icon: "iconfont iconfengxiantishi2",
-    warningNumber: 1
+    warningNumber: 1,
   },
   {
     id: 7,
     text: "行业信用风险提醒",
     icon: "iconfont iconxinyongka",
-    warningNumber: ""
-  }
+    warningNumber: "",
+  },
 ];
 
 const bizType = [
@@ -49,7 +49,7 @@ const bizType = [
   "小企业授信业务贷后全面检查",
   "小企业授信业务还款资金落实情况检查",
   "小企业法人快捷贷首次检查",
-  "小企业法人快捷贷贷后日常检查"
+  "小企业法人快捷贷贷后日常检查",
 ];
 
 const DetailsOfIOU = {
@@ -117,7 +117,7 @@ const DetailsOfIOU = {
   existRisk: true, //是否存在风险预警信号
   riskMsg: "有危险", //预警信号说明
   suggest: "建议你重置", //检查结论及措施建议
-  emplSign: "admin" //检查人员签字
+  emplSign: "admin", //检查人员签字
 };
 
 const definite1 = {
@@ -125,23 +125,23 @@ const definite1 = {
   bizType: bizType[0],
   billBeginDate: "20200201",
   billAmout: "50000",
-  billLength: "1个月"
+  billLength: "1个月",
 };
 
 // const payType = ["贷款人受托支付", "借款人自主支付", "受托支付+自主支付"];
 const payType = [
   {
     key: 1,
-    value: "贷款人受托支付"
+    value: "贷款人受托支付",
   },
   {
     key: 2,
-    value: "借款人自主支付"
+    value: "借款人自主支付",
   },
   {
     key: 3,
-    value: "受托支付+自主支付"
-  }
+    value: "受托支付+自主支付",
+  },
 ];
 
 //definite1
@@ -149,50 +149,50 @@ const definite1Field = [
   {
     name: "要求",
     id: 1,
-    modelName: "equireCheck"
+    modelName: "equireCheck",
   },
   {
     name: "落实情况",
     id: 2,
-    modelName: "checked"
-  }
+    modelName: "checked",
+  },
 ];
 const definite1FieldSpecial = [
   {
     name: "要求",
     id: 1,
-    modelName: "specialRequireCheck"
+    modelName: "specialRequireCheck",
   },
   {
     name: "落实情况",
     id: 2,
-    modelName: "specialChecked"
-  }
+    modelName: "specialChecked",
+  },
 ];
 const definite1FieldRate = [
   {
     name: "要求",
     id: 1,
-    modelName: "rateAndIntfinSerCheck"
+    modelName: "rateAndIntfinSerCheck",
   },
   {
     name: "落实情况",
     id: 2,
-    modelName: "rateAndIntfinSerChecked"
-  }
+    modelName: "rateAndIntfinSerChecked",
+  },
 ];
 //definite2
 const definite2Field = [
   {
     name: "资金使用情况详细说明",
     id: 1,
-    modelName: "detailMsg4useAmout"
+    modelName: "detailMsg4useAmout",
   },
   {
     name: "提供纸质或影像资料的信息来源",
     id: 2,
-    modelName: "msgSource"
-  }
+    modelName: "msgSource",
+  },
 ];
 
 //definite2
@@ -200,50 +200,50 @@ const definite2Field2 = [
   {
     name: "情况说明",
     id: 1,
-    modelName: "msg"
-  }
+    modelName: "msg",
+  },
 ];
 
 const cooperationType = [
   {
     key: 1,
-    value: "配合"
+    value: "配合",
   },
   {
     key: 0,
-    value: "不配合"
-  }
+    value: "不配合",
+  },
 ];
 
 // 检查类型
 const bizTypes = [
   {
     key: "m1",
-    value: "小企业授信业务首次跟踪检查"
+    value: "小企业授信业务首次跟踪检查",
   },
   {
     key: "m2",
-    value: "小企业授信业务贷后例行检查"
+    value: "小企业授信业务贷后例行检查",
   },
   {
     key: "m3",
-    value: "小企业授信业务贷后全面检查"
+    value: "小企业授信业务贷后全面检查",
   },
   {
     key: "m4",
-    value: "小企业授信业务还款资金落实情况检查"
+    value: "小企业授信业务还款资金落实情况检查",
   },
   {
     key: "m5",
-    value: "小企业法人快捷贷首次检查"
+    value: "小企业法人快捷贷首次检查",
   },
   {
     key: "m6",
-    value: "小企业法人快捷贷贷后日常检查"
-  }
+    value: "小企业法人快捷贷贷后日常检查",
+  },
 ];
 
-const loanInsList = _ => {
+const loanInsList = () => {
   // shouldDo-应做，notDo-未做，alreadyDo-已做，inReview-审批中
   const status = ["alreadyDo", "shouldDo", "notDo"];
   const bizStatus = [].concat(status, ...status);
@@ -261,17 +261,16 @@ const loanInsList = _ => {
       bizId: i,
       custNname: "张三",
       custNo: "1111111111111111111",
-      billNo: "222222222222222222"
+      billNo: "222222222222222222",
     });
   }
   return data;
 };
 
-const loanInsList2 = _ => {
+const loanInsList2 = () => {
   // shouldDo-应做，notDo-未做，alreadyDo-已做，inReview-审批中
   const status = ["inReview"];
   const data = [];
-  const arr = [];
   const date = "2020-06-02";
   for (let i = 0; i <= 5; i++) {
     data.push({
@@ -283,7 +282,7 @@ const loanInsList2 = _ => {
       bizId: i,
       custNname: "张三",
       custNo: "1111111111111111111",
-      billNo: "222222222222222222"
+      billNo: "222222222222222222",
     });
   }
   return data;
@@ -293,93 +292,93 @@ const loanInsList2 = _ => {
 const coordinate = [
   {
     key: 1,
-    value: "配合"
+    value: "配合",
   },
   {
     key: 0,
-    value: "不配合"
-  }
+    value: "不配合",
+  },
 ];
 
 //同意
 const agreeOrNot = [
   {
     key: 1,
-    value: "同意"
+    value: "同意",
   },
   {
     key: 0,
-    value: "不同意"
-  }
+    value: "不同意",
+  },
 ];
 
 //下一岗位处理人
 const nextPositionHandlersArr = [
   {
     key: 1,
-    value: "张三"
+    value: "张三",
   },
   {
     key: 0,
-    value: "李四"
-  }
+    value: "李四",
+  },
 ];
 
 //是否
 const yesNo = [
   {
     key: 1,
-    value: "是"
+    value: "是",
   },
   {
     key: 0,
-    value: "否"
-  }
+    value: "否",
+  },
 ];
 
 // 贷款支付方式
 const payKindsArr = [
   {
     key: 1,
-    value: "贷款人受托支付"
+    value: "贷款人受托支付",
   },
   {
     key: 2,
-    value: "借款人自主支付"
+    value: "借款人自主支付",
   },
   {
     key: 3,
-    value: "受托支付+自主支付"
-  }
+    value: "受托支付+自主支付",
+  },
 ];
 
 // 担保方式
 const securityKindsArr = [
   {
     key: 1,
-    value: "信用"
+    value: "信用",
   },
   {
     key: 2,
-    value: "抵押"
+    value: "抵押",
   },
   {
     key: 3,
-    value: "质押"
+    value: "质押",
   },
   {
     key: 4,
-    value: "保证"
+    value: "保证",
   },
   {
     key: 5,
-    value: "其他"
-  }
+    value: "其他",
+  },
 ];
 
 //definte16,影像数据字段
 //类型m1
-const definte16 = _ => {
+const definte16 = () => {
   const definite16Array = [];
   const valueArray = [
     "《小企业授信业务额度借款支用单》或《用款申请》",
@@ -392,7 +391,7 @@ const definte16 = _ => {
     "企业大门",
     "企业经营场地或生产车间",
     "检查人员现场检查影像等",
-    "其他"
+    "其他",
   ];
   for (let i = 0; i < valueArray.length; i++) {
     const a = "m1_" + i;
@@ -401,14 +400,14 @@ const definte16 = _ => {
       id: i,
       text: valueArray[i],
       vModel: b,
-      vId: a
+      vId: a,
     });
   }
   return definite16Array;
 };
 //definte18,影像维护字段
 ////类型m2
-const definte18 = _ => {
+const definte18 = () => {
   const definite18Array = [];
   const valueArray = [
     "财务报表",
@@ -421,7 +420,7 @@ const definte18 = _ => {
     "企业重要生产或经营设备、存货",
     "检查人员现场检查的影像",
     "抵押物影像",
-    "其他"
+    "其他",
   ];
   for (let i = 0; i < valueArray.length; i++) {
     const a = "m2_" + i;
@@ -430,14 +429,14 @@ const definte18 = _ => {
       id: i,
       text: valueArray[i],
       vModel: b,
-      vId: a
+      vId: a,
     });
   }
   return definite18Array;
 };
 
 //类型3.m3
-const definte17 = _ => {
+const definte17 = () => {
   const definite17Array = [];
   const valueArray = [
     "财务报表",
@@ -451,7 +450,7 @@ const definte17 = _ => {
     "企业重要生产或经营设备、存货",
     "检查人员现场检查的影像",
     "抵押物影像",
-    "其他"
+    "其他",
   ];
   for (let i = 0; i < valueArray.length; i++) {
     const a = "m3_" + i;
@@ -460,7 +459,7 @@ const definte17 = _ => {
       id: i,
       text: valueArray[i],
       vModel: b,
-      vId: a
+      vId: a,
     });
   }
   return definite17Array;
@@ -468,7 +467,7 @@ const definte17 = _ => {
 
 //definte16,影像数据字段
 ////类型m5
-const definte162 = _ => {
+const definte162 = () => {
   const definite17Array = [];
   const valueArray = [
     "《小企业授信业务额度借款支用单》或《用款申请》",
@@ -481,7 +480,7 @@ const definte162 = _ => {
     "企业大门",
     "企业经营场地或生产车间",
     "检查人员现场检查影像等",
-    "其他"
+    "其他",
   ];
   for (let i = 0; i < valueArray.length; i++) {
     const a = "m5_" + i;
@@ -490,7 +489,7 @@ const definte162 = _ => {
       id: i,
       text: valueArray[i],
       vModel: b,
-      vId: a
+      vId: a,
     });
   }
   return definite17Array;
@@ -498,7 +497,7 @@ const definte162 = _ => {
 
 //definte17,影像数据字段
 ////类型m6
-const definte172 = _ => {
+const definte172 = () => {
   const definite17Array = [];
   const valueArray = [
     "能耗类材料",
@@ -510,7 +509,7 @@ const definte172 = _ => {
     "企业重要生产或经营设备、存货",
     "检查人员现场检查的影像",
     "抵押物影像",
-    "其他"
+    "其他",
   ];
   for (let i = 0; i < valueArray.length; i++) {
     const a = "m6_" + i;
@@ -519,14 +518,14 @@ const definte172 = _ => {
       id: i,
       text: valueArray[i],
       vModel: b,
-      vId: a
+      vId: a,
     });
   }
   return definite17Array;
 };
 
 // processing2-4 影像维护字段
-const processing4 = _ => {
+const processing4 = () => {
   const processing4Array = [];
   const valueArray = ["其他"];
   for (let i = 0; i < valueArray.length; i++) {
@@ -535,7 +534,7 @@ const processing4 = _ => {
       id: i,
       text: valueArray[i],
       vModel: a,
-      vId: "m4" + i
+      vId: "m4" + i,
     });
   }
   return processing4Array;
@@ -546,16 +545,16 @@ const newly18 = {
   custName: "张三有限公司",
   bizType: bizType[2],
   lineAmout: "200000", //授信金额
-  lineBalance: "50000" //授信余额
+  lineBalance: "50000", //授信余额
 };
 
-const securityKinds = _ => {
+const securityKinds = () => {
   const kinds = ["信用", "抵押", "质押", "保证", "其它"];
   const data = [];
   for (let i = 0; i < kinds.length; i++) {
     data.push({
       key: i + 1,
-      value: kinds[i]
+      value: kinds[i],
     });
   }
   return data;
@@ -566,8 +565,8 @@ const newly18One = [
   {
     name: "健康、 嗜好、家庭关系等方面",
     id: 1,
-    modelName: "HoldPensonRisk"
-  }
+    modelName: "HoldPensonRisk",
+  },
 ];
 //新增1-8里的内容
 const newly18Two = [
@@ -575,8 +574,8 @@ const newly18Two = [
     name:
       "股权变化、关键管理人员变动、关联企业变动等，是否存在偏离主业、盲目扩张等问题",
     id: 1,
-    modelName: "managerRisk"
-  }
+    modelName: "managerRisk",
+  },
 ];
 
 //财务科目里的字段
@@ -588,7 +587,7 @@ const caiwu = {
   // five: ["应收票据", "存货", "私人借款", "应付票据"],
   // six: ["应收账款", "银行借款", "应付账款"],
   seven: ["营业收入", "员工成本", "现金流", "利润"],
-  eight: ["营业成本", "财务费用", "纳税数额"]
+  eight: ["营业成本", "财务费用", "纳税数额"],
 };
 
 const caiwuOne = [
@@ -597,29 +596,29 @@ const caiwuOne = [
     title: "应收票据",
     currentBalance: "colDebtBalance", //当前余额
     lastBalance: "colDebtLastBalance", //应收票据上期检查（或调查）时点余额
-    Chang30Msg: "colDebtChang30Msg" // 应收票据变动超过30%，原因
+    Chang30Msg: "colDebtChang30Msg", // 应收票据变动超过30%，原因
   },
   {
     id: 2,
     title: "存货",
     currentBalance: "stockChangSitu", //存货上次全面检查或调查时余额
     lastBalance: "stockLastBalance", //存货本次检查存货变动情况
-    Chang30Msg: "stockChang30Msg" // 存货变动超过30%，原因
+    Chang30Msg: "stockChang30Msg", // 存货变动超过30%，原因
   },
   {
     id: 3,
     title: "私人借款",
     currentBalance: "loanForPsonBalance", //私人借款当前余额
     lastBalance: "loanForPsonLastBalance", //私人借款上期检查（或调查）时点余额
-    Chang30Msg: "loanForPsonChang30Msg" // 私人借款变动超过30%，原因
+    Chang30Msg: "loanForPsonChang30Msg", // 私人借款变动超过30%，原因
   },
   {
     id: 4,
     title: "应付票据",
     currentBalance: "payDebtBalance", //应付票据当前余额
     lastBalance: "payDebtLastBalance", //应付票据上期检查（或调查）时点余额
-    Chang30Msg: "payDebtChang30Msg" // 应付票据变动超过30%，原因
-  }
+    Chang30Msg: "payDebtChang30Msg", // 应付票据变动超过30%，原因
+  },
 ];
 
 const caiwuTwo = [
@@ -628,22 +627,22 @@ const caiwuTwo = [
     title: "应收账款",
     currentBalance: "colCapitalBalance", //应收账款当前余额
     lastBalance: "colCapitalLastBalance", //应收账款上期检查（或调查）时点余额
-    Chang30Msg: "colCapitalChang30Msg" // 应收账款变动超过30%，原因
+    Chang30Msg: "colCapitalChang30Msg", // 应收账款变动超过30%，原因
   },
   {
     id: 2,
     title: "银行借款",
     currentBalance: "loanForBankBalance", //银行借款当前余额
     lastBalance: "loanForBankLastBalance", //银行借款上期检查（或调查）时点余额
-    Chang30Msg: "loanForBankChang30Msg" // 银行借款变动超过30%，原因
+    Chang30Msg: "loanForBankChang30Msg", // 银行借款变动超过30%，原因
   },
   {
     id: 3,
     title: "应付账款",
     currentBalance: "payCapitalBalance", //应收账款当前余额
     lastBalance: "payCapitalLastBalance", //应收账款上期检查（或调查）时点余额
-    Chang30Msg: "payCapitalChang30Msg" // 应收账款变动超过30%，原因}
-  }
+    Chang30Msg: "payCapitalChang30Msg", // 应收账款变动超过30%，原因}
+  },
 ];
 
 const caiwuThree = [
@@ -651,26 +650,26 @@ const caiwuThree = [
     id: 1,
     title: "营业收入",
     Inc3MSitu: "busInc3MSitu", //营业收入近三个月的情况
-    Chang30Msg: "busIncChang30Msg" // 营业收入剔除季节性因素后变动超30%，原因
+    Chang30Msg: "busIncChang30Msg", // 营业收入剔除季节性因素后变动超30%，原因
   },
   {
     id: 2,
     title: "日常消耗",
     Inc3MSitu: "dailyExpen3MSitu", //近三个月的情况
-    Chang30Msg: "dailyExpenChang30Msg" // 变动超过30%，原因
+    Chang30Msg: "dailyExpenChang30Msg", // 变动超过30%，原因
   },
   {
     id: 3,
     title: "人工成本",
     Inc3MSitu: "emplCost3M", //近三个月的情况
-    Chang30Msg: "emplCostChang30Msg" // 变动超过30%，原因
+    Chang30Msg: "emplCostChang30Msg", // 变动超过30%，原因
   },
   {
     id: 4,
     title: "现金流",
     Inc3MSitu: "cash3M", //近三个月的情况
-    Chang30Msg: "cashChang30Msg" // 应收账款变动超过30%，原因
-  }
+    Chang30Msg: "cashChang30Msg", // 应收账款变动超过30%，原因
+  },
 ];
 
 const caiwuFour = [
@@ -678,26 +677,26 @@ const caiwuFour = [
     id: 1,
     title: "原材料成本",
     Inc3MSitu: "materialCost3M", //营业收入近三个月的情况
-    Chang30Msg: "materialCostChang30Msg" // 营业收入剔除季节性因素后变动超30%，原因
+    Chang30Msg: "materialCostChang30Msg", // 营业收入剔除季节性因素后变动超30%，原因
   },
   {
     id: 2,
     title: "财务费用",
     Inc3MSitu: "financeCost3M", //近三个月的情况
-    Chang30Msg: "financeCostChang30Msg" // 变动超过30%，原因
+    Chang30Msg: "financeCostChang30Msg", // 变动超过30%，原因
   },
   {
     id: 3,
     title: "纳税数额",
     Inc3MSitu: "payTaxAmout3M", //近三个月的情况
-    Chang30Msg: "payTaxAmoutChang30Msg" // 变动超过30%，原因
+    Chang30Msg: "payTaxAmoutChang30Msg", // 变动超过30%，原因
   },
   {
     id: 4,
     title: "利润",
     Inc3MSitu: "profit3M", //近三个月的情况
-    Chang30Msg: "profitChang30Msg" // 应收账款变动超过30%，原因
-  }
+    Chang30Msg: "profitChang30Msg", // 应收账款变动超过30%，原因
+  },
 ];
 
 const caiwuSeven = [
@@ -705,26 +704,26 @@ const caiwuSeven = [
     id: 1,
     title: "营业收入",
     Inc3MSitu: "busInc3MSitu", //营业收入近三个月的情况
-    Chang30Msg: "busIncChang30Msg" // 营业收入剔除季节性因素后变动超30%，原因
+    Chang30Msg: "busIncChang30Msg", // 营业收入剔除季节性因素后变动超30%，原因
   },
   {
     id: 2,
     title: "员工成本",
     Inc3MSitu: "emplCost3M", //近三个月的情况
-    Chang30Msg: "emplCostChang30Msg" // 变动超过30%，原因
+    Chang30Msg: "emplCostChang30Msg", // 变动超过30%，原因
   },
   {
     id: 3,
     title: "现金流",
     Inc3MSitu: "cash3M", //近三个月的情况
-    Chang30Msg: "cashChang30Msg" // 变动超过30%，原因
+    Chang30Msg: "cashChang30Msg", // 变动超过30%，原因
   },
   {
     id: 4,
     title: "利润",
     Inc3MSitu: "profit3M", //近三个月的情况
-    Chang30Msg: "profitChang30Msg" // 应收账款变动超过30%，原因
-  }
+    Chang30Msg: "profitChang30Msg", // 应收账款变动超过30%，原因
+  },
 ];
 
 const caiwuEight = [
@@ -732,58 +731,58 @@ const caiwuEight = [
     id: 1,
     title: "营业成本",
     Inc3MSitu: "materialCost3M", //营业收入近三个月的情况
-    Chang30Msg: "materialCostChang30Msg" // 营业收入剔除季节性因素后变动超30%，原因
+    Chang30Msg: "materialCostChang30Msg", // 营业收入剔除季节性因素后变动超30%，原因
   },
   {
     id: 2,
     title: "财务费用",
     Inc3MSitu: "financeCost3M", //近三个月的情况
-    Chang30Msg: "financeCostChang30Msg" // 变动超过30%，原因
+    Chang30Msg: "financeCostChang30Msg", // 变动超过30%，原因
   },
   {
     id: 3,
     title: "纳税数额",
     Inc3MSitu: "payTaxAmout3M", //近三个月的情况
-    Chang30Msg: "payTaxAmoutChang30Msg" // 变动超过30%，原因
-  }
+    Chang30Msg: "payTaxAmoutChang30Msg", // 变动超过30%，原因
+  },
 ];
 
 // 还款意愿数组
 const payIntentionsArr = [
   {
     key: 1,
-    value: "良好"
+    value: "良好",
   },
   {
     key: 2,
-    value: "较差"
+    value: "较差",
   },
   {
     key: 3,
-    value: "无"
-  }
+    value: "无",
+  },
 ];
 //新增1-4
 const newly4 = [
   {
     id: 1,
     name: "押品价值及变现能力变动情况",
-    modelName: "assitChangeSuit"
+    modelName: "assitChangeSuit",
   },
   {
     id: 2,
     name: "押品其他情况",
-    modelName: "assitOtherSuit"
+    modelName: "assitOtherSuit",
   },
   {
     id: 3,
     name: "押品检查小结",
-    modelName: "summaryForAssit"
-  }
+    modelName: "summaryForAssit",
+  },
 ];
 
 //借据列表信息-1
-const receipt1 = _ => {
+const receipt1 = () => {
   const arr = [];
   for (let i = 0; i <= 6; i++) {
     arr.push({
@@ -792,7 +791,7 @@ const receipt1 = _ => {
       billBeginDate: "2020-05-01", //借据起期
       billEndDate: "2020-05-01", //借据止期
       billAmout: "800000", //借据金额
-      billBlance: "20000" //借据余额
+      billBlance: "20000", //借据余额
     });
   }
   return arr;
@@ -810,7 +809,7 @@ const checklist1 = {
       orgName: "", //处理机构
       emplName: "", //处理人员
       processTime: "", //处理时间
-      agreeResult: "" //意见
+      agreeResult: "", //意见
     },
     {
       currentLinkName: "", //当前环节
@@ -819,16 +818,16 @@ const checklist1 = {
       orgName: "", //处理机构
       emplName: "", //处理人员
       processTime: "", //处理时间
-      agreeResult: "" //意见
-    }
-  ]
+      agreeResult: "", //意见
+    },
+  ],
 };
 
 //definite12
 const definite16Normal = {
   custName: "www", //客户名称
   lineAmout: "", //授信金额
-  lineBalance: "" //贷款余额
+  lineBalance: "", //贷款余额
 };
 
 export {
@@ -872,5 +871,5 @@ export {
   checklist1,
   definite16Normal,
   agreeOrNot,
-  nextPositionHandlersArr
+  nextPositionHandlersArr,
 };

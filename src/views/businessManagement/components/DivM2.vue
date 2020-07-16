@@ -12,7 +12,7 @@
         span(class='title') 张三有限责任公司
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
         el-form-item(label="检查类型 :" class="formItem2")
-          el-select(v-model="form.checkType" disabled style="width:100%" )
+          el-select(v-model="form.bizType" disabled style="width:100%" )
             el-option(label="小企业授信业务首次跟踪检查" value="m1")
             el-option(label="小企业授信业务贷后例行检查" value="m2")
             el-option(label="小企业授信业务贷后全面检查" value="m3")
@@ -405,7 +405,7 @@ export default {
       ],
       form: {
         // card 1
-        checkType: "m2", // 检查类型
+        bizType: "m2", // 检查类型
         lineAmout: "", // 授信额度金额
         custName: "", // 客户名称  queryType为2时，必传；其他情况非必传
         loanAmout: "", // 贷款金额

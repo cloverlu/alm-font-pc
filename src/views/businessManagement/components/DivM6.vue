@@ -391,7 +391,7 @@ export default {
       ],
       form: {
         // card 1
-        checkType: "m6", // 检查类型
+        bizType: "m6", // 检查类型
         checkModel: "", //贷后检查模式
         repayKind: "银行卡", // 还款方式
         lineAmout: "", //  授信金额

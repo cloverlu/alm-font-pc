@@ -10,8 +10,6 @@
       class="el-menu-vertical-demo"
       background-color="#545c64"
       unique-opened
-      @open="handleOpen"
-      @close="handleClose"
       text-color="rgba(255,255,255,0.5)"
       active-text-color="#fff"
       router
@@ -121,12 +119,6 @@ export default {
     };
   },
   methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
-    },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
-    },
     getPath() {
       console.log("this.$route.path", this.$route.path);
       this.defaultActive = this.$route.path;
@@ -142,19 +134,8 @@ export default {
         }
         return arr;
       });
-      // for (let index = 0; index < arr.length; index++) {
-      //   const item = arr[index];
-      //   item.icon = "el-icon" + " " + item.icon;
-      //   if (item.children && item.children.length) {
-      //     for (let i = 0; i < item.children.length; i++) {
-      //       const element = item.children[i];
-      //       element.path = `{path: ${element.path}}`;
-      //       element.index = `${item}+'-'+${i + 1}`;
-      //     }
-      //   }
-      // }
       this.subMenuArr = arr;
-      console.log("this.subMenuArr", this.subMenuArr);
+      // console.log("this.subMenuArr", this.subMenuArr);
     }
   },
   mounted() {

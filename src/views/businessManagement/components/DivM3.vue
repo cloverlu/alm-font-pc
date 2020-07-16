@@ -469,7 +469,7 @@ export default {
       ],
       form: {
         // card 1
-        checkType: "m3", // 检查类型
+        bizType: "m3", // 检查类型
         custName: "", // 客户名称  queryType为2时，必传；其他情况非必传
         securityKind: "", //担保方式
         otherSecurityKindMsg: "", //担保方式说明
@@ -566,6 +566,7 @@ export default {
         // 近期负面信息情况
         msg: "", //近期负面信息情况
         // 企业财务情况
+        financeClassification: "1",
 
         // 现场检查其他要点
         industrycChangSiut: "", //企业所在行业是否发生重大不利变化
@@ -714,29 +715,7 @@ export default {
    * el 被新创建的 vm.$ el 替换，并挂载到实例上去之后调用该钩子。
    * 如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$ el 也在文档内。
    */
-  mounted() {
-    // this.params1 = {
-    //   addrChangedMsg: "无变动",
-    //   billNo: "111",
-    //   checkAddr: "南京",
-    //   checked: "已落实1",
-    //   cooperate: "好",
-    //   custName: "孙骅",
-    //   detailMsg4useAmout: "用于购房",
-    //   loanAmout: "30000",
-    //   loanDate: "",
-    //   loanLength: "三年",
-    //   loanPurpose: "日常生活",
-    //   msg: "无异常情况",
-    //   msgSource: "支付宝",
-    //   payKind: "银行卡",
-    //   requireCheck: "落实到位1",
-    //   specialChecked: "已落实2",
-    //   specialRequireCheck: "落实到位2",
-    //   staff: "网二",
-    //   useAmoutByContract: "是"
-    // };
-  }
+  mounted() {}
 };
 </script>
 

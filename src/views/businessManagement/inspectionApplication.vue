@@ -14,7 +14,7 @@
       .contentTop
         el-form(:model="form" :inline="true" label-position="left" label-width="80px" size="mini" class="demo-form-inline formBox")
           el-form-item(label="检查类型" class="formItem5")
-            el-select(v-model="form.checkType" clearable style="width:100%" )
+            el-select(v-model="form.bizType" clearable style="width:100%" )
               el-option(label="小企业授信业务首次跟踪检查" value="m1")
               el-option(label="小企业授信业务贷后例行检查" value="m2")
               el-option(label="小企业授信业务贷后全面检查" value="m3")
@@ -23,17 +23,17 @@
               el-option(label="小企业法人快捷贷贷后日常检查" value="m6")
           el-button(type="primary" size="mini" @click="onSave" class="btn" ref="saveBtn") 保存
       .contentBody
-        .type(v-if="form.checkType == 'm1'")
+        .type(v-if="form.bizType == 'm1'")
           DivM1(:detail="paramsM1" ref="DivM1")
-        .type(v-if="form.checkType == 'm2'")
+        .type(v-if="form.bizType == 'm2'")
           DivM2(:detail="paramsM2" ref="DivM2")
-        .type(v-if="form.checkType == 'm3'")  
+        .type(v-if="form.bizType == 'm3'")  
           DivM3(:detail="paramsM3" ref="DivM3")
-        .type(v-if="form.checkType == 'm4'")
+        .type(v-if="form.bizType == 'm4'")
           DivM4(:detail="paramsM4" ref="DivM4")
-        .type(v-if="form.checkType == 'm5'")
+        .type(v-if="form.bizType == 'm5'")
           DivM5(:detail="paramsM5" ref="DivM5")
-        .type(v-if="form.checkType == 'm6'")
+        .type(v-if="form.bizType == 'm6'")
           DivM6(:detail="paramsM6" ref="DivM6")
       //- 提交
       .footer
@@ -73,7 +73,8 @@ import { filterParams } from "../../utils/utils";
 import {
   saveEditModelBusiness,
   approve,
-  queryForDetail
+  queryForDetail,
+  queryForBizDtail
 } from "../../api/loanlnspection";
 import DivM1 from "./components/DivM1.vue";
 import DivM2 from "./components/DivM2.vue";
@@ -97,8 +98,9 @@ export default {
       activeName: "first",
       form: {
         // card 1
-        checkType: "m1" // 检查类型
+        bizType: "m1" // 检查类型
       },
+      type: 1,
       approval: {
         // 流程上报
         orgName: "张三有限公司", // 客户名称
@@ -124,41 +126,98 @@ export default {
   mounted() {
     this.$moment.locale("zh-cn");
     // 进入页面先调用查询接口
-    const { custName } = this.$route.query;
-    if (custName) {
-      queryForDetail();
+    const { billNo, bizId } = this.$route.query;
+    if (billNo) {
+      // 借据
+      this.type = 1;
+      // this.form.billNo = billNo;
+      this.paramsM1.billNo = billNo;
+      this.paramsM1.type = 1;
+      this.form.bizId = "";
+      queryForDetail(this, {
+        billNo,
+        bizType: this.form.bizType
+      }).then(res => {
+        if (res.data.returnCode == "200000") {
+          this.form.bizType = res.data.data.bizType;
+          this.paramsM1 = res.data.data;
+          this.paramsM4 = res.data.data;
+        }
+      });
+    }
+    if (bizId) {
+      // 业务
+      this.type = 2;
+      this.form.billNo = "";
+      this.form.bizId = bizId;
+      queryForBizDtail(this, {
+        bizId,
+        bizType: this.form.bizType
+      }).then(res => {
+        if (res.data.returnCode == "200000") {
+          this.form.bizType = res.data.data.bizType;
+          this.paramsM1 = res.data.data;
+          this.paramsM4 = res.data.data;
+        }
+      });
     }
   },
   methods: {
     // 保存
     onSave() {
-      // console.log(filterParams(this.form));
-      // console.log(filterParams(this.$refs.DivM2.form));
-      // const parmas = {
-      //   checkType: this.form.checkType
-      // };
+      // console.log(this.$refs.DivM1.definte16);
+      // console.log(this.$refs.DivM3.form, this.$refs.DivM3.$refs.tabForm1.form);
+
       let data = {};
-      if (this.form.checkType == "m1") {
+      if (this.form.bizType == "m1") {
         data = this.$refs.DivM1.form;
+      } else if (this.form.bizType == "m2") {
+        data = this.$refs.DivM2.form;
+      } else if (
+        this.form.bizType == "m3" &&
+        this.$refs.DivM3.form.financeClassification == "1"
+      ) {
+        data = {
+          ...this.$refs.DivM3.form,
+          ...this.$refs.DivM3.$refs.tabForm1.form
+        };
+      } else if (
+        this.form.bizType == "m3" &&
+        this.$refs.DivM3.form.financeClassification == "2"
+      ) {
+        data = {
+          ...this.$refs.DivM3.form,
+          ...this.$refs.DivM3.$refs.tabForm2.form
+        };
+      } else if (this.form.bizType == "m4") {
+        data = this.$refs.DivM4.form;
+      } else if (this.form.bizType == "m5") {
+        data = this.$refs.DivM5.form;
+      } else {
+        data = this.$refs.DivM6.form;
       }
-      console.log(data);
-      // saveEditModelBusiness(this, {
-      //   ...parmas
-      // }).then(res => {
-      //   if (res.data.returnCode === "200000") {
-      //     this.$message({
-      //       message: "检查申请编辑操作成功",
-      //       type: "success"
-      //     });
-      //   }
-      // });
+
+      console.log(filterParams(data));
+      saveEditModelBusiness(this, {
+        ...filterParams(data)
+      }).then(res => {
+        if (res.data.returnCode === "200000") {
+          this.$message({
+            message: "检查申请编辑操作成功",
+            type: "success"
+          });
+          setTimeout(() => {
+            history.go(-1);
+          }, 500);
+        }
+      });
     },
     // 提交
     onSubmit: function() {
       if (this.form.startDate) {
         this.form.startDate = this.$moment(this.form.startDate).format("L");
       }
-      console.log(filterParams(this.form));
+      // console.log(filterParams(this.form));
       saveEditModelBusiness();
     },
 

@@ -48,13 +48,12 @@
         span(class='title') 影像维护
       .uploadBox(v-for='(item,index) in list5' :key='item.index')
         .imgTitle {{item.title}}
-        el-upload(action="http://20.147.168.82:9001/postLoan/business/uploadModelFile" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
+        el-upload(action="http://20.147.168.82:9001/postLoan/business/uploadModelFile" :file-list="item.url[index]" :on-success="handleSuccess" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
           i(class="el-icon-plus") 
   </div>
 </template>
 
 <script>
-import { filterParams } from "../../../utils/utils";
 export default {
   // 组件名称
   name: "DivM5",
@@ -77,7 +76,7 @@ export default {
       ],
       form: {
         // card 1
-        checkType: "m5", // 检查类型
+        bizType: "m5", // 检查类型
         custName: "张三", // 客户名称  queryType为2时，必传；其他情况非必传
         loanAmout: "300000", // 贷款金额
         loanBalance: "20000", // 贷款余额
@@ -97,72 +96,71 @@ export default {
       list5: [
         {
           title: "《小企业授信业务额度借款支用单》或《用款申请》",
-          url: "",
+          url: [],
           dimension: "",
           longitude: ""
         },
         {
           title: "《小企业贷款受托支付申请书》或自主支付清单",
-          url: "",
+          url: [],
           dimension: "",
           longitude: ""
         },
         {
           title: "汇款凭证",
-          url: "",
+          url: [],
           dimension: "",
           longitude: ""
         },
         {
           title: "账户流水",
-          url: "",
+          url: [],
           dimension: "",
           longitude: ""
         },
         {
           title: "受托支付合同",
-          url: "",
+          url: [],
           dimension: "",
           longitude: ""
         },
         {
           title: "入库单",
-          url: "",
+          url: [],
           dimension: "",
           longitude: ""
         },
         {
           title: "贷款购买标的（如原材料、机器设备等）",
-          url: "",
+          url: [],
           dimension: "",
           longitude: ""
         },
         {
           title: "企业大门",
-          url: "",
+          url: [],
           dimension: "",
           longitude: ""
         },
         {
           title: "企业经营场地或生产车间",
-          url: "",
+          url: [],
           dimension: "",
           longitude: ""
         },
         {
           title: "检查人员现场检查影像等",
-          url: "",
+          url: [],
           dimension: "",
           longitude: ""
         },
         {
           title: "其他",
-          url: "",
+          url: [],
           dimension: "",
           longitude: ""
         }
       ],
-      check: ["第一阶段"],
       dialogImageUrl: "",
       dialogVisible: false,
       formLabelWidth: "72px"
@@ -179,23 +177,6 @@ export default {
   },
   // 组件方法
   methods: {
-    // 保存
-    onSave() {
-      console.log(filterParams(this.form));
-    },
-    // 提交
-    onSubmit: function() {
-      if (this.form.startDate) {
-        this.form.startDate = this.$moment(this.form.startDate).format("L");
-      }
-      console.log(filterParams(this.form));
-    },
-    onSubmitApproval() {
-      console.log(filterParams(this.approval));
-    },
-    handleClick() {
-      console.log(this.activeName);
-    },
     returnType(row) {
       switch (row.bizType) {
         case "m1":
@@ -212,11 +193,11 @@ export default {
           return "小企业法人快捷贷贷后日常检查";
       }
     },
-    // 阶段多选框
-    onChange() {
-      console.log(this.check);
-    },
     // 图片上传
+    handleSuccess(res, fileList, index) {
+      console.log(res, fileList, index);
+    },
+    // 图片删除
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },

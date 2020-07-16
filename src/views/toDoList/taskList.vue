@@ -142,11 +142,11 @@ export default {
           return "小企业法人快捷贷贷后日常检查";
       }
     },
-    link() {
+    link(row) {
       // 跳转检查申请
       this.$router.push({
         path: "/businessManagement/inspectionApplication",
-        query: { type: 2 }
+        query: { type: 2, bizId: row.bizId }
       });
     }
   }

@@ -10,7 +10,7 @@
     .cardTitle1
       span(class='blue')
       span(class='title1') 财务科目
-    el-tabs(v-model="activeTab1" @tab-click="handleClick")
+    el-tabs(v-model="activeTab1" @tab-click="handleClick1")
       el-tab-pane(label="应收票据" name="first")
       el-tab-pane(label="存货" name="second")
       el-tab-pane(label="私人借款" name="three")
@@ -68,7 +68,7 @@
     .cardTitle1
       span(class='blue')
       span(class='title1') 财务科目
-    el-tabs(v-model="activeTab2" @tab-click="handleClick")
+    el-tabs(v-model="activeTab2" @tab-click="handleClick2")
       el-tab-pane(label="应收账款" name="first")
       el-tab-pane(label="银行借款" name="second")
       el-tab-pane(label="应付账款" name="three")
@@ -115,7 +115,7 @@
     .cardTitle1
       span(class='blue')
       span(class='title1') 财务科目
-    el-tabs(v-model="activeTab3" @tab-click="handleClick")
+    el-tabs(v-model="activeTab3" @tab-click="handleClick3")
       el-tab-pane(label="营业收入" name="first")
       el-tab-pane(label="人工成本" name="second")
       el-tab-pane(label="水、电、煤、气其中一项或多项" name="three")
@@ -161,7 +161,7 @@
     .cardTitle1
       span(class='blue')
       span(class='title1') 财务科目
-    el-tabs(v-model="activeTab4" @tab-click="handleClick")
+    el-tabs(v-model="activeTab4" @tab-click="handleClick4")
       el-tab-pane(label="原材料成本" name="first")
       el-tab-pane(label="财务费用" name="second")
       el-tab-pane(label="纳税数额" name="three")
@@ -291,8 +291,70 @@ export default {
   },
   // 组件方法
   methods: {
-    handleClick() {
-      console.log(this.activeName);
+    handleClick1() {
+      console.log(this.activeTab1);
+      this.resetValue1();
+    },
+    resetValue1() {
+      // card 1
+      this.form.colDebtBalance = ""; //当前余额
+      this.form.colDebtLastBalance = ""; //应收票据上期检查（或调查）时点余额
+      this.form.colDebtChang30Msg = ""; // 应收票据变动超过30%，原因
+      this.form.stockChangSitu = ""; //存货上次全面检查或调查时余额
+      this.form.stockLastBalance = ""; //存货本次检查存货变动情况
+      this.form.stockChang30Msg = ""; // 存货变动超过30%，原因
+      this.form.loanForPsonBalance = ""; //私人借款当前余额
+      this.form.loanForPsonLastBalance = ""; //私人借款上期检查（或调查）时点余额
+      this.form.loanForPsonChang30Msg = ""; // 私人借款变动超过30%，原因
+      this.form.payDebtBalance = ""; //应付票据当前余额
+      this.form.payDebtLastBalance = ""; //应付票据上期检查（或调查）时点余额
+      this.form.payDebtChang30Msg = ""; // 应付票据变动超过30%，原因
+    },
+    handleClick2() {
+      console.log(this.activeTab2);
+      this.resetValue2();
+    },
+    resetValue2() {
+      // card 2
+      this.form.colCapitalBalance = ""; //应收账款当前余额
+      this.form.colCapitalLastBalance = ""; //应收账款上期检查（或调查）时点余额
+      this.form.colCapitalChang30Msg = ""; // 应收账款变动超过30%，原因
+      this.form.loanForBankBalance = ""; //银行借款当前余额
+      this.form.loanForBankLastBalance = ""; //银行借款上期检查（或调查）时点余额
+      this.form.loanForBankChang30Msg = ""; // 银行借款变动超过30%，原因
+      this.form.payCapitalBalance = ""; //应付账款当前余额
+      this.form.payCapitalLastBalance = ""; //应付账款上期检查（或调查）时点余额
+      this.form.payCapitalChang30Msg = ""; // 应付账款变动超过30%，原因
+    },
+    handleClick3() {
+      console.log(this.activeTab3);
+      this.resetValue3();
+    },
+    resetValue3() {
+      // card 3
+      this.form.busInc3MSitu = ""; //营业收入近三个月的情况
+      this.form.busIncChang30Msg = ""; // 营业收入剔除季节性因素后变动超30%，原因
+      this.form.dailyExpen3MSitu = ""; //近三个月的情况
+      this.form.dailyExpenChang30Msg = ""; // 变动超过30%，原因
+      this.form.emplCost3M = ""; //近三个月的情况
+      this.form.emplCostChang30Msg = ""; // 变动超过30%，原因
+      this.form.cash3M = ""; //近三个月的情况
+      this.form.cashChang30Msg = ""; // 应收账款变动超过30%，原因
+    },
+    handleClick4() {
+      console.log(this.activeTab4);
+      this.resetValue4();
+    },
+    resetValue4() {
+      // card 4
+      this.form.materialCost3M = ""; //材料近三个月的情况
+      this.form.materialCostChang30Msg = ""; // 材料剔除季节性因素后变动超30%，原因
+      this.form.financeCost3M = ""; //近三个月的情况
+      this.form.financeCostChang30Msg = ""; // 变动超过30%，原因
+      this.form.payTaxAmout3M = ""; //近三个月的情况
+      this.form.payTaxAmoutChang30Msg = ""; // 变动超过30%，原因
+      this.form.profit3M = ""; //近三个月的情况
+      this.form.profitChang30Msg = ""; // 应收账款变动超过30%，原因
     }
   },
   /**

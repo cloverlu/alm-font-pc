@@ -28,24 +28,24 @@
       span(class='blue')
       span(class='title') 检查阶段
     .cardContent
-      el-checkbox-group(v-model="check" @change='onChange')
-        el-checkbox(label="第一阶段")
-        el-checkbox(label="第二阶段")
-        el-checkbox(label="第三阶段")
-      
-    el-form(:model="form" v-for='(item,index) in form.stageData' :key='index' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
-      el-form-item(label="还款意愿 :" class="formItem2")
-        el-input(v-model="item.payIntention" clearable)
-      el-form-item(label="检查地点 :" class="formItem2")
-        el-input(v-model="item.checkAddr" clearable)
-      el-form-item(label="接待人员 :" class="formItem2")
-        el-input(v-model="item.staff" clearable)
-      el-form-item(label="还款资金来源 :" class="formItem2")
-        el-input(v-model="item.amoutSource" clearable)
-      el-form-item(label="预计还款/付息时间 :" class="formItem2")
-        el-date-picker(v-model="item.expectRepayDate" style="width:100%" type="date" placeholder="选择日期" clearable)
-      el-form-item(label="还款资金落实情况说明 :" class="formItem2")
-        el-input(v-model="item.practicableMsg" type="textarea" :rows="3" clearable)
+      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
+        el-radio-group(v-model="checkStage")
+            el-radio(label="第一阶段")
+            el-radio(label="第二阶段")
+            el-radio(label="第三阶段")
+      el-form(:model="form" v-for='(item,index) in form.stageData' :key='index' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
+        el-form-item(label="还款意愿 :" class="formItem2")
+          el-input(v-model="item.payIntention" clearable)
+        el-form-item(label="检查地点 :" class="formItem2")
+          el-input(v-model="item.checkAddr" clearable)
+        el-form-item(label="接待人员 :" class="formItem2")
+          el-input(v-model="item.staff" clearable)
+        el-form-item(label="还款资金来源 :" class="formItem2")
+          el-input(v-model="item.amoutSource" clearable)
+        el-form-item(label="预计还款/付息时间 :" class="formItem2")
+          el-date-picker(v-model="item.expectRepayDate" style="width:100%" type="date" placeholder="选择日期" clearable)
+        el-form-item(label="还款资金落实情况说明 :" class="formItem2")
+          el-input(v-model="item.practicableMsg" type="textarea" :rows="3" clearable)
 
   el-card(class='card')
     .cardTitle
@@ -82,44 +82,26 @@ export default {
       ],
       form: {
         // card 1
-        checkType: "m4", // 检查类型
-        custName: "张三", // 客户名称  queryType为2时，必传；其他情况非必传
-        loanAmout: "300000", // 贷款金额
-        loanBalance: "20000", // 贷款余额
-        loanLength: "26个月", // 贷款期限
-        repayKind: "银行卡", // 还款方式
-        repayDate: "2020-06-15", // 还款日期
-        repayAmout: "200000", // 还款金额
+        bizType: "", // 检查类型
+        custName: "", // 客户名称  queryType为2时，必传；其他情况非必传
+        loanAmout: "", // 贷款金额
+        loanBalance: "", // 贷款余额
+        loanLength: "", // 贷款期限
+        repayKind: "", // 还款方式
+        repayDate: "", // 还款日期
+        repayAmout: "", // 还款金额
 
         // card 2
         stageData: [
-          // {
-          //   checkStage: "第一阶段", // 检查阶段
-          //   payIntention: "", // 还款意愿
-          //   checkAddr: "", // 检查地点
-          //   staff: "", // 接待人员
-          //   amoutSource: "", // 还款资金来源
-          //   expectRepayDate: "2020-5-20", // 预计还款/付息时间
-          //   practicableMsg: "" // 还款资金落实情况说明
-          // },
-          // {
-          //   checkStage: "第二阶段", // 检查阶段
-          //   payIntention: "", // 还款意愿
-          //   checkAddr: "", // 检查地点
-          //   staff: "", // 接待人员
-          //   amoutSource: "", // 还款资金来源
-          //   expectRepayDate: "2020-5-20", // 预计还款/付息时间
-          //   practicableMsg: "" // 还款资金落实情况说明
-          // },
-          // {
-          //   checkStage: "第三阶段", // 检查阶段
-          //   payIntention: "", // 还款意愿
-          //   checkAddr: "", // 检查地点
-          //   staff: "", // 接待人员
-          //   amoutSource: "", // 还款资金来源
-          //   expectRepayDate: "2020-5-20", // 预计还款/付息时间
-          //   practicableMsg: "" // 还款资金落实情况说明
-          // }
+          {
+            checkStage: "", // 检查阶段
+            payIntention: "", // 还款意愿
+            checkAddr: "", // 检查地点
+            staff: "", // 接待人员
+            amoutSource: "", // 还款资金来源
+            expectRepayDate: "", // 预计还款/付息时间
+            practicableMsg: "" // 还款资金落实情况说明
+          }
         ] //还款资金落实阶段数组
       },
       list4: [
@@ -130,7 +112,7 @@ export default {
           longitude: ""
         }
       ],
-      check: [],
+      checkStage: "第一阶段",
       dialogImageUrl: "",
       dialogVisible: false,
       formLabelWidth: "72px"
@@ -143,6 +125,7 @@ export default {
     detail: function(newVal) {
       // console.log(1, newVal, oldVal);
       this.form = newVal;
+      console.log("form", newVal, this.form);
     }
   },
   // 组件方法

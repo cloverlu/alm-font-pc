@@ -13,11 +13,11 @@
         el-form-item(label="贷款期限 :" class="formItem2")
           el-input(v-model="form.loanLength" clearable)
         el-form-item(label="借据编号 :" class="formItem2")
-          el-input(v-model="form.billNo" clearable)
+          el-input(v-model="form.billNo" clearable :disabled="type == 1")
         el-form-item(label="贷款支付方式 :" class="formItem2")
           el-input(v-model="form.payKind" clearable)
         el-form-item(label="放款日期 :" class="formItem2")
-          el-date-picker(v-model="form.loanDate" style="width:100%" type="date" placeholder="选择日期" clearable)
+          el-date-picker(v-model="form.loanDate" style="width:100%" value-format='yyyy-MM-dd' format='yyyy-MM-dd' type="date" placeholder="选择日期" clearable)
         el-form-item(label="放款金额 :" class="formItem2")
           el-input(v-model="form.loanAmout" clearable)
         el-form-item(label="约定用途 :" class="formItem2")
@@ -29,7 +29,7 @@
           span(class='blue')
           span(class='title') 首次跟踪检查要求及落实情况
         
-        el-form(:model="form" v-for='item in check' :key='item' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
+        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
           el-form-item(label="要求 :" class="formItem2")
             el-input(v-model="form.requireCheck" type="textarea" :rows="3" clearable)
           el-form-item(label="落实情况 :" class="formItem2")
@@ -39,23 +39,21 @@
           span(class='blue')
           span(class='title') 首次跟踪特殊要求及落实情况
         
-        el-form(:model="form" v-for='item in check' :key='item' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
+        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
           el-form-item(label="要求 :" class="formItem2")
             el-input(v-model="form.specialRequireCheck" type="textarea" :rows="3" clearable)
           el-form-item(label="落实情况 :" class="formItem2")
             el-input(v-model="form.specialChecked" type="textarea" :rows="3" clearable)
 
     el-card(class='card')
-      .left
-        el-form(:model="form" v-for='item in check' :key='item' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
+        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
           el-form-item(label="检查地点 :" class="formItem2")
             el-input(v-model="form.checkAddr" clearable)
-          el-form-item(label="检查配合程度 :" class="formItem2")
-            el-input(v-model="form.cooperate" type="textarea" :rows="3" clearable)
-      .right
-        el-form(:model="form" v-for='item in check' :key='item' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
           el-form-item(label="接待人员 :" class="formItem2")
             el-input(v-model="form.staff" clearable)
+          el-form-item(label="检查配合程度 :" class="formItem2")
+            el-select(v-model="form.cooperate" style="width:100%" clearable)
+              el-option(v-for="item in cooperateArr" :key="item.value" :label="item.label" :value="item.value")
           el-form-item(label="生产经营场所变动情况 :" class="formItem2")
             el-input(v-model="form.addrChangedMsg" type="textarea" :rows="3" clearable)
     el-card(class='card')
@@ -63,7 +61,7 @@
         .cardTitle
           span(class='blue')
           span(class='title') 检查内容
-        el-form(:model="form" v-for='item in check' :key='item' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
+        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
           el-form-item(label="资金使用情况详细说明 :" class="formItem2")
             el-input(v-model="form.detailMsg4useAmout" type="textarea" :rows="3" clearable)
           el-form-item(label="提供纸质或影像资料的信息来源 :" class="formItem2")
@@ -72,24 +70,26 @@
       .right
         .cardTitle
           span(class='title') 
-        el-form(:model="form" v-for='item in check' :key='item' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
+        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
           el-form-item(label="是否按合同约定的用途使用信贷资金 :" class="formItem2")
-            el-input(v-model="form.useAmoutByContract" type="textarea" :rows="2" clearable)
-          el-form-item(label="情况说明 :" class="formItem2")
-            el-input(v-model="form.msg" type="textarea" :rows="2" clearable)
+            el-select(v-model="form.useAmoutByContract" style="width:100%" clearable)
+              el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
+          el-form-item(label="情况说明 :" class="formItem2" style="marginTop:54px")
+            el-input(v-model="form.msg" type="textarea" :rows="3" clearable)
     el-card(class='card')
       .cardTitle
         span(class='blue')
         span(class='title') 影像维护
       .uploadBox(v-for='(item,index) in list1' :key='item.index')
         .imgTitle {{item.title}}
-        el-upload(action="http://20.147.168.82:9001/postLoan/business/uploadModelFile" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
-          i(class="el-icon-plus") 
+        el-upload(action="http://20.147.168.82:9001/postLoan/business/uploadModelFile" :on-success='handleSuccess' accept="image/gif, image/jpeg ,image/png, image/jpg" list-type="picture-card" :file-list='definte16' :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
+          i(class="el-icon-plus")
   </div>
 </template>
 
 <script>
 // import { filterParams } from "../../../utils/utils";
+// import { definte16 } from "../../../utils/dataMock";
 export default {
   // 组件名称
   name: "DivM1",
@@ -110,9 +110,25 @@ export default {
           value: 0
         }
       ],
+      cooperateArr: [
+        {
+          label: "配合",
+          value: "1"
+        },
+        {
+          label: "一般",
+          value: "2"
+        },
+        {
+          label: "不配合",
+          value: "3"
+        }
+      ],
+      definte16: [],
+      params: {},
       form: {
         // card 1
-        checkType: "m1", // 检查类型
+        bizType: "m1", // 检查类型
         custName: "", // 客户名称  queryType为2时，必传；其他情况非必传
         loanLength: "", // 贷款期限
         billNo: "", //借据编号
@@ -130,7 +146,7 @@ export default {
         // card 3
         staff: "", // 接待人员
         addrChangedMsg: "", // 生产经营场所变动情况
-        cooperate: "", // 检查配合程度
+        cooperate: "1", // 检查配合程度
         checkAddr: "", // 检查地点
 
         // card4
@@ -141,78 +157,43 @@ export default {
       },
       list1: [
         {
-          title: "《小企业授信业务额度借款支用单》",
-          url: "",
-          dimension: "",
-          longitude: ""
+          title: "《小企业授信业务额度借款支用单》"
         },
         {
-          title: "《小企业贷款受托支付申请书》或自主支付清单",
-          url: "",
-          dimension: "",
-          longitude: ""
+          title: "《小企业贷款受托支付申请书》或自主支付清单"
         },
         {
-          title: "《小企业贷款受托支付申请书》",
-          url: "",
-          dimension: "",
-          longitude: ""
+          title: "《小企业贷款受托支付申请书》"
         },
         {
-          title: "汇款凭证",
-          url: "",
-          dimension: "",
-          longitude: ""
+          title: "汇款凭证"
         },
         {
-          title: "账户流水",
-          url: "",
-          dimension: "",
-          longitude: ""
+          title: "账户流水"
         },
         {
-          title: "受托支付合同",
-          url: "",
-          dimension: "",
-          longitude: ""
+          title: "受托支付合同"
         },
         {
-          title: "入库单",
-          url: "",
-          dimension: "",
-          longitude: ""
+          title: "入库单"
         },
         {
-          title: "贷款购买标的（如原材料、机器设备等）",
-          url: "",
-          dimension: "",
-          longitude: ""
+          title: "贷款购买标的（如原材料、机器设备等）"
         },
         {
-          title: "企业大门",
-          url: "",
-          dimension: "",
-          longitude: ""
+          title: "企业大门"
         },
         {
-          title: "企业经营场地或生产车间",
-          url: "",
-          dimension: "",
-          longitude: ""
+          title: "企业经营场地或生产车间"
         },
         {
-          title: "检查人员现场检查影像等",
-          url: "",
-          dimension: "",
-          longitude: ""
+          title: "检查人员现场检查影像等"
         },
         {
-          title: "其他",
-          url: "",
-          dimension: "",
-          longitude: ""
+          title: "其他"
         }
       ],
+      type: 1,
       check: ["第一阶段"],
       dialogImageUrl: "",
       dialogVisible: false,
@@ -230,6 +211,9 @@ export default {
   },
   // 组件方法
   methods: {
+    handleSuccess(res, fileList, index) {
+      console.log(res, fileList, index);
+    },
     returnType(row) {
       switch (row.bizType) {
         case "m1":
@@ -260,7 +244,18 @@ export default {
    * el 被新创建的 vm.$ el 替换，并挂载到实例上去之后调用该钩子。
    * 如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$ el 也在文档内。
    */
-  mounted() {}
+  mounted() {
+    const { billNo, bizId } = this.$route.query;
+    if (billNo) {
+      // 借据
+      this.type = 1;
+      this.form.billNo = billNo;
+    }
+    if (bizId) {
+      // 业务
+      this.type = 2;
+    }
+  }
 };
 </script>
 
