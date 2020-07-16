@@ -29,17 +29,17 @@
       span(class='title') 检查阶段
     .cardContent
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
-        el-radio-group(v-model="checkStage")
-            el-radio(label="第一阶段")
-            el-radio(label="第二阶段")
-            el-radio(label="第三阶段")
+        el-radio-group(v-model="form.stageData[0].checkStage" @change='onchange')
+            el-radio(label="1") 第一阶段
+            el-radio(label="2") 第二阶段
+            el-radio(label="3") 第三阶段
       el-form(:model="form" v-for='(item,index) in form.stageData' :key='index' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
         el-form-item(label="还款意愿 :" class="formItem2")
           el-input(v-model="item.payIntention" clearable)
         el-form-item(label="检查地点 :" class="formItem2")
-          el-input(v-model="item.checkAddr" clearable)
+          el-input(v-model="item.practicableCheckAddr" clearable)
         el-form-item(label="接待人员 :" class="formItem2")
-          el-input(v-model="item.staff" clearable)
+          el-input(v-model="item.practicableStaff" clearable)
         el-form-item(label="还款资金来源 :" class="formItem2")
           el-input(v-model="item.amoutSource" clearable)
         el-form-item(label="预计还款/付息时间 :" class="formItem2")
@@ -60,6 +60,12 @@
 
 <script>
 import { filterParams } from "../../../utils/utils";
+import {
+  // saveEditModelBusiness,
+  // approve,
+  queryForDetail,
+  queryForBizDtail
+} from "../../../api/loanlnspection";
 export default {
   // 组件名称
   name: "DivM4",
@@ -94,10 +100,10 @@ export default {
         // card 2
         stageData: [
           {
-            checkStage: "", // 检查阶段
+            checkStage: "1", // 检查阶段
             payIntention: "", // 还款意愿
-            checkAddr: "", // 检查地点
-            staff: "", // 接待人员
+            practicableCheckAddr: "", // 检查地点
+            practicableStaff: "", // 接待人员
             amoutSource: "", // 还款资金来源
             expectRepayDate: "", // 预计还款/付息时间
             practicableMsg: "" // 还款资金落实情况说明
@@ -112,7 +118,7 @@ export default {
           longitude: ""
         }
       ],
-      checkStage: "第一阶段",
+      // checkStage: "1",
       dialogImageUrl: "",
       dialogVisible: false,
       formLabelWidth: "72px"
@@ -122,24 +128,15 @@ export default {
   computed: {},
   // 侦听器
   watch: {
-    detail: function(newVal) {
-      // console.log(1, newVal, oldVal);
+    detail: function(newVal, oldVal) {
+      console.log(1, newVal, oldVal);
       this.form = newVal;
-      console.log("form", newVal, this.form);
     }
   },
   // 组件方法
   methods: {
-    // 保存
-    onSave() {
-      console.log(filterParams(this.form));
-    },
-    // 提交
-    onSubmit: function() {
-      if (this.form.startDate) {
-        this.form.startDate = this.$moment(this.form.startDate).format("L");
-      }
-      console.log(filterParams(this.form));
+    onchange(e) {
+      this.form.stageData[0].checkStage = e;
     },
     onSubmitApproval() {
       console.log(filterParams(this.approval));
@@ -163,48 +160,7 @@ export default {
           return "小企业法人快捷贷贷后日常检查";
       }
     },
-    // 阶段多选框
-    onChange() {
-      console.log(this.check);
-      if (this.check.length === 0) {
-        console.log(1);
-        this.form.stageData = [];
-      } else {
-        // this.check.map(item => {
-        //   if (item == "第一阶段") {
-        //     this.form.stageData.push({
-        //       checkStage: "第一阶段", // 检查阶段
-        //       payIntention: "", // 还款意愿
-        //       checkAddr: "", // 检查地点
-        //       staff: "", // 接待人员
-        //       amoutSource: "", // 还款资金来源
-        //       expectRepayDate: "2020-5-20", // 预计还款/付息时间
-        //       practicableMsg: "" // 还款资金落实情况说明
-        //     });
-        //   } else if (item == "第二阶段") {
-        //     this.form.stageData.push({
-        //       checkStage: "第二阶段", // 检查阶段
-        //       payIntention: "", // 还款意愿
-        //       checkAddr: "", // 检查地点
-        //       staff: "", // 接待人员
-        //       amoutSource: "", // 还款资金来源
-        //       expectRepayDate: "2020-5-20", // 预计还款/付息时间
-        //       practicableMsg: "" // 还款资金落实情况说明
-        //     });
-        //   } else if (item == "第三阶段") {
-        //     this.form.stageData.push({
-        //       checkStage: "第三阶段", // 检查阶段
-        //       payIntention: "", // 还款意愿
-        //       checkAddr: "", // 检查地点
-        //       staff: "", // 接待人员
-        //       amoutSource: "", // 还款资金来源
-        //       expectRepayDate: "2020-5-20", // 预计还款/付息时间
-        //       practicableMsg: "" // 还款资金落实情况说明
-        //     });
-        //   }
-        // });
-      }
-    },
+
     // 图片上传
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -219,7 +175,41 @@ export default {
    * el 被新创建的 vm.$ el 替换，并挂载到实例上去之后调用该钩子。
    * 如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$ el 也在文档内。
    */
-  mounted() {}
+  mounted() {
+    const { billNo, bizId } = this.$route.query;
+    if (billNo) {
+      // 借据
+      this.type = 1;
+      this.form.billNo = billNo;
+      queryForDetail(this, {
+        billNo,
+        bizType: this.form.bizType
+      }).then(res => {
+        if (res.data.returnCode == "200000") {
+          this.form = res.data.data;
+          this.form.bizType = res.data.data.bizType;
+          // console.log("paramsM1", this.paramsM1);
+        }
+      });
+      // console.log("detail", this.props.detail, this.form);
+    }
+    if (bizId) {
+      // 业务
+      this.type = 2;
+      console.log("detail", this.form);
+      queryForBizDtail(this, {
+        bizId,
+        bizType: this.form.bizType
+      }).then(res => {
+        console.log("resss", res);
+        if (res.data.returnCode == "200000") {
+          this.form = res.data.data;
+          this.form.bizType = res.data.data.bizType;
+          // this.checkStage = res.data.data.stageData[0].checkStage;
+        }
+      });
+    }
+  }
 };
 </script>
 

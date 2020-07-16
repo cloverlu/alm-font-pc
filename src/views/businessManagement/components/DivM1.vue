@@ -207,6 +207,7 @@ export default {
     detail: function(newVal) {
       // console.log(1, newVal, oldVal);
       this.form = newVal;
+      console.log("detail", this.form);
     }
   },
   // 组件方法
@@ -250,10 +251,12 @@ export default {
       // 借据
       this.type = 1;
       this.form.billNo = billNo;
+      // console.log("detail", this.form);
     }
     if (bizId) {
       // 业务
       this.type = 2;
+      // console.log("detail", this.form);
     }
   }
 };

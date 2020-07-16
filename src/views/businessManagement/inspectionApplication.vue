@@ -14,7 +14,7 @@
       .contentTop
         el-form(:model="form" :inline="true" label-position="left" label-width="80px" size="mini" class="demo-form-inline formBox")
           el-form-item(label="检查类型" class="formItem5")
-            el-select(v-model="form.bizType" clearable style="width:100%" )
+            el-select(v-model="form.bizType" clearable style="width:100%" :disabled='type == 2')
               el-option(label="小企业授信业务首次跟踪检查" value="m1")
               el-option(label="小企业授信业务贷后例行检查" value="m2")
               el-option(label="小企业授信业务贷后全面检查" value="m3")
@@ -130,7 +130,6 @@ export default {
     if (billNo) {
       // 借据
       this.type = 1;
-      // this.form.billNo = billNo;
       this.paramsM1.billNo = billNo;
       this.paramsM1.type = 1;
       this.form.bizId = "";
@@ -142,6 +141,7 @@ export default {
           this.form.bizType = res.data.data.bizType;
           this.paramsM1 = res.data.data;
           this.paramsM4 = res.data.data;
+          // console.log("paramsM1", this.paramsM1);
         }
       });
     }
@@ -158,6 +158,7 @@ export default {
           this.form.bizType = res.data.data.bizType;
           this.paramsM1 = res.data.data;
           this.paramsM4 = res.data.data;
+          console.log("paramsM4", this.paramsM4);
         }
       });
     }

@@ -323,11 +323,6 @@ export default {
               type: "error"
             });
           }
-          // this.$message({
-          //   message: "编辑用户成功",
-          //   type: "success"
-          // });
-          // this.onSubmit();
         });
       }
       this.dialogFormVisible = false;
