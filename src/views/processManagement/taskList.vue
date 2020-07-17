@@ -35,7 +35,7 @@
                   <el-option label="应做" value="shouldDo"></el-option>
                   <el-option label="未做" value="notDo"></el-option>
                   <el-option label="审核中" value="inReview"></el-option>
-                  <el-option label="已做" value="already"></el-option>
+                  <el-option label="已做" value="alreadyDo"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -237,15 +237,15 @@ export default {
         case "notDo":
           return "未做";
         case "inReview":
-          return "审批中";
-        case "already":
+          return "审核中";
+        case "alreadyDo":
           return "已做";
       }
     },
     handleEdit(row) {
       this.$router.push({
         path: "/businessManagement/inspectionApplication",
-        query: { type: 1, bizId: row.bizId }
+        query: { type: 1, bizId: row.bizId, bizStatus: row.bizStatus }
       });
     }
   }

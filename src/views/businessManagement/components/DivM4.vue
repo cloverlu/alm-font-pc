@@ -9,52 +9,57 @@
     el-card(class='card')
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
         el-form-item(label="客户名称 :" class="formItem2")
-          el-input(v-model="form.custName" clearable)
+          el-input(v-model="form.custName" disabled)
         el-form-item(label="贷款金额 :" class="formItem2")
-          el-input(v-model="form.loanAmout" clearable)
+          el-input(v-model="form.loanAmout" disabled)
         el-form-item(label="贷款余额 :" class="formItem2")
-          el-input(v-model="form.loanBalance" clearable)
+          el-input(v-model="form.loanBalance" disabled)
         el-form-item(label="贷款期限 :" class="formItem2")
-          el-input(v-model="form.loanLength" clearable)
+          el-input(v-model="form.loanLength" disabled)
         el-form-item(label="还款方式 :" class="formItem2")
           el-input(v-model="form.repayKind" clearable)
         el-form-item(label="还款日期 :" class="formItem2")
-          el-date-picker(v-model="form.repayDate" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" placeholder="选择日期" clearable)
+          el-date-picker(v-model="form.repayDate" disabled value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" placeholder="选择日期")
         el-form-item(label="还款金额 :" class="formItem2")
-          el-input(v-model="form.repayAmout" clearable)
+          el-input(v-model="form.repayAmout" disabled)
 
-  el-card(class='card')
-    .cardTitle
-      span(class='blue')
-      span(class='title') 检查阶段
-    .cardContent
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
-        el-radio-group(v-model="form.stageData[0].checkStage")
-            el-radio(label="1") 第一阶段
-            el-radio(label="2") 第二阶段
-            el-radio(label="3") 第三阶段
-      el-form(:model="form" v-for='(item,index) in form.stageData' :key='index' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
-        el-form-item(label="还款意愿 :" class="formItem2")
-          el-input(v-model="item.payIntention" clearable)
-        el-form-item(label="检查地点 :" class="formItem2")
-          el-input(v-model="item.practicableCheckAddr" clearable)
-        el-form-item(label="接待人员 :" class="formItem2")
-          el-input(v-model="item.practicableStaff" clearable)
-        el-form-item(label="还款资金来源 :" class="formItem2")
-          el-input(v-model="item.amoutSource" clearable)
-        el-form-item(label="预计还款/付息时间 :" class="formItem2")
-          el-date-picker(v-model="item.expectRepayDate" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" placeholder="选择日期" clearable)
-        el-form-item(label="还款资金落实情况说明 :" class="formItem2")
-          el-input(v-model="item.practicableMsg" type="textarea" :rows="3" clearable)
+    el-card(class='card')
+      .cardTitle
+        span(class='blue')
+        span(class='title') 检查阶段
+      .cardContent
+        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
+          el-radio-group(v-model="form.stageData[0].checkStage" :disabled="type == 2")
+              el-radio(label="1") 第一阶段
+              el-radio(label="2") 第二阶段
+              el-radio(label="3") 第三阶段
+        el-form(:model="form" v-for='(item,index) in form.stageData' :key='index' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
+          el-form-item(label="还款意愿 :" class="formItem2")
+            el-input(v-model="item.payIntention" :disabled="type == 2" clearable)
+          el-form-item(label="检查地点 :" class="formItem2")
+            el-input(v-model="item.practicableCheckAddr" :disabled="type == 2" clearable)
+          el-form-item(label="接待人员 :" class="formItem2")
+            el-input(v-model="item.practicableStaff" :disabled="type == 2" clearable)
+          el-form-item(label="还款资金来源 :" class="formItem2")
+            el-input(v-model="item.amoutSource" :disabled="type == 2" clearable)
+          el-form-item(label="预计还款/付息时间 :" class="formItem2")
+            el-date-picker(v-model="item.expectRepayDate" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" placeholder="选择日期" clearable)
+          el-form-item(label="还款资金落实情况说明 :" class="formItem2")
+            el-input(v-model="item.practicableMsg" type="textarea" :disabled="type == 2" :rows="3" clearable)
 
-  el-card(class='card')
-    .cardTitle
-      span(class='blue')
-      span(class='title') 影像维护
-    .uploadBox(v-for='(item,index) in list4' :key='item.index')
-      .imgTitle {{item.title}}
-      el-upload(action="http://20.147.168.82:9001/postLoan/business/uploadModelFile" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
-        i(class="el-icon-plus")
+    el-card(class='card')
+      .cardTitle
+        span(class='blue')
+        span(class='title') 影像维护
+      .uploadBox
+        .imgTitle 其他
+        el-upload(action="http://20.147.168.86:9001/postLoan/business/uploadModelFile" :file-list="fileList" list-type="picture-card" :on-success="handleSuccess"  :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
+          i(class="el-icon-plus")
+    //- el-dialog(:visible.sync="dialogVisible")
+    //-   img(width="100%" :src="dialogImageUrl" alt="")
+    el-dialog(:visible.sync="dialogVisible" width="40%" :append-to-body="true" v-alterELDialogMarginTop="{marginTop:'20vh'}" close="deleteCancel()")
+      img(width="100%" :src="dialogImageUrl" alt="")
+     
   </div>
 </template>
 
@@ -71,6 +76,7 @@ export default {
   // 组件状态值
   data() {
     return {
+      fileList: [],
       options: [
         {
           label: "是",
@@ -91,6 +97,7 @@ export default {
         repayKind: "", // 还款方式
         repayDate: "", // 还款日期
         repayAmout: "", // 还款金额
+        arr: [],
 
         // card 2
         stageData: [
@@ -132,13 +139,17 @@ export default {
     // onchange(e) {
     //   this.form.stageData[0].checkStage = e;
     // },
-
+    handleSuccess(res, fileList, index) {
+      console.log(res, fileList, index);
+      this.fileList = index;
+    },
     // 图片上传
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
     // 预览
     handlePictureCardPreview(file) {
+      console.log("file.url", file.url);
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     }
@@ -148,16 +159,18 @@ export default {
    * 如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$ el 也在文档内。
    */
   mounted() {
-    const { billNo, bizId } = this.$route.query;
+    const { billNo, bizId, bizStatus } = this.$route.query;
     if (billNo) {
       // 借据
       this.type = 1;
-      console.log("detail", this.form);
+      this.form.billNo = billNo;
     }
-    if (bizId) {
+    if (bizStatus == "alreadyDo") {
       // 业务
       this.type = 2;
-      console.log("detail", this.form);
+    }
+    if (bizId) {
+      this.form.bizId = bizId;
     }
   }
 };

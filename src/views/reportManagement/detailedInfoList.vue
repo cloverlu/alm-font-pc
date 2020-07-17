@@ -247,7 +247,7 @@ export default {
         case "notDo":
           return "未做";
         case "inReview":
-          return "审批中";
+          return "审核中";
         case "complete":
           return "完成";
       }

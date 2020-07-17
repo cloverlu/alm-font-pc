@@ -256,7 +256,12 @@ export default {
         this.form.emplName = res.data.data.emplName;
         this.form.emplCode = res.data.data.emplCode;
         this.form.noticeFlag = res.data.data.noticeFlag;
-        this.form.postCode = res.data.data.postCode.split(",");
+        if (res.data.data.postCode) {
+          this.form.postCode = res.data.data.postCode.split(",");
+        } else {
+          this.form.postCode = [];
+        }
+        // this.form.postCode = res.data.data.postCode.split(",");
         this.dialogFormVisible = true;
         this.type = 2;
         console.log(this.type == 2);
@@ -284,12 +289,17 @@ export default {
     },
     // 新建编辑弹窗的 确认按钮
     editOk: function(refname) {
-      this.form.postCode = this.form.postCode.join(",");
       if (this.type === 1) {
+        // if (this.form.postCode) {
+        //   this.form.postCode = this.form.postCode.join(",");
+        // } else {
+        //   this.form.postCode = "";
+        // }
         // 新建
         console.log("新建");
         addUser(this, {
-          ...filterParams(this.form)
+          ...filterParams(this.form),
+          postCode: this.form.postCode ? this.form.postCode.join(",") : ""
         }).then(res => {
           if (res.data.returnCode === "200000") {
             this.$message({
@@ -319,6 +329,7 @@ export default {
         console.log("编辑");
         updateUser(this, {
           ...filterParams(this.form),
+          postCode: this.form.postCode ? this.form.postCode.join(",") : "",
           id: this.currentItem
         }).then(res => {
           if (res.data.returnCode === "200000") {

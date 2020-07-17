@@ -126,7 +126,7 @@ export default {
   mounted() {
     this.$moment.locale("zh-cn");
     // 进入页面先调用查询接口
-    const { billNo, bizId } = this.$route.query;
+    const { billNo, bizId, bizStatus } = this.$route.query;
     if (billNo) {
       // 借据
       this.type = 1;
@@ -156,7 +156,7 @@ export default {
         }
       });
     }
-    if (bizId) {
+    if (bizId || bizStatus === "alreadyDo") {
       // 业务
       this.type = 2;
       this.form.billNo = "";
@@ -220,7 +220,55 @@ export default {
         data = this.$refs.DivM6.form;
       }
 
-      console.log(filterParams(data));
+      // console.log(filterParams(data));
+      console.log(data);
+      // saveEditModelBusiness(this, {
+      //   ...filterParams(data)
+      // }).then(res => {
+      //   if (res.data.returnCode === "200000") {
+      //     this.$message({
+      //       message: "检查申请编辑操作成功",
+      //       type: "success"
+      //     });
+      //     setTimeout(() => {
+      //       history.go(-1);
+      //     }, 500);
+      //   }
+      // });
+    },
+    // 提交
+    onSubmit: function() {
+      let data = {};
+      if (this.form.bizType == "m1") {
+        data = this.$refs.DivM1.form;
+      } else if (this.form.bizType == "m2") {
+        data = this.$refs.DivM2.form;
+      } else if (
+        this.form.bizType == "m3" &&
+        this.$refs.DivM3.form.financeClassification == "1"
+      ) {
+        data = {
+          ...this.$refs.DivM3.form,
+          ...this.$refs.DivM3.$refs.tabForm1.form
+        };
+      } else if (
+        this.form.bizType == "m3" &&
+        this.$refs.DivM3.form.financeClassification == "2"
+      ) {
+        data = {
+          ...this.$refs.DivM3.form,
+          ...this.$refs.DivM3.$refs.tabForm2.form
+        };
+      } else if (this.form.bizType == "m4") {
+        data = this.$refs.DivM4.form;
+      } else if (this.form.bizType == "m5") {
+        data = this.$refs.DivM5.form;
+      } else {
+        data = this.$refs.DivM6.form;
+      }
+
+      // console.log(filterParams(data));
+      console.log(data);
       saveEditModelBusiness(this, {
         ...filterParams(data)
       }).then(res => {
@@ -230,18 +278,10 @@ export default {
             type: "success"
           });
           setTimeout(() => {
-            history.go(-1);
+            this.activeName = "second";
           }, 500);
         }
       });
-    },
-    // 提交
-    onSubmit: function() {
-      if (this.form.startDate) {
-        this.form.startDate = this.$moment(this.form.startDate).format("L");
-      }
-      // console.log(filterParams(this.form));
-      saveEditModelBusiness();
     },
 
     onSubmitApproval() {

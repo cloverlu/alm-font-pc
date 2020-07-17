@@ -9,17 +9,17 @@
     el-card(class='card')
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
         el-form-item(label="客户名称 :" class="formItem2")
-          el-input(v-model="form.custName" clearable)
+          el-input(v-model="form.custName" disabled)
         el-form-item(label="合同编号 :" class="formItem2")
-          el-input(v-model="form.contractNo" clearable)
+          el-input(v-model="form.contractNo" disabled)
         el-form-item(label="授信业务小类 :" class="formItem2")
-          el-input(v-model="form.creditSubLoanKind" clearable)
+          el-input(v-model="form.creditSubLoanKind" disabled)
         el-form-item(label="贷款金额 :" class="formItem2")
-          el-input(v-model="form.loanAmout" clearable)
+          el-input(v-model="form.loanAmout" disabled)
         el-form-item(label="贷款期限 :" class="formItem2")
-          el-input(v-model="form.loanLength" clearable)
+          el-input(v-model="form.loanLength" disabled)
         el-form-item(label="放款日期 :" class="formItem2")
-          el-date-picker(v-model="form.loanDate" style="width:100%" value-format='yyyy-MM-dd' format='yyyy-MM-dd' type="date" placeholder="选择日期" clearable)
+          el-date-picker(v-model="form.loanDate" style="width:100%" value-format='yyyy-MM-dd' format='yyyy-MM-dd' type="date" placeholder="选择日期" disabled)
         el-form-item(label="约定用途 :" class="formItem2")
           el-input(v-model="form.loanPurpose" type="textarea" :rows="2" clearable)
         el-form-item(label="贷款支付方式 :" class="formItem2")
@@ -31,17 +31,17 @@
         span(class='title') 检查内容
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
         el-form-item(label="资金使用情况说明 :" class="formItem2")
-          el-input(v-model="form.requireCheck" type="textarea" :rows="2" clearable)
+          el-input(v-model="form.requireCheck" type="textarea" :disabled="type == 2" :rows="2" clearable)
         el-form-item(label="是否按合同约定的用途使用信贷资金 :" class="formItem2")
-          el-input(v-model="form.checked" clearable)
+          el-input(v-model="form.checked" :disabled="type == 2" clearable)
         el-form-item(label="是否履行合同约定 :" class="formItem2")
-          el-input(v-model="form.checked" clearable)
+          el-input(v-model="form.checked" :disabled="type == 2" clearable)
         el-form-item(label="对我行检查的态度 :" class="formItem2")
-          el-input(v-model="form.checked" clearable)
+          el-input(v-model="form.checked" :disabled="type == 2" clearable)
         el-form-item(label="情况说明 :" class="formItem2")
-            el-input(v-model="form.requireCheck" type="textarea" :rows="2" clearable)
+            el-input(v-model="form.requireCheck" :disabled="type == 2" type="textarea" :rows="2" clearable)
         el-form-item(label="情况说明 :" class="formItem2")
-            el-input(v-model="form.checked" type="textarea" :rows="2" clearable)
+            el-input(v-model="form.checked" :disabled="type == 2" type="textarea" :rows="2" clearable)
     el-card(class='card')
       .cardTitle
         span(class='blue')
@@ -50,6 +50,9 @@
         .imgTitle {{item.title}}
         el-upload(action="http://20.147.168.82:9001/postLoan/business/uploadModelFile" :file-list="item.url[index]" :on-success="handleSuccess" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
           i(class="el-icon-plus") 
+    //- 弹窗
+    el-dialog(:visible.sync="dialogVisible" width="40%" :append-to-body="true" v-alterELDialogMarginTop="{marginTop:'20vh'}" close="deleteCancel()")
+      img(width="100%" :src="dialogImageUrl" alt="")
   </div>
 </template>
 
@@ -211,7 +214,21 @@ export default {
    * el 被新创建的 vm.$ el 替换，并挂载到实例上去之后调用该钩子。
    * 如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$ el 也在文档内。
    */
-  mounted() {}
+  mounted() {
+    const { billNo, bizId, bizStatus } = this.$route.query;
+    if (billNo) {
+      // 借据
+      this.type = 1;
+      this.form.billNo = billNo;
+    }
+    if (bizStatus == "alreadyDo") {
+      // 业务
+      this.type = 2;
+    }
+    if (bizId) {
+      this.form.bizId = bizId;
+    }
+  }
 };
 </script>
 
