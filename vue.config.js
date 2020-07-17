@@ -1,4 +1,5 @@
 const path = require("path");
+const apihost = "http://20.147.168.82:9001";
 // 作为配置文件，直接导出配置对象即可
 module.exports = {
   // 基本路径
@@ -14,7 +15,7 @@ module.exports = {
     proxy: {
       "/alm": {
         // alm开发环境API地址
-        target: "http://20.147.168.82:9001",
+        target: apihost,
         // 如果要代理 websockets
         ws: true,
         // 将主机标头的原点更改为目标URL

@@ -19,7 +19,7 @@
         el-form-item(label="还款方式 :" class="formItem2")
           el-input(v-model="form.repayKind" clearable)
         el-form-item(label="还款日期 :" class="formItem2")
-          el-date-picker(v-model="form.repayDate" style="width:100%" type="date" placeholder="选择日期" clearable)
+          el-date-picker(v-model="form.repayDate" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" placeholder="选择日期" clearable)
         el-form-item(label="还款金额 :" class="formItem2")
           el-input(v-model="form.repayAmout" clearable)
 
@@ -29,7 +29,7 @@
       span(class='title') 检查阶段
     .cardContent
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
-        el-radio-group(v-model="form.stageData[0].checkStage" @change='onchange')
+        el-radio-group(v-model="form.stageData[0].checkStage")
             el-radio(label="1") 第一阶段
             el-radio(label="2") 第二阶段
             el-radio(label="3") 第三阶段
@@ -43,7 +43,7 @@
         el-form-item(label="还款资金来源 :" class="formItem2")
           el-input(v-model="item.amoutSource" clearable)
         el-form-item(label="预计还款/付息时间 :" class="formItem2")
-          el-date-picker(v-model="item.expectRepayDate" style="width:100%" type="date" placeholder="选择日期" clearable)
+          el-date-picker(v-model="item.expectRepayDate" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" placeholder="选择日期" clearable)
         el-form-item(label="还款资金落实情况说明 :" class="formItem2")
           el-input(v-model="item.practicableMsg" type="textarea" :rows="3" clearable)
 
@@ -59,13 +59,8 @@
 </template>
 
 <script>
-import { filterParams } from "../../../utils/utils";
-import {
-  // saveEditModelBusiness,
-  // approve,
-  queryForDetail,
-  queryForBizDtail
-} from "../../../api/loanlnspection";
+// import { filterParams } from "../../../utils/utils";
+
 export default {
   // 组件名称
   name: "DivM4",
@@ -100,7 +95,7 @@ export default {
         // card 2
         stageData: [
           {
-            checkStage: "1", // 检查阶段
+            checkStage: "", // 检查阶段
             payIntention: "", // 还款意愿
             practicableCheckAddr: "", // 检查地点
             practicableStaff: "", // 接待人员
@@ -118,7 +113,6 @@ export default {
           longitude: ""
         }
       ],
-      // checkStage: "1",
       dialogImageUrl: "",
       dialogVisible: false,
       formLabelWidth: "72px"
@@ -135,31 +129,9 @@ export default {
   },
   // 组件方法
   methods: {
-    onchange(e) {
-      this.form.stageData[0].checkStage = e;
-    },
-    onSubmitApproval() {
-      console.log(filterParams(this.approval));
-    },
-    handleClick() {
-      console.log(this.activeName);
-    },
-    returnType(row) {
-      switch (row.bizType) {
-        case "m1":
-          return "小企业授信业务首次跟踪检查";
-        case "m2":
-          return "小企业授信业务贷后例行检查";
-        case "m3":
-          return "小企业授信业务贷后全面检查";
-        case "m4":
-          return "小企业授信业务还款资金落实情况检查";
-        case "m5":
-          return "小企业法人快捷贷首次检查";
-        case "m6":
-          return "小企业法人快捷贷贷后日常检查";
-      }
-    },
+    // onchange(e) {
+    //   this.form.stageData[0].checkStage = e;
+    // },
 
     // 图片上传
     handleRemove(file, fileList) {
@@ -180,34 +152,12 @@ export default {
     if (billNo) {
       // 借据
       this.type = 1;
-      this.form.billNo = billNo;
-      queryForDetail(this, {
-        billNo,
-        bizType: this.form.bizType
-      }).then(res => {
-        if (res.data.returnCode == "200000") {
-          this.form = res.data.data;
-          this.form.bizType = res.data.data.bizType;
-          // console.log("paramsM1", this.paramsM1);
-        }
-      });
-      // console.log("detail", this.props.detail, this.form);
+      console.log("detail", this.form);
     }
     if (bizId) {
       // 业务
       this.type = 2;
       console.log("detail", this.form);
-      queryForBizDtail(this, {
-        bizId,
-        bizType: this.form.bizType
-      }).then(res => {
-        console.log("resss", res);
-        if (res.data.returnCode == "200000") {
-          this.form = res.data.data;
-          this.form.bizType = res.data.data.bizType;
-          // this.checkStage = res.data.data.stageData[0].checkStage;
-        }
-      });
     }
   }
 };
@@ -343,6 +293,14 @@ export default {
     color: rgba(10, 10, 10, 1);
   }
   .checkForm {
+  }
+}
+</style>
+
+<style lang="scss">
+.el-radio-group {
+  /deep/.el-radio {
+    margin-right: 10px;
   }
 }
 </style>

@@ -23,17 +23,17 @@
               el-option(label="小企业法人快捷贷贷后日常检查" value="m6")
           el-button(type="primary" size="mini" @click="onSave" class="btn" ref="saveBtn") 保存
       .contentBody
-        .type(v-if="form.bizType == 'm1'")
+        .type(v-show="form.bizType == 'm1'")
           DivM1(:detail="paramsM1" ref="DivM1")
-        .type(v-if="form.bizType == 'm2'")
+        .type(v-show="form.bizType == 'm2'")
           DivM2(:detail="paramsM2" ref="DivM2")
-        .type(v-if="form.bizType == 'm3'")  
+        .type(v-show="form.bizType == 'm3'")  
           DivM3(:detail="paramsM3" ref="DivM3")
-        .type(v-if="form.bizType == 'm4'")
+        .type(v-show="form.bizType == 'm4'")
           DivM4(:detail="paramsM4" ref="DivM4")
-        .type(v-if="form.bizType == 'm5'")
+        .type(v-show="form.bizType == 'm5'")
           DivM5(:detail="paramsM5" ref="DivM5")
-        .type(v-if="form.bizType == 'm6'")
+        .type(v-show="form.bizType == 'm6'")
           DivM6(:detail="paramsM6" ref="DivM6")
       //- 提交
       .footer
@@ -139,9 +139,20 @@ export default {
       }).then(res => {
         if (res.data.returnCode == "200000") {
           this.form.bizType = res.data.data.bizType;
-          this.paramsM1 = res.data.data;
-          this.paramsM4 = res.data.data;
-          // console.log("paramsM1", this.paramsM1);
+          if (res.data.data.bizType === "m1") {
+            this.paramsM1 = res.data.data;
+          } else if (res.data.data.bizType === "m2") {
+            this.paramsM2 = res.data.data;
+          } else if (res.data.data.bizType === "m3") {
+            this.paramsM3 = res.data.data;
+          } else if (res.data.data.bizType === "m4") {
+            this.paramsM4 = res.data.data;
+          } else if (res.data.data.bizType === "m5") {
+            this.paramsM5 = res.data.data;
+          } else {
+            this.paramsM6 = res.data.data;
+          }
+          console.log("res.data.data", res.data.data);
         }
       });
     }
@@ -156,9 +167,20 @@ export default {
       }).then(res => {
         if (res.data.returnCode == "200000") {
           this.form.bizType = res.data.data.bizType;
-          this.paramsM1 = res.data.data;
-          this.paramsM4 = res.data.data;
-          console.log("paramsM4", this.paramsM4);
+          if (res.data.data.bizType === "m1") {
+            this.paramsM1 = res.data.data;
+          } else if (res.data.data.bizType === "m2") {
+            this.paramsM2 = res.data.data;
+          } else if (res.data.data.bizType === "m3") {
+            this.paramsM3 = res.data.data;
+          } else if (res.data.data.bizType === "m4") {
+            this.paramsM4 = res.data.data;
+          } else if (res.data.data.bizType === "m5") {
+            this.paramsM5 = res.data.data;
+          } else {
+            this.paramsM6 = res.data.data;
+          }
+          console.log("res.data.data", res.data.data);
         }
       });
     }
@@ -488,18 +510,6 @@ export default {
         }
       }
     }
-
-    // .footer {
-    //   text-align: center;
-    //   height: 76px;
-    //   line-height: 76px;
-    //   .el-button--warning {
-    //     padding: 8px 20px;
-    //     span {
-    //       font-size: 16px;
-    //     }
-    //   }
-    // }
   }
   .textContent {
     padding: 30px 40px 0;
@@ -557,6 +567,7 @@ export default {
             font-size: 16px;
             color: rgba(10, 10, 10, 1);
             line-height: 31px;
+            font-weight: normal;
           }
         }
       }
@@ -609,5 +620,14 @@ export default {
   padding-left: 10px;
   color: rgba(10, 10, 10, 1);
   font-size: 16px;
+  // font-family: "微软雅黑";
+}
+.el-textarea {
+  /deep/.el-textarea__inner {
+    font-size: 16px;
+    color: rgba(10, 10, 10, 1);
+    line-height: 31px;
+    font-family: "微软雅黑";
+  }
 }
 </style>

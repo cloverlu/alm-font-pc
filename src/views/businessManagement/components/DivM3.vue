@@ -14,8 +14,11 @@
         el-form-item(label="检查类型 :" class="formItem2")
           el-input(v-model="form.custName" clearable)
         el-form-item(label="担保方式 :" class="formItem2")
-          el-select(v-model="form.securityKind" style="width:100%" clearable)
-            el-option(v-for="item in securityKindsArr" :key="item.value" :label="item.label" :value="item.value")
+          el-checkbox-group(v-model="form.securityKind" style="width:100%" clearable)
+            el-checkbox(v-for="item in securityKindsArr" :key="item.value" :label="item.value" :value="item.value") {{item.label}}
+          
+          //- el-select(v-model="form.securityKind" style="width:100%" clearable)
+            //- el-option(v-for="item in securityKindsArr" :key="item.value" :label="item.label" :value="item.value")
         el-form-item(label="授信金额 :" class="formItem2")
           el-input(v-model="form.lineAmout" clearable)
         el-form-item(label=" " class="formItem2")
@@ -81,7 +84,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="征信报告查询日期 :" style="width:96%")
-              el-date-picker(v-model="form.queryDateForPer" style="width:100%" type="date" clearable)
+              el-date-picker(v-model="form.queryDateForPer" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
         .blueTitle1 1.借款企业征信 :
         .cardTitle1
           span(class='blue')
@@ -183,7 +186,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="征信报告查询日期 :" style="width:96%")
-              el-date-picker(v-model="form.startDate" style="width:100%" type="date" clearable)
+              el-date-picker(v-model="form.startDate" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
         .blueTitle1 1.企业实际控制人及其配偶(若有)征信 :
         .cardTitle1
           span(class='blue')
@@ -374,7 +377,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="上次抵质押物评估或重估日期 :" style="width:96%")
-              el-date-picker(v-model="form.collEstimateDate" style="width:100%" type="date" clearable)
+              el-date-picker(v-model="form.collEstimateDate" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
           el-col(:span="12")
             span(class="greyContent") 根据现场检查及非现场查询情况，从抵(质)押物市场价值和变现能力方面分析，判|断抵(质)押物是否出现约定的需增加、置换等变动情形。
         el-row(:gutter="20")
@@ -663,8 +666,8 @@ export default {
   computed: {},
   // 侦听器
   watch: {
-    detail: function(newVal) {
-      // console.log(1, newVal, oldVal);
+    detail: function(newVal, oldVal) {
+      console.log(1, newVal, oldVal);
       this.form = newVal;
     }
   },
@@ -870,6 +873,13 @@ export default {
     color: rgba(10, 10, 10, 1);
   }
   .checkForm {
+  }
+}
+</style>
+<style lang="scss">
+.el-checkbox-group {
+  .el-checkbox {
+    margin-right: 15px;
   }
 }
 </style>

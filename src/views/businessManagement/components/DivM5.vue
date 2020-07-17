@@ -19,7 +19,7 @@
         el-form-item(label="贷款期限 :" class="formItem2")
           el-input(v-model="form.loanLength" clearable)
         el-form-item(label="放款日期 :" class="formItem2")
-          el-date-picker(v-model="form.loanDate" style="width:100%" type="date" placeholder="选择日期" clearable)
+          el-date-picker(v-model="form.loanDate" style="width:100%" value-format='yyyy-MM-dd' format='yyyy-MM-dd' type="date" placeholder="选择日期" clearable)
         el-form-item(label="约定用途 :" class="formItem2")
           el-input(v-model="form.loanPurpose" type="textarea" :rows="2" clearable)
         el-form-item(label="贷款支付方式 :" class="formItem2")
@@ -170,8 +170,8 @@ export default {
   computed: {},
   // 侦听器
   watch: {
-    detail: function(newVal) {
-      // console.log(1, newVal, oldVal);
+    detail: function(newVal, oldVal) {
+      console.log(1, newVal, oldVal);
       this.form = newVal;
     }
   },

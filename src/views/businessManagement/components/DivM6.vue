@@ -33,8 +33,10 @@
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label="担保方式 :" class="formItem2")
-              el-select(v-model="form.securityKind" style="width:100%" clearable)
-                el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
+              el-checkbox-group(v-model="form.securityKind" style="width:100%" clearable)
+                el-checkbox(v-for="item in securityKindsArr" :key="item.value" :label="item.value" :value="item.value") {{item.label}}
+              //- el-select(v-model="form.securityKind" style="width:100%" clearable)
+              //-   el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label="额度年检 :" class="formItem2")
               el-select(v-model="form.yearlyInspection" style="width:100%" clearable)
@@ -56,55 +58,55 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="征信报告查询日期 :" class="formItem2")
-              el-date-picker(v-model="form.queryDate" style="width:100%" type="date" clearable)
+              el-date-picker(v-model="form.assetCreditInfo.queryDate" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="当前企业及实际控制人征信情况(注明征信查询分类结果) :" class="formItem2")
-              el-input(v-model="form.fiveClass" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.assetCreditInfo.fiveClass" type="textarea" :rows="3" clearable)
           
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="企业或企业主是否有他行收缩贷款规模 :" class="formItem2")
-              el-select(v-model="form.shrinkLoanScale" style="width:100%" clearable)
+              el-select(v-model="form.assetCreditInfo.shrinkLoanScale" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label="企业或企业主征信是否有新增逾期记录 :" class="formItem2")
-              el-select(v-model="form.addedOverdues" style="width:100%" clearable)
+              el-select(v-model="form.assetCreditInfo.addedOverdues" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
          
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
-              el-input(v-model="form.shrinkLoanScaleMsg" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.assetCreditInfo.shrinkLoanScaleMsg" type="textarea" :rows="3" clearable)
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
-              el-input(v-model="form.addedOverduesMsg" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.assetCreditInfo.addedOverduesMsg" type="textarea" :rows="3" clearable)
          
   
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="企业或企业主是否有新增对外担保记录 :" class="formItem2")
-              el-select(v-model="form.addedGuarantees" style="width:100%" clearable)
+              el-select(v-model="form.assetCreditInfo.addedGuarantees" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label="企业或企业主是否有他行新增贷款 :" class="formItem2")
-              el-select(v-model="form.addedLoans" style="width:100%" clearable)
+              el-select(v-model="form.assetCreditInfo.addedLoans" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
 
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
-              el-input(v-model="form.addedLoansMsg" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.assetCreditInfo.addedLoansMsg" type="textarea" :rows="3" clearable)
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
-              el-input(v-model="form.addedLoansMsg" type="textarea" :rows="3" clearable) el-col(:span="12")
+              el-input(v-model="form.assetCreditInfo.addedLoansMsg" type="textarea" :rows="3" clearable) el-col(:span="12")
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="企业或企业主是否有其他异常变化 :" class="formItem2")
-              el-select(v-model="form.otherSitu" style="width:100%" clearable)
+              el-select(v-model="form.assetCreditInfo.otherSitu" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
             el-form-item(label=" " class="formItem2")
-              el-input(v-model="form.otherSituMsg" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.assetCreditInfo.otherSituMsg" type="textarea" :rows="3" clearable)
         
     //- 检查要点小结
     el-card(class='card')
@@ -369,6 +371,28 @@ export default {
   // 组件状态值
   data() {
     return {
+      securityKindsArr: [
+        {
+          label: "信用",
+          value: "1"
+        },
+        {
+          label: "抵押",
+          value: "2"
+        },
+        {
+          label: "质押",
+          value: "3"
+        },
+        {
+          label: "保证",
+          value: "4"
+        },
+        {
+          label: "其它",
+          value: "5"
+        }
+      ],
       options: [
         {
           label: "是",
@@ -402,18 +426,20 @@ export default {
         yearlyInspection: "", //额度年检
         revalOfColl: "", //押品重估
 
-        queryDate: "", //征信报告查询日期
-        fiveClass: "", // 当前企业及实际控制人征信情况(注明征信查询分类结果)
-        shrinkLoanScale: "", //企业或企业主是否有他行收缩贷款规模
-        shrinkLoanScaleMsg: "", //收缩贷款规模说明
-        addedOverdues: "", //企业或企业主征信是否有新增逾期记录
-        addedOverduesMsg: "", //新增逾期记录说明
-        addedGuarantees: "", // 企业或企业主是否有新增对外担保记录
-        addedGuaranteesMsg: "", //新增对外担保记录说明
-        addedLoans: "", //企业或企业主是否有他行新增贷款
-        addedLoansMsg: "", //他行新增贷款说明
-        otherSitu: "", //企业或企业主是否有其他异常变化
-        otherSituMsg: "", //其他异常变化说明
+        assetCreditInfo: {
+          queryDate: "", //征信报告查询日期
+          fiveClass: "", // 当前企业及实际控制人征信情况(注明征信查询分类结果)
+          shrinkLoanScale: "", //企业或企业主是否有他行收缩贷款规模
+          shrinkLoanScaleMsg: "", //收缩贷款规模说明
+          addedOverdues: "", //企业或企业主征信是否有新增逾期记录
+          addedOverduesMsg: "", //新增逾期记录说明
+          addedGuarantees: "", // 企业或企业主是否有新增对外担保记录
+          addedGuaranteesMsg: "", //新增对外担保记录说明
+          addedLoans: "", //企业或企业主是否有他行新增贷款
+          addedLoansMsg: "", //他行新增贷款说明
+          otherSitu: "", //企业或企业主是否有其他异常变化
+          otherSituMsg: "" //其他异常变化说明
+        },
 
         summaryForCheck: "", //检查要点小结
 
@@ -551,8 +577,8 @@ export default {
   computed: {},
   // 侦听器
   watch: {
-    detail: function(newVal) {
-      // console.log(1, newVal, oldVal);
+    detail: function(newVal, oldVal) {
+      console.log(1, newVal, oldVal);
       this.form = newVal;
     }
   },

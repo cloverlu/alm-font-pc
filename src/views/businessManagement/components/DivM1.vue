@@ -82,7 +82,7 @@
         span(class='title') 影像维护
       .uploadBox(v-for='(item,index) in list1' :key='item.index')
         .imgTitle {{item.title}}
-        el-upload(action="http://20.147.168.82:9001/postLoan/business/uploadModelFile" :on-success='handleSuccess' accept="image/gif, image/jpeg ,image/png, image/jpg" list-type="picture-card" :file-list='definte16' :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
+        el-upload(action=`http://20.147.168.86:9001/postLoan/business/uploadModelFile` :on-success='handleSuccess' accept="image/gif, image/jpeg ,image/png, image/jpg" list-type="picture-card" :file-list='definte16' :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
           i(class="el-icon-plus")
   </div>
 </template>
@@ -194,7 +194,6 @@ export default {
         }
       ],
       type: 1,
-      check: ["第一阶段"],
       dialogImageUrl: "",
       dialogVisible: false,
       formLabelWidth: "72px"

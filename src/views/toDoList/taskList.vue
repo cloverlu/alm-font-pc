@@ -74,16 +74,7 @@ export default {
   name: "taskList",
   data() {
     return {
-      tableData: [
-        {
-          id: 1,
-          bizType: "m1",
-          custName: "m1",
-          billNo: "23123242",
-          noticeDate: "2020/02/12",
-          endDate: "2020/12/12"
-        }
-      ],
+      tableData: [],
       pageNo: 1,
       pageSize: 10,
       total: 10,

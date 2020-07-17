@@ -39,7 +39,7 @@
             el-input(v-model="form.checked" type="textarea" :rows="3" clearable)
           .blueTitle 实际控制人或法定代表人风险点
           el-form-item(label="健康、 嗜好、家庭关系等方面 :" class="formItem2")
-            el-input(v-model="form.HoldPensonRisk" type="textarea" :rows="3" clearable)
+            el-input(v-model="form.holdPensonRisk" type="textarea" :rows="3" clearable)
           .blueTitle 近期检查发现的其他风险点
           el-form-item(class="formItem2")
             el-input(v-model="form.otherRisk" type="textarea" :rows="3" clearable)
@@ -61,7 +61,9 @@
         el-form-item(label="生产经营场所变动情况 :" class="formItem2")
           el-input(v-model="form.addrChangedMsg" clearable)
         el-form-item(label="检查配合程度 :" class="formItem2")
-          el-input(v-model="form.cooperate" clearable)
+          el-select(v-model="form.cooperate" style="width:100%" clearable)
+            el-option(v-for="item in cooperateArr" :key="item.value" :label="item.label" :value="item.value")
+          //- el-input(v-model="form.cooperate" clearable)
         el-form-item(label="接待人员 :" class="formItem2")
           el-input(v-model="form.staff" clearable)
 
@@ -74,7 +76,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="征信报告查询日期 :" style="width:96%")
-              el-date-picker(v-model="form.queryDateForPer" style="width:100%" type="date" clearable)
+              el-date-picker(v-model="form.queryDateForPer" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
         .blueTitle1 1.借款企业征信 :
         .cardTitle1
           span(class='blue')
@@ -176,7 +178,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="征信报告查询日期 :" style="width:96%")
-              el-date-picker(v-model="form.queryDateForCom" style="width:100%" type="date" clearable)
+              el-date-picker(v-model="form.queryDateForCom" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
         .blueTitle1 1.企业实际控制人及其配偶(若有)征信 :
         .cardTitle1
           span(class='blue')
@@ -341,34 +343,34 @@
           el-row(:gutter="20")
             el-col(:span="24")
               el-form-item(label="上次全面检查或调查时余额 :" style="width:96%")
-                el-input(v-model="form.stockLastBalance" clearable)
+                el-input(v-model="form.financeInfo.stockLastBalance" clearable)
           el-row(:gutter="20")
             el-col(:span="24")
               el-form-item(label='本次检查存货变动情况 :' style="width:96%")
-                el-input(v-model="form.stockChangSitu" type="textarea" :rows="3" clearable)
+                el-input(v-model="form.financeInfo.stockChangSitu" type="textarea" :rows="3" clearable)
           .blueTitle1 水、电、煤、气费其中一项或多项(加工制造类企业必填)
           el-row(:gutter="20")
             el-col(:span="24")
               el-form-item(label="上次全面检查或调查时余额 :" style="width:96%")
-                el-input(v-model="form.dailyExpenLastBalance" clearable)
+                el-input(v-model="form.financeInfo.dailyExpenLastBalance" clearable)
           el-row(:gutter="20")
             el-col(:span="24")
               el-form-item(label='本次检查存货变动情况 :' style="width:96%")
-                el-input(v-model="form.dailyExpenChangSitu" type="textarea" :rows="3" clearable) 
+                el-input(v-model="form.financeInfo.dailyExpenChangSitu" type="textarea" :rows="3" clearable) 
             el-col(:span="24")
               el-form-item(style="width:96%")
-                el-input(v-model="form.financeMsg" placeholder='根据财务信息及现场检查情况，判断企业是否生产经营异常(停产、半停产、员工数量骤减、设备开工率不足等)，并详细阐述异常情况对企业偿债能力的影响。' type="textarea" :rows="3" clearable)
+                el-input(v-model="form.financeInfo.financeMsg" placeholder='根据财务信息及现场检查情况，判断企业是否生产经营异常(停产、半停产、员工数量骤减、设备开工率不足等)，并详细阐述异常情况对企业偿债能力的影响。' type="textarea" :rows="3" clearable)
       .right
         el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
           .blueTitle1 营业收入
           el-row(:gutter="20")
             el-col(:span="24")
               el-form-item(label="上次全面检查或调查时余额 :" style="width:96%")
-                el-input(v-model="form.busIncLastBalance" clearable)
+                el-input(v-model="form.financeInfo.busIncLastBalance" clearable)
           el-row(:gutter="20")
             el-col(:span="24")
               el-form-item(label='本次检查存货变动情况 :' style="width:96%")
-                el-input(v-model="form.busIncChangSitu" type="textarea" :rows="3" clearable)  
+                el-input(v-model="form.financeInfo.busIncChangSitu" type="textarea" :rows="3" clearable)  
     //- 影像维护
     el-card(class='card')
       .cardTitle
@@ -382,7 +384,7 @@
 </template>
 
 <script>
-import { filterParams } from "../../../utils/utils";
+// import { filterParams } from "../../../utils/utils";
 export default {
   // 组件名称
   name: "DivM2",
@@ -393,6 +395,20 @@ export default {
   // 组件状态值
   data() {
     return {
+      cooperateArr: [
+        {
+          label: "配合",
+          value: "1"
+        },
+        {
+          label: "一般",
+          value: "2"
+        },
+        {
+          label: "不配合",
+          value: "3"
+        }
+      ],
       options: [
         {
           label: "是",
@@ -415,7 +431,7 @@ export default {
         checked: "", // 落实情况
         specialRequireCheck: "", // 产品贷后日常检查特殊要求及落实情况
         specialChecked: "", // 落实情况
-        HoldPensonRisk: "", // 实际控制人或法定代表人风险点
+        holdPensonRisk: "", // 实际控制人或法定代表人风险点
         otherRisk: "", // 近期检查发现的其他风险点
         managerRisk: "", // 管理层风险点
 
@@ -499,15 +515,15 @@ export default {
 
         // card 7
         // 财务信息
-        stockLastBalance: "", // 上次全面检查或调查时余额--- 存货
-        stockChangSitu: "", //本次检查存货变动情况
-        dailyExpenLastBalance: "", //上次全面检查或调查时余额---水、电、煤、气费其中一项或多项
-        dailyExpenChangSitu: "", //本次检查存货变动情况
-        busIncLastBalance: "", //上次全面检查或调查时余额--- 营业收入
-        busIncChangSitu: "", //本次检查存货变动情况
-        financeMsg: "", //财务状况整体说明
-
-        xx: "" //个人报告查询日期
+        financeInfo: {
+          stockLastBalance: "", // 上次全面检查或调查时余额--- 存货
+          stockChangSitu: "", //本次检查存货变动情况
+          dailyExpenLastBalance: "", //上次全面检查或调查时余额---水、电、煤、气费其中一项或多项
+          dailyExpenChangSitu: "", //本次检查存货变动情况
+          busIncLastBalance: "", //上次全面检查或调查时余额--- 营业收入
+          busIncChangSitu: "", //本次检查存货变动情况
+          financeMsg: ""
+        } //财务状况整体说明
       },
       list2: [
         {
@@ -577,7 +593,6 @@ export default {
           longitude: ""
         }
       ],
-      check: ["第一阶段"],
       dialogImageUrl: "",
       dialogVisible: false,
       formLabelWidth: "72px"
@@ -587,30 +602,13 @@ export default {
   computed: {},
   // 侦听器
   watch: {
-    detail: function(newVal) {
-      // console.log(1, newVal, oldVal);
+    detail: function(newVal, oldVal) {
+      console.log(1, newVal, oldVal);
       this.form = newVal;
     }
   },
   // 组件方法
   methods: {
-    // 保存
-    onSave() {
-      console.log(filterParams(this.form));
-    },
-    // 提交
-    onSubmit: function() {
-      if (this.form.startDate) {
-        this.form.startDate = this.$moment(this.form.startDate).format("L");
-      }
-      console.log(filterParams(this.form));
-    },
-    onSubmitApproval() {
-      console.log(filterParams(this.approval));
-    },
-    handleClick() {
-      console.log(this.activeName);
-    },
     returnType(row) {
       switch (row.bizType) {
         case "m1":
@@ -627,10 +625,7 @@ export default {
           return "小企业法人快捷贷贷后日常检查";
       }
     },
-    // 阶段多选框
-    onChange() {
-      console.log(this.check);
-    },
+
     // 图片上传
     handleRemove(file, fileList) {
       console.log(file, fileList);

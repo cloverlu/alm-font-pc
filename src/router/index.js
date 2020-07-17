@@ -16,9 +16,9 @@ const routes = [
     component: Login,
   },
   {
-    path: "/Layout",
+    path: "/",
     // redirect: "/Layout",
-    redirect: "/toDoList/taskList",
+    redirect: "/login",
   },
   // 待办提醒
   {
