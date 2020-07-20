@@ -156,7 +156,7 @@ export default {
         }
       });
     }
-    if (bizStatus === "alreadyDo") {
+    if (bizStatus === "alreadyDo" || bizStatus === "inReview") {
       this.type = 2;
     }
     if (bizId) {

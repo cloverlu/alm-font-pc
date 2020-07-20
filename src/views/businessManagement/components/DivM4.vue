@@ -17,11 +17,11 @@
         el-form-item(label="贷款期限 :" class="formItem2")
           el-input(v-model="form.loanLength" disabled)
         el-form-item(label="还款方式 :" class="formItem2")
-          el-input(v-model="form.repayKind" clearable)
+          el-input(v-model="form.repayKind" disabled)
         el-form-item(label="还款日期 :" class="formItem2")
-          el-date-picker(v-model="form.repayDate" disabled value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" placeholder="选择日期")
+          el-date-picker(v-model="form.repayDate" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" placeholder="选择日期")
         el-form-item(label="还款金额 :" class="formItem2")
-          el-input(v-model="form.repayAmout" disabled)
+          el-input(v-model="form.repayAmout" :disabled="type == 2")
 
     el-card(class='card')
       .cardTitle
@@ -166,8 +166,7 @@ export default {
       this.type = 1;
       this.form.billNo = billNo;
     }
-    if (bizStatus == "alreadyDo") {
-      // 业务
+    if (bizStatus === "alreadyDo" || bizStatus === "inReview") {
       this.type = 2;
     }
     if (bizId) {

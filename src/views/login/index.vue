@@ -50,9 +50,12 @@ export default {
   watch: {},
   // 组件方法
   methods: {
-    forget() {
-      console.log("忘记密码");
-    },
+    // login() {
+    //   let xui = requireModuleJs("xui");
+    //   let obj = xui.getUserInfo();
+    //   let token = xui.getDeviceTokens();
+    //   console.log(obj, token);
+    // },
     submit() {
       console.log(this.emplCode, this.password);
       const params = {
@@ -99,7 +102,9 @@ export default {
       });
     }
   },
-  mounted() {}
+  mounted() {
+    // this.login();
+  }
 };
 </script>
 

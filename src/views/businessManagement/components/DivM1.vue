@@ -253,8 +253,7 @@ export default {
       this.type = 1;
       this.form.billNo = billNo;
     }
-    if (bizStatus == "alreadyDo") {
-      // 业务
+    if (bizStatus === "alreadyDo" || bizStatus === "inReview") {
       this.type = 2;
     }
     if (bizId) {

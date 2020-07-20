@@ -20,7 +20,7 @@
             el-option(label="小企业法人快捷贷首次检查" value="m5")
             el-option(label="小企业法人快捷贷贷后日常检查" value="m6")
         el-form-item(label="授信额度金额 :" class="formItem2")
-          el-input(v-model="form.lineAmout" disabled)
+          el-input(v-model="form.lineAmout" :disabled="type == 2")
         el-form-item(label="客户名称 :" class="formItem2")
           el-input(v-model="form.custName" disabled)
         el-form-item(label="贷款金额 :" class="formItem2")
@@ -654,8 +654,7 @@ export default {
       this.type = 1;
       this.form.billNo = billNo;
     }
-    if (bizStatus == "alreadyDo") {
-      // 业务
+    if (bizStatus === "alreadyDo" || bizStatus === "inReview") {
       this.type = 2;
     }
     if (bizId) {

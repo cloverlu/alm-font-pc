@@ -14,19 +14,19 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="贷后检查模式 :" class="formItem2")
-              el-input(v-model="form.checkModel" disabled)
+              el-input(v-model="form.checkModel")
           el-col(:span="12")
             el-form-item(label="还款方式 :" class="formItem2")
-              el-input(v-model="form.repayKind" disabled)
+              el-input(v-model="form.repayKind")
           el-col(:span="12")
             el-form-item(label="授信金额 :" class="formItem2")
-              el-input(v-model="form.lineAmout" disabled)
+              el-input(v-model="form.lineAmout")
           el-col(:span="12")
             el-form-item(label="检查地点 :" class="formItem2")
-              el-input(v-model="form.practicableCheckAddr" disabled)
+              el-input(v-model="form.practicableCheckAddr")
           el-col(:span="12")
             el-form-item(label="授信余额 :" class="formItem2")
-              el-input(v-model="form.lineBalance" disabled)
+              el-input(v-model="form.lineBalance")
           el-col(:span="12")
             el-form-item(label="检查配合程度 :" class="formItem2")
               el-select(v-model="form.cooperate" style="width:100%" clearable)
@@ -39,14 +39,14 @@
               //-   el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label="额度年检 :" class="formItem2")
-              el-select(v-model="form.yearlyInspection" style="width:100%" disabled)
+              el-select(v-model="form.yearlyInspection" style="width:100%")
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
               el-input(v-model="form.otherSecurityKindMsg" type="textarea" :rows="3" clearable)
           el-col(:span="12")
             el-form-item(label="押品重估 :" class="formItem2")
-              el-select(v-model="form.revalOfColl" style="width:100%" disabled)
+              el-select(v-model="form.revalOfColl" style="width:100%")
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
     //- 
     el-card(class='card')
@@ -420,7 +420,7 @@ export default {
         // card 1
         bizType: "m6", // 检查类型
         checkModel: "", //贷后检查模式
-        repayKind: "银行卡", // 还款方式
+        repayKind: "", // 还款方式
         lineAmout: "", //  授信金额
         practicableCheckAddr: "", // 检查地点
         lineBalance: "", //授信余额
@@ -481,7 +481,6 @@ export default {
         assitOtherSuit: "", //押品其他情况
         summaryForAssit: "", //押品检查小结
 
-        value: 1,
         //
         assitInfoForPledge: [
           {
@@ -589,16 +588,6 @@ export default {
   // 组件方法
   methods: {
     // 保存
-    onSave() {
-      console.log(filterParams(this.form));
-    },
-    // 提交
-    onSubmit: function() {
-      if (this.form.startDate) {
-        this.form.startDate = this.$moment(this.form.startDate).format("L");
-      }
-      console.log(filterParams(this.form));
-    },
     onSubmitApproval() {
       console.log(filterParams(this.approval));
     },
@@ -694,8 +683,7 @@ export default {
       this.type = 1;
       this.form.billNo = billNo;
     }
-    if (bizStatus == "alreadyDo") {
-      // 业务
+    if (bizStatus === "alreadyDo" || bizStatus === "inReview") {
       this.type = 2;
     }
     if (bizId) {

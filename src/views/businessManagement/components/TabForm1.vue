@@ -16,54 +16,53 @@
       el-tab-pane(label="私人借款" name="three")
       el-tab-pane(label="应付票据" name="four")
     .content1(v-show="activeTab1 == 'first'")
-      //- form-content1(:formContent1="params1" ref="formContent1")
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="当前余额 :" style="width:96%")
-              el-input(v-model="form.colDebtBalance" clearable)
+              el-input(v-model="form.financeInfo.colDebtBalance" clearable)
           el-col(:span="12")
             el-form-item(label="上期检查（或调查）时点余额 :" style="width:96%")
-              el-input(v-model="form.colDebtLastBalance" clearable)
+              el-input(v-model="form.financeInfo.colDebtLastBalance" clearable)
           el-col(:span="12")
             el-form-item(label="如变动超过30%，原因 :" style="width:96%")
-              el-input(v-model="form.colDebtChang30Msg" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.colDebtChang30Msg" type="textarea" :rows="3" clearable)
     .content1(v-show="activeTab1 == 'second'")
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="当前余额 :" style="width:96%")
-              el-input(v-model="form.stockChangSitu" clearable)
+              el-input(v-model="form.financeInfo.stockChangSitu" clearable)
           el-col(:span="12")
             el-form-item(label="上期检查（或调查）时点余额 :" style="width:96%")
-              el-input(v-model="form.stockLastBalance" clearable)
+              el-input(v-model="form.financeInfo.stockLastBalance" clearable)
           el-col(:span="12")
             el-form-item(label="如变动超过30%，原因 :" style="width:96%")
-              el-input(v-model="form.stockChang30Msg" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.stockChang30Msg" type="textarea" :rows="3" clearable)
     .content1(v-show="activeTab1 == 'three'")
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="当前余额 :" style="width:96%")
-              el-input(v-model="form.loanForPsonBalance" clearable)
+              el-input(v-model="form.financeInfo.loanForPsonBalance" clearable)
           el-col(:span="12")
             el-form-item(label="上期检查（或调查）时点余额 :" style="width:96%")
-              el-input(v-model="form.loanForPsonLastBalance" clearable)
+              el-input(v-model="form.financeInfo.loanForPsonLastBalance" clearable)
           el-col(:span="12")
             el-form-item(label="如变动超过30%，原因 :" style="width:96%")
-              el-input(v-model="form.loanForPsonChang30Msg" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.loanForPsonChang30Msg" type="textarea" :rows="3" clearable)
     .content1(v-show="activeTab1 == 'four'")
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="当前余额 :" style="width:96%")
-              el-input(v-model="form.payDebtBalance" clearable)
+              el-input(v-model="form.financeInfo.payDebtBalance" clearable)
           el-col(:span="12")
             el-form-item(label="上期检查（或调查）时点余额 :" style="width:96%")
-              el-input(v-model="form.payDebtLastBalance" clearable)
+              el-input(v-model="form.financeInfo.payDebtLastBalance" clearable)
           el-col(:span="12")
             el-form-item(label="如变动超过30%，原因 :" style="width:96%")
-              el-input(v-model="form.payDebtChang30Msg" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.payDebtChang30Msg" type="textarea" :rows="3" clearable)
     //- tab2
     .cardTitle1
       span(class='blue')
@@ -73,44 +72,43 @@
       el-tab-pane(label="银行借款" name="second")
       el-tab-pane(label="应付账款" name="three")
     .content1(v-show="activeTab2 == 'first'")
-      //- form-content1(:formContent1="params2" ref="formContent2")
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="当前余额 :" style="width:96%")
-              el-input(v-model="form.colCapitalBalance" clearable)
+              el-input(v-model="form.financeInfo.colCapitalBalance" clearable)
           el-col(:span="12")
             el-form-item(label="上期检查（或调查）时点余额 :" style="width:96%")
-              el-input(v-model="form.colCapitalLastBalance" clearable)
+              el-input(v-model="form.financeInfo.colCapitalLastBalance" clearable)
           el-col(:span="12")
             el-form-item(label="如变动超过30%，原因 :" style="width:96%")
-              el-input(v-model="form.colCapitalChang30Msg" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.colCapitalChang30Msg" type="textarea" :rows="3" clearable)
     .content1(v-show="activeTab2 == 'second'")
       //- form-content1(:formContent1="params2" ref="formContent2")
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="当前余额 :" style="width:96%")
-              el-input(v-model="form.loanForBankBalance" clearable)
+              el-input(v-model="form.financeInfo.loanForBankBalance" clearable)
           el-col(:span="12")
             el-form-item(label="上期检查（或调查）时点余额 :" style="width:96%")
-              el-input(v-model="form.loanForBankLastBalance" clearable)
+              el-input(v-model="form.financeInfo.loanForBankLastBalance" clearable)
           el-col(:span="12")
             el-form-item(label="如变动超过30%，原因 :" style="width:96%")
-              el-input(v-model="form.loanForBankChang30Msg" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.loanForBankChang30Msg" type="textarea" :rows="3" clearable)
     .content1(v-show="activeTab2 == 'three'")
       //- form-content1(:formContent1="params2" ref="formContent2")
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="当前余额 :" style="width:96%")
-              el-input(v-model="form.payCapitalBalance" clearable)
+              el-input(v-model="form.financeInfo.payCapitalBalance" clearable)
           el-col(:span="12")
             el-form-item(label="上期检查（或调查）时点余额 :" style="width:96%")
-              el-input(v-model="form.payCapitalLastBalance" clearable)
+              el-input(v-model="form.financeInfo.payCapitalLastBalance" clearable)
           el-col(:span="12")
             el-form-item(label="如变动超过30%，原因 :" style="width:96%")
-              el-input(v-model="form.payCapitalChang30Msg" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.payCapitalChang30Msg" type="textarea" :rows="3" clearable)
     //- tab3
     .cardTitle1
       span(class='blue')
@@ -125,38 +123,38 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="近三个月的情况 :" style="width:96%")
-              el-input(v-model="form.busInc3MSitu" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.busInc3MSitu" type="textarea" :rows="3" clearable)
           el-col(:span="12")
             el-form-item(label="如剔除季节性因素后变动超30%，原因 :" style="width:96%")
-              el-input(v-model="form.busIncChang30Msg" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.busIncChang30Msg" type="textarea" :rows="3" clearable)
       //- form-content3(:formContent1="params3" ref="formContent3")
     .content1(v-show="activeTab3 == 'second'")
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="近三个月的情况 :" style="width:96%")
-              el-input(v-model="form.emplCost3M" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.emplCost3M" type="textarea" :rows="3" clearable)
           el-col(:span="12")
             el-form-item(label="如剔除季节性因素后变动超30%，原因 :" style="width:96%")
-              el-input(v-model="form.emplCostChang30Msg" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.emplCostChang30Msg" type="textarea" :rows="3" clearable)
     .content1(v-show="activeTab3 == 'three'")
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="近三个月的情况 :" style="width:96%")
-              el-input(v-model="form.dailyExpen3MSitu" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.dailyExpen3MSitu" type="textarea" :rows="3" clearable)
           el-col(:span="12")
             el-form-item(label="如剔除季节性因素后变动超30%，原因 :" style="width:96%")
-              el-input(v-model="form.dailyExpenChang30Msg" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.dailyExpenChang30Msg" type="textarea" :rows="3" clearable)
     .content1(v-show="activeTab3 == 'four'")
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="近三个月的情况 :" style="width:96%")
-              el-input(v-model="form.cash3M" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.cash3M" type="textarea" :rows="3" clearable)
           el-col(:span="12")
             el-form-item(label="如剔除季节性因素后变动超30%，原因 :" style="width:96%")
-              el-input(v-model="form.cashChang30Msg" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.cashChang30Msg" type="textarea" :rows="3" clearable)
     //- tab4
     .cardTitle1
       span(class='blue')
@@ -171,38 +169,50 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="近三个月的情况 :" style="width:96%")
-              el-input(v-model="form.materialCost3M" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.materialCost3M" type="textarea" :rows="3" clearable)
           el-col(:span="12")
             el-form-item(label="如剔除季节性因素后变动超30%，原因 :" style="width:96%")
-              el-input(v-model="form.materialCostChang30Msg" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.materialCostChang30Msg" type="textarea" :rows="3" clearable)
+          el-col(:span="12")
+            el-form-item(label=" " style="width:96%")
+              el-input(v-model="form.financeInfo.financeMsg" type="textarea" :rows="3" clearable)
       //- form-content4(:formContent1="params4" ref="formContent4")
     .content1(v-show="activeTab4 == 'second'")
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="近三个月的情况 :" style="width:96%")
-              el-input(v-model="form.financeCost3M" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.financeCost3M" type="textarea" :rows="3" clearable)
           el-col(:span="12")
             el-form-item(label="如剔除季节性因素后变动超30%，原因 :" style="width:96%")
-              el-input(v-model="form.financeCostChang30Msg" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.financeCostChang30Msg" type="textarea" :rows="3" clearable)
+          el-col(:span="12")
+            el-form-item(label=" " style="width:96%")
+              el-input(v-model="form.financeInfo.financeMsg" type="textarea" :rows="3" clearable)
     .content1(v-show="activeTab4 == 'three'")
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="近三个月的情况 :" style="width:96%")
-              el-input(v-model="form.payTaxAmout3M" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.payTaxAmout3M" type="textarea" :rows="3" clearable)
           el-col(:span="12")
             el-form-item(label="如剔除季节性因素后变动超30%，原因 :" style="width:96%")
-              el-input(v-model="form.payTaxAmoutChang30Msg" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.payTaxAmoutChang30Msg" type="textarea" :rows="3" clearable)
+          el-col(:span="12")
+            el-form-item(label=" " style="width:96%")
+              el-input(v-model="form.financeInfo.financeMsg" type="textarea" :rows="3" clearable)
     .content1(v-show="activeTab4 == 'four'")
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="近三个月的情况 :" style="width:96%")
-              el-input(v-model="form.profit3M" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.profit3M" type="textarea" :rows="3" clearable)
           el-col(:span="12")
             el-form-item(label="如剔除季节性因素后变动超30%，原因 :" style="width:96%")
-              el-input(v-model="form.profitChang30Msg" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.profitChang30Msg" type="textarea" :rows="3" clearable)
+          el-col(:span="12")
+            el-form-item(label=" " style="width:96%")
+              el-input(v-model="form.financeInfo.financeMsg" type="textarea" :rows="3" clearable)
 
 </template>
 
@@ -231,52 +241,51 @@ export default {
       activeTab3: "first",
       activeTab4: "first",
       form: {
-        // card 1
-        colDebtBalance: "", //当前余额
-        colDebtLastBalance: "", //应收票据上期检查（或调查）时点余额
-        colDebtChang30Msg: "", // 应收票据变动超过30%，原因
-        stockChangSitu: "", //存货上次全面检查或调查时余额
-        stockLastBalance: "", //存货本次检查存货变动情况
-        stockChang30Msg: "", // 存货变动超过30%，原因
-        loanForPsonBalance: "", //私人借款当前余额
-        loanForPsonLastBalance: "", //私人借款上期检查（或调查）时点余额
-        loanForPsonChang30Msg: "", // 私人借款变动超过30%，原因
-        payDebtBalance: "", //应付票据当前余额
-        payDebtLastBalance: "", //应付票据上期检查（或调查）时点余额
-        payDebtChang30Msg: "", // 应付票据变动超过30%，原因
-        // card 2
-        colCapitalBalance: "", //应收账款当前余额
-        colCapitalLastBalance: "", //应收账款上期检查（或调查）时点余额
-        colCapitalChang30Msg: "", // 应收账款变动超过30%，原因
-        loanForBankBalance: "", //银行借款当前余额
-        loanForBankLastBalance: "", //银行借款上期检查（或调查）时点余额
-        loanForBankChang30Msg: "", // 银行借款变动超过30%，原因
-        payCapitalBalance: "", //应付账款当前余额
-        payCapitalLastBalance: "", //应付账款上期检查（或调查）时点余额
-        payCapitalChang30Msg: "", // 应付账款变动超过30%，原因
-        // card 3
-        busInc3MSitu: "", //营业收入近三个月的情况
-        busIncChang30Msg: "", // 营业收入剔除季节性因素后变动超30%，原因
-        dailyExpen3MSitu: "", //近三个月的情况
-        dailyExpenChang30Msg: "", // 变动超过30%，原因
-        emplCost3M: "", //近三个月的情况
-        emplCostChang30Msg: "", // 变动超过30%，原因
-        cash3M: "", //近三个月的情况
-        cashChang30Msg: "", // 应收账款变动超过30%，原因
-        // card 4
-        materialCost3M: "", //材料近三个月的情况
-        materialCostChang30Msg: "", // 材料剔除季节性因素后变动超30%，原因
-        financeCost3M: "", //近三个月的情况
-        financeCostChang30Msg: "", // 变动超过30%，原因
-        payTaxAmout3M: "", //近三个月的情况
-        payTaxAmoutChang30Msg: "", // 变动超过30%，原因
-        profit3M: "", //近三个月的情况
-        profitChang30Msg: "" // 应收账款变动超过30%，原因
-      },
-      params1: {},
-      params2: {},
-      params3: {},
-      params4: {}
+        financeInfo: {
+          // card 1
+          colDebtBalance: "", //当前余额
+          colDebtLastBalance: "", //应收票据上期检查（或调查）时点余额
+          colDebtChang30Msg: "", // 应收票据变动超过30%，原因
+          stockChangSitu: "", //存货上次全面检查或调查时余额
+          stockLastBalance: "", //存货本次检查存货变动情况
+          stockChang30Msg: "", // 存货变动超过30%，原因
+          loanForPsonBalance: "", //私人借款当前余额
+          loanForPsonLastBalance: "", //私人借款上期检查（或调查）时点余额
+          loanForPsonChang30Msg: "", // 私人借款变动超过30%，原因
+          payDebtBalance: "", //应付票据当前余额
+          payDebtLastBalance: "", //应付票据上期检查（或调查）时点余额
+          payDebtChang30Msg: "", // 应付票据变动超过30%，原因
+          // card 2
+          colCapitalBalance: "", //应收账款当前余额
+          colCapitalLastBalance: "", //应收账款上期检查（或调查）时点余额
+          colCapitalChang30Msg: "", // 应收账款变动超过30%，原因
+          loanForBankBalance: "", //银行借款当前余额
+          loanForBankLastBalance: "", //银行借款上期检查（或调查）时点余额
+          loanForBankChang30Msg: "", // 银行借款变动超过30%，原因
+          payCapitalBalance: "", //应付账款当前余额
+          payCapitalLastBalance: "", //应付账款上期检查（或调查）时点余额
+          payCapitalChang30Msg: "", // 应付账款变动超过30%，原因
+          // card 3
+          busInc3MSitu: "", //营业收入近三个月的情况
+          busIncChang30Msg: "", // 营业收入剔除季节性因素后变动超30%，原因
+          dailyExpen3MSitu: "", //近三个月的情况
+          dailyExpenChang30Msg: "", // 变动超过30%，原因
+          emplCost3M: "", //近三个月的情况
+          emplCostChang30Msg: "", // 变动超过30%，原因
+          cash3M: "", //近三个月的情况
+          cashChang30Msg: "", // 应收账款变动超过30%，原因
+          // card 4
+          materialCost3M: "", //材料近三个月的情况
+          materialCostChang30Msg: "", // 材料剔除季节性因素后变动超30%，原因
+          financeCost3M: "", //近三个月的情况
+          financeCostChang30Msg: "", // 变动超过30%，原因
+          payTaxAmout3M: "", //近三个月的情况
+          payTaxAmoutChang30Msg: "", // 变动超过30%，原因
+          profit3M: "", //近三个月的情况
+          profitChang30Msg: "", // 应收账款变动超过30%，原因
+          financeMsg: ""
+        }
+      }
     };
   },
   // 计算属性
@@ -284,9 +293,8 @@ export default {
   // 侦听器
   watch: {
     contentDetail: function(newVal) {
-      // console.log(1, newVal, oldVal);
-      this.params1 = newVal;
-      console.log("this.params1", this.params1);
+      console.log(123, newVal);
+      this.form.financeInfo = newVal;
     }
   },
   // 组件方法
@@ -297,18 +305,18 @@ export default {
     },
     resetValue1() {
       // card 1
-      this.form.colDebtBalance = ""; //当前余额
-      this.form.colDebtLastBalance = ""; //应收票据上期检查（或调查）时点余额
-      this.form.colDebtChang30Msg = ""; // 应收票据变动超过30%，原因
-      this.form.stockChangSitu = ""; //存货上次全面检查或调查时余额
-      this.form.stockLastBalance = ""; //存货本次检查存货变动情况
-      this.form.stockChang30Msg = ""; // 存货变动超过30%，原因
-      this.form.loanForPsonBalance = ""; //私人借款当前余额
-      this.form.loanForPsonLastBalance = ""; //私人借款上期检查（或调查）时点余额
-      this.form.loanForPsonChang30Msg = ""; // 私人借款变动超过30%，原因
-      this.form.payDebtBalance = ""; //应付票据当前余额
-      this.form.payDebtLastBalance = ""; //应付票据上期检查（或调查）时点余额
-      this.form.payDebtChang30Msg = ""; // 应付票据变动超过30%，原因
+      // this.form.financeInfo.colDebtBalance = ""; //当前余额
+      // this.form.financeInfo.colDebtLastBalance = ""; //应收票据上期检查（或调查）时点余额
+      // this.form.financeInfo.colDebtChang30Msg = ""; // 应收票据变动超过30%，原因
+      // this.form.financeInfo.stockChangSitu = ""; //存货上次全面检查或调查时余额
+      // this.form.financeInfo.stockLastBalance = ""; //存货本次检查存货变动情况
+      // this.form.financeInfo.stockChang30Msg = ""; // 存货变动超过30%，原因
+      // this.form.financeInfo.loanForPsonBalance = ""; //私人借款当前余额
+      // this.form.financeInfo.loanForPsonLastBalance = ""; //私人借款上期检查（或调查）时点余额
+      // this.form.financeInfo.loanForPsonChang30Msg = ""; // 私人借款变动超过30%，原因
+      // this.form.financeInfo.payDebtBalance = ""; //应付票据当前余额
+      // this.form.financeInfo.payDebtLastBalance = ""; //应付票据上期检查（或调查）时点余额
+      // this.form.financeInfo.payDebtChang30Msg = ""; // 应付票据变动超过30%，原因
     },
     handleClick2() {
       console.log(this.activeTab2);
@@ -316,15 +324,15 @@ export default {
     },
     resetValue2() {
       // card 2
-      this.form.colCapitalBalance = ""; //应收账款当前余额
-      this.form.colCapitalLastBalance = ""; //应收账款上期检查（或调查）时点余额
-      this.form.colCapitalChang30Msg = ""; // 应收账款变动超过30%，原因
-      this.form.loanForBankBalance = ""; //银行借款当前余额
-      this.form.loanForBankLastBalance = ""; //银行借款上期检查（或调查）时点余额
-      this.form.loanForBankChang30Msg = ""; // 银行借款变动超过30%，原因
-      this.form.payCapitalBalance = ""; //应付账款当前余额
-      this.form.payCapitalLastBalance = ""; //应付账款上期检查（或调查）时点余额
-      this.form.payCapitalChang30Msg = ""; // 应付账款变动超过30%，原因
+      // this.form.financeInfo.colCapitalBalance = ""; //应收账款当前余额
+      // this.form.financeInfo.colCapitalLastBalance = ""; //应收账款上期检查（或调查）时点余额
+      // this.form.financeInfo.colCapitalChang30Msg = ""; // 应收账款变动超过30%，原因
+      // this.form.financeInfo.loanForBankBalance = ""; //银行借款当前余额
+      // this.form.financeInfo.loanForBankLastBalance = ""; //银行借款上期检查（或调查）时点余额
+      // this.form.financeInfo.loanForBankChang30Msg = ""; // 银行借款变动超过30%，原因
+      // this.form.financeInfo.payCapitalBalance = ""; //应付账款当前余额
+      // this.form.financeInfo.payCapitalLastBalance = ""; //应付账款上期检查（或调查）时点余额
+      // this.form.financeInfo.payCapitalChang30Msg = ""; // 应付账款变动超过30%，原因
     },
     handleClick3() {
       console.log(this.activeTab3);
@@ -332,14 +340,14 @@ export default {
     },
     resetValue3() {
       // card 3
-      this.form.busInc3MSitu = ""; //营业收入近三个月的情况
-      this.form.busIncChang30Msg = ""; // 营业收入剔除季节性因素后变动超30%，原因
-      this.form.dailyExpen3MSitu = ""; //近三个月的情况
-      this.form.dailyExpenChang30Msg = ""; // 变动超过30%，原因
-      this.form.emplCost3M = ""; //近三个月的情况
-      this.form.emplCostChang30Msg = ""; // 变动超过30%，原因
-      this.form.cash3M = ""; //近三个月的情况
-      this.form.cashChang30Msg = ""; // 应收账款变动超过30%，原因
+      // this.form.financeInfo.busInc3MSitu = ""; //营业收入近三个月的情况
+      // this.form.financeInfo.busIncChang30Msg = ""; // 营业收入剔除季节性因素后变动超30%，原因
+      // this.form.financeInfo.dailyExpen3MSitu = ""; //近三个月的情况
+      // this.form.financeInfo.dailyExpenChang30Msg = ""; // 变动超过30%，原因
+      // this.form.financeInfo.emplCost3M = ""; //近三个月的情况
+      // this.form.financeInfo.emplCostChang30Msg = ""; // 变动超过30%，原因
+      // this.form.financeInfo.cash3M = ""; //近三个月的情况
+      // this.form.financeInfo.cashChang30Msg = ""; // 应收账款变动超过30%，原因
     },
     handleClick4() {
       console.log(this.activeTab4);
@@ -347,14 +355,15 @@ export default {
     },
     resetValue4() {
       // card 4
-      this.form.materialCost3M = ""; //材料近三个月的情况
-      this.form.materialCostChang30Msg = ""; // 材料剔除季节性因素后变动超30%，原因
-      this.form.financeCost3M = ""; //近三个月的情况
-      this.form.financeCostChang30Msg = ""; // 变动超过30%，原因
-      this.form.payTaxAmout3M = ""; //近三个月的情况
-      this.form.payTaxAmoutChang30Msg = ""; // 变动超过30%，原因
-      this.form.profit3M = ""; //近三个月的情况
-      this.form.profitChang30Msg = ""; // 应收账款变动超过30%，原因
+      // this.form.financeInfo.materialCost3M = ""; //材料近三个月的情况
+      // this.form.financeInfo.materialCostChang30Msg = ""; // 材料剔除季节性因素后变动超30%，原因
+      // this.form.financeInfo.financeCost3M = ""; //近三个月的情况
+      // this.form.financeInfo.financeCostChang30Msg = ""; // 变动超过30%，原因
+      // this.form.financeInfo.payTaxAmout3M = ""; //近三个月的情况
+      // this.form.financeInfo.payTaxAmoutChang30Msg = ""; // 变动超过30%，原因
+      // this.form.financeInfo.profit3M = ""; //近三个月的情况
+      // this.form.financeInfo.profitChang30Msg = ""; // 应收账款变动超过30%，原因
+      // this.form.financeInfo.financeMsg = ""; // 财务状况整体说明
     }
   },
   /**
