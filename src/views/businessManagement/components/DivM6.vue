@@ -569,6 +569,7 @@ export default {
           longitude: ""
         }
       ],
+      type: 1,
       params1: {},
       params2: {},
       dialogImageUrl: "",

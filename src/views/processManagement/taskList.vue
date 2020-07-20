@@ -207,7 +207,7 @@ export default {
     },
     selectable(row) {
       let flag = true;
-      if (row.bizStatus == "already") {
+      if (row.bizStatus == "alreadyDo") {
         flag = true;
       } else {
         flag = false;

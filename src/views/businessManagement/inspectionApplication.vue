@@ -156,9 +156,11 @@ export default {
         }
       });
     }
-    if (bizId || bizStatus === "alreadyDo") {
-      // 业务
+    if (bizStatus === "alreadyDo") {
       this.type = 2;
+    }
+    if (bizId) {
+      // 业务
       this.form.billNo = "";
       this.form.bizId = bizId;
       queryForBizDtail(this, {
@@ -220,21 +222,20 @@ export default {
         data = this.$refs.DivM6.form;
       }
 
-      // console.log(filterParams(data));
       console.log(data);
-      // saveEditModelBusiness(this, {
-      //   ...filterParams(data)
-      // }).then(res => {
-      //   if (res.data.returnCode === "200000") {
-      //     this.$message({
-      //       message: "检查申请编辑操作成功",
-      //       type: "success"
-      //     });
-      //     setTimeout(() => {
-      //       history.go(-1);
-      //     }, 500);
-      //   }
-      // });
+      saveEditModelBusiness(this, {
+        ...filterParams(data)
+      }).then(res => {
+        if (res.data.returnCode === "200000") {
+          this.$message({
+            message: "检查申请编辑操作成功",
+            type: "success"
+          });
+          setTimeout(() => {
+            history.go(-1);
+          }, 500);
+        }
+      });
     },
     // 提交
     onSubmit: function() {
@@ -267,7 +268,6 @@ export default {
         data = this.$refs.DivM6.form;
       }
 
-      // console.log(filterParams(data));
       console.log(data);
       saveEditModelBusiness(this, {
         ...filterParams(data)

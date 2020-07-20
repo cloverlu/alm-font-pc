@@ -120,6 +120,7 @@ export default {
           longitude: ""
         }
       ],
+      type: 1,
       dialogImageUrl: "",
       dialogVisible: false,
       formLabelWidth: "72px"

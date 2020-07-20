@@ -609,6 +609,9 @@ export default {
     detail: function(newVal, oldVal) {
       console.log(1, newVal, oldVal);
       this.form = newVal;
+      if (!newVal.creditInfo.queryDateForPer) {
+        this.form.creditInfo.queryDateForPer = "";
+      }
     }
   },
   // 组件方法
