@@ -14,7 +14,7 @@
       .contentTop
         el-form(:model="form" :inline="true" label-position="left" label-width="80px" size="mini" class="demo-form-inline formBox")
           el-form-item(label="检查类型" class="formItem5")
-            el-select(v-model="form.bizType" clearable style="width:100%" :disabled='type == 2')
+            el-select(v-model="form.bizType" clearable @change='onChange' style="width:100%" :disabled='type == 2')
               el-option(label="小企业授信业务首次跟踪检查" value="m1")
               el-option(label="小企业授信业务贷后例行检查" value="m2")
               el-option(label="小企业授信业务贷后全面检查" value="m3")
@@ -118,6 +118,8 @@ export default {
       paramsM4: {},
       paramsM5: {},
       paramsM6: {},
+      params: {},
+      loanBusiness: {},
       dialogImageUrl: "",
       dialogVisible: false,
       formLabelWidth: "72px"
@@ -138,19 +140,45 @@ export default {
         bizType: this.form.bizType
       }).then(res => {
         if (res.data.returnCode == "200000") {
+          for (var key in res.data.data) {
+            if (!res.data.data[key]) {
+              // console.log("没有key", key);
+              res.data.data[key] = "";
+            }
+          }
+          if (!res.data.data.creditInfo) {
+            console.log("没有creditInfo");
+            res.data.data.creditInfo = {
+              queryDateForPer: ""
+            };
+          }
+          if (!res.data.data.financeInfo) {
+            console.log("financeInfo");
+            res.data.data.financeInfo = {};
+          }
+          if (!res.data.data.stageData) {
+            console.log("financeInfo");
+            res.data.data.stageData = [{ checkStage: "1" }];
+          }
+          if (!res.data.data.assetCreditInfo) {
+            console.log("assetCreditInfo");
+            res.data.data.assetCreditInfo = {};
+          }
+
           this.form.bizType = res.data.data.bizType;
+          this.params = res.data.data;
           if (res.data.data.bizType === "m1") {
-            this.paramsM1 = res.data.data;
+            this.paramsM1 = this.params;
           } else if (res.data.data.bizType === "m2") {
-            this.paramsM2 = res.data.data;
+            this.paramsM2 = this.params;
           } else if (res.data.data.bizType === "m3") {
-            this.paramsM3 = res.data.data;
+            this.paramsM3 = this.params;
           } else if (res.data.data.bizType === "m4") {
-            this.paramsM4 = res.data.data;
+            this.paramsM4 = this.params;
           } else if (res.data.data.bizType === "m5") {
-            this.paramsM5 = res.data.data;
+            this.paramsM5 = this.params;
           } else {
-            this.paramsM6 = res.data.data;
+            this.paramsM6 = this.params;
           }
           console.log("res.data.data", res.data.data);
         }
@@ -168,19 +196,44 @@ export default {
         bizType: this.form.bizType
       }).then(res => {
         if (res.data.returnCode == "200000") {
+          for (var key in res.data.data) {
+            if (!res.data.data[key]) {
+              // console.log("没有key", key);
+              res.data.data[key] = "";
+            }
+          }
+          if (!res.data.data.creditInfo) {
+            console.log("没有creditInfo");
+            res.data.data.creditInfo = {
+              queryDateForPer: ""
+            };
+          }
+          if (!res.data.data.financeInfo) {
+            console.log("financeInfo");
+            res.data.data.financeInfo = {};
+          }
+          if (!res.data.data.stageData) {
+            console.log("financeInfo");
+            res.data.data.stageData = [{ checkStage: "1" }];
+          }
+          if (!res.data.data.assetCreditInfo) {
+            console.log("assetCreditInfo");
+            res.data.data.assetCreditInfo = {};
+          }
           this.form.bizType = res.data.data.bizType;
+          this.params = res.data.data;
           if (res.data.data.bizType === "m1") {
-            this.paramsM1 = res.data.data;
+            this.paramsM1 = this.params;
           } else if (res.data.data.bizType === "m2") {
-            this.paramsM2 = res.data.data;
+            this.paramsM2 = this.params;
           } else if (res.data.data.bizType === "m3") {
-            this.paramsM3 = res.data.data;
+            this.paramsM3 = this.params;
           } else if (res.data.data.bizType === "m4") {
-            this.paramsM4 = res.data.data;
+            this.paramsM4 = this.params;
           } else if (res.data.data.bizType === "m5") {
-            this.paramsM5 = res.data.data;
+            this.paramsM5 = this.params;
           } else {
-            this.paramsM6 = res.data.data;
+            this.paramsM6 = this.params;
           }
           console.log("res.data.data", res.data.data);
         }
@@ -190,36 +243,87 @@ export default {
   methods: {
     // 保存
     onSave() {
-      // console.log(this.$refs.DivM1.definte16);
       // console.log(this.$refs.DivM3.form, this.$refs.DivM3.$refs.tabForm1.form);
 
       let data = {};
+      let arrs = {};
       if (this.form.bizType == "m1") {
-        data = this.$refs.DivM1.form;
+        // m1
+        for (let i = 0; i < this.$refs.DivM1.titleList.length; i++) {
+          const a = `pic_${i + 1}s`;
+          arrs[a] = this.$refs.DivM1.$refs[`definte16${i}`][0].fileList[a];
+        }
+        this.loanBusiness = Object.assign({}, this.type, arrs);
+        console.log("this.loanBusiness", this.loanBusiness);
+        data = { ...this.$refs.DivM1.form, ...this.loanBusiness };
       } else if (this.form.bizType == "m2") {
-        data = this.$refs.DivM2.form;
+        // m2
+        for (let i = 0; i < this.$refs.DivM2.titleList.length; i++) {
+          const a = `pic_${i + 1}s`;
+          arrs[a] = this.$refs.DivM2.$refs[`definte16${i}`][0].fileList[a];
+        }
+        this.loanBusiness = Object.assign({}, this.type, arrs);
+        console.log("this.loanBusiness", this.loanBusiness);
+        data = { ...this.$refs.DivM2.form, ...this.loanBusiness };
       } else if (
         this.form.bizType == "m3" &&
-        this.$refs.DivM3.form.financeClassification == "1"
+        this.$refs.DivM3.form.financeInfo.financeClassification == "1"
       ) {
+        // m3
+        for (let i = 0; i < this.$refs.DivM3.titleList.length; i++) {
+          const a = `pic_${i + 1}s`;
+          arrs[a] = this.$refs.DivM3.$refs[`definte16${i}`][0].fileList[a];
+        }
+        this.loanBusiness = Object.assign({}, this.type, arrs);
+        console.log("this.loanBusiness", this.loanBusiness);
         data = {
           ...this.$refs.DivM3.form,
-          ...this.$refs.DivM3.$refs.tabForm1.form
+          ...this.$refs.DivM3.$refs.tabForm1.form,
+          ...this.loanBusiness
         };
       } else if (
         this.form.bizType == "m3" &&
-        this.$refs.DivM3.form.financeClassification == "2"
+        this.$refs.DivM3.form.financeInfo.financeClassification == "2"
       ) {
+        // m3
+        for (let i = 0; i < this.$refs.DivM3.titleList.length; i++) {
+          const a = `pic_${i + 1}s`;
+          arrs[a] = this.$refs.DivM3.$refs[`definte16${i}`][0].fileList[a];
+        }
+        this.loanBusiness = Object.assign({}, this.type, arrs);
+        console.log("this.loanBusiness", this.loanBusiness);
         data = {
           ...this.$refs.DivM3.form,
-          ...this.$refs.DivM3.$refs.tabForm2.form
+          ...this.$refs.DivM3.$refs.tabForm2.form,
+          ...this.loanBusiness
         };
       } else if (this.form.bizType == "m4") {
-        data = this.$refs.DivM4.form;
+        // m4
+        for (let i = 0; i < this.$refs.DivM4.titleList.length; i++) {
+          const a = `pic_${i + 1}s`;
+          arrs[a] = this.$refs.DivM4.$refs[`definte16${i}`][0].fileList[a];
+        }
+        this.loanBusiness = Object.assign({}, this.type, arrs);
+        console.log("this.loanBusiness", this.loanBusiness);
+        data = { ...this.$refs.DivM4.form, ...this.loanBusiness };
       } else if (this.form.bizType == "m5") {
-        data = this.$refs.DivM5.form;
+        // m5
+        for (let i = 0; i < this.$refs.DivM5.titleList.length; i++) {
+          const a = `pic_${i + 1}s`;
+          arrs[a] = this.$refs.DivM5.$refs[`definte16${i}`][0].fileList[a];
+        }
+        this.loanBusiness = Object.assign({}, this.type, arrs);
+        console.log("this.loanBusiness", this.loanBusiness);
+        data = { ...this.$refs.DivM5.form, ...this.loanBusiness };
       } else {
-        data = this.$refs.DivM6.form;
+        // m6
+        for (let i = 0; i < this.$refs.DivM6.titleList.length; i++) {
+          const a = `pic_${i + 1}s`;
+          arrs[a] = this.$refs.DivM6.$refs[`definte16${i}`][0].fileList[a];
+        }
+        this.loanBusiness = Object.assign({}, this.type, arrs);
+        console.log("this.loanBusiness", this.loanBusiness);
+        data = { ...this.$refs.DivM6.form, ...this.loanBusiness };
       }
 
       console.log(data);
@@ -240,32 +344,84 @@ export default {
     // 提交
     onSubmit: function() {
       let data = {};
+      let arrs = {};
       if (this.form.bizType == "m1") {
-        data = this.$refs.DivM1.form;
+        // m1
+        for (let i = 0; i < this.$refs.DivM1.titleList.length; i++) {
+          const a = `pic_${i + 1}s`;
+          arrs[a] = this.$refs.DivM1.$refs[`definte16${i}`][0].fileList[a];
+        }
+        this.loanBusiness = Object.assign({}, this.type, arrs);
+        console.log("this.loanBusiness", this.loanBusiness);
+        data = { ...this.$refs.DivM1.form, ...this.loanBusiness };
       } else if (this.form.bizType == "m2") {
-        data = this.$refs.DivM2.form;
+        // m2
+        for (let i = 0; i < this.$refs.DivM2.titleList.length; i++) {
+          const a = `pic_${i + 1}s`;
+          arrs[a] = this.$refs.DivM2.$refs[`definte16${i}`][0].fileList[a];
+        }
+        this.loanBusiness = Object.assign({}, this.type, arrs);
+        console.log("this.loanBusiness", this.loanBusiness);
+        data = { ...this.$refs.DivM2.form, ...this.loanBusiness };
       } else if (
         this.form.bizType == "m3" &&
-        this.$refs.DivM3.form.financeClassification == "1"
+        this.$refs.DivM3.form.financeInfo.financeClassification == "1"
       ) {
+        // m3
+        for (let i = 0; i < this.$refs.DivM3.titleList.length; i++) {
+          const a = `pic_${i + 1}s`;
+          arrs[a] = this.$refs.DivM3.$refs[`definte16${i}`][0].fileList[a];
+        }
+        this.loanBusiness = Object.assign({}, this.type, arrs);
+        console.log("this.loanBusiness", this.loanBusiness);
         data = {
           ...this.$refs.DivM3.form,
-          ...this.$refs.DivM3.$refs.tabForm1.form
+          ...this.$refs.DivM3.$refs.tabForm1.form,
+          ...this.loanBusiness
         };
       } else if (
         this.form.bizType == "m3" &&
-        this.$refs.DivM3.form.financeClassification == "2"
+        this.$refs.DivM3.form.financeInfo.financeClassification == "2"
       ) {
+        // m3
+        for (let i = 0; i < this.$refs.DivM3.titleList.length; i++) {
+          const a = `pic_${i + 1}s`;
+          arrs[a] = this.$refs.DivM3.$refs[`definte16${i}`][0].fileList[a];
+        }
+        this.loanBusiness = Object.assign({}, this.type, arrs);
+        console.log("this.loanBusiness", this.loanBusiness);
         data = {
           ...this.$refs.DivM3.form,
-          ...this.$refs.DivM3.$refs.tabForm2.form
+          ...this.$refs.DivM3.$refs.tabForm2.form,
+          ...this.loanBusiness
         };
       } else if (this.form.bizType == "m4") {
-        data = this.$refs.DivM4.form;
+        // m4
+        for (let i = 0; i < this.$refs.DivM4.titleList.length; i++) {
+          const a = `pic_${i + 1}s`;
+          arrs[a] = this.$refs.DivM4.$refs[`definte16${i}`][0].fileList[a];
+        }
+        this.loanBusiness = Object.assign({}, this.type, arrs);
+        console.log("this.loanBusiness", this.loanBusiness);
+        data = { ...this.$refs.DivM4.form, ...this.loanBusiness };
       } else if (this.form.bizType == "m5") {
-        data = this.$refs.DivM5.form;
+        // m5
+        for (let i = 0; i < this.$refs.DivM5.titleList.length; i++) {
+          const a = `pic_${i + 1}s`;
+          arrs[a] = this.$refs.DivM5.$refs[`definte16${i}`][0].fileList[a];
+        }
+        this.loanBusiness = Object.assign({}, this.type, arrs);
+        console.log("this.loanBusiness", this.loanBusiness);
+        data = { ...this.$refs.DivM5.form, ...this.loanBusiness };
       } else {
-        data = this.$refs.DivM6.form;
+        // m6
+        for (let i = 0; i < this.$refs.DivM6.titleList.length; i++) {
+          const a = `pic_${i + 1}s`;
+          arrs[a] = this.$refs.DivM6.$refs[`definte16${i}`][0].fileList[a];
+        }
+        this.loanBusiness = Object.assign({}, this.type, arrs);
+        console.log("this.loanBusiness", this.loanBusiness);
+        data = { ...this.$refs.DivM6.form, ...this.loanBusiness };
       }
 
       console.log(data);
@@ -309,7 +465,21 @@ export default {
     },
     // 阶段多选框
     onChange() {
-      console.log(this.check);
+      console.log(this.form.bizType);
+
+      if (this.form.bizType === "m1") {
+        this.paramsM1 = this.params;
+      } else if (this.form.bizType === "m2") {
+        this.paramsM2 = this.params;
+      } else if (this.form.bizType === "m3") {
+        this.paramsM3 = this.params;
+      } else if (this.form.bizType === "m4") {
+        this.paramsM4 = this.params;
+      } else if (this.form.bizType === "m5") {
+        this.paramsM5 = this.params;
+      } else {
+        this.paramsM6 = this.params;
+      }
     },
     // 图片上传
     handleRemove(file, fileList) {

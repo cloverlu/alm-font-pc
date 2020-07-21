@@ -51,10 +51,16 @@
       .cardTitle
         span(class='blue')
         span(class='title') 影像维护
-      .uploadBox
-        .imgTitle 其他
-        el-upload(action="http://20.147.168.86:9001/postLoan/business/uploadModelFile" :file-list="fileList" list-type="picture-card" :on-success="handleSuccess"  :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
-          i(class="el-icon-plus")
+      .upload
+        .item(v-for="(item,i) in titleList" :key="item.id")
+          .title {{item.text}}
+          .upload-wrapper
+            uploadTest(:item="item" :itemVmodel="params" :read="false" :ref="`definte16${i}`")
+        .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
+      //- .uploadBox
+      //-   .imgTitle 其他
+      //-   el-upload(action="http://20.147.168.86:9001/postLoan/business/uploadModelFile" :file-list="fileList" list-type="picture-card" :on-success="handleSuccess"  :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
+      //-     i(class="el-icon-plus")
     //- el-dialog(:visible.sync="dialogVisible")
     //-   img(width="100%" :src="dialogImageUrl" alt="")
     el-dialog(:visible.sync="dialogVisible" width="40%" :append-to-body="true" v-alterELDialogMarginTop="{marginTop:'20vh'}" close="deleteCancel()")
@@ -64,6 +70,7 @@
 </template>
 
 <script>
+import uploadTest from "./upload";
 // import { filterParams } from "../../../utils/utils";
 
 export default {
@@ -72,11 +79,28 @@ export default {
   // 组件参数 接收来自父组件的数据
   props: ["detail"],
   // 局部注册的组件
-  components: {},
+  components: { uploadTest },
   // 组件状态值
   data() {
+    const definte17 = () => {
+      const definite17Array = [];
+      const valueArray = ["其他"];
+      for (let i = 0; i < valueArray.length; i++) {
+        const a = "m1_" + i;
+        const b = `pic_${i + 1}s`;
+        definite17Array.push({
+          id: i,
+          text: valueArray[i],
+          vModel: b,
+          vId: a
+        });
+      }
+      return definite17Array;
+    };
     return {
-      fileList: [],
+      titleList: definte17(),
+      params: {},
+      loanBusiness: {},
       options: [
         {
           label: "是",
@@ -142,7 +166,6 @@ export default {
     // },
     handleSuccess(res, fileList, index) {
       console.log(res, fileList, index);
-      this.fileList = index;
     },
     // 图片上传
     handleRemove(file, fileList) {
@@ -153,6 +176,29 @@ export default {
       console.log("file.url", file.url);
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    // 图像模块匹配
+    mVmodel(num) {
+      const definite16 = {};
+      for (let i = 0; i < num; i++) {
+        const a = `pic_${i + 1}s`;
+        definite16[a] = [
+          {
+            url: "",
+            longitude: "",
+            dimension: ""
+          }
+        ];
+      }
+      return definite16;
+    },
+    submit() {
+      var arrs = {};
+      for (let i = 0; i < this.titleList.length; i++) {
+        const a = `pic_${i + 1}s`;
+        arrs[a] = this.$refs[`definte16${i}`][0].fileList[a];
+      }
+      this.loanBusiness = Object.assign({}, this.type, arrs);
     }
   },
   /**
@@ -160,6 +206,7 @@ export default {
    * 如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$ el 也在文档内。
    */
   mounted() {
+    this.params = this.mVmodel(1);
     const { billNo, bizId, bizStatus } = this.$route.query;
     if (billNo) {
       // 借据

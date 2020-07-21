@@ -17,7 +17,7 @@
         </el-input>
       </div>
       <div class="userInfo">
-        <el-input placeholder="请输入您的密码" v-model="password" show-passWord>
+        <el-input placeholder="请输入您的密码" v-model="password" show-passWord @change="enterLogin">
           <i slot="prepend" class="iconfont iconmima-01"></i>
         </el-input>
       </div>
@@ -100,6 +100,9 @@ export default {
           });
         }
       });
+    },
+    enterLogin() {
+      this.submit();
     }
   },
   mounted() {

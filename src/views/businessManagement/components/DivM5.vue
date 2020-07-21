@@ -46,10 +46,16 @@
       .cardTitle
         span(class='blue')
         span(class='title') 影像维护
-      .uploadBox(v-for='(item,index) in list5' :key='item.index')
-        .imgTitle {{item.title}}
-        el-upload(action="http://20.147.168.82:9001/postLoan/business/uploadModelFile" :file-list="item.url[index]" :on-success="handleSuccess" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
-          i(class="el-icon-plus") 
+      .upload
+        .item(v-for="(item,i) in titleList" :key="item.id")
+          .title {{item.text}}
+          .upload-wrapper
+            uploadTest(:item="item" :itemVmodel="params" :read="false" :ref="`definte16${i}`")
+        .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
+      //- .uploadBox(v-for='(item,index) in list5' :key='item.index')
+      //-   .imgTitle {{item.title}}
+      //-   el-upload(action="http://20.147.168.82:9001/postLoan/business/uploadModelFile" :file-list="item.url[index]" :on-success="handleSuccess" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
+      //-     i(class="el-icon-plus") 
     //- 弹窗
     el-dialog(:visible.sync="dialogVisible" width="40%" :append-to-body="true" v-alterELDialogMarginTop="{marginTop:'20vh'}" close="deleteCancel()")
       img(width="100%" :src="dialogImageUrl" alt="")
@@ -57,16 +63,47 @@
 </template>
 
 <script>
+import uploadTest from "./upload";
 export default {
   // 组件名称
   name: "DivM5",
   // 组件参数 接收来自父组件的数据
   props: ["detail"],
   // 局部注册的组件
-  components: {},
+  components: { uploadTest },
   // 组件状态值
   data() {
+    const definte17 = () => {
+      const definite17Array = [];
+      const valueArray = [
+        "《小企业授信业务额度借款支用单》或《用款申请》",
+        "《小企业贷款受托支付申请书》或自主支付清单",
+        "汇款凭证",
+        "账户流水",
+        "受托支付合同",
+        "入库单",
+        "贷款购买标的（如原材料、机器设备等）",
+        "企业大门",
+        "企业经营场地或生产车间",
+        "检查人员现场检查影像等",
+        "其他"
+      ];
+      for (let i = 0; i < valueArray.length; i++) {
+        const a = "m1_" + i;
+        const b = `pic_${i + 1}s`;
+        definite17Array.push({
+          id: i,
+          text: valueArray[i],
+          vModel: b,
+          vId: a
+        });
+      }
+      return definite17Array;
+    };
     return {
+      titleList: definte17(),
+      params: {},
+      loanBusiness: {},
       options: [
         {
           label: "是",
@@ -209,6 +246,29 @@ export default {
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    // 图像模块匹配
+    mVmodel(num) {
+      const definite16 = {};
+      for (let i = 0; i < num; i++) {
+        const a = `pic_${i + 1}s`;
+        definite16[a] = [
+          {
+            url: "",
+            longitude: "",
+            dimension: ""
+          }
+        ];
+      }
+      return definite16;
+    },
+    submit() {
+      var arrs = {};
+      for (let i = 0; i < this.titleList.length; i++) {
+        const a = `pic_${i + 1}s`;
+        arrs[a] = this.$refs[`definte16${i}`][0].fileList[a];
+      }
+      this.loanBusiness = Object.assign({}, this.type, arrs);
     }
   },
   /**
@@ -216,6 +276,7 @@ export default {
    * 如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$ el 也在文档内。
    */
   mounted() {
+    this.params = this.mVmodel(10);
     const { billNo, bizId, bizStatus } = this.$route.query;
     if (billNo) {
       // 借据

@@ -393,18 +393,25 @@
       .cardTitle
         span(class='blue')
         span(class='title') 影像维护
-      .uploadBox(v-for='(item,index) in list3' :key='item.index')
-        .imgTitle {{item.title}}
-        el-upload(action="http://20.147.168.82:9001/postLoan/business/uploadModelFile" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
-          i(class="el-icon-plus") 
+      .upload
+        .item(v-for="(item,i) in titleList" :key="item.id")
+          .title {{item.text}}
+          .upload-wrapper
+            uploadTest(:item="item" :itemVmodel="params" :read="false" :ref="`definte16${i}`")
+        .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
+      //- .uploadBox(v-for='(item,index) in list3' :key='item.index')
+      //-   .imgTitle {{item.title}}
+      //-   el-upload(action="http://20.147.168.82:9001/postLoan/business/uploadModelFile" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
+      //-     i(class="el-icon-plus") 
     //- 弹窗
-    el-dialog(:visible.sync="dialogVisible" width="40%" :append-to-body="true" v-alterELDialogMarginTop="{marginTop:'20vh'}" close="deleteCancel()")
-      img(width="100%" :src="dialogImageUrl" alt="")
+    //- el-dialog(:visible.sync="dialogVisible" width="40%" :append-to-body="true" v-alterELDialogMarginTop="{marginTop:'20vh'}" close="deleteCancel()")
+    //-   img(width="100%" :src="dialogImageUrl" alt="")
   </div>
 </template>
 
 <script>
 // import { filterParams } from "../../../utils/utils";
+import uploadTest from "./upload";
 import TabForm1 from "./TabForm1";
 import TabForm2 from "./TabForm2";
 export default {
@@ -415,11 +422,43 @@ export default {
   // 局部注册的组件
   components: {
     "tab-form1": TabForm1,
-    "tab-form2": TabForm2
+    "tab-form2": TabForm2,
+    uploadTest
   },
   // 组件状态值
   data() {
+    const definte17 = () => {
+      const definite17Array = [];
+      const valueArray = [
+        "财务报表",
+        "纳税材料",
+        "水电费材料",
+        "银行流水",
+        "主要上下游客户合同单据",
+        "其他财务经营材料",
+        "企业办公场所（含企业大门）",
+        "企业生产车间（含重要生产或经营工序）",
+        "企业重要生产或经营设备、存货",
+        "检查人员现场检查的影像",
+        "抵押物影像",
+        "其他"
+      ];
+      for (let i = 0; i < valueArray.length; i++) {
+        const a = "m3_" + i;
+        const b = `pic_${i + 1}s`;
+        definite17Array.push({
+          id: i,
+          text: valueArray[i],
+          vModel: b,
+          vId: a
+        });
+      }
+      return definite17Array;
+    };
     return {
+      titleList: definte17(),
+      params: {},
+      loanBusiness: {},
       securityKindsArr: [
         {
           label: "信用",
@@ -590,80 +629,6 @@ export default {
           collEstimateValue: "" //上次抵质押物评估或重估金额
         }
       },
-      list3: [
-        {
-          title: "财务报表",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "纳税材料",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "水电费材料",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "银行流水",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "主要上下游客户合同单据",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "其他财务经营材料",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "企业办公场所（含企业大门）",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "企业生产车间（含重要生产或经营工序）",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "企业重要生产或经营设备、存货",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "检查人员现场检查影像",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "抵押物影像",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "其他",
-          url: "",
-          dimension: "",
-          longitude: ""
-        }
-      ],
       type: 1,
       params1: {},
       params2: {},
@@ -685,6 +650,28 @@ export default {
   },
   // 组件方法
   methods: {
+    mVmodel(num) {
+      const definite16 = {};
+      for (let i = 0; i < num; i++) {
+        const a = `pic_${i + 1}s`;
+        definite16[a] = [
+          {
+            url: "",
+            longitude: "",
+            dimension: ""
+          }
+        ];
+      }
+      return definite16;
+    },
+    submit() {
+      var arrs = {};
+      for (let i = 0; i < this.titleList.length; i++) {
+        const a = `pic_${i + 1}s`;
+        arrs[a] = this.$refs[`definte16${i}`][0].fileList[a];
+      }
+      this.loanBusiness = Object.assign({}, this.type, arrs);
+    },
     // 阶段多选框
     financeInfoChange() {
       console.log(this.form.financeInfo.financeClassification);
@@ -704,6 +691,7 @@ export default {
    * 如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$ el 也在文档内。
    */
   mounted() {
+    this.params = this.mVmodel(11);
     const { billNo, bizId, bizStatus } = this.$route.query;
     // this.params1 = this.form.financeInfo;
     // console.log("this.params1", this.form);
