@@ -25,7 +25,7 @@
 
     el-card(class='card')
       .left
-        .cardTitle
+        .cardTitle1
           span(class='blue')
           span(class='title') 首次跟踪检查要求及落实情况
         
@@ -35,7 +35,7 @@
           el-form-item(label="落实情况 :" class="formItem2")
             el-input(v-model="form.checked" type="textarea" :disabled="type == 2" :rows="3" clearable)
       .right
-        .cardTitle
+        .cardTitle1
           span(class='blue')
           span(class='title') 首次跟踪特殊要求及落实情况
         
@@ -58,7 +58,7 @@
             el-input(v-model="form.addrChangedMsg" type="textarea" :rows="3" clearable :disabled="type == 2")
     el-card(class='card')
       .left
-        .cardTitle
+        .cardTitle1
           span(class='blue')
           span(class='title') 检查内容
         el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
@@ -77,21 +77,15 @@
           el-form-item(label="情况说明 :" class="formItem2" style="marginTop:54px")
             el-input(v-model="form.msg" type="textarea" :rows="3" clearable :disabled="type == 2")
     el-card(class='card')
-      .cardTitle 
+      .cardTitle1 
         span(class='blue')
         span(class='title') 影像维护
-      //- .uploadBox(v-for='(item,index) in list1' :key='item.index')
-      //-   .imgTitle {{item.title}}
-      //-   el-upload(action=`http://20.147.168.86:9001/postLoan/business/uploadModelFile` :on-success='handleSuccess' accept="image/gif, image/jpeg ,image/png, image/jpg" list-type="picture-card" :file-list='definte16' :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
-      //-     i(class="el-icon-plus")
       .upload
         .item(v-for="(item,i) in titleList" :key="item.id")
           .title {{item.text}}
           .upload-wrapper
             uploadTest(:item="item" :itemVmodel="params" :read="false" :ref="`definte16${i}`")
-        .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
-    el-dialog(:visible.sync="dialogVisible" width="40%" :append-to-body="true" v-alterELDialogMarginTop="{marginTop:'20vh'}" close="deleteCancel()")
-      img(width="100%" :src="dialogImageUrl" alt="")
+        //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
   </div>
 </template>
 
@@ -188,7 +182,7 @@ export default {
 
         // card4
         msg: "", //情况说明
-        useAmoutByContract: "", //是否按合同约定的用途使用信贷资金
+        useAmoutByContract: 1, //是否按合同约定的用途使用信贷资金
         msgSource: "", //提供纸质或影像资料的信息来源
         detailMsg4useAmout: "" //资金使用情况详细说明
       },
@@ -203,9 +197,8 @@ export default {
   // 侦听器
   watch: {
     detail: function(newVal) {
-      // console.log(1, newVal, oldVal);
       this.form = newVal;
-      console.log("detail", this.form);
+      this.params = this.matchImage(newVal);
     }
   },
   // 组件方法
@@ -252,6 +245,19 @@ export default {
         ];
       }
       return definite16;
+    }, //图片对象匹配
+    matchImage(data) {
+      // data为详情传来的所有值
+      var forBizDetail = data;
+      var obj2 = {};
+      //  this.mVmodel(num)的num参数为各个类型所需字段的个数
+      obj2 = this.mVmodel(11);
+      Object.keys(obj2).forEach(key => {
+        if (forBizDetail) {
+          obj2[key] = forBizDetail[key];
+        }
+      });
+      return obj2;
     },
     submit() {
       var arrs = {};
@@ -267,7 +273,7 @@ export default {
    * 如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$ el 也在文档内。
    */
   mounted() {
-    this.params = this.mVmodel(11);
+    // this.params = this.mVmodel(11);
     const { billNo, bizId, bizStatus } = this.$route.query;
     if (billNo) {
       // 借据
@@ -331,7 +337,7 @@ export default {
     }
   }
   .cardTitle1 {
-    margin: 0;
+    margin: 5px 0 5px;
     padding: 0;
     height: 30px;
     width: 100%;
@@ -344,6 +350,16 @@ export default {
       background-color: rgba(78, 120, 222, 1);
     }
     .title {
+      position: absolute;
+      font-size: 18px;
+      font-weight: 700;
+      color: rgba(96, 98, 102, 1);
+      top: 1px;
+      left: 10px;
+      height: 20px;
+      line-height: 20px;
+    }
+    .title1 {
       position: absolute;
       font-size: 18px;
       font-weight: 500;

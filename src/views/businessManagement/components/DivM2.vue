@@ -7,9 +7,9 @@
 <template lang="pug">
   <div class="m2">
     el-card(class='card')
-      .cardTitle
+      .cardTitle1
         span(class='blue')
-        span(class='title') 张三有限责任公司
+        span(class='title') {{form.custName}}
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
         el-form-item(label="检查类型 :" class="formItem2")
           el-select(v-model="form.bizType" disabled style="width:100%" )
@@ -27,7 +27,7 @@
           el-input(v-model="form.loanAmout" disabled)
 
     el-card(class='card')
-      .cardTitle
+      .cardTitle1
         span(class='blue')
         span(class='title') 填写信息
       .left
@@ -68,7 +68,7 @@
           el-input(v-model="form.staff" :disabled="type == 2" clearable)
 
     el-card(class='card')
-      .cardTitle
+      .cardTitle1
         span(class='blue')
         span(class='title') 征信情况
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
@@ -80,7 +80,7 @@
         .blueTitle1 1.借款企业征信 :
         .cardTitle1
           span(class='blue')
-          span(class='title') 征信情况 
+          span(class='title1') 征信情况 
         .cardTitle2
           span (1)未结清贷款及对外担保情况
         el-row(:gutter="20")
@@ -182,14 +182,14 @@
         .blueTitle1 1.企业实际控制人及其配偶(若有)征信 :
         .cardTitle1
           span(class='blue')
-          span(class='title') 征信分类
+          span(class='title1') 征信分类
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(style="width:96%")
               el-input(v-model="form.creditInfo.creditClassification" :disabled="type == 2" clearable)
         .cardTitle1
           span(class='blue')
-          span(class='title') 征信情况 
+          span(class='title1') 征信情况 
         .cardTitle2
           span (1)未结清贷款、未销户贷记卡（含准贷记）及对外担保情况
         el-row(:gutter="20")
@@ -248,14 +248,14 @@
         .blueTitle1 2.企业法定代表人及其配偶（若有）征信 :
         .cardTitle1
           span(class='blue')
-          span(class='title') 征信分类
+          span(class='title1') 征信分类
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(style="width:96%")
               el-input(v-model="form.creditClassificationJur" :disabled="type == 2" clearable)
         .cardTitle1
           span(class='blue')
-          span(class='title') 征信情况 
+          span(class='title1') 征信情况 
         .cardTitle2
           span (1)未结清贷款、未销户贷记卡（含准贷记）及对外担保情况
         el-row(:gutter="20")
@@ -325,7 +325,7 @@
     //- 近期负面信息情况
     el-card(class='card')
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
-        .cardTitle
+        .cardTitle1
           span(class='blue')
           span(class='title') 近期负面信息情况
         el-row(:gutter="20" style="marginTop:20px")
@@ -334,7 +334,7 @@
               el-input(v-model="form.msg" type="textarea" :disabled="type == 2" :rows="3" clearable) 
     //- 财务信息
     el-card(class='card')
-      .cardTitle
+      .cardTitle1
           span(class='blue')
           span(class='title') 财务信息
       .left
@@ -373,7 +373,7 @@
                 el-input(v-model="form.financeInfo.busIncChangSitu" :disabled="type == 2" type="textarea" :rows="3" clearable)  
     //- 影像维护
     el-card(class='card')
-      .cardTitle
+      .cardTitle1
         span(class='blue')
         span(class='title') 影像维护
       .upload
@@ -381,11 +381,7 @@
           .title {{item.text}}
           .upload-wrapper
             uploadTest(:item="item" :itemVmodel="params" :read="false" :ref="`definte16${i}`")
-        .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
-      //- .uploadBox(v-for='(item,index) in list2' :key='item.index')
-      //-   .imgTitle {{item.title}}
-      //-   el-upload(action="http://20.147.168.82:9001/postLoan/business/uploadModelFile" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
-      //-     i(class="el-icon-plus")  
+        //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
   </div>
 </template>
 
@@ -565,74 +561,74 @@ export default {
           financeMsg: ""
         } //财务状况整体说明
       },
-      list2: [
-        {
-          title: "财务报表",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "纳税材料",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "水电费材料",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "银行流水",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "其他经营材料",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "企业办公场所（含企业大门）",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "企业生产车间（含重要生产或经营工序）",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "企业重要生产或经营设备、存货",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "检查人员现场检查的影像",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "抵押物影像",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "其他",
-          url: "",
-          dimension: "",
-          longitude: ""
-        }
-      ],
+      // list2: [
+      //   {
+      //     title: "财务报表",
+      //     url: "",
+      //     dimension: "",
+      //     longitude: ""
+      //   },
+      //   {
+      //     title: "纳税材料",
+      //     url: "",
+      //     dimension: "",
+      //     longitude: ""
+      //   },
+      //   {
+      //     title: "水电费材料",
+      //     url: "",
+      //     dimension: "",
+      //     longitude: ""
+      //   },
+      //   {
+      //     title: "银行流水",
+      //     url: "",
+      //     dimension: "",
+      //     longitude: ""
+      //   },
+      //   {
+      //     title: "其他经营材料",
+      //     url: "",
+      //     dimension: "",
+      //     longitude: ""
+      //   },
+      //   {
+      //     title: "企业办公场所（含企业大门）",
+      //     url: "",
+      //     dimension: "",
+      //     longitude: ""
+      //   },
+      //   {
+      //     title: "企业生产车间（含重要生产或经营工序）",
+      //     url: "",
+      //     dimension: "",
+      //     longitude: ""
+      //   },
+      //   {
+      //     title: "企业重要生产或经营设备、存货",
+      //     url: "",
+      //     dimension: "",
+      //     longitude: ""
+      //   },
+      //   {
+      //     title: "检查人员现场检查的影像",
+      //     url: "",
+      //     dimension: "",
+      //     longitude: ""
+      //   },
+      //   {
+      //     title: "抵押物影像",
+      //     url: "",
+      //     dimension: "",
+      //     longitude: ""
+      //   },
+      //   {
+      //     title: "其他",
+      //     url: "",
+      //     dimension: "",
+      //     longitude: ""
+      //   }
+      // ],
       type: 1,
       dialogImageUrl: "",
       dialogVisible: false,
@@ -646,6 +642,7 @@ export default {
     detail: function(newVal, oldVal) {
       console.log(1, newVal, oldVal);
       this.form = newVal;
+      this.params = this.matchImage(newVal);
       if (!newVal.creditInfo.queryDateForPer) {
         this.form.creditInfo.queryDateForPer = "";
       }
@@ -694,6 +691,19 @@ export default {
       }
       return definite16;
     },
+    matchImage(data) {
+      // data为详情传来的所有值
+      var forBizDetail = data;
+      var obj2 = {};
+      //  this.mVmodel(num)的num参数为各个类型所需字段的个数
+      obj2 = this.mVmodel(10);
+      Object.keys(obj2).forEach(key => {
+        if (forBizDetail) {
+          obj2[key] = forBizDetail[key];
+        }
+      });
+      return obj2;
+    },
     submit() {
       var arrs = {};
       for (let i = 0; i < this.titleList.length; i++) {
@@ -708,7 +718,7 @@ export default {
    * 如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$ el 也在文档内。
    */
   mounted() {
-    this.params = this.mVmodel(10);
+    // this.params = this.mVmodel(10);
     const { billNo, bizId, bizStatus } = this.$route.query;
     if (billNo) {
       // 借据
@@ -772,7 +782,7 @@ export default {
     }
   }
   .cardTitle1 {
-    margin: 0;
+    margin: 5px 0 5px;
     padding: 0;
     height: 30px;
     width: 100%;
@@ -785,6 +795,16 @@ export default {
       background-color: rgba(78, 120, 222, 1);
     }
     .title {
+      position: absolute;
+      font-size: 18px;
+      font-weight: 700;
+      color: rgba(96, 98, 102, 1);
+      top: 1px;
+      left: 10px;
+      height: 20px;
+      line-height: 20px;
+    }
+    .title1 {
       position: absolute;
       font-size: 18px;
       font-weight: 500;

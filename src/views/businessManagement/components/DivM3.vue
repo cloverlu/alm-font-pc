@@ -9,7 +9,7 @@
     el-card(class='card')
       .cardTitle1
         span(class='blue')
-        span(class='title') 张三有限责任公司
+        span(class='title') {{form.custName}}
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
         el-form-item(label="检查类型 :" class="formItem2")
           el-select(v-model="form.bizType" disabled style="width:100%" )
@@ -398,14 +398,7 @@
           .title {{item.text}}
           .upload-wrapper
             uploadTest(:item="item" :itemVmodel="params" :read="false" :ref="`definte16${i}`")
-        .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
-      //- .uploadBox(v-for='(item,index) in list3' :key='item.index')
-      //-   .imgTitle {{item.title}}
-      //-   el-upload(action="http://20.147.168.82:9001/postLoan/business/uploadModelFile" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
-      //-     i(class="el-icon-plus") 
-    //- 弹窗
-    //- el-dialog(:visible.sync="dialogVisible" width="40%" :append-to-body="true" v-alterELDialogMarginTop="{marginTop:'20vh'}" close="deleteCancel()")
-    //-   img(width="100%" :src="dialogImageUrl" alt="")
+        //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
   </div>
 </template>
 
@@ -644,6 +637,7 @@ export default {
     detail: function(newVal, oldVal) {
       console.log(1, newVal, oldVal);
       this.form = newVal;
+      this.params = this.matchImage(newVal);
       this.params1 = newVal.financeInfo;
       this.params2 = newVal.financeInfo;
     }
@@ -663,6 +657,19 @@ export default {
         ];
       }
       return definite16;
+    },
+    matchImage(data) {
+      // data为详情传来的所有值
+      var forBizDetail = data;
+      var obj2 = {};
+      //  this.mVmodel(num)的num参数为各个类型所需字段的个数
+      obj2 = this.mVmodel(11);
+      Object.keys(obj2).forEach(key => {
+        if (forBizDetail) {
+          obj2[key] = forBizDetail[key];
+        }
+      });
+      return obj2;
     },
     submit() {
       var arrs = {};
@@ -691,7 +698,7 @@ export default {
    * 如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$ el 也在文档内。
    */
   mounted() {
-    this.params = this.mVmodel(11);
+    // this.params = this.mVmodel(11);
     const { billNo, bizId, bizStatus } = this.$route.query;
     // this.params1 = this.form.financeInfo;
     // console.log("this.params1", this.form);

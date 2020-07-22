@@ -24,7 +24,7 @@
           el-input(v-model="form.repayAmout" :disabled="type == 2")
 
     el-card(class='card')
-      .cardTitle
+      .cardTitle1
         span(class='blue')
         span(class='title') 检查阶段
       .cardContent
@@ -48,7 +48,7 @@
             el-input(v-model="item.practicableMsg" type="textarea" :disabled="type == 2" :rows="3" clearable)
 
     el-card(class='card')
-      .cardTitle
+      .cardTitle1
         span(class='blue')
         span(class='title') 影像维护
       .upload
@@ -56,15 +56,7 @@
           .title {{item.text}}
           .upload-wrapper
             uploadTest(:item="item" :itemVmodel="params" :read="false" :ref="`definte16${i}`")
-        .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
-      //- .uploadBox
-      //-   .imgTitle 其他
-      //-   el-upload(action="http://20.147.168.86:9001/postLoan/business/uploadModelFile" :file-list="fileList" list-type="picture-card" :on-success="handleSuccess"  :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
-      //-     i(class="el-icon-plus")
-    //- el-dialog(:visible.sync="dialogVisible")
-    //-   img(width="100%" :src="dialogImageUrl" alt="")
-    el-dialog(:visible.sync="dialogVisible" width="40%" :append-to-body="true" v-alterELDialogMarginTop="{marginTop:'20vh'}" close="deleteCancel()")
-      img(width="100%" :src="dialogImageUrl" alt="")
+        //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
      
   </div>
 </template>
@@ -157,6 +149,7 @@ export default {
     detail: function(newVal, oldVal) {
       console.log(1, newVal, oldVal);
       this.form = newVal;
+      this.params = this.matchImage(newVal);
     }
   },
   // 组件方法
@@ -192,6 +185,19 @@ export default {
       }
       return definite16;
     },
+    matchImage(data) {
+      // data为详情传来的所有值
+      var forBizDetail = data;
+      var obj2 = {};
+      //  this.mVmodel(num)的num参数为各个类型所需字段的个数
+      obj2 = this.mVmodel(1);
+      Object.keys(obj2).forEach(key => {
+        if (forBizDetail) {
+          obj2[key] = forBizDetail[key];
+        }
+      });
+      return obj2;
+    },
     submit() {
       var arrs = {};
       for (let i = 0; i < this.titleList.length; i++) {
@@ -206,7 +212,7 @@ export default {
    * 如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$ el 也在文档内。
    */
   mounted() {
-    this.params = this.mVmodel(1);
+    // this.params = this.mVmodel(1);
     const { billNo, bizId, bizStatus } = this.$route.query;
     if (billNo) {
       // 借据
@@ -270,7 +276,7 @@ export default {
     }
   }
   .cardTitle1 {
-    margin: 0;
+    margin: 5px 0 5px;
     padding: 0;
     height: 30px;
     width: 100%;
@@ -283,6 +289,16 @@ export default {
       background-color: rgba(78, 120, 222, 1);
     }
     .title {
+      position: absolute;
+      font-size: 18px;
+      font-weight: 700;
+      color: rgba(96, 98, 102, 1);
+      top: 1px;
+      left: 10px;
+      height: 20px;
+      line-height: 20px;
+    }
+    .title1 {
       position: absolute;
       font-size: 18px;
       font-weight: 500;

@@ -9,7 +9,7 @@
     el-card(class='card')
       .cardTitle1
         span(class='blue')
-        span(class='title') 张三有限责任公司
+        span(class='title') {{form.custName}}
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
         el-row(:gutter="20")
           el-col(:span="12")
@@ -344,7 +344,7 @@
     
     //- 影像维护
     el-card(class='card')
-      .cardTitle
+      .cardTitle1
         span(class='blue')
         span(class='title') 影像维护
       .upload
@@ -352,14 +352,7 @@
           .title {{item.text}}
           .upload-wrapper
             uploadTest(:item="item" :itemVmodel="params" :read="false" :ref="`definte16${i}`")
-        .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
-      //- .uploadBox(v-for='(item,index) in list6' :key='item.index')
-      //-   .imgTitle {{item.title}}
-      //-   el-upload(action="http://20.147.168.82:9001/postLoan/business/uploadModelFile" v-model="item.url" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
-      //-     i(class="el-icon-plus") 
-    //- 弹窗
-    el-dialog(:visible.sync="dialogVisible" width="40%" :append-to-body="true" v-alterELDialogMarginTop="{marginTop:'20vh'}" close="deleteCancel()")
-      img(width="100%" :src="dialogImageUrl" alt="")
+        //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
   </div>
 </template>
 
@@ -539,68 +532,6 @@ export default {
           }
         ]
       },
-      list6: [
-        {
-          title: "能耗类材料",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "银行流水",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "主要上下游客户合同单据",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "其他财务经营材料",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "企业办公场所（含企业大门）",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "企业生产车间（含重要生产或经营工序）",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "企业重要生产或经营设备、存货",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "检查人员现场检查影像",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "抵押物影像",
-          url: "",
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "其他",
-          url: "",
-          dimension: "",
-          longitude: ""
-        }
-      ],
       type: 1,
       params1: {},
       params2: {},
@@ -616,6 +547,7 @@ export default {
     detail: function(newVal, oldVal) {
       console.log(1, newVal, oldVal);
       this.form = newVal;
+      this.params = this.matchImage(newVal);
     }
   },
   // 组件方法
@@ -719,6 +651,19 @@ export default {
       }
       return definite16;
     },
+    matchImage(data) {
+      // data为详情传来的所有值
+      var forBizDetail = data;
+      var obj2 = {};
+      //  this.mVmodel(num)的num参数为各个类型所需字段的个数
+      obj2 = this.mVmodel(9);
+      Object.keys(obj2).forEach(key => {
+        if (forBizDetail) {
+          obj2[key] = forBizDetail[key];
+        }
+      });
+      return obj2;
+    },
     submit() {
       var arrs = {};
       for (let i = 0; i < this.titleList.length; i++) {
@@ -733,7 +678,7 @@ export default {
    * 如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$ el 也在文档内。
    */
   mounted() {
-    this.params = this.mVmodel(9);
+    // this.params = this.mVmodel(9);
     const { billNo, bizId, bizStatus } = this.$route.query;
     if (billNo) {
       // 借据

@@ -26,7 +26,7 @@
           el-input(v-model="form.repayKind" clearable)
 
     el-card(class='card')
-      .cardTitle
+      .cardTitle1
         span(class='blue')
         span(class='title') 检查内容
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
@@ -43,7 +43,7 @@
         el-form-item(label="情况说明 :" class="formItem2")
             el-input(v-model="form.checked" :disabled="type == 2" type="textarea" :rows="2" clearable)
     el-card(class='card')
-      .cardTitle
+      .cardTitle1
         span(class='blue')
         span(class='title') 影像维护
       .upload
@@ -51,14 +51,7 @@
           .title {{item.text}}
           .upload-wrapper
             uploadTest(:item="item" :itemVmodel="params" :read="false" :ref="`definte16${i}`")
-        .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
-      //- .uploadBox(v-for='(item,index) in list5' :key='item.index')
-      //-   .imgTitle {{item.title}}
-      //-   el-upload(action="http://20.147.168.82:9001/postLoan/business/uploadModelFile" :file-list="item.url[index]" :on-success="handleSuccess" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove")
-      //-     i(class="el-icon-plus") 
-    //- 弹窗
-    el-dialog(:visible.sync="dialogVisible" width="40%" :append-to-body="true" v-alterELDialogMarginTop="{marginTop:'20vh'}" close="deleteCancel()")
-      img(width="100%" :src="dialogImageUrl" alt="")
+        //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
   </div>
 </template>
 
@@ -133,74 +126,6 @@ export default {
         expectRepayDate: "2020-5-20", // 预计还款/付息时间
         practicableMsg: "xxxx" // 还款资金落实情况说明
       },
-      list5: [
-        {
-          title: "《小企业授信业务额度借款支用单》或《用款申请》",
-          url: [],
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "《小企业贷款受托支付申请书》或自主支付清单",
-          url: [],
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "汇款凭证",
-          url: [],
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "账户流水",
-          url: [],
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "受托支付合同",
-          url: [],
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "入库单",
-          url: [],
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "贷款购买标的（如原材料、机器设备等）",
-          url: [],
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "企业大门",
-          url: [],
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "企业经营场地或生产车间",
-          url: [],
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "检查人员现场检查影像等",
-          url: [],
-          dimension: "",
-          longitude: ""
-        },
-        {
-          title: "其他",
-          url: [],
-          dimension: "",
-          longitude: ""
-        }
-      ],
       type: 1,
       dialogImageUrl: "",
       dialogVisible: false,
@@ -214,6 +139,7 @@ export default {
     detail: function(newVal, oldVal) {
       console.log(1, newVal, oldVal);
       this.form = newVal;
+      this.params = this.matchImage(newVal);
     }
   },
   // 组件方法
@@ -262,6 +188,19 @@ export default {
       }
       return definite16;
     },
+    matchImage(data) {
+      // data为详情传来的所有值
+      var forBizDetail = data;
+      var obj2 = {};
+      //  this.mVmodel(num)的num参数为各个类型所需字段的个数
+      obj2 = this.mVmodel(10);
+      Object.keys(obj2).forEach(key => {
+        if (forBizDetail) {
+          obj2[key] = forBizDetail[key];
+        }
+      });
+      return obj2;
+    },
     submit() {
       var arrs = {};
       for (let i = 0; i < this.titleList.length; i++) {
@@ -276,7 +215,7 @@ export default {
    * 如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$ el 也在文档内。
    */
   mounted() {
-    this.params = this.mVmodel(10);
+    // this.params = this.mVmodel(10);
     const { billNo, bizId, bizStatus } = this.$route.query;
     if (billNo) {
       // 借据
@@ -340,7 +279,7 @@ export default {
     }
   }
   .cardTitle1 {
-    margin: 0;
+    margin: 5px 0 5px;
     padding: 0;
     height: 30px;
     width: 100%;
@@ -353,6 +292,16 @@ export default {
       background-color: rgba(78, 120, 222, 1);
     }
     .title {
+      position: absolute;
+      font-size: 18px;
+      font-weight: 700;
+      color: rgba(96, 98, 102, 1);
+      top: 1px;
+      left: 10px;
+      height: 20px;
+      line-height: 20px;
+    }
+    .title1 {
       position: absolute;
       font-size: 18px;
       font-weight: 500;

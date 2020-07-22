@@ -9,7 +9,7 @@
     .headerPart
       el-tabs(v-model="activeName" @tab-click="handleClick")
         el-tab-pane(label="申请明细" name="first")
-        el-tab-pane(label="流程上报" name="second")
+        el-tab-pane(label="流程上报" name="second" disabled)
     .content1(v-show="activeName == 'first'")
       .contentTop
         el-form(:model="form" :inline="true" label-position="left" label-width="80px" size="mini" class="demo-form-inline formBox")
@@ -21,7 +21,7 @@
               el-option(label="小企业授信业务还款资金落实情况检查" value="m4")
               el-option(label="小企业法人快捷贷首次检查" value="m5")
               el-option(label="小企业法人快捷贷贷后日常检查" value="m6")
-          el-button(type="primary" size="mini" @click="onSave" class="btn" ref="saveBtn") 保存
+          el-button(type="primary" size="mini" @click="onSave" class="btn") 保存
       .contentBody
         .type(v-show="form.bizType == 'm1'")
           DivM1(:detail="paramsM1" ref="DivM1")
@@ -37,7 +37,7 @@
           DivM6(:detail="paramsM6" ref="DivM6")
       //- 提交
       .footer
-        el-button(type="warning" @click='onSubmit' ref="submitBtn") 提交
+        el-button(type="warning" @click='onSubmit' :disabled='submitBtn') 提交
 
     .content2(v-show="activeName == 'second'")
       .textContent
@@ -103,10 +103,10 @@ export default {
       type: 1,
       approval: {
         // 流程上报
-        orgName: "张三有限公司", // 客户名称
-        linkName: "一级支行主管岗", // 业务上报至
-        emplName: "李四", // 业务接收人
-        approveTime: "2020-06-06 10：30：00", // 上报时间
+        orgName: "", // 客户名称
+        linkName: "", // 业务上报至
+        emplName: "", // 业务接收人
+        approveTime: "", // 上报时间
         existRisk: "", // 是否存在风险预警信号
         riskMsg: "", // 预警信号说明
         suggest: "" // 检查结论及措施建议
@@ -119,6 +119,7 @@ export default {
       paramsM5: {},
       paramsM6: {},
       params: {},
+      submitBtn: true,
       loanBusiness: {},
       dialogImageUrl: "",
       dialogVisible: false,
@@ -140,28 +141,29 @@ export default {
         bizType: this.form.bizType
       }).then(res => {
         if (res.data.returnCode == "200000") {
-          for (var key in res.data.data) {
-            if (!res.data.data[key]) {
-              // console.log("没有key", key);
-              res.data.data[key] = "";
-            }
-          }
+          console.log(res.data.data.useAmoutByContract);
+          // for (var key in res.data.data) {
+          //   if (res.data.data[key] == null) {
+          //     // console.log("没有key", key);
+          //     res.data.data[key] = "";
+          //   }
+          // }
           if (!res.data.data.creditInfo) {
-            console.log("没有creditInfo");
+            // console.log("没有creditInfo");
             res.data.data.creditInfo = {
               queryDateForPer: ""
             };
           }
           if (!res.data.data.financeInfo) {
-            console.log("financeInfo");
+            // console.log("financeInfo");
             res.data.data.financeInfo = {};
           }
           if (!res.data.data.stageData) {
-            console.log("financeInfo");
+            // console.log("financeInfo");
             res.data.data.stageData = [{ checkStage: "1" }];
           }
           if (!res.data.data.assetCreditInfo) {
-            console.log("assetCreditInfo");
+            // console.log("assetCreditInfo");
             res.data.data.assetCreditInfo = {};
           }
 
@@ -180,12 +182,15 @@ export default {
           } else {
             this.paramsM6 = this.params;
           }
-          console.log("res.data.data", res.data.data);
+          // console.log("res.data.data", res.data.data);
         }
       });
     }
     if (bizStatus === "alreadyDo" || bizStatus === "inReview") {
       this.type = 2;
+    }
+    if (bizStatus === "shouldDo" || bizStatus === "notDo") {
+      this.submitBtn = false;
     }
     if (bizId) {
       // 业务
@@ -196,28 +201,29 @@ export default {
         bizType: this.form.bizType
       }).then(res => {
         if (res.data.returnCode == "200000") {
+          console.log(!res.data.data.useAmoutByContract);
           for (var key in res.data.data) {
-            if (!res.data.data[key]) {
+            if (res.data.data[key] == null) {
               // console.log("没有key", key);
               res.data.data[key] = "";
             }
           }
           if (!res.data.data.creditInfo) {
-            console.log("没有creditInfo");
+            // console.log("没有creditInfo");
             res.data.data.creditInfo = {
               queryDateForPer: ""
             };
           }
           if (!res.data.data.financeInfo) {
-            console.log("financeInfo");
+            // console.log("financeInfo");
             res.data.data.financeInfo = {};
           }
           if (!res.data.data.stageData) {
-            console.log("financeInfo");
+            // console.log("financeInfo");
             res.data.data.stageData = [{ checkStage: "1" }];
           }
           if (!res.data.data.assetCreditInfo) {
-            console.log("assetCreditInfo");
+            // console.log("assetCreditInfo");
             res.data.data.assetCreditInfo = {};
           }
           this.form.bizType = res.data.data.bizType;
@@ -235,7 +241,6 @@ export default {
           } else {
             this.paramsM6 = this.params;
           }
-          console.log("res.data.data", res.data.data);
         }
       });
     }
@@ -243,8 +248,6 @@ export default {
   methods: {
     // 保存
     onSave() {
-      // console.log(this.$refs.DivM3.form, this.$refs.DivM3.$refs.tabForm1.form);
-
       let data = {};
       let arrs = {};
       if (this.form.bizType == "m1") {
@@ -254,7 +257,7 @@ export default {
           arrs[a] = this.$refs.DivM1.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        console.log("this.loanBusiness", this.loanBusiness);
+        // console.log("this.loanBusiness", this.loanBusiness);
         data = { ...this.$refs.DivM1.form, ...this.loanBusiness };
       } else if (this.form.bizType == "m2") {
         // m2
@@ -263,7 +266,7 @@ export default {
           arrs[a] = this.$refs.DivM2.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        console.log("this.loanBusiness", this.loanBusiness);
+        // console.log("this.loanBusiness", this.loanBusiness);
         data = { ...this.$refs.DivM2.form, ...this.loanBusiness };
       } else if (
         this.form.bizType == "m3" &&
@@ -275,7 +278,7 @@ export default {
           arrs[a] = this.$refs.DivM3.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        console.log("this.loanBusiness", this.loanBusiness);
+        // console.log("this.loanBusiness", this.loanBusiness);
         data = {
           ...this.$refs.DivM3.form,
           ...this.$refs.DivM3.$refs.tabForm1.form,
@@ -291,7 +294,7 @@ export default {
           arrs[a] = this.$refs.DivM3.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        console.log("this.loanBusiness", this.loanBusiness);
+        // console.log("this.loanBusiness", this.loanBusiness);
         data = {
           ...this.$refs.DivM3.form,
           ...this.$refs.DivM3.$refs.tabForm2.form,
@@ -304,7 +307,7 @@ export default {
           arrs[a] = this.$refs.DivM4.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        console.log("this.loanBusiness", this.loanBusiness);
+        // console.log("this.loanBusiness", this.loanBusiness);
         data = { ...this.$refs.DivM4.form, ...this.loanBusiness };
       } else if (this.form.bizType == "m5") {
         // m5
@@ -313,7 +316,7 @@ export default {
           arrs[a] = this.$refs.DivM5.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        console.log("this.loanBusiness", this.loanBusiness);
+        // console.log("this.loanBusiness", this.loanBusiness);
         data = { ...this.$refs.DivM5.form, ...this.loanBusiness };
       } else {
         // m6
@@ -322,7 +325,7 @@ export default {
           arrs[a] = this.$refs.DivM6.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        console.log("this.loanBusiness", this.loanBusiness);
+        // console.log("this.loanBusiness", this.loanBusiness);
         data = { ...this.$refs.DivM6.form, ...this.loanBusiness };
       }
 
@@ -352,7 +355,6 @@ export default {
           arrs[a] = this.$refs.DivM1.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        console.log("this.loanBusiness", this.loanBusiness);
         data = { ...this.$refs.DivM1.form, ...this.loanBusiness };
       } else if (this.form.bizType == "m2") {
         // m2
@@ -361,7 +363,6 @@ export default {
           arrs[a] = this.$refs.DivM2.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        console.log("this.loanBusiness", this.loanBusiness);
         data = { ...this.$refs.DivM2.form, ...this.loanBusiness };
       } else if (
         this.form.bizType == "m3" &&
@@ -373,7 +374,6 @@ export default {
           arrs[a] = this.$refs.DivM3.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        console.log("this.loanBusiness", this.loanBusiness);
         data = {
           ...this.$refs.DivM3.form,
           ...this.$refs.DivM3.$refs.tabForm1.form,
@@ -389,7 +389,6 @@ export default {
           arrs[a] = this.$refs.DivM3.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        console.log("this.loanBusiness", this.loanBusiness);
         data = {
           ...this.$refs.DivM3.form,
           ...this.$refs.DivM3.$refs.tabForm2.form,
@@ -402,7 +401,6 @@ export default {
           arrs[a] = this.$refs.DivM4.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        console.log("this.loanBusiness", this.loanBusiness);
         data = { ...this.$refs.DivM4.form, ...this.loanBusiness };
       } else if (this.form.bizType == "m5") {
         // m5
@@ -411,7 +409,6 @@ export default {
           arrs[a] = this.$refs.DivM5.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        console.log("this.loanBusiness", this.loanBusiness);
         data = { ...this.$refs.DivM5.form, ...this.loanBusiness };
       } else {
         // m6
@@ -420,7 +417,6 @@ export default {
           arrs[a] = this.$refs.DivM6.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        console.log("this.loanBusiness", this.loanBusiness);
         data = { ...this.$refs.DivM6.form, ...this.loanBusiness };
       }
 
@@ -433,6 +429,7 @@ export default {
             message: "检查申请编辑操作成功",
             type: "success"
           });
+          this.submitBtn = true;
           setTimeout(() => {
             this.activeName = "second";
           }, 500);
