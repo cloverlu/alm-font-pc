@@ -159,6 +159,7 @@ export default {
     if (billNo) {
       // 借据
       this.type = 1;
+      this.submitBtn = false;
       this.paramsM1.billNo = billNo;
       this.paramsM1.type = 1;
       this.form.bizId = "";
