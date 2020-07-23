@@ -113,11 +113,13 @@
 
 <script>
 import { filterParams } from "../../utils/utils";
+import { host } from "../../api/host";
 import { getTaskList } from "../../api/processManagement";
 export default {
   name: "processManagement",
   data() {
     return {
+      host: host,
       tableData: [],
       pageNo: 1,
       pageSize: 10,
@@ -180,10 +182,8 @@ export default {
       console.log("bizIdString", bizIdString);
       var a = document.createElement("a");
       //需要下载的数据内容,我这里放的就是BLOB，如果你有下载链接就不需要了
-      var url =
-        "http://20.147.168.86:9001/postLoan/model/downZipPdfFile?bizIds=" +
-        bizIdString;
-      var filename = "aaa.zip";
+      var url = `${this.host}/postLoan/model/downZipPdfFile?bizIds=${bizIdString}`;
+      var filename = "pdfFile.zip";
       a.href = url;
       a.download = filename;
       a.click();

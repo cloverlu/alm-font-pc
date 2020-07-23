@@ -6,7 +6,7 @@
 
 <template lang="pug">
   
-	.aa 
+	.aa
 		el-upload(
 		:on-preview.stop.prevent="handlePictureCardPreview" 
 		:file-list="fileList[item.vModel]" 
@@ -15,20 +15,23 @@
 		:on-success="handleSuccess" 
 		:before-upload="handleBefore"
 		:multiple="false"
-		action="http://20.147.168.82:9001/postLoan/business/uploadModelFile" 
+		:action='`${host}/postLoan/business/uploadModelFile`'
 		list-type="picture-card"  
 		)
 			i(class="el-icon-plus")
 		el-dialog(:visible.sync="dialogVisible" :append-to-body="true")
 			img(:src="dialogImageUrl" width="100%"  alt="")
+      
 </template>
 
 <script>
 import EXIF from "exif-js";
+import { host } from "../../../api/host";
 export default {
   props: ["item", "itemVmodel", "read"],
   data() {
     return {
+      host: host,
       dialogImageUrl: "",
       dialogVisible: false,
       fileList: [],
@@ -40,6 +43,7 @@ export default {
     };
   },
   mounted() {
+    console.log(host);
     const arr = this.itemVmodel[this.item.vModel];
     if (arr && arr[0] && arr[0].url !== "") {
       if (arr.length > 0) {
@@ -263,6 +267,11 @@ export default {
     },
     aa() {
       console.log(this.fileList);
+    }
+  },
+  computed: {
+    action() {
+      return `${host}/postLoan/business/uploadModelFile`;
     }
   }
 };

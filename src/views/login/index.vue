@@ -30,6 +30,7 @@
 
 <script>
 import { login } from "../../api/login";
+import { getUserInfo } from "../../api/users";
 export default {
   // 组件名称
   name: "Login",
@@ -50,12 +51,16 @@ export default {
   watch: {},
   // 组件方法
   methods: {
-    // login() {
-    //   let xui = requireModuleJs("xui");
-    //   let obj = xui.getUserInfo();
-    //   let token = xui.getDeviceTokens();
-    //   console.log(obj, token);
-    // },
+    GetQueryValue(queryName) {
+      var query = decodeURI(window.location.search.substring(1));
+      var vars = query.split("&");
+      for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split("=");
+        if (pair[0] == queryName) {
+          return pair[1];
+        }
+      }
+    },
     submit() {
       console.log(this.emplCode, this.password);
       const params = {
@@ -106,7 +111,13 @@ export default {
     }
   },
   mounted() {
-    // this.login();
+    var accessToken = this.GetQueryValue("accessToken");
+    if (accessToken) {
+      getUserInfo(this, { accessToken });
+      console.log("获取到token");
+    } else {
+      console.log("无法获取token");
+    }
   }
 };
 </script>

@@ -132,10 +132,12 @@
 <script>
 import { filterParams } from "../../utils/utils";
 import { getReportFormList } from "../../api/report";
+import { host } from "../../api/host";
 export default {
   name: "detailedInfoList",
   data() {
     return {
+      host: host,
       tableData: [],
       pageNo: 1,
       pageSize: 10,
@@ -215,7 +217,7 @@ export default {
         }
       });
       console.log(queryStr);
-      const url = `http://20.147.168.82:9001/postLoan/business/exportReportFormList?${queryStr}`;
+      const url = `${this.host}/postLoan/business/exportReportFormList?${queryStr}`;
       window.location.href = url;
       // outPutReport(this, {
       //   ...filterParams(queryFormValues)

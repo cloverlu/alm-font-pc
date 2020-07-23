@@ -9,7 +9,7 @@
     .headerPart
       el-tabs(v-model="activeName" @tab-click="handleClick")
         el-tab-pane(label="申请明细" name="first")
-        el-tab-pane(label="流程上报" name="second" disabled)
+        el-tab-pane(label="流程上报" name="second")
     .content1(v-show="activeName == 'first'")
       .contentTop
         el-form(:model="form" :inline="true" label-position="left" label-width="80px" size="mini" class="demo-form-inline formBox")
@@ -41,27 +41,47 @@
 
     .content2(v-show="activeName == 'second'")
       .textContent
-        el-form(label-position="top" label-width="80px" :model="approval")
-          el-form-item(label="客户名称 :" class='noBorder')
-            el-input(v-model="approval.custName")
-          el-form-item(label="业务上报至 :" class='noBorder')
-            el-input(v-model="approval.linkName")
-          el-form-item(label="业务接收人 :" class='noBorder')
-            el-input(v-model="approval.emplName")
-          el-form-item(label="上报时间 :" class='noBorder')
-            el-input(v-model="approval.approveTime")
-          el-form-item(label="是否存在风险预警信号 :" class="formItem2")
-            //- el-input(v-model="form.existRisk" clearable)
-            el-select(v-model="approval.existRisk" placeholder="请选择" style='width:100%')
-              el-option(label="是" value="1")
-              el-option(label="否" value="0")
-          el-form-item(label="预警信号说明 :" class="formItem2")
-            el-input(v-model="approval.riskMsg" type="textarea" :rows="2" clearable)
-          el-form-item(label="检查结论及措施建议 :" class="formItem2")
-            el-input(v-model="approval.suggest" type="textarea" :rows="2" clearable)
-        .control
-          span(class='lebal') 检查人员 :
-          span(class='content') {{approval.emplName}}
+        el-card(class='card')
+          .cardTitle
+            span(class='blue')
+            span(class='title') 环节信息
+          .approvaList(v-for='(item,index) in approvaList' :key='index')
+            el-form(label-position="left" label-width="80px" style="borderBottom:1px dashed #CCC")
+              el-form-item(label="环节 :" class='noBorder')
+                el-input(v-model="item.linkName")
+              el-form-item(label="处理机构 :" class='noBorder')
+                el-input(v-model="item.orgName")
+              el-form-item(label="处理人员 :" class='noBorder')
+                el-input(v-model="item.emplName")
+              el-form-item(label="处理时间 :" class='noBorder')
+                el-input(v-model="item.processTime")
+              el-form-item(label="意见 :" class='noBorder')
+                el-input(v-model="item.agreeResult")
+              
+           
+
+        el-card(class='card')
+          el-form(label-position="left" label-width="200px" :model="approval")
+            el-form-item(label="客户名称:" class="formItem2")
+              span(v-model="approval.custName")
+            el-form-item(label="业务上报至:" class="formItem2")
+              span(v-model="approval.linkName")
+            el-form-item(label="业务接收人:" class="formItem2")
+              el-input(v-model="approval.emplName")
+            el-form-item(label="上报时间:" class="formItem2")
+              span(v-model="approval.approveTime")
+            el-form-item(label="是否存在风险预警信号:" class="formItem2")
+              //- el-input(v-model="form.existRisk" clearable)
+              el-select(v-model="approval.existRisk" placeholder="请选择" style='width:100%')
+                el-option(label="是" value="1")
+                el-option(label="否" value="0")
+            el-form-item(label="预警信号说明:" class="formItem2")
+              el-input(v-model="approval.riskMsg" type="textarea" :rows="2" clearable)
+            el-form-item(label="检查结论及措施建议:" class="formItem2")
+              el-input(v-model="approval.suggest" type="textarea" :rows="2" clearable)
+          .control
+            span(class='lebal') 检查人员 :
+            el-button(class="qianzi" @click="goSign" size='mini' type='primary') 签字
       .footer
           el-button(type="warning" @click='onSubmitApproval') 提交审批
     el-dialog(:visible.sync="dialogVisible")
@@ -72,6 +92,7 @@
 import { filterParams } from "../../utils/utils";
 import {
   saveEditModelBusiness,
+  approveDetail,
   approve,
   queryForDetail,
   queryForBizDtail
@@ -101,9 +122,10 @@ export default {
         bizType: "m1" // 检查类型
       },
       type: 1,
+      approvaList: [],
       approval: {
         // 流程上报
-        orgName: "", // 客户名称
+        custName: "", // 客户名称
         linkName: "", // 业务上报至
         emplName: "", // 业务接收人
         approveTime: "", // 上报时间
@@ -130,6 +152,10 @@ export default {
     this.$moment.locale("zh-cn");
     // 进入页面先调用查询接口
     const { billNo, bizId, bizStatus } = this.$route.query;
+    approveDetail(this, { bizId }).then(res => {
+      console.log("res", res.data.data);
+      this.approvaList = res.data.data.aproveInfo;
+    });
     if (billNo) {
       // 借据
       this.type = 1;
@@ -346,6 +372,7 @@ export default {
     },
     // 提交
     onSubmit: function() {
+      const { bizId } = this.$route.query;
       let data = {};
       let arrs = {};
       if (this.form.bizType == "m1") {
@@ -432,6 +459,9 @@ export default {
           this.submitBtn = true;
           setTimeout(() => {
             this.activeName = "second";
+            approveDetail(this, { bizId }).then(res => {
+              console.log("res", res.data.data);
+            });
           }, 500);
         }
       });
@@ -478,14 +508,91 @@ export default {
         this.paramsM6 = this.params;
       }
     },
-    // 图片上传
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    goSign() {
+      this.params.empSign = "";
+      this.popupVisible = true;
+      this.lineCanvas({
+        // el: this.$refs.canvas, //绘制canvas的父级div
+        box: this.$refs.processing2, // 拿到宽度
+        clearEl: this.$refs.clearCanvas, //清除按钮
+        saveEl: this.$refs.saveCanvas //保存按钮
+      });
     },
-    // 预览
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
+    lineCanvas(obj) {
+      this.linewidth = 2;
+      this.color = "#000000";
+      this.background = "rgba(0, 0, 0, 0)";
+      for (var i in obj) {
+        this[i] = obj[i];
+      }
+      // this.canvas = document.createElement("canvas");
+      this.canvas = document.getElementsByTagName("canvas")[0];
+      // this.el.appendChild(this.canvas);
+      this.cxt = this.canvas.getContext("2d");
+      this.canvas.width = this.box.clientWidth;
+      this.canvas.height = 400;
+      this.cxt.fillStyle = this.background;
+      this.cxt.fillRect(0, 0, this.canvas.width, this.canvas.width);
+      this.cxt.strokeStyle = this.color;
+      this.cxt.lineWidth = this.linewidth;
+      this.cxt.lineCap = "round";
+      //开始绘制
+      this.canvas.addEventListener(
+        "touchstart",
+        function(e) {
+          this.cxt.beginPath();
+          this.cxt.moveTo(
+            e.changedTouches[0].pageX,
+            e.changedTouches[0].pageY - 40
+          );
+        }.bind(this),
+        true
+      );
+      //绘制中
+      this.canvas.addEventListener(
+        "touchmove",
+        function(e) {
+          this.cxt.lineTo(
+            e.changedTouches[0].pageX,
+            e.changedTouches[0].pageY - 40
+          );
+          this.cxt.stroke();
+        }.bind(this),
+        true
+      );
+      //结束绘制
+      this.canvas.addEventListener(
+        "touchend",
+        function() {
+          this.cxt.closePath();
+          let imgBase64 = this.canvas.toDataURL();
+          //console.log(imgBase64);
+          this.params.empSign = imgBase64;
+        }.bind(this),
+        true
+      );
+      //清除画布
+      this.clearEl.addEventListener(
+        "click",
+        function() {
+          this.cxt.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        }.bind(this),
+        true
+      );
+      //保存图片，直接转base64
+      this.saveEl.addEventListener(
+        "click",
+        function() {
+          let imgBase64 = this.canvas.toDataURL();
+          this.params.empSign = imgBase64;
+          setTimeout(() => {
+            var c = document.getElementsByTagName("canvas")[0];
+            c.innerHTML = "";
+            this.popupVisible = false;
+          }, 200);
+        }.bind(this),
+        true
+      );
     }
   }
 };
@@ -720,7 +827,7 @@ export default {
   }
   .textContent {
     padding: 30px 40px 0;
-    border-bottom: 1px dashed #ccc;
+    // border-bottom: 1px dashed #ccc;
     .noBorder {
       margin-bottom: 15px;
       /deep/.el-form-item__label {
@@ -748,13 +855,16 @@ export default {
         }
       }
     }
+    // /deep/.el-form-item {
+    //   margin: 5px 0;
+    // }
     .formItem2 {
       box-sizing: border-box;
       width: 542px;
-      margin: 0;
+      margin: 10px 0;
       padding-right: 20px;
       /deep/.el-form-item__label {
-        padding: 10px 0 0;
+        // padding: 10px 0 0;
         font-size: 16px;
         color: rgba(96, 98, 102, 1);
       }
@@ -793,6 +903,35 @@ export default {
         font-size: 16px;
         color: rgba(10, 10, 10, 1);
         opacity: 1;
+      }
+    }
+    .card {
+      width: 100%;
+      margin-bottom: 10px;
+      .cardTitle {
+        margin: 0;
+        margin-bottom: 10px;
+        padding: 0;
+        height: 28px;
+        width: 100%;
+        position: relative;
+        .blue {
+          position: absolute;
+          top: 2px;
+          width: 3px;
+          height: 20px;
+          background-color: rgba(78, 120, 222, 1);
+        }
+        .title {
+          position: absolute;
+          font-size: 20px;
+          font-weight: 500;
+          color: rgba(10, 10, 10, 1);
+          top: 2px;
+          left: 10px;
+          height: 20px;
+          line-height: 20px;
+        }
       }
     }
   }

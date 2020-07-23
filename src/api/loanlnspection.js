@@ -2,6 +2,10 @@
 const saveEditModelBusiness = ({ $axios }, data) =>
   $axios.post(`/alm/postLoan/business/editModelBusiness`, data);
 
+// 流程上报详情
+const approveDetail = ({ $axios }, data) =>
+  $axios.get(`/alm/approve/queryForProcess`, { params: data });
+
 // 流程上报按钮
 const approve = ({ $axios }, data) => $axios.post(`/alm/approve/save`, data);
 
@@ -13,4 +17,10 @@ const queryForDetail = ({ $axios }, data) =>
 const queryForBizDtail = ({ $axios }, data) =>
   $axios.get(`/alm/postLoan/business/queryForBizDtail`, { params: data });
 
-export { saveEditModelBusiness, approve, queryForDetail, queryForBizDtail };
+export {
+  saveEditModelBusiness,
+  approveDetail,
+  approve,
+  queryForDetail,
+  queryForBizDtail,
+};
