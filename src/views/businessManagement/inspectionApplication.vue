@@ -285,7 +285,11 @@ export default {
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
         // console.log("this.loanBusiness", this.loanBusiness);
-        data = { ...this.$refs.DivM1.form, ...this.loanBusiness };
+        data = {
+          ...this.$refs.DivM1.form,
+          ...this.loanBusiness,
+          bizType: "m1"
+        };
       } else if (this.form.bizType == "m2") {
         // m2
         for (let i = 0; i < this.$refs.DivM2.titleList.length; i++) {
@@ -294,7 +298,11 @@ export default {
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
         // console.log("this.loanBusiness", this.loanBusiness);
-        data = { ...this.$refs.DivM2.form, ...this.loanBusiness };
+        data = {
+          ...this.$refs.DivM2.form,
+          ...this.loanBusiness,
+          bizType: "m2"
+        };
       } else if (
         this.form.bizType == "m3" &&
         this.$refs.DivM3.form.financeInfo.financeClassification == "1"
@@ -309,7 +317,8 @@ export default {
         data = {
           ...this.$refs.DivM3.form,
           ...this.$refs.DivM3.$refs.tabForm1.form,
-          ...this.loanBusiness
+          ...this.loanBusiness,
+          bizType: "m3"
         };
       } else if (
         this.form.bizType == "m3" &&
@@ -325,7 +334,8 @@ export default {
         data = {
           ...this.$refs.DivM3.form,
           ...this.$refs.DivM3.$refs.tabForm2.form,
-          ...this.loanBusiness
+          ...this.loanBusiness,
+          bizType: "m3"
         };
       } else if (this.form.bizType == "m4") {
         // m4
@@ -335,7 +345,11 @@ export default {
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
         // console.log("this.loanBusiness", this.loanBusiness);
-        data = { ...this.$refs.DivM4.form, ...this.loanBusiness };
+        data = {
+          ...this.$refs.DivM4.form,
+          ...this.loanBusiness,
+          bizType: "m4"
+        };
       } else if (this.form.bizType == "m5") {
         // m5
         for (let i = 0; i < this.$refs.DivM5.titleList.length; i++) {
@@ -344,7 +358,11 @@ export default {
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
         // console.log("this.loanBusiness", this.loanBusiness);
-        data = { ...this.$refs.DivM5.form, ...this.loanBusiness };
+        data = {
+          ...this.$refs.DivM5.form,
+          ...this.loanBusiness,
+          bizType: "m5"
+        };
       } else {
         // m6
         for (let i = 0; i < this.$refs.DivM6.titleList.length; i++) {
@@ -353,7 +371,11 @@ export default {
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
         // console.log("this.loanBusiness", this.loanBusiness);
-        data = { ...this.$refs.DivM6.form, ...this.loanBusiness };
+        data = {
+          ...this.$refs.DivM6.form,
+          ...this.loanBusiness,
+          bizType: "m6"
+        };
       }
 
       console.log(data);
@@ -383,7 +405,11 @@ export default {
           arrs[a] = this.$refs.DivM1.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        data = { ...this.$refs.DivM1.form, ...this.loanBusiness };
+        data = {
+          ...this.$refs.DivM1.form,
+          ...this.loanBusiness,
+          bizType: "m1"
+        };
       } else if (this.form.bizType == "m2") {
         // m2
         for (let i = 0; i < this.$refs.DivM2.titleList.length; i++) {
@@ -391,7 +417,11 @@ export default {
           arrs[a] = this.$refs.DivM2.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        data = { ...this.$refs.DivM2.form, ...this.loanBusiness };
+        data = {
+          ...this.$refs.DivM2.form,
+          ...this.loanBusiness,
+          bizType: "m2"
+        };
       } else if (
         this.form.bizType == "m3" &&
         this.$refs.DivM3.form.financeInfo.financeClassification == "1"
@@ -405,7 +435,8 @@ export default {
         data = {
           ...this.$refs.DivM3.form,
           ...this.$refs.DivM3.$refs.tabForm1.form,
-          ...this.loanBusiness
+          ...this.loanBusiness,
+          bizType: "m3"
         };
       } else if (
         this.form.bizType == "m3" &&
@@ -420,7 +451,8 @@ export default {
         data = {
           ...this.$refs.DivM3.form,
           ...this.$refs.DivM3.$refs.tabForm2.form,
-          ...this.loanBusiness
+          ...this.loanBusiness,
+          bizType: "m3"
         };
       } else if (this.form.bizType == "m4") {
         // m4
@@ -429,7 +461,11 @@ export default {
           arrs[a] = this.$refs.DivM4.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        data = { ...this.$refs.DivM4.form, ...this.loanBusiness };
+        data = {
+          ...this.$refs.DivM4.form,
+          ...this.loanBusiness,
+          bizType: "m4"
+        };
       } else if (this.form.bizType == "m5") {
         // m5
         for (let i = 0; i < this.$refs.DivM5.titleList.length; i++) {
@@ -437,7 +473,11 @@ export default {
           arrs[a] = this.$refs.DivM5.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        data = { ...this.$refs.DivM5.form, ...this.loanBusiness };
+        data = {
+          ...this.$refs.DivM5.form,
+          ...this.loanBusiness,
+          bizType: "m5"
+        };
       } else {
         // m6
         for (let i = 0; i < this.$refs.DivM6.titleList.length; i++) {
@@ -445,7 +485,11 @@ export default {
           arrs[a] = this.$refs.DivM6.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        data = { ...this.$refs.DivM6.form, ...this.loanBusiness };
+        data = {
+          ...this.$refs.DivM6.form,
+          ...this.loanBusiness,
+          bizType: "m6"
+        };
       }
 
       console.log(data);

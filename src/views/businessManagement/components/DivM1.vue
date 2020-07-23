@@ -15,7 +15,9 @@
         el-form-item(label="借据编号 :" class="formItem2")
           el-input(v-model="form.billNo" disabled)
         el-form-item(label="贷款支付方式 :" class="formItem2")
-          el-input(v-model="form.payKind" clearable :disabled="type == 2")
+          el-select(v-model="form.payKind" style="width:100%" clearable :disabled="type == 2")
+            el-option(v-for="item in payKindArr" :key="item.value" :label="item.label" :value="item.value")
+          //- el-input(v-model="form.payKind" clearable :disabled="type == 2")
         el-form-item(label="放款日期 :" class="formItem2")
           el-date-picker(v-model="form.loanDate" style="width:100%" disabled value-format='yyyy-MM-dd' format='yyyy-MM-dd' type="date" placeholder="选择日期")
         el-form-item(label="放款金额 :" class="formItem2")
@@ -139,6 +141,20 @@ export default {
         {
           label: "否",
           value: 0
+        }
+      ],
+      payKindArr: [
+        {
+          label: "贷款人受托支付",
+          value: "1"
+        },
+        {
+          label: "借款人自主支付",
+          value: "2"
+        },
+        {
+          label: "受托支付+自主支付",
+          value: "3"
         }
       ],
       cooperateArr: [

@@ -28,6 +28,7 @@
           </el-form-item>
 
           <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
+          <el-button size="mini" @click="onClear">重置</el-button>
         </el-form>
       </div>
       <div class="userTable">
@@ -116,6 +117,13 @@ export default {
         this.tableData = res.data.data;
         this.total = res.data.total;
       });
+    }, // 重置
+    onClear() {
+      this.searchForm = {
+        bizType: ""
+      };
+      this.pageNo = 1;
+      this.pageSize = 10;
     },
     returnType(row) {
       switch (row.bizType) {
@@ -137,7 +145,7 @@ export default {
       // 跳转检查申请
       this.$router.push({
         path: "/businessManagement/inspectionApplication",
-        query: { type: 2, bizId: row.bizId }
+        query: { type: 2, bizId: row.bizId, bizStatus: row.bizStatus }
       });
     }
   }
@@ -205,7 +213,7 @@ export default {
           margin-top: 13px;
           min-width: 30px;
           margin-left: 0;
-          margin-right: 5%;
+          margin-right: 10px;
           text-align: center;
           .el-button--primary {
             background: rgba(78, 120, 222, 1);
