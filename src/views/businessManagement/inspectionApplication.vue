@@ -8,9 +8,9 @@
   .inspectionApplication
     .headerPart
       el-tabs(v-model="activeName" @tab-click="handleClick")
-        el-tab-pane(label="申请明细" name="first")
-        el-tab-pane(label="流程上报" name="second")
-    .content1(v-show="activeName == 'first'")
+        el-tab-pane(label="申请明细" name="first" disabled)
+        el-tab-pane(label="流程上报" name="second" disabled)
+    .content1(v-if="activeName == 'first'")
       .contentTop
         el-form(:model="form" :inline="true" label-position="left" label-width="80px" size="mini" class="demo-form-inline formBox")
           el-form-item(label="检查类型" class="formItem5")
@@ -37,9 +37,10 @@
           DivM6(:detail="paramsM6" ref="DivM6")
       //- 提交
       .footer
-        el-button(type="warning" @click='onSubmit' :disabled='submitBtn') 提交
+        el-button(type="warning" @click='onSubmit') 提交
+        //- el-button(type="warning" @click='onSubmit') 提交
 
-    .content2(v-show="activeName == 'second'")
+    .content2(v-if="activeName == 'second'")
       .textContent
         el-card(class='card')
           .cardTitle
@@ -48,30 +49,30 @@
           .approvaList(v-for='(item,index) in approvaList' :key='index')
             el-form(label-position="left" label-width="80px" style="borderBottom:1px dashed #CCC")
               el-form-item(label="环节 :" class='noBorder')
-                el-input(v-model="item.linkName")
+                el-input(v-model="item.linkName" disabled)
               el-form-item(label="处理机构 :" class='noBorder')
-                el-input(v-model="item.orgName")
+                el-input(v-model="item.orgName" disabled)
               el-form-item(label="处理人员 :" class='noBorder')
-                el-input(v-model="item.emplName")
+                el-input(v-model="item.emplName" disabled)
               el-form-item(label="处理时间 :" class='noBorder')
-                el-input(v-model="item.processTime")
+                el-input(v-model="item.processTime" disabled)
               el-form-item(label="意见 :" class='noBorder')
-                el-input(v-model="item.agreeResult")
-              
-           
+                el-input(v-model="item.agreeResult" disabled)
 
         el-card(class='card')
-          el-form(label-position="left" label-width="200px" :model="approval")
+          el-button(type="primary" style="textAlien:right" @click="onSubmitApproval('0')" class='save') 保存
+          el-form(label-position="left" label-width="200px" :model="approval" style="marginTop:20px")
             el-form-item(label="客户名称:" class="formItem2")
-              span(v-model="approval.custName")
+              span {{approval.custName}}
             el-form-item(label="业务上报至:" class="formItem2")
-              span(v-model="approval.linkName")
+              span {{approval.currentLinkName}}
             el-form-item(label="业务接收人:" class="formItem2")
-              el-input(v-model="approval.emplName")
+              el-select(v-model="approval.nextEmplName" placeholder="请选择" style='width:100%')
+                el-option(v-for="item in nextEmplNameList" :key="item" :label="item" :value="item") 
             el-form-item(label="上报时间:" class="formItem2")
-              span(v-model="approval.approveTime")
+              //- span {{approval.approveTime}}
+              span {{this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss")}}
             el-form-item(label="是否存在风险预警信号:" class="formItem2")
-              //- el-input(v-model="form.existRisk" clearable)
               el-select(v-model="approval.existRisk" placeholder="请选择" style='width:100%')
                 el-option(label="是" value="1")
                 el-option(label="否" value="0")
@@ -79,21 +80,32 @@
               el-input(v-model="approval.riskMsg" type="textarea" :rows="2" clearable)
             el-form-item(label="检查结论及措施建议:" class="formItem2")
               el-input(v-model="approval.suggest" type="textarea" :rows="2" clearable)
-          .control
-            span(class='lebal') 检查人员 :
-            el-button(class="qianzi" @click="goSign" size='mini' type='primary') 签字
+            el-form-item(label="检查人员:" class="formItem2")
+              //- el-button(class="qianzi" @click="goSign" size='mini' type='primary') 签字
+              img(:src='approval.empSign' class='imgContent')
       .footer
-          el-button(type="warning" @click='onSubmitApproval') 提交审批
-    el-dialog(:visible.sync="dialogVisible")
-      img(width="100%" :src="dialogImageUrl" alt="") 
+          el-button(type="warning" @click="onSubmitApproval('1')" v-if="approvaList.length == 0") 提交审批
+          el-button(type="warning" size='normal' @click="onSubmitApproval('1')" v-if="approvaList.length !== 0") 提交
+          el-button(type="info" @click="onSubmitApproval('2')" v-if="approvaList.length !== 0") 回退
+          el-button(type="primary" @click="onSubmitApproval('3')" v-if="approvaList.length !== 0") 退回上一岗位
+    el-dialog(:visible.sync="dialogVisible" :append-to-body="true" width="800px" v-alterELDialogMarginTop="{marginTop:'30vh'}" ref="signArea")
+      .title
+        span 签名:
+      .boardBox(ref="boardBox")
+        canvas(ref="board" style="width:100%;height:100%" @mousedown="pcStart" @mousemove="pcMove" @mouseup="pcEnd" id="board")
+      .canvasBtn
+        el-button(type="primary" @click="saveCanvas") 确认签名
+        el-button(type="default" @click="clearCanvas" ref="clearCanvas") 重置签名
 </template>
 
 <script>
 import { filterParams } from "../../utils/utils";
+import bg from "../../assets/img/none.png";
 import {
   saveEditModelBusiness,
   approveDetail,
   approve,
+  getNextEmplName,
   queryForDetail,
   queryForBizDtail
 } from "../../api/loanlnspection";
@@ -115,6 +127,8 @@ export default {
     DivM6
   },
   data() {
+    this.$moment.locale("zh-cn");
+    const dateTime = this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
     return {
       activeName: "first",
       form: {
@@ -126,13 +140,13 @@ export default {
       approval: {
         // 流程上报
         custName: "", // 客户名称
-        linkName: "", // 业务上报至
-        emplName: "", // 业务接收人
-        approveTime: "", // 上报时间
+        currentLinkName: "", // 业务上报至
+        nextEmplName: "", // 业务接收人
+        approveTime: dateTime, // 上报时间
         existRisk: "", // 是否存在风险预警信号
         riskMsg: "", // 预警信号说明
-        suggest: "" // 检查结论及措施建议
-        // emplName: "" // 检查人员
+        suggest: "", // 检查结论及措施建议
+        empSign: bg // 检查人员
       },
       paramsM1: {},
       paramsM2: {},
@@ -143,19 +157,30 @@ export default {
       params: {},
       submitBtn: true,
       loanBusiness: {},
-      dialogImageUrl: "",
       dialogVisible: false,
-      formLabelWidth: "72px"
+      formLabelWidth: "72px",
+      nextEmplNameList: [],
+      ctx: null,
+      point: {
+        x: 0,
+        y: 0
+      },
+      moving: false
     };
   },
   mounted() {
     this.$moment.locale("zh-cn");
     // 进入页面先调用查询接口
     const { billNo, bizId, bizStatus } = this.$route.query;
-    approveDetail(this, { bizId }).then(res => {
-      console.log("res", res.data.data);
-      this.approvaList = res.data.data.aproveInfo;
-    });
+    // approveDetail(this, { bizId }).then(res => {
+    //   this.approval = res.data.data;
+    //   console.log("res", res.data.data);
+    //   const pa = { orgName: res.data.data.custOrg };
+    //   getNextEmplName(this, pa).then(ress => {
+    //     this.nextEmplNameList = ress.data.data.nextEmplNameList;
+    //     // console.log(ress.data.data);
+    //   });
+    // });
     if (billNo) {
       // 借据
       this.type = 1;
@@ -395,7 +420,6 @@ export default {
     },
     // 提交
     onSubmit: function() {
-      const { bizId } = this.$route.query;
       let data = {};
       let arrs = {};
       if (this.form.bizType == "m1") {
@@ -492,7 +516,8 @@ export default {
         };
       }
 
-      console.log(data);
+      // console.log(data);
+
       saveEditModelBusiness(this, {
         ...filterParams(data)
       }).then(res => {
@@ -502,19 +527,48 @@ export default {
             type: "success"
           });
           this.submitBtn = true;
+          const id = res.data.bizId;
           setTimeout(() => {
-            this.activeName = "second";
-            approveDetail(this, { bizId }).then(res => {
-              console.log("res", res.data.data);
+            approveDetail(this, { bizId: id }).then(res => {
+              this.activeName = "second";
+              this.approval = res.data.data;
+              this.approval.bizId = id;
+              if (!res.data.data.empSign) {
+                this.approval.empSign = bg;
+              }
+              this.approvaList = res.data.data.aproveInfo || [];
+              const pa = { orgName: res.data.data.custOrg };
+              getNextEmplName(this, pa).then(ress => {
+                this.nextEmplNameList = ress.data.data.nextEmplNameList;
+              });
             });
           }, 500);
         }
       });
     },
 
-    onSubmitApproval() {
+    onSubmitApproval(type) {
+      this.approval.approveTime = this.$moment(new Date()).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
+      this.approval.opType = type;
       console.log(filterParams(this.approval));
-      approve();
+      approve(this, { ...filterParams(this.approval) }).then(res => {
+        if (res.data.returnCode === "200000") {
+          this.$message({
+            message: "操作成功",
+            type: "success"
+          });
+          setTimeout(() => {
+            history.go(-1);
+          }, 500);
+        } else {
+          this.$message({
+            message: res.data.returnMsg,
+            type: "error"
+          });
+        }
+      });
     },
     handleClick() {
       console.log(this.activeName);
@@ -554,90 +608,63 @@ export default {
       }
     },
     goSign() {
-      this.params.empSign = "";
-      this.popupVisible = true;
-      this.lineCanvas({
-        // el: this.$refs.canvas, //绘制canvas的父级div
-        box: this.$refs.processing2, // 拿到宽度
-        clearEl: this.$refs.clearCanvas, //清除按钮
-        saveEl: this.$refs.saveCanvas //保存按钮
-      });
+      this.approval.empSign = "";
+      this.dialogVisible = true;
+      let board = document.getElementById("board");
+      this.ctx = board.getContext("2d");
+      console.log("this.canvas", board);
     },
-    lineCanvas(obj) {
-      this.linewidth = 2;
-      this.color = "#000000";
-      this.background = "rgba(0, 0, 0, 0)";
-      for (var i in obj) {
-        this[i] = obj[i];
+    // 鼠标按下(开始)
+    pcStart(e) {
+      let x = e.offsetX,
+        y = e.offsetY; // 获取鼠标在画板（canvas）的坐标
+      this.point.x = x;
+      this.point.y = y;
+      this.ctx.beginPath();
+      this.moving = true;
+      this.cxt.moveTo(
+        e.changedTouches[0].clientX -
+          e.target.offsetLeft +
+          document.documentElement.scrollLeft,
+        e.changedTouches[0].clientY -
+          40 -
+          e.target.offsetTop +
+          document.documentElement.scrollTop
+      );
+    },
+    // 鼠标移动（移动中...）
+    pcMove(e) {
+      if (this.moving) {
+        let x = e.offsetX,
+          y = e.offsetY; // 获取鼠标在画板（canvas）的坐标
+        this.ctx.moveTo(this.point.x, this.point.y); // 把路径移动到画布中的指定点，不创建线条(起始点)
+        this.ctx.lineTo(x, y); // 添加一个新点，然后创建从该点到画布中最后指定点的线条，不创建线条
+        this.ctx.stroke(); // 绘制
+        (this.point.x = x), (this.point.y = y); // 重置点坐标为上一个坐标
       }
-      // this.canvas = document.createElement("canvas");
-      this.canvas = document.getElementsByTagName("canvas")[0];
-      // this.el.appendChild(this.canvas);
-      this.cxt = this.canvas.getContext("2d");
-      this.canvas.width = this.box.clientWidth;
-      this.canvas.height = 400;
-      this.cxt.fillStyle = this.background;
-      this.cxt.fillRect(0, 0, this.canvas.width, this.canvas.width);
-      this.cxt.strokeStyle = this.color;
-      this.cxt.lineWidth = this.linewidth;
-      this.cxt.lineCap = "round";
-      //开始绘制
-      this.canvas.addEventListener(
-        "touchstart",
-        function(e) {
-          this.cxt.beginPath();
-          this.cxt.moveTo(
-            e.changedTouches[0].pageX,
-            e.changedTouches[0].pageY - 40
-          );
-        }.bind(this),
-        true
-      );
-      //绘制中
-      this.canvas.addEventListener(
-        "touchmove",
-        function(e) {
-          this.cxt.lineTo(
-            e.changedTouches[0].pageX,
-            e.changedTouches[0].pageY - 40
-          );
-          this.cxt.stroke();
-        }.bind(this),
-        true
-      );
-      //结束绘制
-      this.canvas.addEventListener(
-        "touchend",
-        function() {
-          this.cxt.closePath();
-          let imgBase64 = this.canvas.toDataURL();
-          //console.log(imgBase64);
-          this.params.empSign = imgBase64;
-        }.bind(this),
-        true
-      );
-      //清除画布
-      this.clearEl.addEventListener(
-        "click",
-        function() {
-          this.cxt.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        }.bind(this),
-        true
-      );
-      //保存图片，直接转base64
-      this.saveEl.addEventListener(
-        "click",
-        function() {
-          let imgBase64 = this.canvas.toDataURL();
-          this.params.empSign = imgBase64;
-          setTimeout(() => {
-            var c = document.getElementsByTagName("canvas")[0];
-            c.innerHTML = "";
-            this.popupVisible = false;
-          }, 200);
-        }.bind(this),
-        true
-      );
+    },
+    // 鼠标松开（结束）
+    pcEnd() {
+      if (this.moving) {
+        this.ctx.closePath(); // 停止绘制
+        this.moving = false; // 关闭绘制开关
+      }
+    },
+    // 保存图片
+    saveCanvas() {
+      let board = document.getElementById("board");
+      let imgBase64 = board.toDataURL();
+      this.params.empSign = imgBase64;
+      setTimeout(() => {
+        board.innerHTML = "";
+        this.dialogVisible = false;
+      }, 200);
+    },
+    // 重置图片
+    clearCanvas() {
+      let board = document.getElementById("board");
+      let ctx = board.getContext("2d");
+      ctx.clearRect(0, 0, 760, 380);
     }
   }
 };
@@ -648,6 +675,7 @@ export default {
 .inspectionApplication {
   box-sizing: border-box;
   width: 100%;
+  height: 100%;
   // padding: 0 40px 0;
   .headerPart {
     /deep/.el-tabs__header {
@@ -934,25 +962,18 @@ export default {
         }
       }
     }
-    .control {
-      height: 38px;
-      line-height: 38px;
-      margin-bottom: 20px;
-      .lebal {
-        font-size: 16px;
-        color: rgba(96, 98, 102, 1);
-        opacity: 1;
-        margin-right: 25px;
-      }
-      .content {
-        font-size: 16px;
-        color: rgba(10, 10, 10, 1);
-        opacity: 1;
-      }
+    .imgContent {
+      width: 200px;
+      height: 100%;
     }
     .card {
       width: 100%;
       margin-bottom: 10px;
+      position: relative;
+      .save {
+        position: absolute;
+        right: 10%;
+      }
       .cardTitle {
         margin: 0;
         margin-bottom: 10px;
@@ -978,17 +999,29 @@ export default {
           line-height: 20px;
         }
       }
+      .approvaList {
+        /deep/.el-input.is-disabled .el-input__inner {
+          background-color: #fff;
+        }
+      }
     }
   }
   .footer {
     text-align: center;
     height: 76px;
     line-height: 76px;
-    .el-button--warning {
-      padding: 8px 20px;
+    .el-button {
       span {
         font-size: 16px;
       }
+    }
+  }
+  .boardBox {
+    margin: 20px auto;
+    width: 100%;
+    background: #eee;
+    canvas {
+      border: 1px solid #298cff;
     }
   }
 }

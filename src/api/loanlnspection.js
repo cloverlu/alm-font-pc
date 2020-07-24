@@ -9,6 +9,10 @@ const approveDetail = ({ $axios }, data) =>
 // 流程上报按钮
 const approve = ({ $axios }, data) => $axios.post(`/alm/approve/save`, data);
 
+// 获取流程上报 业务接收人数组
+const getNextEmplName = ({ $axios }, data) =>
+  $axios.get(`/alm/approve/queryNextEmplNameList`, { params: data });
+
 // 检查审批详情
 const queryForDetail = ({ $axios }, data) =>
   $axios.get(`/alm/postLoan/business/queryForDtail`, { params: data });
@@ -21,6 +25,7 @@ export {
   saveEditModelBusiness,
   approveDetail,
   approve,
+  getNextEmplName,
   queryForDetail,
   queryForBizDtail,
 };
