@@ -520,6 +520,11 @@ export default {
           setTimeout(() => {
             history.go(-1);
           }, 500);
+        } else {
+          this.$message({
+            message: res.data.returnMsg,
+            type: "success"
+          });
         }
       });
     },
@@ -648,6 +653,11 @@ export default {
               });
             });
           }, 500);
+        } else {
+          this.$message({
+            message: res.data.returnMsg,
+            type: "success"
+          });
         }
       });
     },
