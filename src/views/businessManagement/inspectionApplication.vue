@@ -8,9 +8,9 @@
   .inspectionApplication
     .headerPart
       el-tabs(v-model="activeName" @tab-click="handleClick")
-        el-tab-pane(label="申请明细" name="first" disabled)
-        el-tab-pane(label="流程上报" name="second" disabled)
-    .content1(v-if="activeName == 'first'")
+        el-tab-pane(label="申请明细" name="first" :disabled='canTouch')
+        el-tab-pane(label="流程上报" name="second" :disabled='canTouch')
+    .content1(v-show="activeName == 'first'")
       .contentTop
         el-form(:model="form" :inline="true" label-position="left" label-width="80px" size="mini" class="demo-form-inline formBox")
           el-form-item(label="检查类型" class="formItem5")
@@ -21,7 +21,7 @@
               el-option(label="小企业授信业务还款资金落实情况检查" value="m4")
               el-option(label="小企业法人快捷贷首次检查" value="m5")
               el-option(label="小企业法人快捷贷贷后日常检查" value="m6")
-          el-button(type="primary" size="mini" @click="onSave" class="btn") 保存
+          el-button(type="primary" size="mini" @click="onSave" class="btn" v-if='type==1') 保存
       .contentBody
         .type(v-show="form.bizType == 'm1'")
           DivM1(:detail="paramsM1" ref="DivM1")
@@ -37,10 +37,10 @@
           DivM6(:detail="paramsM6" ref="DivM6")
       //- 提交
       .footer
-        el-button(type="warning" @click='onSubmit') 提交
+        el-button(type="warning" @click='onSubmit' v-if='type==1') 提交
         //- el-button(type="warning" @click='onSubmit') 提交
 
-    .content2(v-if="activeName == 'second'")
+    .content2(v-show="activeName == 'second'")
       .textContent
         el-card(class='card')
           .cardTitle
@@ -159,6 +159,7 @@ export default {
       loanBusiness: {},
       dialogVisible: false,
       formLabelWidth: "72px",
+      canTouch: true,
       nextEmplNameList: [],
       ctx: null,
       point: {
@@ -172,15 +173,6 @@ export default {
     this.$moment.locale("zh-cn");
     // 进入页面先调用查询接口
     const { billNo, bizId, bizStatus } = this.$route.query;
-    // approveDetail(this, { bizId }).then(res => {
-    //   this.approval = res.data.data;
-    //   console.log("res", res.data.data);
-    //   const pa = { orgName: res.data.data.custOrg };
-    //   getNextEmplName(this, pa).then(ress => {
-    //     this.nextEmplNameList = ress.data.data.nextEmplNameList;
-    //     // console.log(ress.data.data);
-    //   });
-    // });
     if (billNo) {
       // 借据
       this.type = 1;
@@ -247,6 +239,7 @@ export default {
     if (bizId) {
       // 业务
       this.form.billNo = "";
+      this.canTouch = false;
       this.form.bizId = bizId;
       queryForBizDtail(this, {
         bizId,
@@ -571,7 +564,26 @@ export default {
       });
     },
     handleClick() {
+      const { bizId } = this.$route.query;
       console.log(this.activeName);
+      if (this.activeName == "second") {
+        approveDetail(this, { bizId }).then(res => {
+          this.activeName = "second";
+          this.approval = res.data.data;
+          this.approval.bizId = bizId;
+          if (!res.data.data.empSign) {
+            this.approval.empSign = bg;
+          }
+          this.approvaList = res.data.data.aproveInfo || [];
+          const pa = {
+            orgName: res.data.data.custOrg,
+            orgCode: localStorage.getItem("orgCode")
+          };
+          getNextEmplName(this, pa).then(ress => {
+            this.nextEmplNameList = ress.data.data.nextEmplNameList;
+          });
+        });
+      }
     },
     returnType(row) {
       switch (row.bizType) {
