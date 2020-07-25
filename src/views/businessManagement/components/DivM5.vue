@@ -18,6 +18,7 @@
           el-input(v-model="form.loanAmout" disabled)
         el-form-item(label="贷款期限 :" class="formItem2")
           el-input(v-model="form.loanLength" disabled)
+            i(slot="suffix" style="font-style:normal") 月
         el-form-item(label="放款日期 :" class="formItem2")
           el-date-picker(v-model="form.loanDate" style="width:100%" value-format='yyyy-MM-dd' format='yyyy-MM-dd' type="date" placeholder="选择日期" disabled)
         el-form-item(label="约定用途 :" class="formItem2")

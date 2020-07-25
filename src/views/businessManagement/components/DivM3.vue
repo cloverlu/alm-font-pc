@@ -98,27 +98,34 @@
           el-col(:span="12")
             el-form-item(label="未结清贷款笔数 :" style="width:96%")
               el-input(v-model="form.creditInfo.unPayOffLoanNum" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 笔
           el-col(:span="12")
             el-form-item(label="对外担保笔数 :" style="width:96%")
               el-input(v-model="form.creditInfo.guaranteeNum" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 笔
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="未结清贷款金额 :" style="width:96%")
               el-input(v-model="form.creditInfo.unPayOffAmout" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="对外担保金额 :" style="width:96%")
               el-input(v-model="form.creditInfo.guaranteeAmout" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="涉及金融机构 :" style="width:96%")
               el-input(v-model="form.creditInfo.finInstitutionNum" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 家
           el-col(:span="12")
             el-form-item(label="对外担保结余 :" style="width:96%")
               el-input(v-model="form.creditInfo.guaranteeBalance" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="未结清贷款结余 :" style="width:96%")
               el-input(v-model="form.creditInfo.sumBalance" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
         .cardTitle2
           span (2)逾期及欠息等不良记录
         el-row(:gutter="20")
@@ -207,30 +214,39 @@
           el-col(:span="12")
             el-form-item(label="未结清贷款笔数 :" style="width:96%")
               el-input(v-model="form.creditInfo.unPayOffLoanNumCon" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 笔
           el-col(:span="12")
             el-form-item(label="授信总金额 :" style="width:96%")
               el-input(v-model="form.creditInfo.debitCardLineAmoutCon" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="未结清贷款金额 :" style="width:96%")
               el-input(v-model="form.creditInfo.unPayOffAmoutCon" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="对外担保笔数 :" style="width:96%")
               el-input(v-model="form.creditInfo.guaranteeNumCon" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 笔
           el-col(:span="12")
             el-form-item(label="涉及金融机构 :" style="width:96%")
               el-input(v-model="form.creditInfo.finInstitutionNumCon" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 家
           el-col(:span="12")
             el-form-item(label="对外担保金额 :" style="width:96%")
               el-input(v-model="form.creditInfo.guaranteeAmoutCon" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="未结清贷款结余 :" style="width:96%")
               el-input(v-model="form.creditInfo.sumBalanceCon" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="对外担保结余 :" style="width:96%")
               el-input(v-model="form.creditInfo.guaranteeBalanceCon" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="未销户贷记卡账户 :" style="width:96%")
               el-input(v-model="form.creditInfo.debitCardNumCon" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 个
         .left
             .cardTitle2 (2)逾期及违约:
             el-row(:gutter="20")
@@ -273,30 +289,39 @@
           el-col(:span="12")
             el-form-item(label="未结清贷款笔数 :" style="width:96%")
               el-input(v-model="form.creditInfo.unPayOffLoanNumJur" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 笔
           el-col(:span="12")
             el-form-item(label="未销户贷记卡担保金额 :" style="width:96%")
               el-input(v-model="form.creditInfo.debitCardLineAmoutJur" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="未结清贷款金额 :" style="width:96%")
               el-input(v-model="form.creditInfo.unPayOffAmoutJur" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="对外担保笔数 :" style="width:96%")
               el-input(v-model="form.creditInfo.guaranteeNumJur" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 笔
           el-col(:span="12")
             el-form-item(label="涉及金融机构 :" style="width:96%")
               el-input(v-model="form.creditInfo.finInstitutionNumJur" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 家
           el-col(:span="12")
             el-form-item(label="对外担保金额 :" style="width:96%")
               el-input(v-model="form.creditInfo.guaranteeAmoutJur" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="未结清贷款结余 :" style="width:96%")
               el-input(v-model="form.creditInfo.sumBalanceJur" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="对外担保结余 :" style="width:96%")
               el-input(v-model="form.creditInfo.guaranteeBalanceJur" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="未销户贷记卡账户 :" style="width:96%")
               el-input(v-model="form.creditInfo.debitCardNumJur" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 个
         .left
             .cardTitle2 (2)逾期及违约:
             el-row(:gutter="20")

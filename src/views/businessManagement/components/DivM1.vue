@@ -12,6 +12,7 @@
           el-input(v-model="form.custName" disabled)
         el-form-item(label="贷款期限 :" class="formItem2")
           el-input(v-model="form.loanLength" disabled)
+            i(slot="suffix" style="font-style:normal") 月
         el-form-item(label="借据编号 :" class="formItem2")
           el-input(v-model="form.billNo" disabled)
         el-form-item(label="贷款支付方式 :" class="formItem2")

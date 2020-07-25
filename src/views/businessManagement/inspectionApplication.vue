@@ -65,7 +65,7 @@
             el-form-item(label="客户名称:" class="formItem2")
               span {{approval.custName}}
             el-form-item(label="业务上报至:" class="formItem2")
-              span {{approval.currentLinkName}}
+              span {{approval.nextLinkName}}
             el-form-item(label="业务接收人:" class="formItem2")
               el-select(v-model="approval.nextEmplName" placeholder="请选择" style='width:100%')
                 el-option(v-for="item in nextEmplNameList" :key="item" :label="item" :value="item") 
@@ -141,7 +141,7 @@ export default {
       approval: {
         // 流程上报
         custName: "", // 客户名称
-        currentLinkName: "", // 业务上报至
+        nextLinkName: "", // 业务上报至
         nextEmplName: "", // 业务接收人
         approveTime: dateTime, // 上报时间
         existRisk: "", // 是否存在风险预警信号

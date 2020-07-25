@@ -16,6 +16,7 @@
           el-input(v-model="form.loanBalance" disabled)
         el-form-item(label="贷款期限 :" class="formItem2")
           el-input(v-model="form.loanLength" disabled)
+            i(slot="suffix" style="font-style:normal") 月
         el-form-item(label="还款方式 :" class="formItem2")
           el-input(v-model="form.repayKind" disabled)
         el-form-item(label="还款日期 :" class="formItem2")
