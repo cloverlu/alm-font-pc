@@ -87,7 +87,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="征信报告查询日期 :" style="width:96%")
-              el-date-picker(v-model="form.creditInfo.queryDateForPer" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
+              el-date-picker(v-model="form.creditInfo.queryDateForPer" :picker-options="pickerOptions" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
         .blueTitle1 1.借款企业征信 :
         .cardTitle1
           span(class='blue')
@@ -189,7 +189,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="征信报告查询日期 :" style="width:96%")
-              el-date-picker(v-model="form.creditInfo.startDate" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
+              el-date-picker(v-model="form.creditInfo.startDate" :picker-options="pickerOptions" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
         .blueTitle1 1.企业实际控制人及其配偶(若有)征信 :
         .cardTitle1
           span(class='blue')
@@ -341,7 +341,7 @@
         el-row(:gutter="20" style="marginTop:20px")
           el-col(:span="12")
             el-form-item(style="width:96%")
-              el-input(v-model="form.creditInfo.msg" type="textarea" :disabled="type == 2" :rows="3" clearable) 
+              el-input(v-model="form.msg" type="textarea" :disabled="type == 2" :rows="3" clearable) 
     //- 企业财务情况
     el-card(class='card')
       .cardTitle1
@@ -354,8 +354,8 @@
               el-select(v-model="form.financeInfo.financeClassification" @change='financeInfoChange' :disabled="type == 2" placeholder="请选择" style="width:100%")
                 el-option(v-for="item in financeList" :key="item.value" :label="item.label" :value="item.value")
       .cardContent
-        tab-form1(:contentDetail="params1" v-if="form.financeInfo.financeClassification=='1'" ref="tabForm1")
-        tab-form2(:contentDetail="params2" v-if="form.financeInfo.financeClassification=='2'" ref="tabForm2")
+        tab-form1(:contentDetail="params1" v-show="form.financeInfo.financeClassification =='1'" ref="tabForm1")
+        tab-form2(:contentDetail="params2" v-show="form.financeInfo.financeClassification =='2'" ref="tabForm2")
     //- 现场检查其他要点
     el-card(class='card')
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
@@ -397,7 +397,7 @@
         .item(v-for="(item,i) in titleList" :key="item.id")
           .title {{item.text}}
           .upload-wrapper
-            uploadTest(:item="item" :itemVmodel="params" :read="false" :ref="`definte16${i}`")
+            uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
         //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
   </div>
 </template>
@@ -452,6 +452,15 @@ export default {
       titleList: definte17(),
       params: {},
       loanBusiness: {},
+      pickerOptions: {
+        disabledDate(time) {
+          let curDate = new Date().toString(); // 当前时间戳转为字符串
+          let curDateYear = new Date().getFullYear(); // 当前时间的年份
+          let oneYearAgoDate = curDate.replace(curDateYear, curDateYear - 1); // 字符串年份替换为一年前
+          let oneYear = new Date(oneYearAgoDate).getTime(); //一年前字符串转为时间戳
+          return time.getTime() > Date.now() || time.getTime() < oneYear;
+        }
+      },
       securityKindsArr: [
         {
           label: "信用",
@@ -512,7 +521,7 @@ export default {
         // card 1
         bizType: "m3", // 检查类型
         custName: "", // 客户名称  queryType为2时，必传；其他情况非必传
-        securityKind: "", //担保方式
+        securityKind: [], //担保方式
         otherSecurityKindMsg: "", //担保方式说明
         lineAmout: "", //授信金额
         lineBalance: "", //授信余额
@@ -531,7 +540,7 @@ export default {
 
         // card 3
         checkAddr: "", //检查地点
-        cooperate: "", //检查配合程度
+        cooperate: "1", //检查配合程度
         addrChangedMsg: "", //生产经营场所变动情况
         staff: "", //接待人员
 
@@ -557,12 +566,12 @@ export default {
           administRecordNum: "", // 行政处罚记录
           // (4)征信记录
           creditChageMsg1: "", // 	借款企业 征信变化情况说明
-          existCreditChage1: 0, // 借款企业 征信变化是否变化
+          existCreditChage1: 1, // 借款企业 征信变化是否变化
           // card 5
           creditChageMsg2: "", // 	关联企业 征信变化情况说明
-          existCreditChage2: 0, // 关联企业 征信变化是否变化
+          existCreditChage2: 1, // 关联企业 征信变化是否变化
           creditChageMsg3: "", // 	法人保证人 征信变化情况说明
-          existCreditChage3: 0, // 法人保证人 征信变化是否变化
+          existCreditChage3: 1, // 法人保证人 征信变化是否变化
 
           // 基于个人征信报告
           startDate: "", //征信报告查询日期
@@ -579,10 +588,10 @@ export default {
           guaranteeBalanceCon: "", //对外担保结余
           debitCardNumCon: "", //未销户贷记卡账户
           // (2)逾期及违约
-          existBadRecordCon: "", //是否存在逾期及违约记录
+          existBadRecordCon: 1, //是否存在逾期及违约记录
           badRecordMsgCon: "", //说明
           // (3)征信记录
-          existCreditChage4: "", //征信记录是否有异常变化
+          existCreditChage4: 1, //征信记录是否有异常变化
           creditChageMsg4: "", //说明
           // 2.企业法定代表人及其配偶（若有）征信
           creditClassificationJur: "", //征信分类
@@ -597,18 +606,17 @@ export default {
           guaranteeBalanceJur: "", //对外担保结余
           debitCardNumJur: "", //未销户贷记卡账户
           // (2)逾期及违约
-          existBadRecordJur: "", //是否存在逾期及违约记录
+          existBadRecordJur: 1, //是否存在逾期及违约记录
           badRecordMsgJur: "", //说明
           // (3)征信记录
-          existCreditChage5: "", //征信记录是否有异常变化
+          existCreditChage5: 1, //征信记录是否有异常变化
           creditChageMsg5: "", //说明
           // 3.其他保证人征信
-          existCreditChage6: "", //征信记录是否有异常变化
-          creditChageMsg6: "", //说明
+          existCreditChage6: 1, //征信记录是否有异常变化
+          creditChageMsg6: "" //说明
           // 近期负面信息情况
-          msg: "" //近期负面信息情况
         },
-
+        msg: "", //近期负面信息情况
         // 企业财务情况
         financeInfo: {
           financeClassification: "1",
@@ -637,6 +645,50 @@ export default {
     detail: function(newVal, oldVal) {
       console.log(1, newVal, oldVal);
       this.form = newVal;
+      if (!newVal.creditInfo) {
+        this.form.creditInfo = {
+          queryDateForPer: "",
+          startDate: "",
+          existBadRecord: 1,
+          existCreditChage1: 1,
+          existCreditChage2: 1,
+          existCreditChage3: 1,
+          existBadRecordCon: 1,
+          existCreditChage4: 1,
+          existBadRecordJur: 1,
+          existCreditChage5: 1,
+          existCreditChager6: 1
+        };
+        // this.form.creditInfo.queryDateForPer = "";
+        // this.form.creditInfo.startDate = "";
+        // this.form.creditInfo.existBadRecord = 1;
+        // this.form.creditInfo.existCreditChage1 = 1;
+        // this.form.creditInfo.existCreditChage2 = 1;
+        // this.form.creditInfo.existCreditChage3 = 1;
+        // this.form.creditInfo.existBadRecordCon = 1;
+        // this.form.creditInfo.existCreditChage4 = 1;
+        // this.form.creditInfo.existBadRecordJur = 1;
+        // this.form.creditInfo.existCreditChage5 = 1;
+        // this.form.creditInfo.existCreditChager6 = 1;
+      }
+      if (!newVal.securityKind) {
+        this.form.securityKind = ["1"];
+      }
+      if (!newVal.cooperate) {
+        this.form.cooperate = "1";
+      }
+      if (!newVal.financeInfo) {
+        this.form.financeInfo = {
+          financeClassification: "1",
+          industrycChangSiut: "", //企业所在行业是否发生重大不利变化
+          hiddenTroubleSitu: "", //生产经营是否存在安全隐患
+          planExpandSitu: "", //企业是否有与主业无关的扩张计划
+          otherSitu: "", //其他
+          collEstimateDate: "", //上次抵质押物评估或重估日期
+          collEstimateValue: "" //上次抵质押物评估或重估金额
+        };
+      }
+
       this.params = this.matchImage(newVal);
       this.params1 = newVal.financeInfo;
       this.params2 = newVal.financeInfo;

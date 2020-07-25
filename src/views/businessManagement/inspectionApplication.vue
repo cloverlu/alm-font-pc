@@ -14,7 +14,7 @@
       .contentTop
         el-form(:model="form" :inline="true" label-position="left" label-width="80px" size="mini" class="demo-form-inline formBox")
           el-form-item(label="检查类型" class="formItem5")
-            el-select(v-model="form.bizType" clearable @change='onChange' style="width:100%" :disabled='type == 2')
+            el-select(v-model="form.bizType" clearable @change='onChange' style="width:100%" :disabled='canChange == 2')
               el-option(label="小企业授信业务首次跟踪检查" value="m1")
               el-option(label="小企业授信业务贷后例行检查" value="m2")
               el-option(label="小企业授信业务贷后全面检查" value="m3")
@@ -136,6 +136,7 @@ export default {
         bizType: "m1" // 检查类型
       },
       type: 1,
+      canChange: 1,
       approvaList: [],
       approval: {
         // 流程上报
@@ -176,6 +177,7 @@ export default {
     if (billNo) {
       // 借据
       this.type = 1;
+      this.canChange = 1;
       this.submitBtn = false;
       this.paramsM1.billNo = billNo;
       this.paramsM1.type = 1;
@@ -186,29 +188,83 @@ export default {
       }).then(res => {
         if (res.data.returnCode == "200000") {
           console.log(res.data.data.useAmoutByContract);
-          // for (var key in res.data.data) {
-          //   if (res.data.data[key] == null) {
-          //     // console.log("没有key", key);
-          //     res.data.data[key] = "";
-          //   }
-          // }
-          if (!res.data.data.creditInfo) {
-            // console.log("没有creditInfo");
-            res.data.data.creditInfo = {
-              queryDateForPer: ""
-            };
-          }
-          if (!res.data.data.financeInfo) {
-            // console.log("financeInfo");
-            res.data.data.financeInfo = {};
-          }
-          if (!res.data.data.stageData) {
-            // console.log("financeInfo");
-            res.data.data.stageData = [{ checkStage: "1" }];
+          for (var key in res.data.data) {
+            if (res.data.data[key] == null) {
+              res.data.data[key] = "";
+            }
           }
           if (!res.data.data.assetCreditInfo) {
-            // console.log("assetCreditInfo");
-            res.data.data.assetCreditInfo = {};
+            res.data.data.assetCreditInfo = {
+              queryDate: "", //征信报告查询日期
+              fiveClass: "", // 当前企业及实际控制人征信情况(注明征信查询分类结果)
+              shrinkLoanScale: 1, //企业或企业主是否有他行收缩贷款规模
+              shrinkLoanScaleMsg: "", //收缩贷款规模说明
+              addedOverdues: 1, //企业或企业主征信是否有新增逾期记录
+              addedOverduesMsg: "", //新增逾期记录说明
+              addedGuarantees: 1, // 企业或企业主是否有新增对外担保记录
+              addedGuaranteesMsg: "", //新增对外担保记录说明
+              addedLoans: 1, //企业或企业主是否有他行新增贷款
+              addedLoansMsg: "", //他行新增贷款说明
+              otherSitu: 1, //企业或企业主是否有其他异常变化
+              otherSituMsg: "" //其他异常变化说明
+            };
+          }
+          if (!res.data.data.assitInfoForGuarantee) {
+            res.data.data.assitInfoForGuarantee = [
+              {
+                assitName: "",
+                CooperatStatus: "",
+                assitFiveClass: ""
+              }
+            ];
+          }
+          if (!res.data.data.assitInfoForPledge) {
+            res.data.data.assitInfoForPledge = [
+              {
+                assitName: "",
+                assitAddr: "",
+                firstEstimateDate: "",
+                firstEstimateValue: "",
+                firstMortAndpleRate: "",
+                LastEstimateDate: "",
+                LastEstimateValue: "",
+                LastMortAndpleRate: "",
+                thisEstimateDate: "",
+                thisEstimateValue: "",
+                thisMortAndpleRate: ""
+              }
+            ];
+          }
+          if (!res.data.data.securityKind) {
+            res.data.data.securityKind = ["1"];
+          }
+          if (!res.data.data.creditInfo) {
+            res.data.data.creditInfo = {
+              queryDateForPer: "",
+              startDate: "",
+              existBadRecord: 1,
+              existCreditChage1: 1,
+              existCreditChage2: 1,
+              existCreditChage3: 1,
+              existBadRecordCon: 1,
+              existCreditChage4: 1,
+              existBadRecordJur: 1,
+              existCreditChage5: 1,
+              existCreditChager6: 1
+            };
+          }
+          if (!res.data.data.stageData || res.data.data.stageData.length == 0) {
+            res.data.data.stageData = [
+              {
+                checkStage: "1", // 检查阶段
+                payIntention: "", // 还款意愿
+                practicableCheckAddr: "", // 检查地点
+                practicableStaff: "", // 接待人员
+                amoutSource: "", // 还款资金来源
+                expectRepayDate: "", // 预计还款/付息时间
+                practicableMsg: "" // 还款资金落实情况说明
+              }
+            ];
           }
 
           this.form.bizType = res.data.data.bizType;
@@ -226,7 +282,6 @@ export default {
           } else {
             this.paramsM6 = this.params;
           }
-          // console.log("res.data.data", res.data.data);
         }
       });
     }
@@ -239,6 +294,7 @@ export default {
     if (bizId) {
       // 业务
       this.form.billNo = "";
+      this.canChange = 2;
       this.canTouch = false;
       this.form.bizId = bizId;
       queryForBizDtail(this, {
@@ -246,30 +302,85 @@ export default {
         bizType: this.form.bizType
       }).then(res => {
         if (res.data.returnCode == "200000") {
-          console.log(!res.data.data.useAmoutByContract);
           for (var key in res.data.data) {
             if (res.data.data[key] == null) {
-              // console.log("没有key", key);
               res.data.data[key] = "";
             }
+          }
+
+          if (!res.data.data.assetCreditInfo) {
+            res.data.data.assetCreditInfo = {
+              queryDate: "", //征信报告查询日期
+              fiveClass: "", // 当前企业及实际控制人征信情况(注明征信查询分类结果)
+              shrinkLoanScale: 1, //企业或企业主是否有他行收缩贷款规模
+              shrinkLoanScaleMsg: "", //收缩贷款规模说明
+              addedOverdues: 1, //企业或企业主征信是否有新增逾期记录
+              addedOverduesMsg: "", //新增逾期记录说明
+              addedGuarantees: 1, // 企业或企业主是否有新增对外担保记录
+              addedGuaranteesMsg: "", //新增对外担保记录说明
+              addedLoans: 1, //企业或企业主是否有他行新增贷款
+              addedLoansMsg: "", //他行新增贷款说明
+              otherSitu: 1, //企业或企业主是否有其他异常变化
+              otherSituMsg: "" //其他异常变化说明
+            };
+          }
+          if (!res.data.data.assitInfoForGuarantee) {
+            res.data.data.assitInfoForGuarantee = [
+              {
+                assitName: "",
+                CooperatStatus: "",
+                assitFiveClass: ""
+              }
+            ];
+          }
+          if (!res.data.data.assitInfoForPledge) {
+            res.data.data.assitInfoForPledge = [
+              {
+                assitName: "",
+                assitAddr: "",
+                firstEstimateDate: "",
+                firstEstimateValue: "",
+                firstMortAndpleRate: "",
+                LastEstimateDate: "",
+                LastEstimateValue: "",
+                LastMortAndpleRate: "",
+                thisEstimateDate: "",
+                thisEstimateValue: "",
+                thisMortAndpleRate: ""
+              }
+            ];
+          }
+          if (!res.data.data.securityKind) {
+            res.data.data.securityKind = ["1"];
           }
           if (!res.data.data.creditInfo) {
             // console.log("没有creditInfo");
             res.data.data.creditInfo = {
-              queryDateForPer: ""
+              queryDateForPer: "",
+              startDate: "",
+              existBadRecord: 1,
+              existCreditChage1: 1,
+              existCreditChage2: 1,
+              existCreditChage3: 1,
+              existBadRecordCon: 1,
+              existCreditChage4: 1,
+              existBadRecordJur: 1,
+              existCreditChage5: 1,
+              existCreditChager6: 1
             };
           }
-          if (!res.data.data.financeInfo) {
-            // console.log("financeInfo");
-            res.data.data.financeInfo = {};
-          }
-          if (!res.data.data.stageData) {
-            // console.log("financeInfo");
-            res.data.data.stageData = [{ checkStage: "1" }];
-          }
-          if (!res.data.data.assetCreditInfo) {
-            // console.log("assetCreditInfo");
-            res.data.data.assetCreditInfo = {};
+          if (!res.data.data.stageData || res.data.data.stageData.length == 0) {
+            res.data.data.stageData = [
+              {
+                checkStage: "1", // 检查阶段
+                payIntention: "", // 还款意愿
+                practicableCheckAddr: "", // 检查地点
+                practicableStaff: "", // 接待人员
+                amoutSource: "", // 还款资金来源
+                expectRepayDate: "", // 预计还款/付息时间
+                practicableMsg: "" // 还款资金落实情况说明
+              }
+            ];
           }
           this.form.bizType = res.data.data.bizType;
           this.params = res.data.data;
@@ -332,6 +443,7 @@ export default {
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
         // console.log("this.loanBusiness", this.loanBusiness);
+        this.$refs.DivM3.form.financeInfo.financeClassification = "1";
         data = {
           ...this.$refs.DivM3.form,
           ...this.$refs.DivM3.$refs.tabForm1.form,

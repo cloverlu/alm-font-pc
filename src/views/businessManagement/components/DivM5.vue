@@ -21,9 +21,9 @@
         el-form-item(label="放款日期 :" class="formItem2")
           el-date-picker(v-model="form.loanDate" style="width:100%" value-format='yyyy-MM-dd' format='yyyy-MM-dd' type="date" placeholder="选择日期" disabled)
         el-form-item(label="约定用途 :" class="formItem2")
-          el-input(v-model="form.loanPurpose" type="textarea" :rows="2" clearable)
+          el-input(v-model="form.loanPurpose" type="textarea" :rows="2" :disabled="type == 2" clearable)
         el-form-item(label="贷款支付方式 :" class="formItem2")
-          el-input(v-model="form.repayKind" clearable)
+          el-input(v-model="form.repayKind" clearable :disabled="type == 2")
 
     el-card(class='card')
       .cardTitle1
@@ -50,7 +50,7 @@
         .item(v-for="(item,i) in titleList" :key="item.id")
           .title {{item.text}}
           .upload-wrapper
-            uploadTest(:item="item" :itemVmodel="params" :read="false" :ref="`definte16${i}`")
+            uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
         //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
   </div>
 </template>

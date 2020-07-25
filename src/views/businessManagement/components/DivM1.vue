@@ -59,25 +59,27 @@
           el-form-item(label="生产经营场所变动情况 :" class="formItem2")
             el-input(v-model="form.addrChangedMsg" type="textarea" :rows="3" clearable :disabled="type == 2")
     el-card(class='card')
-      .left
-        .cardTitle1
-          span(class='blue')
-          span(class='title') 检查内容
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
-          el-form-item(label="资金使用情况详细说明 :" class="formItem2")
-            el-input(v-model="form.detailMsg4useAmout" type="textarea" :disabled="type == 2" :rows="3" clearable)
-          el-form-item(label="提供纸质或影像资料的信息来源 :" class="formItem2")
-            el-input(v-model="form.msgSource" type="textarea" :disabled="type == 2" :rows="3" clearable)
-            .notes ※注：1、贷款发放如采用贷款人受托支付方式，信息来源包括《小企业授信业务额度借款支用单》、《小企业贷款受托支付申请书》、汇款凭证、账户流水、合同、入库单、贷款购买标的(如原材料、机器设备等)等。2、贷款发放如采用借款人自主支付方式，信息来源包括《实际支付清单》、汇款凭证、合同、入库单、贷款购买标的( 如原材料、机器设备等)等。
-      .right
-        .cardTitle
-          span(class='title') 
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
-          el-form-item(label="是否按合同约定的用途使用信贷资金 :" class="formItem2")
-            el-select(v-model="form.useAmoutByContract" style="width:100%" clearable :disabled="type == 2")
-              el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
-          el-form-item(label="情况说明 :" class="formItem2" style="marginTop:54px")
-            el-input(v-model="form.msg" type="textarea" :rows="3" clearable :disabled="type == 2")
+      .cardTitle1
+        span(class='blue')
+        span(class='title') 检查内容
+      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
+        el-row(:gutter="20")
+          el-col(:span="12")
+            el-form-item(label="资金使用情况详细说明 :" class="formItem1")
+              el-input(v-model="form.detailMsg4useAmout" type="textarea" :disabled="type == 2" :rows="3" clearable)
+          el-col(:span="12")
+            el-form-item(label="是否按合同约定的用途使用信贷资金 :" class="formItem1")
+              el-select(v-model="form.useAmoutByContract" style="width:100%" clearable :disabled="type == 2")
+                el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
+        el-row(:gutter="20")
+          el-col(:span="12")
+            el-form-item(label="提供纸质或影像资料的信息来源 :" class="formItem1")
+              el-input(v-model="form.msgSource" type="textarea" :disabled="type == 2" :rows="3" clearable)
+              .notes ※注：1、贷款发放如采用贷款人受托支付方式，信息来源包括《小企业授信业务额度借款支用单》、《小企业贷款受托支付申请书》、汇款凭证、账户流水、合同、入库单、贷款购买标的(如原材料、机器设备等)等。2、贷款发放如采用借款人自主支付方式，信息来源包括《实际支付清单》、汇款凭证、合同、入库单、贷款购买标的( 如原材料、机器设备等)等。
+          el-col(:span="12")
+            el-form-item(label="情况说明 :" class="formItem1" )
+              el-input(v-model="form.msg" type="textarea" :rows="3" clearable :disabled="type == 2")
+        
     el-card(class='card')
       .cardTitle1 
         span(class='blue')
@@ -86,7 +88,7 @@
         .item(v-for="(item,i) in titleList" :key="item.id")
           .title {{item.text}}
           .upload-wrapper
-            uploadTest(:item="item" :itemVmodel="params" :read="false" :ref="`definte16${i}`")
+            uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
         //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
   </div>
 </template>
@@ -179,7 +181,7 @@ export default {
         custName: "", // 客户名称  queryType为2时，必传；其他情况非必传
         loanLength: "", // 贷款期限
         billNo: "", //借据编号
-        payKind: "", //贷款支付方式
+        payKind: "1", //贷款支付方式
         loanDate: "", //放款日期
         loanAmout: "", //贷款金额
         loanPurpose: "", //约定用途
@@ -214,6 +216,15 @@ export default {
   watch: {
     detail: function(newVal) {
       this.form = newVal;
+      if (!newVal.payKind) {
+        this.form.payKind = "1";
+      }
+      if (!newVal.cooperate) {
+        this.form.cooperate = "1";
+      }
+      if (!newVal.useAmoutByContract) {
+        this.form.useAmoutByContract = 1;
+      }
       this.params = this.matchImage(newVal);
     }
   },
@@ -317,6 +328,11 @@ export default {
     width: 50%;
     margin: 0;
     padding-right: 20px;
+  }
+  .formItem1 {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
   }
   /deep/.el-form-item__label {
     padding: 10px 0 0;

@@ -16,7 +16,7 @@
 		:before-upload="handleBefore"
 		:multiple="false"
 		:action='`${host}/postLoan/business/uploadModelFile`'
-		list-type="picture-card"  
+		list-type="picture-card" :disabled="modify"
 		)
 			i(class="el-icon-plus")
 		el-dialog(:visible.sync="dialogVisible" :append-to-body="true")
@@ -28,10 +28,11 @@
 import EXIF from "exif-js";
 import { host } from "../../../api/host";
 export default {
-  props: ["item", "itemVmodel", "read"],
+  props: ["item", "itemVmodel", "read", "modify"],
   data() {
     return {
       host: host,
+      canModify: false,
       dialogImageUrl: "",
       dialogVisible: false,
       fileList: [],
@@ -104,6 +105,14 @@ export default {
           this.uploadVisible = false;
           this.imageHas = false;
         }
+      }
+    },
+    modify(val) {
+      console.log("val", val);
+      if (val) {
+        this.canModify = true;
+      } else {
+        this.canModify = false;
       }
     }
   },

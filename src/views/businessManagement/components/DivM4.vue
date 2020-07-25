@@ -55,7 +55,7 @@
         .item(v-for="(item,i) in titleList" :key="item.id")
           .title {{item.text}}
           .upload-wrapper
-            uploadTest(:item="item" :itemVmodel="params" :read="false" :ref="`definte16${i}`")
+            uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
         //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
      
   </div>
@@ -118,7 +118,7 @@ export default {
         // card 2
         stageData: [
           {
-            checkStage: "", // 检查阶段
+            checkStage: "1", // 检查阶段
             payIntention: "", // 还款意愿
             practicableCheckAddr: "", // 检查地点
             practicableStaff: "", // 接待人员
@@ -150,6 +150,19 @@ export default {
       console.log(1, newVal, oldVal);
       this.form = newVal;
       this.params = this.matchImage(newVal);
+      if (!newVal.stageData || newVal.stageData.length == 0) {
+        this.form.stageData = [
+          {
+            checkStage: "1", // 检查阶段
+            payIntention: "", // 还款意愿
+            practicableCheckAddr: "", // 检查地点
+            practicableStaff: "", // 接待人员
+            amoutSource: "", // 还款资金来源
+            expectRepayDate: "", // 预计还款/付息时间
+            practicableMsg: "" // 还款资金落实情况说明
+          }
+        ];
+      }
     }
   },
   // 组件方法

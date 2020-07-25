@@ -14,40 +14,40 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="贷后检查模式 :" class="formItem2")
-              el-input(v-model="form.checkModel")
+              el-input(v-model="form.checkModel" :disabled="type == 2")
           el-col(:span="12")
             el-form-item(label="还款方式 :" class="formItem2")
-              el-input(v-model="form.repayKind")
+              el-input(v-model="form.repayKind" :disabled="type == 2")
           el-col(:span="12")
             el-form-item(label="授信金额 :" class="formItem2")
-              el-input(v-model="form.lineAmout")
+              el-input(v-model="form.lineAmout" :disabled="type == 2")
           el-col(:span="12")
             el-form-item(label="检查地点 :" class="formItem2")
-              el-input(v-model="form.practicableCheckAddr")
+              el-input(v-model="form.checkAddr" :disabled="type == 2")
           el-col(:span="12")
             el-form-item(label="授信余额 :" class="formItem2")
-              el-input(v-model="form.lineBalance")
+              el-input(v-model="form.lineBalance" :disabled="type == 2")
           el-col(:span="12")
             el-form-item(label="检查配合程度 :" class="formItem2")
-              el-select(v-model="form.cooperate" style="width:100%" clearable)
-                el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
+              el-select(v-model="form.cooperate" style="width:100%" clearable :disabled="type == 2")
+                el-option(v-for="item in cooperateArr" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label="担保方式 :" class="formItem2")
-              el-checkbox-group(v-model="form.securityKind" style="width:100%" clearable)
+              el-checkbox-group(v-model="form.securityKind" style="width:100%" clearable :disabled="type == 2")
                 el-checkbox(v-for="item in securityKindsArr" :key="item.value" :label="item.value" :value="item.value") {{item.label}}
               //- el-select(v-model="form.securityKind" style="width:100%" clearable)
               //-   el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label="额度年检 :" class="formItem2")
-              el-select(v-model="form.yearlyInspection" style="width:100%")
+              el-select(v-model="form.yearlyInspection" style="width:100%" :disabled="type == 2")
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
-              el-input(v-model="form.otherSecurityKindMsg" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.otherSecurityKindMsg" type="textarea" :rows="3" :disabled="type == 2" clearable)
           el-col(:span="12")
             el-form-item(label="押品重估 :" class="formItem2")
-              el-select(v-model="form.revalOfColl" style="width:100%")
-                el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
+              el-select(v-model="form.revalOfColl" style="width:100%" :disabled="type == 2")
+                el-option(v-for="item in options" :key="item.value"  :label="item.label" :value="item.value")
     //- 
     el-card(class='card')
       .cardTitle1
@@ -58,7 +58,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="征信报告查询日期 :" class="formItem2")
-              el-date-picker(v-model="form.assetCreditInfo.queryDate" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
+              el-date-picker(v-model="form.assetCreditInfo.queryDate" :picker-options="pickerOptions" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="当前企业及实际控制人征信情况(注明征信查询分类结果) :" class="formItem2")
@@ -351,7 +351,7 @@
         .item(v-for="(item,i) in titleList" :key="item.id")
           .title {{item.text}}
           .upload-wrapper
-            uploadTest(:item="item" :itemVmodel="params" :read="false" :ref="`definte16${i}`")
+            uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
         //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
   </div>
 </template>
@@ -400,6 +400,29 @@ export default {
       titleList: definte17(),
       params: {},
       loanBusiness: {},
+      pickerOptions: {
+        disabledDate(time) {
+          let curDate = new Date().toString(); // 当前时间戳转为字符串
+          let curDateYear = new Date().getFullYear(); // 当前时间的年份
+          let oneYearAgoDate = curDate.replace(curDateYear, curDateYear - 1); // 字符串年份替换为一年前
+          let oneYear = new Date(oneYearAgoDate).getTime(); //一年前字符串转为时间戳
+          return time.getTime() > Date.now() || time.getTime() < oneYear;
+        }
+      },
+      cooperateArr: [
+        {
+          label: "配合",
+          value: "1"
+        },
+        {
+          label: "一般",
+          value: "2"
+        },
+        {
+          label: "不配合",
+          value: "3"
+        }
+      ],
       securityKindsArr: [
         {
           label: "信用",
@@ -432,25 +455,15 @@ export default {
           value: 0
         }
       ],
-      financeList: [
-        {
-          label: "加工制造类企业适用",
-          value: 1
-        },
-        {
-          label: "贸易类/其他类企业适用",
-          value: 2
-        }
-      ],
       form: {
         // card 1
         bizType: "m6", // 检查类型
         checkModel: "", //贷后检查模式
         repayKind: "", // 还款方式
         lineAmout: "", //  授信金额
-        practicableCheckAddr: "", // 检查地点
+        checkAddr: "", // 检查地点
         lineBalance: "", //授信余额
-        cooperate: "", // 检查配合程度
+        cooperate: "1", // 检查配合程度
         securityKind: "", //担保方式
         yearlyInspection: "", //额度年检
         revalOfColl: "", //押品重估
@@ -475,8 +488,8 @@ export default {
         //客户经营情况检查
         ownerStruSame: "", //企业实际股权结构是否与上述工商信息网查询一致
         ownerStruSameMsg: "", //实际股权结构说明
-        IndustrycChangSiut: "", //企业所在行业是否发生重大不利变化
-        IndustrycChangSiutMsg: "", //所在行业是否发生重大不利变化说明
+        industrycChangSiut: "", //企业所在行业是否发生重大不利变化
+        industrycChangSiutMsg: "", //所在行业是否发生重大不利变化说明
         mainBusIsChanged: "", //企业主营业务情况是否发生变更
         mainBusIsChangedMsg: "", //企业主营业务情况是否发生变更说明
         planExpandSitu: "", //企业是否有与主业无关的扩张计划
@@ -527,7 +540,7 @@ export default {
         assitInfoForGuarantee: [
           {
             assitName: "",
-            CooperatStatus: "",
+            cooperatStatus: "",
             assitFiveClass: ""
           }
         ]
@@ -548,6 +561,95 @@ export default {
       console.log(1, newVal, oldVal);
       this.form = newVal;
       this.params = this.matchImage(newVal);
+      if (!newVal.cooperate) {
+        this.form.cooperate = "1";
+      }
+      if (!newVal.yearlyInspection) {
+        this.form.yearlyInspection = 1;
+      }
+      if (!newVal.revalOfColl) {
+        this.form.revalOfColl = 1;
+      }
+      if (!newVal.ownerStruSame) {
+        this.form.ownerStruSame = 1;
+      }
+      if (!newVal.industrycChangSiut) {
+        this.form.industrycChangSiut = 1;
+      }
+      if (!newVal.mainBusIsChanged) {
+        this.form.mainBusIsChanged = 1;
+      }
+      if (!newVal.planExpandSitu) {
+        this.form.planExpandSitu = 1;
+      }
+      if (!newVal.proAndOpeAbnormalSuit) {
+        this.form.proAndOpeAbnormalSuit = 1;
+      }
+      if (!newVal.purchaseCost) {
+        this.form.purchaseCost = 1;
+      }
+      if (!newVal.orderDecline) {
+        this.form.orderDecline = 1;
+      }
+      if (!newVal.saleAbnormalSuit) {
+        this.form.saleAbnormalSuit = 1;
+      }
+      if (!newVal.chainChange) {
+        this.form.chainChange = 1;
+      }
+      if (!newVal.dailyCostDecline) {
+        this.form.dailyCostDecline = 1;
+      }
+      if (!newVal.hiddenTroubleSitu) {
+        this.form.hiddenTroubleSitu = 1;
+      }
+      if (!newVal.cashDecline) {
+        this.form.cashDecline = 1;
+      }
+      if (!newVal.cashMatchesAndProAndOpe) {
+        this.form.cashMatchesAndProAndOpe = 1;
+      }
+      if (!newVal.assitInfoForPledge) {
+        this.form.assitInfoForPledge = [
+          {
+            assitName: "",
+            assitAddr: "",
+            firstEstimateDate: "",
+            firstEstimateValue: "",
+            firstMortAndpleRate: "",
+            LastEstimateDate: "",
+            LastEstimateValue: "",
+            LastMortAndpleRate: "",
+            thisEstimateDate: "",
+            thisEstimateValue: "",
+            thisMortAndpleRate: ""
+          }
+        ];
+      }
+      if (!newVal.assitInfoForGuarantee) {
+        this.form.assitInfoForGuarantee = [
+          {
+            assitName: "",
+            cooperatStatus: "",
+            assitFiveClass: ""
+          }
+        ];
+      }
+
+      if (!newVal.assetCreditInfo) {
+        this.form.assetCreditInfo = {
+          shrinkLoanScale: 1,
+          addedOverdues: 1,
+          addedGuarantees: 1,
+          addedLoans: 1,
+          otherSitu: 1
+        };
+        // this.form.assetCreditInfo.shrinkLoanScale = 1;
+        // this.form.assetCreditInfo.addedOverdues = 1;
+        // this.form.assetCreditInfo.addedGuarantees = 1;
+        // this.form.assetCreditInfo.addedLoans = 1;
+        // this.form.assetCreditInfo.otherSitu = 1;
+      }
     }
   },
   // 组件方法
