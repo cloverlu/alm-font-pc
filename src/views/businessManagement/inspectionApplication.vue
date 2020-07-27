@@ -100,6 +100,7 @@
 
 <script>
 import { filterParams } from "../../utils/utils";
+// import { settime } from "@/utils/antiShake";
 import bg from "../../assets/img/none.png";
 import {
   saveEditModelBusiness,
@@ -115,6 +116,7 @@ import DivM3 from "./components/DivM3.vue";
 import DivM4 from "./components/DivM4.vue";
 import DivM5 from "./components/DivM5.vue";
 import DivM6 from "./components/DivM6.vue";
+// const tim = settime();
 
 export default {
   name: "iouList",
@@ -129,7 +131,9 @@ export default {
   data() {
     this.$moment.locale("zh-cn");
     const dateTime = this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
+    // const tim = settime();
     return {
+      // tim: tim,
       activeName: "first",
       form: {
         // card 1
@@ -257,7 +261,7 @@ export default {
             res.data.data.stageData = [
               {
                 checkStage: "1", // 检查阶段
-                payIntention: "", // 还款意愿
+                payIntention: "1", // 还款意愿
                 practicableCheckAddr: "", // 检查地点
                 practicableStaff: "", // 接待人员
                 amoutSource: "", // 还款资金来源
@@ -373,7 +377,7 @@ export default {
             res.data.data.stageData = [
               {
                 checkStage: "1", // 检查阶段
-                payIntention: "", // 还款意愿
+                payIntention: "1", // 还款意愿
                 practicableCheckAddr: "", // 检查地点
                 practicableStaff: "", // 接待人员
                 amoutSource: "", // 还款资金来源
@@ -402,8 +406,25 @@ export default {
     }
   },
   methods: {
+    // tim: settime(),
+    settime() {
+      let runFlag = false;
+      return function(fn) {
+        console.log("1111111111-------", fn);
+        // 判断之前的调用是否完成
+        if (runFlag) {
+          return false;
+        }
+        runFlag = true;
+        setTimeout(() => {
+          fn();
+          runFlag = false;
+        }, 2000);
+      };
+    },
     // 保存
-    onSave() {
+    onSave: function() {
+      console.log("save");
       let data = {};
       let arrs = {};
       if (this.form.bizType == "m1") {
@@ -509,24 +530,24 @@ export default {
       }
 
       console.log(data);
-      saveEditModelBusiness(this, {
-        ...filterParams(data)
-      }).then(res => {
-        if (res.data.returnCode === "200000") {
-          this.$message({
-            message: "检查申请编辑操作成功",
-            type: "success"
-          });
-          setTimeout(() => {
-            history.go(-1);
-          }, 500);
-        } else {
-          this.$message({
-            message: res.data.returnMsg,
-            type: "success"
-          });
-        }
-      });
+      // saveEditModelBusiness(this, {
+      //   ...filterParams(data)
+      // }).then(res => {
+      //   if (res.data.returnCode === "200000") {
+      //     this.$message({
+      //       message: "检查申请编辑操作成功",
+      //       type: "success"
+      //     });
+      //     setTimeout(() => {
+      //       history.go(-1);
+      //     }, 500);
+      //   } else {
+      //     this.$message({
+      //       message: res.data.returnMsg,
+      //       type: "success"
+      //     });
+      //   }
+      // });
     },
     // 提交
     onSubmit: function() {
@@ -661,7 +682,6 @@ export default {
         }
       });
     },
-
     onSubmitApproval(type) {
       this.approval.approveTime = this.$moment(new Date()).format(
         "YYYY-MM-DD HH:mm:ss"
@@ -1000,14 +1020,6 @@ export default {
           font-size: 16px;
           line-height: 31px;
           color: rgba(10, 10, 10, 1);
-        }
-        .checkForm {
-          // border-bottom: 1px dashed #ccc;
-          // .blueTitle {
-          //   font-size: 18px;
-          //   line-height: 31px;
-          //   color: rgba(78, 120, 222, 1);
-          // }
         }
         .uploadBox {
           // height: 175px;

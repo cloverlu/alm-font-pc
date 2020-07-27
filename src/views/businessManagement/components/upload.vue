@@ -15,7 +15,7 @@
 		:on-success="handleSuccess" 
 		:before-upload="handleBefore"
 		:multiple="false"
-		:action='`${host}/postLoan/business/uploadModelFile`'
+		:action='`${this.host}/postLoan/business/uploadModelFile`'
 		list-type="picture-card" :disabled="modify"
 		)
 			i(class="el-icon-plus")
@@ -26,12 +26,11 @@
 
 <script>
 import EXIF from "exif-js";
-import { host } from "../../../api/host";
 export default {
   props: ["item", "itemVmodel", "read", "modify"],
   data() {
     return {
-      host: host,
+      host: window.config.host.authorization,
       canModify: false,
       dialogImageUrl: "",
       dialogVisible: false,
@@ -44,7 +43,6 @@ export default {
     };
   },
   mounted() {
-    console.log(host);
     const arr = this.itemVmodel[this.item.vModel];
     if (arr && arr[0] && arr[0].url !== "") {
       if (arr.length > 0) {
@@ -278,11 +276,7 @@ export default {
       console.log(this.fileList);
     }
   },
-  computed: {
-    action() {
-      return `${host}/postLoan/business/uploadModelFile`;
-    }
-  }
+  computed: {}
 };
 </script>
 

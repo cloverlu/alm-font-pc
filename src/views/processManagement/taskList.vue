@@ -113,13 +113,12 @@
 
 <script>
 import { filterParams } from "../../utils/utils";
-import { host } from "../../api/host";
 import { getTaskList } from "../../api/processManagement";
 export default {
   name: "processManagement",
   data() {
     return {
-      host: host,
+      host: window.config.host.authorization,
       tableData: [],
       pageNo: 1,
       pageSize: 10,
@@ -130,6 +129,10 @@ export default {
         bizType: "",
         bizStatus: "",
         custName: ""
+      },
+      paramsDetail: {
+        pageNo: 1,
+        pageSize: 10
       },
       formLabelWidth: "72px",
       multipleSelection: []
@@ -144,13 +147,29 @@ export default {
     handleSizeChange: function(e) {
       this.pageSize = e;
       this.pageNo = 1;
+      this.paramsDetail = {
+        pageNo: this.pageNo,
+        pageSize: this.pageSize
+      };
       this.onSubmit();
+      this.paramsDetail = {
+        pageNo: 1,
+        pageSize: 10
+      };
       console.log("pageSize", this.pageSize);
     },
     // 翻页
     handleCurrentChange: function(e) {
       this.pageNo = e;
+      this.paramsDetail = {
+        pageNo: this.pageNo,
+        pageSize: this.pageSize
+      };
       this.onSubmit();
+      this.paramsDetail = {
+        pageNo: 1,
+        pageSize: 10
+      };
       console.log("pageIndex", this.pageNo);
     },
     // 表单查询
@@ -160,8 +179,9 @@ export default {
       getTaskList(this, {
         ...filterParams(this.searchForm),
         emplName: "金林" || localStorage.getItem("emplName"),
-        pageSize: this.pageSize,
-        pageNo: this.pageNo
+        pageSize: 10,
+        pageNo: 1,
+        ...this.paramsDetail
       }).then(res => {
         this.tableData = res.data.data;
         this.total = res.data.total;

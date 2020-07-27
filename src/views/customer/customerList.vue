@@ -73,6 +73,10 @@ export default {
         queryType: "3",
         orgName: "南京"
       },
+      paramsDetail: {
+        pageNo: 1,
+        pageSize: 10
+      },
       formLabelWidth: "72px"
     };
   },
@@ -84,13 +88,30 @@ export default {
     // 修改分页大小
     handleSizeChange: function(e) {
       this.pageSize = e;
+      this.pageNo = 1;
+      this.paramsDetail = {
+        pageNo: this.pageNo,
+        pageSize: this.pageSize
+      };
       this.onSubmit();
+      this.paramsDetail = {
+        pageNo: 1,
+        pageSize: 10
+      };
       console.log("pageSize", this.pageSize);
     },
     // 翻页
     handleCurrentChange: function(e) {
       this.pageNo = e;
+      this.paramsDetail = {
+        pageNo: this.pageNo,
+        pageSize: this.pageSize
+      };
       this.onSubmit();
+      this.paramsDetail = {
+        pageNo: 1,
+        pageSize: 10
+      };
       console.log("pageIndex", this.pageNo);
     },
     // 表单查询
@@ -101,8 +122,9 @@ export default {
         ...filterParams(this.searchForm),
         emplCode: localStorage.getItem("emplCode"),
         emplName: "金林" || localStorage.getItem("emplName"),
-        pageSize: this.pageSize,
-        pageNo: this.pageNo
+        pageSize: 10,
+        pageNo: 1,
+        ...this.paramsDetail
       }).then(res => {
         this.tableData = res.data.data;
         this.total = res.data.total;

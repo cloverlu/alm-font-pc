@@ -132,12 +132,11 @@
 <script>
 import { filterParams } from "../../utils/utils";
 import { getReportFormList } from "../../api/report";
-import { host } from "../../api/host";
 export default {
   name: "detailedInfoList",
   data() {
     return {
-      host: host,
+      host: window.config.host.authorization,
       tableData: [],
       pageNo: 1,
       pageSize: 10,
@@ -150,6 +149,10 @@ export default {
         emplName: "",
         bizType: "",
         bizStatus: ""
+      },
+      paramsDetail: {
+        pageNo: 1,
+        pageSize: 10
       },
       multipleSelection: [],
       flag: true,
@@ -167,16 +170,32 @@ export default {
       this.pageSize = e;
       this.pageNo = 1;
       console.log(111);
+      this.paramsDetail = {
+        pageNo: this.pageNo,
+        pageSize: this.pageSize
+      };
       this.onSubmit();
+      this.paramsDetail = {
+        pageNo: 1,
+        pageSize: 10
+      };
     },
     // 翻页
     handleCurrentChange: function(e) {
       this.pageNo = e;
       console.log(222);
+      this.paramsDetail = {
+        pageNo: this.pageNo,
+        pageSize: this.pageSize
+      };
       this.onSubmit();
+      this.paramsDetail = {
+        pageNo: 1,
+        pageSize: 10
+      };
     },
     // 表单查询
-    onSubmit: function() {
+    onSubmit() {
       if (this.searchForm.beginDate) {
         this.searchForm.beginDate = this.$moment(
           this.searchForm.beginDate
@@ -187,13 +206,18 @@ export default {
           "L"
         );
       }
+      console.log("this.searchForm", this.searchForm);
+      console.log("params", this.paramsDetail);
       getReportFormList(this, {
         ...filterParams(this.searchForm),
-        pageSize: this.pageSize,
-        pageNo: this.pageNo
+        pageSize: 10,
+        pageNo: 1,
+        ...this.paramsDetail
       }).then(res => {
         this.tableData = res.data.data;
         this.total = res.data.total;
+        // this.pageSize = this.paramsDetail.pageSize;
+        // this.pageNo = this.paramsDetail.pageNo;
       });
     },
     // 重置

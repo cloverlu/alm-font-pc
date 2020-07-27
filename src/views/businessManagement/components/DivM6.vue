@@ -134,7 +134,7 @@
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label="企业所在行业是否发生重大不利变化 :" class="formItem2")
-              el-select(v-model="form.IndustrycChangSiut" :disabled="type == 2" style="width:100%" clearable)
+              el-select(v-model="form.industrycChangSiut" :disabled="type == 2" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
         el-row(:gutter="20")
           el-col(:span="12")
@@ -142,7 +142,7 @@
               el-input(v-model="form.ownerStruSameMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
-              el-input(v-model="form.IndustrycChangSiutMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.industrycChangSiutMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="企业主营业务情况是否发生变更 :" class="formItem2")
@@ -287,16 +287,20 @@
           el-col(:span="12")
             el-form-item(label="抵质押率: " class="formItem2")
               el-input(v-model="item.LastMortAndpleRate" :disabled="type == 2" clearable)
-        el-row(:gutter="20")
           el-col(:span="12")
-            el-form-item(label="最近一次评估情况: " class="formItem2")
+            el-form-item(label="本次评估情况: " class="formItem2")
               el-input(v-model="item.thisEstimateDate" :disabled="type == 2" clearable)
+        el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="我行认定价值: " class="formItem2")
               el-input(v-model="item.thisEstimateValue" :disabled="type == 2" clearable)
           el-col(:span="12")
             el-form-item(label="抵质押率: " class="formItem2")
               el-input(v-model="item.thisMortAndpleRate" :disabled="type == 2" clearable)
+        el-row(:gutter="20")
+          el-col(:span="12")
+            el-form-item(label="押品价值及变现能力变动情况: " class="formItem2")
+              el-input(v-model="item.assitChangeSuit" :disabled="type == 2" type="textarea" :rows="3" clearable)
           el-col(:span="12" style="marginTop:24px")
             el-button(@click="addDomain1" type='primary' :disabled="type == 2" v-if="index == 0") 新增
             el-button(@click="removeDomain1(item)" type='primary' :disabled="type == 2" v-if="index !== 0") 删除
@@ -326,11 +330,11 @@
     el-card(class='card')
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
         el-row(:gutter="20")
-          el-col(:span="12")
-            .cardTitle1
-              span(class='title') 押品价值及变现能力变动情况
-            el-form-item(label=" " class="formItem2")
-              el-input(v-model="form.assitChangeSuit" :disabled="type == 2" type="textarea" :rows="3" clearable)
+          //- el-col(:span="12")
+          //-   .cardTitle1
+          //-     span(class='title') 押品价值及变现能力变动情况
+          //-   el-form-item(label=" " class="formItem2")
+          //-     el-input(v-model="form.assitChangeSuit" :disabled="type == 2" type="textarea" :rows="3" clearable)
           el-col(:span="12")
             .cardTitle1
               span(class='title') 押品其他情况
@@ -609,7 +613,7 @@ export default {
       if (!newVal.cashMatchesAndProAndOpe) {
         this.form.cashMatchesAndProAndOpe = 1;
       }
-      if (!newVal.assitInfoForPledge) {
+      if (!newVal.assitInfoForPledge || newVal.assitInfoForPledge.length == 0) {
         this.form.assitInfoForPledge = [
           {
             assitName: "",
@@ -622,11 +626,15 @@ export default {
             LastMortAndpleRate: "",
             thisEstimateDate: "",
             thisEstimateValue: "",
-            thisMortAndpleRate: ""
+            thisMortAndpleRate: "",
+            assitChangeSuit: ""
           }
         ];
       }
-      if (!newVal.assitInfoForGuarantee) {
+      if (
+        !newVal.assitInfoForGuarantee ||
+        newVal.assitInfoForGuarantee.length == 0
+      ) {
         this.form.assitInfoForGuarantee = [
           {
             assitName: "",
@@ -692,7 +700,8 @@ export default {
     },
     // 增加--检查要点小结
     addDomain1() {
-      this.assitInfoForPledge.push({
+      console.log(this.form.assitInfoForPledge);
+      this.form.assitInfoForPledge.push({
         assitName: "",
         assitAddr: "",
         firstEstimateDate: "",
@@ -704,19 +713,20 @@ export default {
         thisEstimateDate: "",
         thisEstimateValue: "",
         thisMortAndpleRate: "",
+        assitChangeSuit: "",
         key: Date.now()
       });
     },
     // 删除--检查要点小结
     removeDomain1(item) {
-      var index = this.assitInfoForPledge.indexOf(item);
+      var index = this.form.assitInfoForPledge.indexOf(item);
       if (index !== -1) {
-        this.assitInfoForPledge.splice(index, 1);
+        this.form.assitInfoForPledge.splice(index, 1);
       }
     },
     //
     addDomain2() {
-      this.assitInfoForGuarantee.push({
+      this.form.assitInfoForGuarantee.push({
         assitName: "",
         assitAddr: "",
         firstEstimateDate: "",
@@ -733,9 +743,9 @@ export default {
     },
     // 删除--检查要点小结
     removeDomain2(item) {
-      var index = this.assitInfoForGuarantee.indexOf(item);
+      var index = this.form.assitInfoForGuarantee.indexOf(item);
       if (index !== -1) {
-        this.assitInfoForGuarantee.splice(index, 1);
+        this.form.assitInfoForGuarantee.splice(index, 1);
       }
     },
     // 图像模块匹配

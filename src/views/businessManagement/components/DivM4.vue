@@ -36,7 +36,8 @@
               el-radio(label="3") 第三阶段
         el-form(:model="form" v-for='(item,index) in form.stageData' :key='index' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
           el-form-item(label="还款意愿 :" class="formItem2")
-            el-input(v-model="item.payIntention" :disabled="type == 2" clearable)
+            el-select(v-model="item.payIntention" style="width:100%" clearable :disabled="type == 2")
+              el-option(v-for="item in payArr" :key="item.value" :label="item.label" :value="item.value")
           el-form-item(label="检查地点 :" class="formItem2")
             el-input(v-model="item.practicableCheckAddr" :disabled="type == 2" clearable)
           el-form-item(label="接待人员 :" class="formItem2")
@@ -94,6 +95,23 @@ export default {
       titleList: definte17(),
       params: {},
       loanBusiness: {},
+      payArr: [
+        {
+          key: "1",
+          label: "良好",
+          value: "1"
+        },
+        {
+          key: "2",
+          label: "较差",
+          value: "2"
+        },
+        {
+          key: "3",
+          label: "无",
+          value: "3"
+        }
+      ],
       options: [
         {
           label: "是",
@@ -120,7 +138,7 @@ export default {
         stageData: [
           {
             checkStage: "1", // 检查阶段
-            payIntention: "", // 还款意愿
+            payIntention: "1", // 还款意愿
             practicableCheckAddr: "", // 检查地点
             practicableStaff: "", // 接待人员
             amoutSource: "", // 还款资金来源
@@ -155,7 +173,7 @@ export default {
         this.form.stageData = [
           {
             checkStage: "1", // 检查阶段
-            payIntention: "", // 还款意愿
+            payIntention: "1", // 还款意愿
             practicableCheckAddr: "", // 检查地点
             practicableStaff: "", // 接待人员
             amoutSource: "", // 还款资金来源

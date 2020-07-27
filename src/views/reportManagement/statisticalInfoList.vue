@@ -151,6 +151,10 @@ export default {
       searchForm: {
         orgName: ""
       },
+      paramsDetail: {
+        pageNo: 1,
+        pageSize: 10
+      },
       formLabelWidth: "72px"
     };
   },
@@ -163,23 +167,36 @@ export default {
     handleSizeChange: function(e) {
       this.pageSize = e;
       this.pageNo = 1;
-      console.log("pageSize", this.pageSize);
+      this.paramsDetail = {
+        pageNo: this.pageNo,
+        pageSize: this.pageSize
+      };
       this.onSubmit();
+      this.paramsDetail = {
+        pageNo: 1,
+        pageSize: 10
+      };
     },
     // 翻页
     handleCurrentChange: function(e) {
       this.pageNo = e;
-      console.log("pageIndex", this.pageNo);
+      this.paramsDetail = {
+        pageNo: this.pageNo,
+        pageSize: this.pageSize
+      };
       this.onSubmit();
+      this.paramsDetail = {
+        pageNo: 1,
+        pageSize: 10
+      };
     },
     // 表单查询
     onSubmit: function() {
-      console.log(filterParams(this.searchForm));
-      console.log(this.pageSize, this.pageNo);
       getReportFormStatistics(this, {
         ...filterParams(this.searchForm),
         pageSize: this.pageSize,
-        pageNo: this.pageNo
+        pageNo: this.pageNo,
+        ...this.paramsDetail
       }).then(res => {
         this.tableData = res.data.data;
         this.total = res.data.total;
