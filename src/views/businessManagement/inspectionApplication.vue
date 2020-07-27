@@ -21,7 +21,7 @@
               el-option(label="小企业授信业务还款资金落实情况检查" value="m4")
               el-option(label="小企业法人快捷贷首次检查" value="m5")
               el-option(label="小企业法人快捷贷贷后日常检查" value="m6")
-          el-button(type="primary" size="mini" @click="onSave" class="btn" v-if='type==1') 保存
+          el-button(type="primary" size="mini" v-antiShake="[() => { onSave() }, 1000]" class="btn" v-if='type==1') 保存
       .contentBody
         .type(v-show="form.bizType == 'm1'")
           DivM1(:detail="paramsM1" ref="DivM1")
@@ -37,7 +37,7 @@
           DivM6(:detail="paramsM6" ref="DivM6")
       //- 提交
       .footer
-        el-button(type="warning" @click='onSubmit' v-if='type==1') 提交
+        el-button(type="warning" v-antiShake="[() => { onSubmit() }, 1000]" v-if='type==1') 提交
         //- el-button(type="warning" @click='onSubmit') 提交
 
     .content2(v-show="activeName == 'second'")
@@ -60,7 +60,7 @@
                 el-input(v-model="item.agreeResult" disabled)
 
         el-card(class='card')
-          el-button(type="primary" style="textAlien:right" @click="onSubmitApproval('0')" class='save') 保存
+          el-button(type="primary" style="textAlien:right" v-antiShake="[() => { onSubmitApproval('0') }, 1000]" class='save') 保存
           el-form(label-position="left" label-width="200px" :model="approval" style="marginTop:20px")
             el-form-item(label="客户名称:" class="formItem2")
               span {{approval.custName}}
@@ -84,10 +84,10 @@
               //- el-button(class="qianzi" @click="goSign" size='mini' type='primary') 签字
               img(:src='approval.empSign' class='imgContent')
       .footer
-          el-button(type="warning" @click="onSubmitApproval('1')" v-if="approvaList.length == 0") 提交审批
-          el-button(type="warning" size='normal' @click="onSubmitApproval('1')" v-if="approvaList.length !== 0") 提交
-          el-button(type="info" @click="onSubmitApproval('2')" v-if="approvaList.length !== 0") 回退
-          el-button(type="primary" @click="onSubmitApproval('3')" v-if="approvaList.length !== 0") 退回上一岗位
+          el-button(type="warning" v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="approvaList.length == 0") 提交审批
+          el-button(type="warning" size='normal' v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="approvaList.length !== 0") 提交
+          el-button(type="info" v-antiShake="[() => { onSubmitApproval('2') }, 1000]" v-if="approvaList.length !== 0") 回退
+          el-button(type="primary" v-antiShake="[() => { onSubmitApproval('3') }, 1000]" v-if="approvaList.length !== 0") 退回上一岗位
     el-dialog(:visible.sync="dialogVisible" :append-to-body="true" width="800px" v-alterELDialogMarginTop="{marginTop:'30vh'}" ref="signArea")
       .title
         span 签名:
@@ -406,22 +406,6 @@ export default {
     }
   },
   methods: {
-    // tim: settime(),
-    settime() {
-      let runFlag = false;
-      return function(fn) {
-        console.log("1111111111-------", fn);
-        // 判断之前的调用是否完成
-        if (runFlag) {
-          return false;
-        }
-        runFlag = true;
-        setTimeout(() => {
-          fn();
-          runFlag = false;
-        }, 2000);
-      };
-    },
     // 保存
     onSave: function() {
       console.log("save");
@@ -436,7 +420,7 @@ export default {
         this.loanBusiness = Object.assign({}, this.type, arrs);
         // console.log("this.loanBusiness", this.loanBusiness);
         data = {
-          ...this.$refs.DivM1.form,
+          ...filterParams(this.$refs.DivM1.form),
           ...this.loanBusiness,
           bizType: "m1"
         };
@@ -449,7 +433,7 @@ export default {
         this.loanBusiness = Object.assign({}, this.type, arrs);
         // console.log("this.loanBusiness", this.loanBusiness);
         data = {
-          ...this.$refs.DivM2.form,
+          ...filterParams(this.$refs.DivM2.form),
           ...this.loanBusiness,
           bizType: "m2"
         };
@@ -466,8 +450,8 @@ export default {
         // console.log("this.loanBusiness", this.loanBusiness);
         this.$refs.DivM3.form.financeInfo.financeClassification = "1";
         data = {
-          ...this.$refs.DivM3.form,
-          ...this.$refs.DivM3.$refs.tabForm1.form,
+          ...filterParams(this.$refs.DivM3.form),
+          ...filterParams(this.$refs.DivM3.$refs.tabForm1.form),
           ...this.loanBusiness,
           bizType: "m3"
         };
@@ -483,8 +467,8 @@ export default {
         this.loanBusiness = Object.assign({}, this.type, arrs);
         // console.log("this.loanBusiness", this.loanBusiness);
         data = {
-          ...this.$refs.DivM3.form,
-          ...this.$refs.DivM3.$refs.tabForm2.form,
+          ...filterParams(this.$refs.DivM3.form),
+          ...filterParams(this.$refs.DivM3.$refs.tabForm2.form),
           ...this.loanBusiness,
           bizType: "m3"
         };
@@ -497,7 +481,7 @@ export default {
         this.loanBusiness = Object.assign({}, this.type, arrs);
         // console.log("this.loanBusiness", this.loanBusiness);
         data = {
-          ...this.$refs.DivM4.form,
+          ...filterParams(this.$refs.DivM4.form),
           ...this.loanBusiness,
           bizType: "m4"
         };
@@ -510,7 +494,7 @@ export default {
         this.loanBusiness = Object.assign({}, this.type, arrs);
         // console.log("this.loanBusiness", this.loanBusiness);
         data = {
-          ...this.$refs.DivM5.form,
+          ...filterParams(this.$refs.DivM5.form),
           ...this.loanBusiness,
           bizType: "m5"
         };
@@ -523,31 +507,31 @@ export default {
         this.loanBusiness = Object.assign({}, this.type, arrs);
         // console.log("this.loanBusiness", this.loanBusiness);
         data = {
-          ...this.$refs.DivM6.form,
+          ...filterParams(this.$refs.DivM6.form),
           ...this.loanBusiness,
           bizType: "m6"
         };
       }
 
       console.log(data);
-      // saveEditModelBusiness(this, {
-      //   ...filterParams(data)
-      // }).then(res => {
-      //   if (res.data.returnCode === "200000") {
-      //     this.$message({
-      //       message: "检查申请编辑操作成功",
-      //       type: "success"
-      //     });
-      //     setTimeout(() => {
-      //       history.go(-1);
-      //     }, 500);
-      //   } else {
-      //     this.$message({
-      //       message: res.data.returnMsg,
-      //       type: "success"
-      //     });
-      //   }
-      // });
+      saveEditModelBusiness(this, {
+        ...data
+      }).then(res => {
+        if (res.data.returnCode === "200000") {
+          this.$message({
+            message: "检查申请编辑操作成功",
+            type: "success"
+          });
+          setTimeout(() => {
+            history.go(-1);
+          }, 500);
+        } else {
+          this.$message({
+            message: res.data.returnMsg,
+            type: "success"
+          });
+        }
+      });
     },
     // 提交
     onSubmit: function() {
@@ -561,7 +545,7 @@ export default {
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
         data = {
-          ...this.$refs.DivM1.form,
+          ...filterParams(this.$refs.DivM1.form),
           ...this.loanBusiness,
           bizType: "m1"
         };
@@ -573,7 +557,7 @@ export default {
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
         data = {
-          ...this.$refs.DivM2.form,
+          ...filterParams(this.$refs.DivM2.form),
           ...this.loanBusiness,
           bizType: "m2"
         };
@@ -588,8 +572,8 @@ export default {
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
         data = {
-          ...this.$refs.DivM3.form,
-          ...this.$refs.DivM3.$refs.tabForm1.form,
+          ...filterParams(this.$refs.DivM3.form),
+          ...filterParams(this.$refs.DivM3.$refs.tabForm1.form),
           ...this.loanBusiness,
           bizType: "m3"
         };
@@ -604,8 +588,8 @@ export default {
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
         data = {
-          ...this.$refs.DivM3.form,
-          ...this.$refs.DivM3.$refs.tabForm2.form,
+          ...filterParams(this.$refs.DivM3.form),
+          ...filterParams(this.$refs.DivM3.$refs.tabForm2.form),
           ...this.loanBusiness,
           bizType: "m3"
         };
@@ -617,7 +601,7 @@ export default {
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
         data = {
-          ...this.$refs.DivM4.form,
+          ...filterParams(this.$refs.DivM4.form),
           ...this.loanBusiness,
           bizType: "m4"
         };
@@ -629,7 +613,7 @@ export default {
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
         data = {
-          ...this.$refs.DivM5.form,
+          ...filterParams(this.$refs.DivM5.form),
           ...this.loanBusiness,
           bizType: "m5"
         };
@@ -641,7 +625,7 @@ export default {
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
         data = {
-          ...this.$refs.DivM6.form,
+          ...filterParams(this.$refs.DivM6.form),
           ...this.loanBusiness,
           bizType: "m6"
         };
@@ -649,9 +633,7 @@ export default {
 
       // console.log(data);
 
-      saveEditModelBusiness(this, {
-        ...filterParams(data)
-      }).then(res => {
+      saveEditModelBusiness(this, { ...data }).then(res => {
         if (res.data.returnCode === "200000") {
           this.$message({
             message: "检查申请编辑操作成功",

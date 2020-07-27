@@ -96,7 +96,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
-              el-input(v-model="form.assetCreditInfo.addedLoansMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.assetCreditInfo.addedGuaranteesMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
               el-input(v-model="form.assetCreditInfo.addedLoansMsg" :disabled="type == 2" type="textarea" :rows="3" clearable) el-col(:span="12")
@@ -280,13 +280,13 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="最近一次评估情况: " class="formItem2")
-              el-input(v-model="item.LastEstimateDate" :disabled="type == 2" clearable)
+              el-input(v-model="item.lastEstimateDate" :disabled="type == 2" clearable)
           el-col(:span="12")
             el-form-item(label="我行认定价值: " class="formItem2")
-              el-input(v-model="item.LastEstimateValue" :disabled="type == 2" clearable)
+              el-input(v-model="item.lastEstimateValue" :disabled="type == 2" clearable)
           el-col(:span="12")
             el-form-item(label="抵质押率: " class="formItem2")
-              el-input(v-model="item.LastMortAndpleRate" :disabled="type == 2" clearable)
+              el-input(v-model="item.lastMortAndpleRate" :disabled="type == 2" clearable)
           el-col(:span="12")
             el-form-item(label="本次评估情况: " class="formItem2")
               el-input(v-model="item.thisEstimateDate" :disabled="type == 2" clearable)
@@ -317,7 +317,7 @@
               el-input(v-model="item.assitName" :disabled="type == 2" clearable)
           el-col(:span="12")
             el-form-item(label="我行合作状态: " class="formItem2")
-              el-input(v-model="item.CooperatStatus" :disabled="type == 2" clearable)
+              el-input(v-model="item.cooperatStatus" :disabled="type == 2" clearable)
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="风险分类: " class="formItem2")
@@ -532,12 +532,13 @@ export default {
             firstEstimateDate: "",
             firstEstimateValue: "",
             firstMortAndpleRate: "",
-            LastEstimateDate: "",
-            LastEstimateValue: "",
-            LastMortAndpleRate: "",
+            lastEstimateDate: "",
+            lastEstimateValue: "",
+            lastMortAndpleRate: "",
             thisEstimateDate: "",
             thisEstimateValue: "",
-            thisMortAndpleRate: ""
+            thisMortAndpleRate: "",
+            assitClassification: "1"
           }
         ],
         //
@@ -545,7 +546,8 @@ export default {
           {
             assitName: "",
             cooperatStatus: "",
-            assitFiveClass: ""
+            assitFiveClass: "",
+            assitClassification: "2"
           }
         ]
       },
@@ -621,13 +623,14 @@ export default {
             firstEstimateDate: "",
             firstEstimateValue: "",
             firstMortAndpleRate: "",
-            LastEstimateDate: "",
-            LastEstimateValue: "",
-            LastMortAndpleRate: "",
+            lastEstimateDate: "",
+            lastEstimateValue: "",
+            lastMortAndpleRate: "",
             thisEstimateDate: "",
             thisEstimateValue: "",
             thisMortAndpleRate: "",
-            assitChangeSuit: ""
+            assitChangeSuit: "",
+            assitClassification: "1"
           }
         ];
       }
@@ -639,7 +642,8 @@ export default {
           {
             assitName: "",
             cooperatStatus: "",
-            assitFiveClass: ""
+            assitFiveClass: "",
+            assitClassification: "2"
           }
         ];
       }
@@ -707,13 +711,14 @@ export default {
         firstEstimateDate: "",
         firstEstimateValue: "",
         firstMortAndpleRate: "",
-        LastEstimateDate: "",
-        LastEstimateValue: "",
-        LastMortAndpleRate: "",
+        lastEstimateDate: "",
+        lastEstimateValue: "",
+        lastMortAndpleRate: "",
         thisEstimateDate: "",
         thisEstimateValue: "",
         thisMortAndpleRate: "",
         assitChangeSuit: "",
+        assitClassification: "1",
         key: Date.now()
       });
     },
@@ -728,16 +733,9 @@ export default {
     addDomain2() {
       this.form.assitInfoForGuarantee.push({
         assitName: "",
-        assitAddr: "",
-        firstEstimateDate: "",
-        firstEstimateValue: "",
-        firstMortAndpleRate: "",
-        LastEstimateDate: "",
-        LastEstimateValue: "",
-        LastMortAndpleRate: "",
-        thisEstimateDate: "",
-        thisEstimateValue: "",
-        thisMortAndpleRate: "",
+        cooperatStatus: "",
+        assitFiveClass: "",
+        assitClassification: "2",
         key: Date.now()
       });
     },
@@ -768,7 +766,7 @@ export default {
       var forBizDetail = data;
       var obj2 = {};
       //  this.mVmodel(num)的num参数为各个类型所需字段的个数
-      obj2 = this.mVmodel(9);
+      obj2 = this.mVmodel(10);
       Object.keys(obj2).forEach(key => {
         if (forBizDetail) {
           obj2[key] = forBizDetail[key];

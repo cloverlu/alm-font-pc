@@ -194,7 +194,7 @@ export default {
       var forBizDetail = data;
       var obj2 = {};
       //  this.mVmodel(num)的num参数为各个类型所需字段的个数
-      obj2 = this.mVmodel(10);
+      obj2 = this.mVmodel(11);
       Object.keys(obj2).forEach(key => {
         if (forBizDetail) {
           obj2[key] = forBizDetail[key];
