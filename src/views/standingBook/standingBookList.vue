@@ -44,7 +44,7 @@
                 <el-upload
                   class="upload-demo fileUpload"
                   ref="upload"
-                  action="http://20.147.168.82:9001/loanReceipt/uploadExcel"
+                  :action="`${this.host}/loanReceipt/uploadExcel`"
                   :auto-upload="true"
                   :on-success="sendSuccess"
                   :on-error="sendError"
@@ -117,6 +117,7 @@ export default {
   name: "standingBookList",
   data() {
     return {
+      host: window.config.host.authorization,
       tableData: [],
       pageNo: 1,
       pageSize: 10,
