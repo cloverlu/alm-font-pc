@@ -198,23 +198,40 @@ export default {
     handleSizeChange: function(e) {
       this.pageSize = e;
       this.pageNo = 1;
+      this.paramsDetail = {
+        pageNo: this.pageNo,
+        pageSize: this.pageSize
+      };
       this.onSubmit();
+      this.paramsDetail = {
+        pageNo: 1,
+        pageSize: 10
+      };
     },
     // 翻页
     handleCurrentChange: function(e) {
       this.pageNo = e;
+      this.paramsDetail = {
+        pageNo: this.pageNo,
+        pageSize: this.pageSize
+      };
       this.onSubmit();
+      this.paramsDetail = {
+        pageNo: 1,
+        pageSize: 10
+      };
     },
     // 表单查询
     onSubmit: function() {
       const params = {
         ...this.searchForm,
         postCode: this.searchForm.postCode.join(","),
-        pageSize: this.pageSize,
-        pageNo: this.pageNo
+        pageSize: 10,
+        pageNo: 1
       };
       getUsers(this, {
-        ...filterParams(params)
+        ...filterParams(params),
+        ...this.paramsDetail
       }).then(res => {
         this.tableData = res.data.data;
         this.total = res.data.total;

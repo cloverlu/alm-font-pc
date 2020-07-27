@@ -127,14 +127,11 @@ export default {
         billNo: "",
         custName: ""
       },
-      formLabelWidth: "72px",
-      fileList: [
-        // {
-        //   name: "food.jpeg",
-        //   url:
-        //     "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-        // }
-      ]
+      paramsDetail: {
+        pageNo: 1,
+        pageSize: 10
+      },
+      formLabelWidth: "72px"
     };
   },
   mounted() {
@@ -146,14 +143,28 @@ export default {
     handleSizeChange: function(e) {
       this.pageSize = e;
       this.pageNo = 1;
+      this.paramsDetail = {
+        pageNo: this.pageNo,
+        pageSize: this.pageSize
+      };
       this.onSubmit();
-      console.log("pageSize", this.pageSize);
+      this.paramsDetail = {
+        pageNo: 1,
+        pageSize: 10
+      };
     },
     // 翻页
     handleCurrentChange: function(e) {
       this.pageNo = e;
+      this.paramsDetail = {
+        pageNo: this.pageNo,
+        pageSize: this.pageSize
+      };
       this.onSubmit();
-      console.log("pageIndex", this.pageNo);
+      this.paramsDetail = {
+        pageNo: 1,
+        pageSize: 10
+      };
     },
     // 表单查询
     onSubmit: function() {
@@ -162,7 +173,8 @@ export default {
       getCustomers(this, {
         ...filterParams(this.searchForm),
         pageSize: this.pageSize,
-        pageNo: this.pageNo
+        pageNo: this.pageNo,
+        ...this.paramsDetail
       }).then(res => {
         this.tableData = res.data.data;
         this.total = res.data.total;
