@@ -1,0 +1,82 @@
+.tr-scrollbar
+  overflow hidden
+  position relative
+  &:hover
+  &:active
+  &:focus
+    > .tr-scrollbar__bar
+      opacity 1
+      transition opacity .34s ease-out
+  .tr-scrollbar__wrap
+    overflow scroll
+  .tr-scrollbar__bar
+    position absolute
+    right 2px
+    bottom 2px
+    z-index 1
+    border-radius 4px
+    opacity 0
+    transition opacity .12s ease-out
+    &.opacity1
+      opacity 1
+    &.is-horizontal
+      height 5px
+      left 2px
+    &.is-vertical
+      width 6px
+      top 2px
+    &.is-vertical
+      .tr-scrollbar__thumb
+        width 100%
+    &.is-horizontal
+      .tr-scrollbar__thumb
+        height 100%
+  .tr-scrollbar__thumb
+    position relative
+    display block
+    width 0
+    height 0
+    cursor pointer
+    border-radius inherit
+    background-color hsla(220, 4%, 50%, .3)
+    transition background-color .3s
+  .tr-scrollbar__thumb:hover
+    background-color hsla(220,4%,58%,.5)
+.adapt-width
+  &.tr-scrollbar__wrap
+    font-size 0
+  .tr-scrollbar__view
+    font-size 1rem
+    display inline-block
+    min-width 100%
+.tr-scrollbar__wrap--hidden-default::-webkit-scrollbar
+  width 0
+  height 0
+// .tr-scrollbar__corner
+//   position absolute
+//   height 0
+//   width 0
+//   border-bottom 4px solid hsla(220, 4%, 50%, .5)
+//   // border-bottom 4px solid red
+//   border-left 4px solid transparent
+//   border-right 4px solid transparent
+//   cursor pointer
+// .tr-scrollbar__corner:hover
+//   border-bottom 4px solid hsla(220,4%,58%,.8)
+// .is-vertical
+//   .tr-scrollbar__first
+//     left 0
+//     top -5px
+//   .tr-scrollbar__last
+//     left 0
+//     bottom -6px
+//     transform rotate(180deg)
+// .is-horizontal
+//   .tr-scrollbar__first
+//     left -7px
+//     top calc(50% - 3px)
+//     transform rotate(-90deg)
+//   .tr-scrollbar__last
+//     right -7px
+//     top calc(50% - 3px)
+//     transform rotate(90deg)
