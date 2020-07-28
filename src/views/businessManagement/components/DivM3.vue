@@ -59,7 +59,7 @@
             el-input(v-model="form.specialChecked" type="textarea" :disabled="type == 2" :rows="3" clearable)
           .blueTitle 实际控制人或法定代表人风险点
           el-form-item(label="健康、 嗜好、家庭关系等方面 :" class="formItem2")
-            el-input(v-model="form.HoldPensonRisk" type="textarea" :disabled="type == 2" :rows="3" clearable)
+            el-input(v-model="form.holdPensonRisk" type="textarea" :disabled="type == 2" :rows="3" clearable)
           el-form-item(label="股权变化、关键管理人员变动、关联企业变动等，是否存在偏离主业、盲目扩张等问题 :" class="formItem2")
             el-input(v-model="form.managerRisk" type="textarea" :disabled="type == 2" :rows="3" clearable)
 
@@ -87,7 +87,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="征信报告查询日期 :" style="width:96%")
-              el-date-picker(v-model="form.creditInfo.queryDateForPer" :picker-options="pickerOptions" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
+              el-date-picker(v-model="form.creditInfo.queryDateForCom" :picker-options="pickerOptions" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
         .blueTitle1 1.借款企业征信 :
         .cardTitle1
           span(class='blue')
@@ -196,7 +196,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="征信报告查询日期 :" style="width:96%")
-              el-date-picker(v-model="form.creditInfo.startDate" :picker-options="pickerOptions" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
+              el-date-picker(v-model="form.creditInfo.queryDateForPer" :picker-options="pickerOptions" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
         .blueTitle1 1.企业实际控制人及其配偶(若有)征信 :
         .cardTitle1
           span(class='blue')
@@ -563,7 +563,7 @@ export default {
         otherRisk: "", // 近期检查发现的其他风险点
         specialRequireCheck: "", //产品贷后日常检查特殊要求
         specialChecked: "", // 落实情况
-        HoldPensonRisk: "", //实际控制人风险点
+        holdPensonRisk: "", //实际控制人风险点
         managerRisk: "", //管理层风险点
 
         // card 3
@@ -574,7 +574,7 @@ export default {
 
         // card 4  基于企业征信报告
         creditInfo: {
-          queryDateForPer: "", //征信报告查询日期
+          queryDateForCom: "", //征信报告查询日期
           // 1.借款企业征信
           // (1)未结清贷款及对外担保情况
           unPayOffLoanNum: "", //未结清贷款笔数
@@ -602,7 +602,7 @@ export default {
           existCreditChage3: 1, // 法人保证人 征信变化是否变化
 
           // 基于个人征信报告
-          startDate: "", //征信报告查询日期
+          queryDateForPer: "", //征信报告查询日期
           // 1.企业实际控制人及其配偶(若有)征信
           creditClassification: "", //征信分类
           // (1)未结清贷款、未销户贷记卡（含准贷记）及对外担保情况
@@ -676,7 +676,7 @@ export default {
       if (!newVal.creditInfo) {
         this.form.creditInfo = {
           queryDateForPer: "",
-          startDate: "",
+          queryDateForCom: "",
           existBadRecord: 1,
           existCreditChage1: 1,
           existCreditChage2: 1,
@@ -688,7 +688,7 @@ export default {
           existCreditChager6: 1
         };
         // this.form.creditInfo.queryDateForPer = "";
-        // this.form.creditInfo.startDate = "";
+        // this.form.creditInfo.queryDateForCom = "";
         // this.form.creditInfo.existBadRecord = 1;
         // this.form.creditInfo.existCreditChage1 = 1;
         // this.form.creditInfo.existCreditChage2 = 1;
@@ -708,9 +708,9 @@ export default {
       if (!newVal.financeInfo) {
         this.form.financeInfo = {
           financeClassification: "1",
-          industrycChangSiut: "", //企业所在行业是否发生重大不利变化
-          hiddenTroubleSitu: "", //生产经营是否存在安全隐患
-          planExpandSitu: "", //企业是否有与主业无关的扩张计划
+          industrycChangSiut: 1, //企业所在行业是否发生重大不利变化
+          hiddenTroubleSitu: 1, //生产经营是否存在安全隐患
+          planExpandSitu: 1, //企业是否有与主业无关的扩张计划
           otherSitu: "", //其他
           collEstimateDate: "", //上次抵质押物评估或重估日期
           collEstimateValue: "" //上次抵质押物评估或重估金额

@@ -76,7 +76,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="征信报告查询日期 :" style="width:96%")
-              el-date-picker(v-model="form.creditInfo.queryDateForPer" :picker-options="pickerOptions" style="width:100%" value-format='yyyy-MM-dd' format='yyyy-MM-dd' type="date" placeholder="选择日期" :disabled="type == 2" clearable)
+              el-date-picker(v-model="form.creditInfo.queryDateForCom" :picker-options="pickerOptions" style="width:100%" value-format='yyyy-MM-dd' format='yyyy-MM-dd' type="date" placeholder="选择日期" :disabled="type == 2" clearable)
         .blueTitle1 1.借款企业征信 :
         .cardTitle1
           span(class='blue')
@@ -185,7 +185,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="征信报告查询日期 :" style="width:96%")
-              el-date-picker(v-model="form.creditInfo.queryDateForCom" :picker-options="pickerOptions" style="width:100%" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' type="date" placeholder="选择日期" clearable)
+              el-date-picker(v-model="form.creditInfo.queryDateForPer" :picker-options="pickerOptions" style="width:100%" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' type="date" placeholder="选择日期" clearable)
         .blueTitle1 1.企业实际控制人及其配偶(若有)征信 :
         .cardTitle1
           span(class='blue')
@@ -512,7 +512,7 @@ export default {
 
         creditInfo: {
           // (1)未结清贷款及对外担保情况
-          queryDateForPer: "", //征信报告查询日期
+          queryDateForCom: "", //征信报告查询日期
           unPayOffLoanNum: "", // 未结清贷款笔数
           guaranteeNum: "", //对外担保笔数
           unPayOffAmout: "", //未结清贷款金额
@@ -541,7 +541,7 @@ export default {
           msg: "", //近期负面信息情况
 
           //card 6--基于个人征信报告
-          queryDateForCom: "", //个人报告查询日期
+          queryDateForPer: "", //个人报告查询日期
           creditClassification: "", //征信分类
           // (1)未结清贷款、未销户贷记卡（含准贷记）及对外担保情况
           unPayOffLoanNumCon: "", //未结清贷款笔数
@@ -611,6 +611,7 @@ export default {
       this.params = this.matchImage(newVal);
       if (!newVal.creditInfo) {
         this.form.creditInfo.queryDateForPer = "";
+        this.form.creditInfo.queryDateForCom = "";
         this.form.creditInfo.existBadRecord = 1;
         this.form.creditInfo.existCreditChage1 = 1;
         this.form.creditInfo.existCreditChage2 = 1;
