@@ -76,15 +76,16 @@
               el-col(:span="24")
                 el-form-item(label="上报时间:" class="formItem2")
                   span {{this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss")}}
-          components(:is="commpoentName" ref="commpoent" :approveDetail='approval')
-            //- el-form-item(label="是否存在风险预警信号:" class="formItem2")
-            //-   el-select(v-model="approval.existRisk" placeholder="请选择" style='width:100%')
-            //-     el-option(label="是" value="1")
-            //-     el-option(label="否" value="0")
-            //- el-form-item(label="预警信号说明:" class="formItem2")
-            //-   el-input(v-model="approval.riskMsg" type="textarea" :rows="2" clearable)
-            //- el-form-item(label="检查结论及措施建议:" class="formItem2")
-            //-   el-input(v-model="approval.suggest" type="textarea" :rows="2" clearable)
+          components(:is="commpoentName" ref="commpoent" :approveDetail='approval' v-if='approveContent')
+          el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px" v-if='!approveContent')
+            el-form-item(label="是否存在风险预警信号:" class="formItem2")
+              el-select(v-model="approval.existRisk" placeholder="请选择" style='width:100%')
+                el-option(label="是" value="1")
+                el-option(label="否" value="0")
+            el-form-item(label="预警信号说明:" class="formItem2")
+              el-input(v-model="approval.riskMsg" type="textarea" :rows="2" clearable)
+            el-form-item(label="检查结论及措施建议:" class="formItem2")
+              el-input(v-model="approval.suggest" type="textarea" :rows="2" clearable)
           el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px")
             el-col(:span="24")
               el-form-item(label="检查人员:" class="formItem2")
@@ -191,6 +192,7 @@ export default {
       params: {},
       signName: "",
       allBtn: false,
+      approveContent: false,
       submitBtn: true,
       commpoentName: "",
       loanBusiness: {},
@@ -747,6 +749,9 @@ export default {
         bizType
       } = this.$route.query;
       console.log(currPost, biggerThan500, belongBranch, bizType);
+      if (currPost) {
+        this.approveContent = true;
+      }
 
       if (currPost === "321") {
         if (bizType === "m1" || bizType === "m3") {

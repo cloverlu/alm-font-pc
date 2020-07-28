@@ -15,7 +15,7 @@
     >
       <el-row>
         <el-col :span="24">
-          <el-form-item label="一级支行/二级分行复核意见" class="formItem2">
+          <el-form-item label="一级支行/二级分行复核意见:" class="formItem2">
             <el-select v-model="params.agreeResult" style="width:100%" clearable>
               <el-option
                 v-for="item in agreeOrNot"
@@ -27,12 +27,12 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="意见说明" class="formItem2">
+          <el-form-item label="意见说明:" class="formItem2">
             <el-input v-model="params.msg" type="textarea" :rows="3" clearable></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="是否存在风险预警信号" class="formItem2">
+          <el-form-item label="是否存在风险预警信号:" class="formItem2">
             <el-select v-model="params.existRisk" style="width: 100%">
               <el-option
                 v-for="item in options"
@@ -44,12 +44,12 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="预警信号说明" class="formItem2">
+          <el-form-item label="预警信号说明:" class="formItem2">
             <el-input v-model="params.riskMsg" type="textarea" :rows="3" clearable></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="复核意见及行动建议" class="formItem2">
+          <el-form-item label="复核意见及行动建议:" class="formItem2">
             <el-input v-model="params.suggest" type="textarea" :rows="3" clearable></el-input>
           </el-form-item>
         </el-col>
@@ -99,7 +99,7 @@ export default {
           value: "3"
         }
       ],
-      approveParams: {
+      params: {
         existRisk: 1, // 存在风险
         agreeResult: 1, // 一级支行/二级分行复核意见
         msg: "", // 一级支行/二级分行复核意见说明

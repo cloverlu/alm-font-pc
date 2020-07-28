@@ -15,7 +15,7 @@
     >
       <el-row>
         <el-col :span="24">
-          <el-form-item label="二级分行/一级分行抽查复核意见" class="formItem2">
+          <el-form-item label="二级分行/一级分行抽查复核意见:" class="formItem2">
             <el-select v-model="params.agreeResult" style="width:100%" clearable>
               <el-option
                 v-for="item in agreeOrNot"
@@ -27,12 +27,12 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="意见说明" class="formItem2">
+          <el-form-item label="意见说明:" class="formItem2">
             <el-input v-model="params.msg" type="textarea" :rows="3" clearable></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="抽查复核意见及行动建议" class="formItem2">
+          <el-form-item label="抽查复核意见及行动建议:" class="formItem2">
             <el-input v-model="params.suggest" type="textarea" :rows="3" clearable></el-input>
           </el-form-item>
         </el-col>
