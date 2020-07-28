@@ -164,7 +164,15 @@ export default {
       // 跳转检查申请
       this.$router.push({
         path: "/businessManagement/inspectionApplication",
-        query: { type: 2, bizId: row.bizId, bizStatus: row.bizStatus }
+        query: {
+          type: 2,
+          bizId: row.bizId,
+          bizStatus: row.bizStatus,
+          currPost: row.currPost,
+          biggerThan500: row.biggerThan500,
+          belongBranch: row.belongBranch,
+          bizType: row.bizType
+        }
       });
     }
   }

@@ -60,35 +60,42 @@
                 el-input(v-model="item.agreeResult" disabled)
 
         el-card(class='card')
-          el-button(type="primary" style="textAlien:right" v-antiShake="[() => { onSubmitApproval('0') }, 1000]" class='save') 保存
-          el-form(label-position="left" label-width="200px" :model="approval" style="marginTop:20px")
-            el-form-item(label="客户名称:" class="formItem2")
-              span {{approval.custName}}
-            el-form-item(label="业务上报至:" class="formItem2")
-              span {{approval.nextLinkName}}
-            el-form-item(label="业务接收人:" class="formItem2")
-              el-select(v-model="approval.nextEmplName" placeholder="请选择" style='width:100%')
-                el-option(v-for="item in nextEmplNameList" :key="item" :label="item" :value="item") 
-            el-form-item(label="上报时间:" class="formItem2")
-              //- span {{approval.approveTime}}
-              span {{this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss")}}
-            el-form-item(label="是否存在风险预警信号:" class="formItem2")
-              el-select(v-model="approval.existRisk" placeholder="请选择" style='width:100%')
-                el-option(label="是" value="1")
-                el-option(label="否" value="0")
-            el-form-item(label="预警信号说明:" class="formItem2")
-              el-input(v-model="approval.riskMsg" type="textarea" :rows="2" clearable)
-            el-form-item(label="检查结论及措施建议:" class="formItem2")
-              el-input(v-model="approval.suggest" type="textarea" :rows="2" clearable)
-            el-form-item(label="检查人员:" class="formItem2")
-              //- el-button(class="qianzi" @click="goSign" size='mini' type='primary') 签字
-              img(:src='approval.empSign' v-if='approval.empSign' class='imgContent')
-              img(:src='bg' v-if='!approval.empSign' class='imgContent')
+          el-button(type="primary" style="textAlien:right" v-antiShake="[() => { onSubmitApproval('0') }, 1000]" v-if="!allBtn" class='save') 保存
+          el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px")
+            el-row
+              el-col(:span="24")
+                el-form-item(label="客户名称:" class="formItem2")
+                  span {{approval.custName}}
+              el-col(:span="24")
+                el-form-item(label="业务上报至:" class="formItem2")
+                  span {{approval.nextLinkName}}
+              el-col(:span="24")
+                el-form-item(label="业务接收人:" class="formItem2")
+                  el-select(v-model="approval.nextEmplName" placeholder="请选择" style='width:100%')
+                    el-option(v-for="item in nextEmplNameList" :key="item" :label="item" :value="item")
+              el-col(:span="24")
+                el-form-item(label="上报时间:" class="formItem2")
+                  span {{this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss")}}
+          components(:is="commpoentName" ref="commpoent" :approveDetail='approval')
+            //- el-form-item(label="是否存在风险预警信号:" class="formItem2")
+            //-   el-select(v-model="approval.existRisk" placeholder="请选择" style='width:100%')
+            //-     el-option(label="是" value="1")
+            //-     el-option(label="否" value="0")
+            //- el-form-item(label="预警信号说明:" class="formItem2")
+            //-   el-input(v-model="approval.riskMsg" type="textarea" :rows="2" clearable)
+            //- el-form-item(label="检查结论及措施建议:" class="formItem2")
+            //-   el-input(v-model="approval.suggest" type="textarea" :rows="2" clearable)
+          el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px")
+            el-col(:span="24")
+              el-form-item(label="检查人员:" class="formItem2")
+                //- el-button(class="qianzi" @click="goSign" size='mini' type='primary') 签字
+                img(:src='approval.empSign' v-if='approval.empSign' class='imgContent')
+                img(:src='bg' v-if='!approval.empSign' class='imgContent')
       .footer
-          el-button(type="warning" v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="approvaList.length == 0") 提交审批
-          el-button(type="warning" size='normal' v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="approvaList.length !== 0") 提交
-          el-button(type="info" v-antiShake="[() => { onSubmitApproval('2') }, 1000]" v-if="approvaList.length !== 0") 回退
-          el-button(type="primary" v-antiShake="[() => { onSubmitApproval('3') }, 1000]" v-if="approvaList.length !== 0") 退回上一岗位
+          el-button(type="warning" v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="!allBtn && approvaList.length == 0") 提交审批
+          el-button(type="warning" size='normal' v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="!allBtn && approvaList.length !== 0") 提交
+          el-button(type="info" v-antiShake="[() => { onSubmitApproval('2') }, 1000]" v-if="!allBtn && approvaList.length !== 0") 回退
+          el-button(type="primary" v-antiShake="[() => { onSubmitApproval('3') }, 1000]" v-if="!allBtn && approvaList.length !== 0") 退回上一岗位
     el-dialog(:visible.sync="dialogVisible" :append-to-body="true" width="800px" v-alterELDialogMarginTop="{marginTop:'30vh'}" ref="signArea")
       .title
         span 签名:
@@ -116,6 +123,18 @@ import DivM3 from "./components/DivM3.vue";
 import DivM4 from "./components/DivM4.vue";
 import DivM5 from "./components/DivM5.vue";
 import DivM6 from "./components/DivM6.vue";
+import processing2 from "./approve/processing2";
+import processing21 from "./approve/processing21";
+import processing23 from "./approve/processing23";
+import processing25 from "./approve/processing25";
+import processing26 from "./approve/processing26";
+import processing27 from "./approve/processing27";
+import processing28 from "./approve/processing28";
+import processing29 from "./approve/processing29";
+import processing210 from "./approve/processing210";
+import processing211 from "./approve/processing211";
+import processing212 from "./approve/processing212";
+import processing213 from "./approve/processing213";
 
 export default {
   name: "iouList",
@@ -125,7 +144,19 @@ export default {
     DivM3,
     DivM4,
     DivM5,
-    DivM6
+    DivM6,
+    processing2,
+    processing21,
+    processing23,
+    processing25,
+    processing26,
+    processing27,
+    processing28,
+    processing29,
+    processing210,
+    processing211,
+    processing212,
+    processing213
   },
   data() {
     this.$moment.locale("zh-cn");
@@ -158,7 +189,10 @@ export default {
       paramsM5: {},
       paramsM6: {},
       params: {},
+      signName: "",
+      allBtn: false,
       submitBtn: true,
+      commpoentName: "",
       loanBusiness: {},
       dialogVisible: false,
       formLabelWidth: "72px",
@@ -290,10 +324,14 @@ export default {
     if (bizStatus === "alreadyDo" || bizStatus === "inReview") {
       this.type = 2;
     }
+    if (bizStatus === "alreadyDo") {
+      this.allBtn = true;
+    }
     if (bizStatus === "shouldDo" || bizStatus === "notDo") {
       this.submitBtn = false;
     }
     if (bizId) {
+      this.routerMatch();
       // 业务
       this.form.billNo = "";
       this.canChange = 2;
@@ -660,12 +698,25 @@ export default {
       });
     },
     onSubmitApproval(type) {
+      const { currPost } = this.$route.query;
       this.approval.approveTime = this.$moment(new Date()).format(
         "YYYY-MM-DD HH:mm:ss"
       );
       this.approval.opType = type;
-      console.log(filterParams(this.approval));
-      approve(this, { ...filterParams(this.approval) }).then(res => {
+      let data;
+      if (currPost) {
+        data = {
+          ...this.approval,
+          ...this.$refs.commpoent.params
+        };
+      } else {
+        data = {
+          ...this.approval
+        };
+      }
+
+      delete data.aproveInfo;
+      approve(this, { ...filterParams(data) }).then(res => {
         if (res.data.returnCode === "200000") {
           this.$message({
             message: "操作成功",
@@ -682,10 +733,116 @@ export default {
         }
       });
     },
+    // 审批页面的展示判断
+    routerMatch() {
+      //一级支行主管岗     321
+      //一级支行第二经营主责任人  320
+      //二级分行贷后管理岗        222
+      //二级分行主管岗         221
+      //二级分行第二经营主责任人   220
+      const {
+        currPost,
+        biggerThan500,
+        belongBranch,
+        bizType
+      } = this.$route.query;
+      console.log(currPost, biggerThan500, belongBranch, bizType);
+
+      if (currPost === "321") {
+        if (bizType === "m1" || bizType === "m3") {
+          this.commpoentName = "processing2";
+        } else if (bizType === "m2" || bizType === "m5") {
+          this.commpoentName = "processing27";
+        } else if (bizType === "m4") {
+          this.commpoentName = "processing25";
+        } else if (bizType === "m6") {
+          this.commpoentName = "processing29";
+        }
+      } else if (currPost === "320") {
+        if (biggerThan500 === 1) {
+          if (bizType === "m1") {
+            this.commpoentName = "processing2";
+          } else if (bizType === "m2" || bizType === "m5") {
+            this.commpoentName = "processing27";
+          } else if (bizType === "m3") {
+            this.commpoentName = "processing21";
+          } else if (bizType === "m4") {
+            this.commpoentName = "processing25";
+          } else if (bizType === "m6") {
+            this.commpoentName = "processing29";
+          }
+        } else {
+          if (bizType === "m1" || bizType === "m3") {
+            this.commpoentName = "processing23";
+            this.signName = "审核";
+          } else if (bizType === "m2" || bizType === "m5") {
+            this.commpoentName = "processing28";
+            this.signName = "审核";
+          } else if (bizType === "m4") {
+            this.commpoentName = "processing26";
+            this.signName = "审核";
+          } else if (bizType === "m6") {
+            this.commpoentName = "processing210";
+            this.signName = "审核";
+          }
+        }
+      } else if (currPost === "222") {
+        if (belongBranch === 1) {
+          if (bizType === "m1" || bizType === "m3") {
+            this.commpoentName = "processing2";
+          } else if (bizType === "m2" || bizType === "m5") {
+            this.commpoentName = "processing27";
+          } else if (bizType === "m4") {
+            this.commpoentName = "processing25";
+          } else if (bizType === "m6") {
+            this.commpoentName = "processing29";
+          }
+        } else {
+          if (bizType === "m1" || bizType === "m3") {
+            this.commpoentName = "processing213";
+            this.signName = "审核";
+          } else if (bizType === "m2" || bizType === "m5") {
+            this.commpoentName = "processing210";
+            this.signName = "审核";
+          } else if (bizType === "m4") {
+            this.commpoentName = "processing26";
+            this.signName = "审核";
+          } else if (bizType === "m6") {
+            this.commpoentName = "processing210";
+            this.signName = "审核";
+          }
+        }
+      } else if (currPost === "221") {
+        if (bizType === "m1" || bizType === "m3") {
+          this.commpoentName = "processing2";
+        } else if (bizType === "m2" || bizType === "m5") {
+          this.commpoentName = "processing27";
+        } else if (bizType === "m4") {
+          this.commpoentName = "processing25";
+        } else if (bizType === "m6") {
+          this.commpoentName = "processing29";
+        }
+      } else if (currPost === "220") {
+        if (bizType === "m1" || bizType === "m3") {
+          this.commpoentName = "processing23";
+          this.signName = "审核";
+        } else if (bizType === "m2" || bizType === "m5") {
+          this.commpoentName = "processing28";
+          this.signName = "审核";
+        } else if (bizType === "m4") {
+          this.commpoentName = "processing26";
+          this.signName = "审核";
+        } else if (bizType === "m6") {
+          this.commpoentName = "processing210";
+          this.signName = "审核";
+        }
+      }
+    },
     handleClick() {
       const { bizId } = this.$route.query;
       console.log(this.activeName);
       if (this.activeName == "second") {
+        // this.routerMatch();
         approveDetail(this, { bizId }).then(res => {
           this.activeName = "second";
           this.approval = res.data.data;

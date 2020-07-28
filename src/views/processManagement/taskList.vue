@@ -88,9 +88,15 @@
             <el-table-column header-align="center" prop="billNo" label="借据编号" min-width="25%"></el-table-column>
             <el-table-column header-align="center" prop="noticeDate" label="提醒时间" min-width="15%"></el-table-column>
             <el-table-column header-align="center" prop="bizEndDate" label="截止时间" min-width="15%"></el-table-column>
-            <el-table-column header-align="center" label="操作" min-width="15%">
-              <template slot-scope="scope" width="120px">
+            <el-table-column header-align="center" label="操作" width="150px">
+              <template slot-scope="scope">
                 <el-button size="mini" type="primary" @click="handleEdit(scope.row)">修改</el-button>
+                <!-- <el-button
+                  size="mini"
+                  type="warning"
+                  @click="handlePreview(scope.row)"
+                  v-if="scope.row.bizStatus == 'alreadyDo'"
+                >预览</el-button>-->
               </template>
             </el-table-column>
           </el-table>
@@ -108,6 +114,24 @@
         </div>
       </div>
     </div>
+    <!-- <el-dialog
+      :close-on-click-modal="false"
+      :visible.sync="dialogVisible"
+      :fullscreen="true"
+      title="文件预览"
+    >
+      <div class="agreement_picture">
+        <div class="pdf">
+          <iframe :src="src" frameborder="0" style="width: 100%; height: 100%"></iframe>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <div class="tip-left transfer">
+          <el-button type="info" @click="dialogVisible=false">不同意</el-button>
+          <el-button type="danger" @click="agreeSignFun">同意</el-button>
+        </div>
+      </span>
+    </el-dialog>-->
   </div>
 </template>
 
@@ -130,10 +154,12 @@ export default {
         bizStatus: "",
         custName: ""
       },
+      src: "",
       paramsDetail: {
         pageNo: 1,
         pageSize: 10
       },
+      dialogVisible: false,
       formLabelWidth: "72px",
       multipleSelection: []
     };
@@ -265,8 +291,21 @@ export default {
     handleEdit(row) {
       this.$router.push({
         path: "/businessManagement/inspectionApplication",
-        query: { type: 1, bizId: row.bizId, bizStatus: row.bizStatus }
+        query: {
+          type: 1,
+          bizId: row.bizId,
+          bizStatus: row.bizStatus,
+          currPost: row.currPost,
+          biggerThan500: row.biggerThan500,
+          belongBranch: row.belongBranch,
+          bizType: row.bizType
+        }
       });
+    },
+    // 预览
+    handlePreview(row) {
+      console.log(row.bizId, row.pdfUrl);
+      this.dialogVisible = true;
     }
   }
 };

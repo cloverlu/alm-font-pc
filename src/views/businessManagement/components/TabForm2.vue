@@ -198,7 +198,7 @@ export default {
   // 组件名称
   name: "TabForm2",
   // 组件参数 接收来自父组件的数据
-  props: ["detail"],
+  props: ["contentDetail"],
   // 局部注册的组件
   components: {},
   // 组件状态值
@@ -256,7 +256,12 @@ export default {
   // 计算属性
   computed: {},
   // 侦听器
-  watch: {},
+  watch: {
+    contentDetail: function(newVal) {
+      console.log(123, newVal);
+      this.form.financeInfo = newVal;
+    }
+  },
   // 组件方法
   methods: {
     handleClick1() {
