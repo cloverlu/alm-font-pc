@@ -82,7 +82,8 @@
               el-input(v-model="approval.suggest" type="textarea" :rows="2" clearable)
             el-form-item(label="检查人员:" class="formItem2")
               //- el-button(class="qianzi" @click="goSign" size='mini' type='primary') 签字
-              img(:src='approval.empSign' class='imgContent')
+              img(:src='approval.empSign' v-if='approval.empSign' class='imgContent')
+              img(:src='bg' v-if='!approval.empSign' class='imgContent')
       .footer
           el-button(type="warning" v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="approvaList.length == 0") 提交审批
           el-button(type="warning" size='normal' v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="approvaList.length !== 0") 提交
@@ -100,7 +101,6 @@
 
 <script>
 import { filterParams } from "../../utils/utils";
-// import { settime } from "@/utils/antiShake";
 import bg from "../../assets/img/none.png";
 import {
   saveEditModelBusiness,
@@ -116,7 +116,6 @@ import DivM3 from "./components/DivM3.vue";
 import DivM4 from "./components/DivM4.vue";
 import DivM5 from "./components/DivM5.vue";
 import DivM6 from "./components/DivM6.vue";
-// const tim = settime();
 
 export default {
   name: "iouList",
@@ -131,15 +130,14 @@ export default {
   data() {
     this.$moment.locale("zh-cn");
     const dateTime = this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
-    // const tim = settime();
     return {
-      // tim: tim,
       activeName: "first",
       form: {
         // card 1
         bizType: "m1" // 检查类型
       },
       type: 1,
+      bg: bg,
       canChange: 1,
       approvaList: [],
       approval: {
@@ -151,7 +149,7 @@ export default {
         existRisk: "", // 是否存在风险预警信号
         riskMsg: "", // 预警信号说明
         suggest: "", // 检查结论及措施建议
-        empSign: bg // 检查人员
+        empSign: "" // 检查人员
       },
       paramsM1: {},
       paramsM2: {},
@@ -646,9 +644,6 @@ export default {
               this.activeName = "second";
               this.approval = res.data.data;
               this.approval.bizId = id;
-              if (!res.data.data.empSign) {
-                this.approval.empSign = bg;
-              }
               this.approvaList = res.data.data.aproveInfo || [];
               const pa = { orgName: res.data.data.custOrg };
               getNextEmplName(this, pa).then(ress => {
@@ -695,9 +690,6 @@ export default {
           this.activeName = "second";
           this.approval = res.data.data;
           this.approval.bizId = bizId;
-          if (!res.data.data.empSign) {
-            this.approval.empSign = bg;
-          }
           this.approvaList = res.data.data.aproveInfo || [];
           const pa = {
             orgName: res.data.data.custOrg,
