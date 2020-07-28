@@ -268,7 +268,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(style="width:96%")
-              el-input(v-model="form.creditClassificationJur" :disabled="type == 2" clearable)
+              el-input(v-model="form.creditInfo.creditClassificationJur" :disabled="type == 2" clearable)
         .cardTitle1
           span(class='blue')
           span(class='title1') 征信情况 
