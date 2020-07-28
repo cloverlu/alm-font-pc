@@ -279,7 +279,7 @@ export default {
           if (!res.data.data.creditInfo) {
             res.data.data.creditInfo = {
               queryDateForPer: "",
-              startDate: "",
+              queryDateForCom: "",
               existBadRecord: 1,
               existCreditChage1: 1,
               existCreditChage2: 1,
@@ -289,6 +289,17 @@ export default {
               existBadRecordJur: 1,
               existCreditChage5: 1,
               existCreditChager6: 1
+            };
+          }
+          if (!res.data.data.financeInfo) {
+            res.data.data.financeInfo = {
+              stockLastBalance: "", // 上次全面检查或调查时余额--- 存货
+              stockChangSitu: "", //本次检查存货变动情况
+              dailyExpenLastBalance: "", //上次全面检查或调查时余额---水、电、煤、气费其中一项或多项
+              dailyExpenChangSitu: "", //本次检查存货变动情况
+              busIncLastBalance: "", //上次全面检查或调查时余额--- 营业收入
+              busIncChangSitu: "", //本次检查存货变动情况
+              financeMsg: ""
             };
           }
           if (!res.data.data.stageData || res.data.data.stageData.length == 0) {
@@ -399,7 +410,7 @@ export default {
             // console.log("没有creditInfo");
             res.data.data.creditInfo = {
               queryDateForPer: "",
-              startDate: "",
+              queryDateForCom: "",
               existBadRecord: 1,
               existCreditChage1: 1,
               existCreditChage2: 1,
@@ -409,6 +420,17 @@ export default {
               existBadRecordJur: 1,
               existCreditChage5: 1,
               existCreditChager6: 1
+            };
+          }
+          if (!res.data.data.financeInfo) {
+            res.data.data.financeInfo = {
+              stockLastBalance: "", // 上次全面检查或调查时余额--- 存货
+              stockChangSitu: "", //本次检查存货变动情况
+              dailyExpenLastBalance: "", //上次全面检查或调查时余额---水、电、煤、气费其中一项或多项
+              dailyExpenChangSitu: "", //本次检查存货变动情况
+              busIncLastBalance: "", //上次全面检查或调查时余额--- 营业收入
+              busIncChangSitu: "", //本次检查存货变动情况
+              financeMsg: ""
             };
           }
           if (!res.data.data.stageData || res.data.data.stageData.length == 0) {
