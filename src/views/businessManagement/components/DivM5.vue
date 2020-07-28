@@ -22,7 +22,7 @@
         el-form-item(label="放款日期 :" class="formItem2")
           el-date-picker(v-model="form.loanDate" style="width:100%" value-format='yyyy-MM-dd' format='yyyy-MM-dd' type="date" placeholder="选择日期" disabled)
         el-form-item(label="约定用途 :" class="formItem2")
-          el-input(v-model="form.loanPurpose" type="textarea" :rows="2" :disabled="type == 2" clearable)
+          el-input(v-model="form.loanPurpose" type="textarea" :rows="3" :disabled="type == 2" clearable)
         el-form-item(label="贷款支付方式 :" class="formItem2")
           el-input(v-model="form.repayKind" clearable :disabled="type == 2")
 
@@ -31,18 +31,23 @@
         span(class='blue')
         span(class='title') 检查内容
       el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
-        el-form-item(label="资金使用情况说明 :" class="formItem2")
-          el-input(v-model="form.requireCheck" type="textarea" :disabled="type == 2" :rows="2" clearable)
         el-form-item(label="是否按合同约定的用途使用信贷资金 :" class="formItem2")
-          el-input(v-model="form.checked" :disabled="type == 2" clearable)
+          el-select(v-model="form.useAmoutByContract" :disabled="type == 2" placeholder="请选择" style="width:100%")
+            el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
+        el-form-item(label="资金使用情况说明 :" class="formItem2")
+          el-input(v-model="form.detailMsg4useAmout" type="textarea" :disabled="type == 2" :rows="3" clearable)
+
         el-form-item(label="是否履行合同约定 :" class="formItem2")
-          el-input(v-model="form.checked" :disabled="type == 2" clearable)
+          el-select(v-model="form.executeCon" :disabled="type == 2" placeholder="请选择" style="width:100%")
+            el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
+        el-form-item(label="情况说明 :" class="formItem2")
+            el-input(v-model="form.msg" :disabled="type == 2" type="textarea" :rows="3" clearable)
+
         el-form-item(label="对我行检查的态度 :" class="formItem2")
-          el-input(v-model="form.checked" :disabled="type == 2" clearable)
+            el-select(v-model="form.cooperate" style="width:100%" clearable :disabled="type == 2")
+              el-option(v-for="item in cooperateArr" :key="item.value" :label="item.label" :value="item.value")
         el-form-item(label="情况说明 :" class="formItem2")
-            el-input(v-model="form.requireCheck" :disabled="type == 2" type="textarea" :rows="2" clearable)
-        el-form-item(label="情况说明 :" class="formItem2")
-            el-input(v-model="form.checked" :disabled="type == 2" type="textarea" :rows="2" clearable)
+            el-input(v-model="form.cooperateMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
     el-card(class='card')
       .cardTitle1
         span(class='blue')
@@ -108,24 +113,40 @@ export default {
           value: 0
         }
       ],
+      cooperateArr: [
+        {
+          label: "配合",
+          value: "1"
+        },
+        {
+          label: "一般",
+          value: "2"
+        },
+        {
+          label: "不配合",
+          value: "3"
+        }
+      ],
       form: {
         // card 1
         bizType: "m5", // 检查类型
-        custName: "张三", // 客户名称  queryType为2时，必传；其他情况非必传
-        loanAmout: "300000", // 贷款金额
-        loanBalance: "20000", // 贷款余额
-        loanLength: "26个月", // 贷款期限
-        repayKind: "银行卡", // 还款方式
-        repayDate: "2020-06-15", // 还款日期
-        repayAmout: "200000", // 还款金额
+        custName: "", // 客户名称  queryType为2时，必传；其他情况非必传
+        contractNo: "", //
+        creditSubLoanKind: "", //
+        loanAmout: "", // 贷款金额
+        loanBalance: "", // 贷款余额
+        loanLength: "", // 贷款期限
+        loanDate: "", //
+        loanPurpose: "", //
+        repayKind: "", // 还款方式
 
         // card 2
-        payIntention: "张三", // 还款意愿
-        checkAddr: "xxxxxxxx", // 检查地点
-        staff: "李四", // 接待人员
-        amoutSource: "银联", // 还款资金来源
-        expectRepayDate: "2020-5-20", // 预计还款/付息时间
-        practicableMsg: "xxxx" // 还款资金落实情况说明
+        detailMsg4useAmout: "", // 资金使用情况说明
+        useAmoutByContract: 0, // 是否按合同约定的用途使用信贷资金
+        executeCon: 0, // 是否履行合同约定
+        cooperate: "1", // 对我行检查的态度
+        msg: "", // 情况说明
+        cooperateMsg: "" // 对我行检查的态度情况说明
       },
       type: 1,
       dialogImageUrl: "",
@@ -141,6 +162,15 @@ export default {
       console.log(1, newVal, oldVal);
       this.form = newVal;
       this.params = this.matchImage(newVal);
+      if (!newVal.executeCon) {
+        this.form.executeCon = 0;
+      }
+      if (!newVal.useAmoutByContract) {
+        this.form.useAmoutByContract = 0;
+      }
+      if (!newVal.cooperate) {
+        this.form.cooperate = "1";
+      }
     }
   },
   // 组件方法
