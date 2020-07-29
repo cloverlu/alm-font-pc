@@ -20,12 +20,12 @@
             el-option(label="小企业法人快捷贷首次检查" value="m5")
             el-option(label="小企业法人快捷贷贷后日常检查" value="m6")
         el-form-item(label="担保方式 :" class="formItem2")
-          el-checkbox-group(v-model="form.securityKind" style="width:100%" clearable :disabled="type == 2")
+          el-checkbox-group(v-model="form.securityKind" style="width:100%" clearable :disabled="type == 2" @change='selectSecurityKind')
             el-checkbox(v-for="item in securityKindsArr" :key="item.value" :label="item.value" :value="item.value") {{item.label}}
         el-form-item(label="授信金额 :" class="formItem2")
           el-input(v-model="form.lineAmout" :disabled="type == 2" clearable)
-        el-form-item(label=" " class="formItem2")
-          el-input(v-model="form.otherSecurityKindMsg" type="textarea" :rows="3" clearable :disabled="type == 2")
+        el-form-item(label=" " class="formItem2" )
+          el-input(v-model="form.otherSecurityKindMsg" v-if='securityKindMsgShow' type="textarea" :rows="3" clearable :disabled="type == 2")
         el-form-item(label="授信余额 :" class="formItem2")
           el-input(v-model="form.lineBalance" :disabled="type == 2" clearable)
         el-form-item(label="还款方式 :" class="formItem2")
@@ -662,6 +662,7 @@ export default {
       params1: {},
       params2: {},
       dialogImageUrl: "",
+      securityKindMsgShow: false,
       dialogVisible: false,
       formLabelWidth: "72px"
     };
@@ -673,6 +674,9 @@ export default {
     detail: function(newVal, oldVal) {
       console.log(1, newVal, oldVal);
       this.form = newVal;
+      if (newVal.securityKind.indexOf("5") != -1) {
+        this.securityKindMsgShow = true;
+      }
       if (!newVal.creditInfo) {
         this.form.creditInfo = {
           queryDateForPer: "",
@@ -758,6 +762,14 @@ export default {
         arrs[a] = this.$refs[`definte16${i}`][0].fileList[a];
       }
       this.loanBusiness = Object.assign({}, this.type, arrs);
+    },
+    selectSecurityKind() {
+      console.log(this.form.securityKind);
+      if (this.form.securityKind.indexOf("5") != -1) {
+        this.securityKindMsgShow = true;
+      } else {
+        this.securityKindMsgShow = false;
+      }
     },
     // 阶段多选框
     financeInfoChange() {

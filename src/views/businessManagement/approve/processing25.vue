@@ -45,7 +45,14 @@
         </el-col>
         <el-col :span="24">
           <el-form-item label="发生阶段:" class="formItem2">
-            <el-input v-model="params.riskStage" type="textarea" :rows="3" clearable></el-input>
+            <el-select v-model="params.riskStage" style="width: 100%">
+              <el-option
+                v-for="item in stageArr"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -104,11 +111,25 @@ export default {
           value: "3"
         }
       ],
+      stageArr: [
+        {
+          label: "第一阶段",
+          value: "一"
+        },
+        {
+          label: "第二阶段",
+          value: "二"
+        },
+        {
+          label: "第三阶段",
+          value: "三"
+        }
+      ],
       params: {
         existRisk: 1, // 存在风险
         agreeResult: 1, // 一级支行/二级分行复核意见
         msg: "", // 一级支行/二级分行复核意见说明
-        riskStage: "",
+        riskStage: "一",
         riskMsg: "", // 风险说明
         suggest: "" // 措施建议
       }
@@ -129,6 +150,9 @@ export default {
       }
       if (!newVal.agreeResult) {
         this.params.agreeResult = 1;
+      }
+      if (!newVal.riskStage) {
+        this.params.riskStage = "一";
       }
     }
   },

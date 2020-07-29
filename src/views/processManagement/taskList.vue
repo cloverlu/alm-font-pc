@@ -91,12 +91,12 @@
             <el-table-column header-align="center" label="操作" width="150px">
               <template slot-scope="scope">
                 <el-button size="mini" type="primary" @click="handleEdit(scope.row)">修改</el-button>
-                <!-- <el-button
+                <el-button
                   size="mini"
                   type="warning"
                   @click="handlePreview(scope.row)"
                   v-if="scope.row.bizStatus == 'alreadyDo'"
-                >预览</el-button>-->
+                >预览</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -114,29 +114,12 @@
         </div>
       </div>
     </div>
-    <!-- <el-dialog
-      :close-on-click-modal="false"
-      :visible.sync="dialogVisible"
-      :fullscreen="true"
-      title="文件预览"
-    >
-      <div class="agreement_picture">
-        <div class="pdf">
-          <iframe :src="src" frameborder="0" style="width: 100%; height: 100%"></iframe>
-        </div>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <div class="tip-left transfer">
-          <el-button type="info" @click="dialogVisible=false">不同意</el-button>
-          <el-button type="danger" @click="agreeSignFun">同意</el-button>
-        </div>
-      </span>
-    </el-dialog>-->
   </div>
 </template>
 
 <script>
 import { filterParams } from "../../utils/utils";
+
 import { getTaskList } from "../../api/processManagement";
 export default {
   name: "processManagement",
@@ -147,6 +130,7 @@ export default {
       pageNo: 1,
       pageSize: 10,
       total: 10,
+      ie: false,
       currentItem: 1,
       flag: true,
       searchForm: {
@@ -159,6 +143,8 @@ export default {
         pageNo: 1,
         pageSize: 10
       },
+      pages: "",
+      url: "",
       dialogVisible: false,
       formLabelWidth: "72px",
       multipleSelection: []
@@ -234,13 +220,6 @@ export default {
       a.download = filename;
       a.click();
       window.URL.revokeObjectURL(url);
-
-      // window.open([]);
-      // arr.map(item => {
-      //   window.open([
-      //     "http://20.147.168.82:9001/postLoan/model/downPdfFile?bizId=" + item
-      //   ]);
-      // });
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -304,20 +283,40 @@ export default {
     },
     // 预览
     handlePreview(row) {
-      console.log(row.bizId, row.pdfUrl);
-      this.dialogVisible = true;
+      this.url = `${this.host}/postLoan/model/viewPdfFile?bizId=${row.bizId}`;
+      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        window.open(this.url);
+        // previewPDF(this, { bizId: row.bizId }).then(res => {
+        //   var csvData = new Blob([res.data], { type: "application/pdf" });
+        //   console.log(csvData);
+        //   window.navigator.msSaveOrOpenBlob(csvData, "pdf");
+        // });
+      } else {
+        this._loadFile(this.url);
+      }
+    },
+    _loadFile(url) {
+      console.log(url);
+      var a = document.createElement("a");
+      a.href = url;
+      a.target = "_blank";
+      a.click();
+      window.URL.revokeObjectURL(url);
+    },
+    agreeSignFun() {
+      console.log("成功关闭");
+      this.dialogVisible = false;
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/style/global.scss";
 .processManagement {
   box-sizing: border-box;
   width: 100%;
   min-height: 100%;
-  position: relative;
+  // position: relative;
   .userHeader {
     box-sizing: border-box;
     height: 35px;
@@ -444,14 +443,37 @@ export default {
       }
     }
   }
+  // .follow {
+  //   /deep/.el-dialog {
+  //     height: 100%;
+  //     .el-dialog__body {
+  //       height: 95%;
+  //       background-color: #ccc;
+  //     }
+  //   }
+  // }
 }
 </style>
 
 <style lang="scss">
-@import "../../assets/style/global.scss";
 .processManagement {
   .el-table__row td .cell {
     text-align: center !important;
   }
+  // .follow {
+  .el-dialog {
+    height: 100%;
+    .el-dialog__body {
+      height: 95% !important;
+      background-color: #ccc;
+    }
+  }
+  // }
+  // .agreement_picture {
+  //   height: 95%;
+  // }
+  // .dialog-footer {
+  //   height: 5%;
+  // }
 }
 </style>

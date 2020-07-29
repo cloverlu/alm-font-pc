@@ -33,7 +33,7 @@
                 el-option(v-for="item in cooperateArr" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label="担保方式 :" class="formItem2")
-              el-checkbox-group(v-model="form.securityKind" style="width:100%" clearable :disabled="type == 2")
+              el-checkbox-group(v-model="form.securityKind" style="width:100%" clearable :disabled="type == 2" @change='selectSecurityKind')
                 el-checkbox(v-for="item in securityKindsArr" :key="item.value" :label="item.value" :value="item.value") {{item.label}}
               //- el-select(v-model="form.securityKind" style="width:100%" clearable)
               //-   el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
@@ -43,7 +43,7 @@
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
-              el-input(v-model="form.otherSecurityKindMsg" type="textarea" :rows="3" :disabled="type == 2" clearable)
+              el-input(v-model="form.otherSecurityKindMsg" v-if='securityKindMsgShow' type="textarea" :rows="3" :disabled="type == 2" clearable)
           el-col(:span="12")
             el-form-item(label="押品重估 :" class="formItem2")
               el-select(v-model="form.revalOfColl" style="width:100%" :disabled="type == 2")
@@ -555,6 +555,7 @@ export default {
       params1: {},
       params2: {},
       dialogImageUrl: "",
+      securityKindMsgShow: false,
       dialogVisible: false,
       formLabelWidth: "72px"
     };
@@ -566,6 +567,9 @@ export default {
     detail: function(newVal, oldVal) {
       console.log(1, newVal, oldVal);
       this.form = newVal;
+      if (newVal.securityKind.indexOf("5") != -1) {
+        this.securityKindMsgShow = true;
+      }
       this.params = this.matchImage(newVal);
       if (!newVal.cooperate) {
         this.form.cooperate = "1";
@@ -687,6 +691,14 @@ export default {
           return "小企业法人快捷贷首次检查";
         case "m6":
           return "小企业法人快捷贷贷后日常检查";
+      }
+    },
+    selectSecurityKind() {
+      console.log(this.form.securityKind);
+      if (this.form.securityKind.indexOf("5") != -1) {
+        this.securityKindMsgShow = true;
+      } else {
+        this.securityKindMsgShow = false;
       }
     },
     // 阶段多选框
