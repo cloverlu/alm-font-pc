@@ -23,8 +23,8 @@
           el-input(v-model="form.lineAmout" :disabled="type == 2")
         el-form-item(label="客户名称 :" class="formItem2")
           el-input(v-model="form.custName" disabled)
-        el-form-item(label="贷款金额 :" class="formItem2")
-          el-input(v-model="form.loanAmout" disabled)
+        el-form-item(label="贷款余额 :" class="formItem2")
+          el-input(v-model="form.loanBalance" disabled)
 
     el-card(class='card')
       .cardTitle1
@@ -491,7 +491,7 @@ export default {
         bizType: "m2", // 检查类型
         lineAmout: "", // 授信额度金额
         custName: "", // 客户名称  queryType为2时，必传；其他情况非必传
-        loanAmout: "", // 贷款金额
+        loanBalance: "", // 贷款金额
 
         // card 2
         requireCheck: "", // 审批意见中贷后日常检查要求及落实情况
