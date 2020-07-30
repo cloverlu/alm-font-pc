@@ -5,8 +5,8 @@
   时间：2020年07月02日 08:54:09
 -->
 <template>
-  <div class="login">
-    <!-- <div class="content">
+  <div class="login" v-show="visible">
+    <div class="content">
       <div class="coName">
         <i class="iconfont iconjiedaixiaofeirenzheng-01 leftIcon"></i>
         <span>小企业无纸化贷后管理系统</span>
@@ -24,7 +24,7 @@
       <div class="btn">
         <el-button type="primary" @click="submit">安全登录</el-button>
       </div>
-    </div>-->
+    </div>
   </div>
 </template>
 
@@ -41,6 +41,7 @@ export default {
   // 组件状态值
   data() {
     return {
+      visible: true,
       emplCode: "",
       password: ""
     };
@@ -113,10 +114,12 @@ export default {
   mounted() {
     var accessToken = this.GetQueryValue("accessToken");
     if (accessToken) {
-      getUserInfo(this, { accessToken });
-      alert("获取到token");
+      this.visible = false;
+      getUserInfo(this, { accessToken }).then(res => {
+        alert(res.data);
+      });
     } else {
-      alert("无法获取token");
+      this.visible = true;
     }
   }
 };
