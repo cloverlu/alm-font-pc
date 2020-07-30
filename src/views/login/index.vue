@@ -6,7 +6,7 @@
 -->
 <template>
   <div class="login">
-    <div class="content">
+    <!-- <div class="content">
       <div class="coName">
         <i class="iconfont iconjiedaixiaofeirenzheng-01 leftIcon"></i>
         <span>小企业无纸化贷后管理系统</span>
@@ -24,7 +24,7 @@
       <div class="btn">
         <el-button type="primary" @click="submit">安全登录</el-button>
       </div>
-    </div>
+    </div>-->
   </div>
 </template>
 
@@ -114,9 +114,9 @@ export default {
     var accessToken = this.GetQueryValue("accessToken");
     if (accessToken) {
       getUserInfo(this, { accessToken });
-      console.log("获取到token");
+      alert("获取到token");
     } else {
-      console.log("无法获取token");
+      alert("无法获取token");
     }
   }
 };

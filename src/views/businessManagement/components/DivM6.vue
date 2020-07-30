@@ -475,15 +475,15 @@ export default {
         assetCreditInfo: {
           queryDate: "", //征信报告查询日期
           fiveClass: "", // 当前企业及实际控制人征信情况(注明征信查询分类结果)
-          shrinkLoanScale: "", //企业或企业主是否有他行收缩贷款规模
+          shrinkLoanScale: 1, //企业或企业主是否有他行收缩贷款规模
           shrinkLoanScaleMsg: "", //收缩贷款规模说明
-          addedOverdues: "", //企业或企业主征信是否有新增逾期记录
+          addedOverdues: 1, //企业或企业主征信是否有新增逾期记录
           addedOverduesMsg: "", //新增逾期记录说明
-          addedGuarantees: "", // 企业或企业主是否有新增对外担保记录
+          addedGuarantees: 1, // 企业或企业主是否有新增对外担保记录
           addedGuaranteesMsg: "", //新增对外担保记录说明
-          addedLoans: "", //企业或企业主是否有他行新增贷款
+          addedLoans: 1, //企业或企业主是否有他行新增贷款
           addedLoansMsg: "", //他行新增贷款说明
-          otherSitu: "", //企业或企业主是否有其他异常变化
+          otherSitu: 1, //企业或企业主是否有其他异常变化
           otherSituMsg: "" //其他异常变化说明
         },
 
@@ -660,11 +660,21 @@ export default {
           addedLoans: 1,
           otherSitu: 1
         };
-        // this.form.assetCreditInfo.shrinkLoanScale = 1;
-        // this.form.assetCreditInfo.addedOverdues = 1;
-        // this.form.assetCreditInfo.addedGuarantees = 1;
-        // this.form.assetCreditInfo.addedLoans = 1;
-        // this.form.assetCreditInfo.otherSitu = 1;
+      }
+      if (newVal.assetCreditInfo.shrinkLoanScale != 0) {
+        this.form.assetCreditInfo.shrinkLoanScale = 1;
+      }
+      if (newVal.assetCreditInfo.addedOverdues != 0) {
+        this.form.assetCreditInfo.addedOverdues = 1;
+      }
+      if (newVal.assetCreditInfo.addedGuarantees != 0) {
+        this.form.assetCreditInfo.addedGuarantees = 1;
+      }
+      if (newVal.assetCreditInfo.addedLoans != 0) {
+        this.form.assetCreditInfo.addedLoans = 1;
+      }
+      if (newVal.assetCreditInfo.otherSitu != 0) {
+        this.form.assetCreditInfo.otherSitu = 1;
       }
     }
   },

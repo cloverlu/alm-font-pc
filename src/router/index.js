@@ -17,8 +17,8 @@ const routes = [
   },
   {
     path: "/",
-    // redirect: "/Layout",
-    redirect: "/login",
+    // redirect: "/login",
+    component: Login,
   },
   // 待办提醒
   {
