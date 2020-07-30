@@ -124,7 +124,7 @@ export default {
       this.defaultActive = this.$route.path;
     },
     getMenuList() {
-      const arr = JSON.parse(localStorage.getItem("menuList"));
+      const arr = JSON.parse(sessionStorage.getItem("menuList"));
       arr.map(item => {
         item.icon = "el-icon" + " iconfont " + item.icon;
         if (item.children && item.children.length) {

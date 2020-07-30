@@ -16,7 +16,7 @@
       <i class="iconfont iconPC-morentouxiang userIcon"></i>
 
       <div class="nameBox">
-        <span class="userName">王建国</span>
+        <span class="userName">{{userName}}</span>
       </div>
       <el-popconfirm
         confirmButtonText="确定"
@@ -35,15 +35,20 @@
 <script>
 export default {
   name: "Header",
+  data() {
+    return {
+      userName:sessionStorage.getItem('emplName')
+    };
+  },
   methods: {
     loginOut() {
-      localStorage.removeItem("emplCode");
-      localStorage.removeItem("emplName");
-      localStorage.removeItem("noticeFlag");
-      localStorage.removeItem("orgCode");
-      localStorage.removeItem("orgName");
-      localStorage.removeItem("postCode");
-      localStorage.removeItem("menuList");
+      sessionStorage.removeItem("emplCode");
+      sessionStorage.removeItem("emplName");
+      sessionStorage.removeItem("noticeFlag");
+      sessionStorage.removeItem("orgCode");
+      sessionStorage.removeItem("orgName");
+      sessionStorage.removeItem("postCode");
+      sessionStorage.removeItem("menuList");
       this.$message({
         message: "成功退出系统",
         type: "success"

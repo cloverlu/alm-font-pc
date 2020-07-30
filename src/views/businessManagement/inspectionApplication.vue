@@ -877,7 +877,7 @@ export default {
           this.approvaList = res.data.data.aproveInfo || [];
           const pa = {
             orgName: res.data.data.custOrg,
-            orgCode: localStorage.getItem("orgCode")
+            orgCode: sessionStorage.getItem("orgCode")
           };
           getNextEmplName(this, pa).then(ress => {
             this.nextEmplNameList = ress.data.data.nextEmplNameList;

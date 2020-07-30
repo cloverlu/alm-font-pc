@@ -190,7 +190,7 @@ export default {
       console.log(this.pageSize, this.pageNo);
       getTaskList(this, {
         ...filterParams(this.searchForm),
-        emplName: "金林" || localStorage.getItem("emplName"),
+        emplName: sessionStorage.getItem("emplName") || "金林",
         pageSize: 10,
         pageNo: 1,
         ...this.paramsDetail

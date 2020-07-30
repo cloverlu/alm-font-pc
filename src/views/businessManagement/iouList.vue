@@ -134,8 +134,8 @@ export default {
       console.log(this.pageSize, this.pageNo);
       getCustomers(this, {
         ...filterParams(this.searchForm),
-        emplCode: localStorage.getItem("emplCode"),
-        emplName: "金林" || localStorage.getItem("emplName"),
+        emplCode: sessionStorage.getItem("emplCode"),
+        emplName: sessionStorage.getItem("emplName") || "金林",
         pageSize: 10,
         pageNo: 1,
         ...this.paramsDetail

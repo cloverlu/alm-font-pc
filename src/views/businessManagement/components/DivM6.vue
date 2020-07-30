@@ -117,7 +117,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(class="formItem2")
-              el-input(v-model="form.loanLength" :disabled="type == 2" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.assetCreditInfo.summarySituMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
     //- 客户经营情况检查
     el-card(class='card')
       .cardTitle1
@@ -494,7 +494,8 @@ export default {
           addedLoans: 1, //企业或企业主是否有他行新增贷款
           addedLoansMsg: "", //他行新增贷款说明
           otherSitu: 1, //企业或企业主是否有其他异常变化
-          otherSituMsg: "" //其他异常变化说明
+          otherSituMsg: "", //其他异常变化说明
+          summarySituMsg: "" // 检查要点小结
         },
 
         summaryForCheck: "", //检查要点小结
@@ -662,7 +663,7 @@ export default {
             assitName: "",
             cooperatStatus: "",
             assitFiveClass: "",
-            assitClassification: "2"
+            assitClassification: "1"
           }
         ];
       }
@@ -724,6 +725,7 @@ export default {
         this.securityKindMsgShow = true;
       } else {
         this.securityKindMsgShow = false;
+        this.otherSecurityKindMsg = "";
       }
     },
     // 阶段多选框
