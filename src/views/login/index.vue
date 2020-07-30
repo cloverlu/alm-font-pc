@@ -115,6 +115,7 @@ export default {
     var accessToken = this.GetQueryValue("accessToken");
     if (accessToken) {
       this.visible = false;
+      alert("拿到token");
       getUserInfo(this, { accessToken }).then(res => {
         alert(res.data);
       });

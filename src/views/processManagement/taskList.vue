@@ -12,7 +12,7 @@
           :model="searchForm"
           :inline="true"
           label-position="right"
-          label-width="60px"
+          label-width="80px"
           size="mini"
           class="demo-form-inline formBox"
         >
@@ -284,15 +284,64 @@ export default {
     // 预览
     handlePreview(row) {
       this.url = `${this.host}/postLoan/model/viewPdfFile?bizId=${row.bizId}`;
-      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-        window.open(this.url);
-        // previewPDF(this, { bizId: row.bizId }).then(res => {
-        //   var csvData = new Blob([res.data], { type: "application/pdf" });
-        //   console.log(csvData);
-        //   window.navigator.msSaveOrOpenBlob(csvData, "pdf");
-        // });
+      // if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      //   window.open(this.url);
+      //   // previewPDF(this, { bizId: row.bizId }).then(res => {
+      //   //   var csvData = new Blob([res.data], { type: "application/pdf" });
+      //   //   console.log(csvData);
+      //   //   window.navigator.msSaveOrOpenBlob(csvData, "pdf");
+      //   // });
+      // } else {
+      //   this._loadFile(this.url);
+      // }
+
+      // 下面代码都是处理IE浏览器的情况
+      if (window.ActiveXObject || "ActiveXObject" in window) {
+        console.log(1111, "ie");
+        let flag;
+        //判断是否为IE浏览器，"ActiveXObject" in window判断是否为IE11
+        //判断是否安装了adobe Reader
+        for (var x = 2; x < 10; x++) {
+          try {
+            var oAcro = eval("new ActiveXObject('PDF.PdfCtrl." + x + "');");
+            if (oAcro) {
+              flag = true;
+            }
+          } catch (e) {
+            flag = false;
+          }
+        }
+        try {
+          var oAcro4 = new ActiveXObject("PDF.PdfCtrl.1");
+          if (oAcro4) {
+            flag = true;
+          }
+        } catch (e) {
+          flag = false;
+        }
+
+        try {
+          var oAcro7 = new ActiveXObject("AcroPDF.PDF.1");
+          if (oAcro7) {
+            flag = true;
+          }
+        } catch (e) {
+          flag = false;
+        }
+
+        if (flag) {
+          //支持
+          window.open(this.url); //调用显示的方法
+        } else {
+          //不支持
+          alert(
+            "对不起,您还没有安装PDF阅读器软件呢,为了方便预览PDF文档,请选择安装！"
+          );
+          location =
+            "http://ardownload.adobe.com/pub/adobe/reader/win/9.x/9.3/chs/AdbeRdr930_zh_CN.exe";
+        }
       } else {
-        this._loadFile(this.url);
+        this._loadFile(this.url); //调用显示的方法
       }
     },
     _loadFile(url) {
@@ -363,7 +412,7 @@ export default {
           }
           /deep/.el-form-item__content {
             margin-top: 13px;
-            width: calc(100% - 60px);
+            width: calc(100% - 80px);
           }
         }
         .btn {
