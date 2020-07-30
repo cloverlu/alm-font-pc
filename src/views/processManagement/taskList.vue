@@ -351,10 +351,6 @@ export default {
       a.target = "_blank";
       a.click();
       window.URL.revokeObjectURL(url);
-    },
-    agreeSignFun() {
-      console.log("成功关闭");
-      this.dialogVisible = false;
     }
   }
 };

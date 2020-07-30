@@ -162,7 +162,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="企业生产经营场所是否发生或即将发生变动 :" class="formItem2")
-              el-select(v-model="form.proAndOpeAbnormalSuit" :disabled="type == 2" style="width:100%" clearable)
+              el-select(v-model="form.addrIsChanged" :disabled="type == 2" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label="企业主要原材料或货物的采购成本是否明显上升 :" class="formItem2")
@@ -171,14 +171,14 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
-              el-input(v-model="form.proAndOpeAbnormalSuitMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.addrChangedMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
               el-input(v-model="form.purchaseCostMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="企业生产经营是否出现异常情况(停产、半停产、销售大规模退货、员工数量骤减、劳资关系紧张、设备开工率不足、拖欠租金等) :" class="formItem2")
-              el-select(v-model="form.orderDecline" :disabled="type == 2" style="width:100%" clearable)
+              el-select(v-model="form.proAndOpeAbnormalSuit" :disabled="type == 2" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12" style='paddingTop:24px')
             el-form-item(label="企业销售是否出现异常情况(销售大规模退货、存货积压严重) :" class="formItem2")
@@ -187,7 +187,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
-              el-input(v-model="form.orderDeclineMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.proAndOpeAbnormalSuitMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
               el-input(v-model="form.saleAbnormalSuitMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
@@ -197,7 +197,7 @@
               el-select(v-model="form.chainChange" :disabled="type == 2" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
-            el-form-item(label="制造型企业水、电、煤、气等资源消耗量是否较上年同期明显下降(降幅达30%) : :" class="formItem2")
+            el-form-item(label="制造型企业水、电、煤、气等资源消耗量是否较上年同期明显下降(降幅达30%) :" class="formItem2")
               el-select(v-model="form.dailyCostDecline" :disabled="type == 2" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
         el-row(:gutter="20")
@@ -209,15 +209,25 @@
               el-input(v-model="form.dailyCostDeclineMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
         el-row(:gutter="20")
           el-col(:span="12")
+            el-form-item(label="企业订单是否出现大幅下降(降幅达30%) :" class="formItem2")
+              el-select(v-model="form.orderDecline" :disabled="type == 2" style="width:100%" clearable)
+                el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
+          el-col(:span="12")
             el-form-item(label="企业生产经营是否有安全隐患 :" class="formItem2")
               el-select(v-model="form.hiddenTroubleSitu" :disabled="type == 2" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
-          el-col(:span="12")
-            el-form-item(label="其他 :" class="formItem2" style='paddingTop:24px')
+          
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
+              el-input(v-model="form.orderDeclineMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
+          el-col(:span="12")
+            el-form-item(label=" " class="formItem2")
               el-input(v-model="form.hiddenTroubleSituMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
+        el-row(:gutter="20")
+          el-col(:span="12")
+            el-form-item(label="其他 :" class="formItem2" style='paddingTop:24px')
+        el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
               el-input(v-model="form.msg" type="textarea" :disabled="type == 2" :rows="3" clearable)
@@ -498,12 +508,14 @@ export default {
         mainBusIsChangedMsg: "", //企业主营业务情况是否发生变更说明
         planExpandSitu: "", //企业是否有与主业无关的扩张计划
         planExpandSituMsg: "", //企业是否有与主业无关的扩张计划说明
-        proAndOpeAbnormalSuit: "", //企业生产经营场所是否发生或即将发生变动
-        proAndOpeAbnormalSuitMsg: "", //企业生产经营场所是否发生或即将发生变动说明
+        addrIsChanged: "", //企业生产经营场所是否发生或即将发生变动
+        addrChangedMsg: "", //企业生产经营场所是否发生或即将发生变动说明
+        proAndOpeAbnormalSuit: "", //企业生产经营是否出现异常情况
+        proAndOpeAbnormalSuitMsg: "", //企业生产经营是否出现异常情况说明
         purchaseCost: "", //企业主要原材料或货物的采购成本是否明显上升
         purchaseCostMsg: "", //企业主要原材料或货物的采购成本是否明显上升说明
-        orderDecline: "", //企业生产经营是否出现异常情况
-        orderDeclinemsg: "", //企业生产经营是否出现异常情况说明
+        orderDecline: "", //企业订单是否出现大幅下降（降幅达30)
+        orderDeclineMsg: "", //企业订单出现大幅下降（降幅达30%）说明
         saleAbnormalSuit: "", //企业销售是否出现异常情况
         saleAbnormalSuitMsg: "", //企业销售是否出现异常情况说明
         chainChange: "", //企业上下游核心客户是否发生重大变更
@@ -594,6 +606,9 @@ export default {
       }
       if (!newVal.proAndOpeAbnormalSuit) {
         this.form.proAndOpeAbnormalSuit = 1;
+      }
+      if (!newVal.addrIsChanged) {
+        this.form.addrIsChanged = 1;
       }
       if (!newVal.purchaseCost) {
         this.form.purchaseCost = 1;
