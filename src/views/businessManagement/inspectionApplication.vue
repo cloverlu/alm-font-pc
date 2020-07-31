@@ -59,7 +59,7 @@
               el-form-item(label="意见 :" class='noBorder')
                 el-input(v-model="item.agreeResult" disabled)
 
-        el-card(class='card')
+        el-card(class='card' v-if='!allBtn')
           el-button(type="primary" style="textAlien:right" v-antiShake="[() => { onSubmitApproval('0') }, 1000]" v-if="!allBtn" class='save') 保存
           el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px")
             el-row
@@ -92,7 +92,7 @@
                 //- el-button(class="qianzi" @click="goSign" size='mini' type='primary') 签字
                 img(:src='approval.empSign' v-if='approval.empSign' class='imgContent')
                 img(:src='bg' v-if='!approval.empSign' class='imgContent')
-      .footer
+      .footer(v-if='!allBtn')
           el-button(type="warning" v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="!allBtn && approvaList.length == 0") 提交审批
           el-button(type="warning" size='normal' v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="!allBtn && approvaList.length !== 0") 提交
           el-button(type="info" v-antiShake="[() => { onSubmitApproval('2') }, 1000]" v-if="!allBtn && approvaList.length !== 0") 回退

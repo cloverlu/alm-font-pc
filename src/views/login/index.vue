@@ -149,6 +149,9 @@ export default {
             message: "登陆失败",
             type: "error"
           });
+          setTimeout(() => {
+            this.visible = true;
+          }, 1000);
         }
       });
     } else {
