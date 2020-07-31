@@ -71,7 +71,7 @@ export default {
       searchForm: {
         custName: "",
         queryType: "3",
-        orgName: "南京"
+        orgName: sessionStorage.getItem("orgName")
       },
       paramsDetail: {
         pageNo: 1,
