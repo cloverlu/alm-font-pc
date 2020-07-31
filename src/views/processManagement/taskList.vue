@@ -106,7 +106,7 @@
                   size="mini"
                   type="warning"
                   @click="handlePreview(scope.row)"
-                  v-if="scope.row.bizStatus == 'alreadyDo'"
+                  v-if="scope.row.bizStatus == 'inReview'"
                 >预览</el-button>
               </template>
             </el-table-column>
