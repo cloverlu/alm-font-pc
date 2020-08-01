@@ -21,34 +21,34 @@ const routes = [
     component: Login,
   },
   // 待办提醒
-  {
-    path: "/toDoList",
-    component: Layout,
-    redirect: "/toDoList/taskList",
-    name: "待办提醒",
-    meta: { title: "待办提醒" },
-    children: [
-      {
-        path: "taskList",
-        component: () => import("@/views/toDoList/taskList"),
-        name: "任务列表",
-        meta: { title: "任务列表", noCache: true },
-      },
-    ],
-  },
+  // {
+  //   path: "/toDoList",
+  //   component: Layout,
+  //   redirect: "/toDoList/taskList",
+  //   name: "待办提醒",
+  //   meta: { title: "待办提醒" },
+  //   children: [
+  //     {
+  //       path: "taskList",
+  //       component: () => import("@/views/toDoList/taskList"),
+  //       name: "任务列表",
+  //       meta: { title: "任务列表", noCache: true },
+  //     },
+  //   ],
+  // },
   // 用户管理
   {
     path: "/user",
     component: Layout,
     redirect: "/user/index",
-    name: "用户管理",
-    meta: { title: "用户管理" },
+    name: "人员管理",
+    meta: { title: "人员管理" },
     children: [
       {
         path: "index",
         component: () => import("@/views/user/userList"),
-        name: "用户列表",
-        meta: { title: "用户列表", noCache: true },
+        name: "人员列表",
+        meta: { title: "人员列表", noCache: true },
       },
     ],
   },
@@ -57,14 +57,20 @@ const routes = [
     path: "/customer",
     component: Layout,
     redirect: "/customer/index",
-    name: "客户管理",
-    meta: { title: "客户管理" },
+    name: "我的客户",
+    meta: { title: "我的客户" },
     children: [
       {
         path: "index",
         component: () => import("@/views/customer/customerList"),
         name: "客户列表",
         meta: { title: "客户列表", noCache: true },
+      },
+      {
+        path: "iouList",
+        component: () => import("@/views/businessManagement/iouList"),
+        name: "借据列表",
+        meta: { title: "借据列表", noCache: true },
       },
     ],
   },
@@ -73,8 +79,8 @@ const routes = [
     path: "/standingBook",
     component: Layout,
     redirect: "/standingBook/index",
-    name: "台账管理",
-    meta: { title: "台账管理" },
+    name: "借据导入",
+    meta: { title: "借据导入" },
     children: [
       {
         path: "index",
@@ -88,15 +94,22 @@ const routes = [
   {
     path: "/processManagement",
     component: Layout,
-    redirect: "/processManagement/taskList",
-    name: "流程管理",
-    meta: { title: "流程管理" },
+    redirect: "/processManagement/managerDownload",
+    name: "报告下载",
+    meta: { title: "报告下载" },
     children: [
       {
-        path: "taskList",
-        component: () => import("@/views/processManagement/taskList"),
-        name: "任务列表",
-        meta: { title: "任务列表", noCache: true },
+        path: "managerDownload",
+        component: () => import("@/views/processManagement/managerDownload"),
+        name: "客户经理报告下载",
+        meta: { title: "客户经理报告下载", noCache: true },
+      },
+      {
+        path: "administrationDownload",
+        component: () =>
+          import("@/views/processManagement/administrationDownload"),
+        name: "管理岗报告下载",
+        meta: { title: "管理岗报告下载", noCache: true },
       },
     ],
   },
@@ -105,8 +118,8 @@ const routes = [
     path: "/reportManagement",
     component: Layout,
     redirect: "/reportManagement/detailedInfoList",
-    name: "报表管理",
-    meta: { title: "报表管理" },
+    name: "统计查询",
+    meta: { title: "统计查询" },
     children: [
       {
         path: "detailedInfoList",
@@ -124,41 +137,23 @@ const routes = [
   },
   // 业务管理
   {
-    path: "/businessManagement",
+    path: "/toDoList",
     component: Layout,
-    redirect: "/businessManagement/businessList",
-    name: "业务管理",
-    meta: { title: "业务管理" },
+    redirect: "/toDoList/taskList",
+    name: "我的工作",
+    meta: { title: "我的工作" },
     children: [
       {
-        path: "businessList",
+        path: "taskList",
         component: () => import("@/views/toDoList/taskList"),
-        name: "业务列表",
-        meta: { title: "业务列表" },
-        // children: [
-        //   {
-        //     path: "inspectionApplication",
-        //     component: () =>
-        //       import("@/views/businessManagement/inspectionApplication"),
-        //     name: "检查申请",
-        //     meta: { title: "检查申请", noCache: true },
-        //   },
-        // ],
+        name: "待办任务",
+        meta: { title: "待办任务" },
       },
       {
-        path: "iouList",
-        component: () => import("@/views/businessManagement/iouList"),
-        name: "借据列表",
-        meta: { title: "借据列表", noCache: true },
-        // children: [
-        //   {
-        //     path: "inspectionApplication",
-        //     component: () =>
-        //       import("@/views/businessManagement/inspectionApplication"),
-        //     name: "检查申请",
-        //     meta: { title: "检查申请", noCache: true },
-        //   },
-        // ],
+        path: "finishedTaskList",
+        component: () => import("@/views/toDoList/finishedTaskList"),
+        name: "已办任务",
+        meta: { title: "已办任务", noCache: true },
       },
       {
         path: "inspectionApplication",

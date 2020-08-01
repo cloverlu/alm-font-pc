@@ -92,22 +92,16 @@
               <template slot-scope="scope">
                 <el-button
                   size="mini"
-                  type="primary"
-                  @click="handleEdit(scope.row)"
-                  v-if="scope.row.bizStatus !== 'alreadyDo'"
-                >修改</el-button>
-                <el-button
-                  size="mini"
-                  type="primary"
-                  @click="handleEdit(scope.row)"
-                  v-if="scope.row.bizStatus == 'alreadyDo'"
+                  type="warning"
+                  @click="handlePreview(scope.row)"
+                  v-if="scope.row.bizStatus == 'inReview'"
                 >查看</el-button>
                 <el-button
                   size="mini"
                   type="warning"
-                  @click="handlePreview(scope.row)"
+                  @click="handleDownload(scope.row)"
                   v-if="scope.row.bizStatus == 'inReview'"
-                >预览</el-button>
+                >下载</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -201,7 +195,7 @@ export default {
       console.log(this.pageSize, this.pageNo);
       getTaskList(this, {
         ...filterParams(this.searchForm),
-        emplName: sessionStorage.getItem("emplName") || "金林",
+        emplName: sessionStorage.getItem("emplName"),
         pageSize: 10,
         pageNo: 1,
         ...this.paramsDetail
@@ -218,6 +212,7 @@ export default {
       this.pageNo = 1;
       this.pageSize = 10;
     },
+    // 压缩包下载
     download() {
       // console.log("111");
       const arr = this.multipleSelection.map(item => item.bizId);
@@ -227,6 +222,18 @@ export default {
       //需要下载的数据内容,我这里放的就是BLOB，如果你有下载链接就不需要了
       var url = `${this.host}/postLoan/model/downZipPdfFile?bizIds=${bizIdString}`;
       var filename = "pdfFile.zip";
+      a.href = url;
+      a.download = filename;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    },
+    // 单个pdf 文件下载
+    handleDownload(row) {
+      const id = row.bizId;
+      var a = document.createElement("a");
+      //需要下载的数据内容,我这里放的就是BLOB，如果你有下载链接就不需要了
+      var url = `${this.host}/postLoan/model/downZipPdfFile?bizIds=${id}`;
+      var filename = "pdf.zip";
       a.href = url;
       a.download = filename;
       a.click();
@@ -280,7 +287,7 @@ export default {
     },
     handleEdit(row) {
       this.$router.push({
-        path: "/businessManagement/inspectionApplication",
+        path: "/toDoList/inspectionApplication",
         query: {
           type: 1,
           bizId: row.bizId,

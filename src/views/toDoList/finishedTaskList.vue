@@ -32,10 +32,10 @@
             <el-col :span="6">
               <el-form-item label="状态" class="formItem5">
                 <el-select v-model="searchForm.bizStatus" clearable style="width:100%">
-                  <el-option label="应做" value="shouldDo"></el-option>
-                  <el-option label="未做" value="notDo"></el-option>
-                  <!-- <el-option label="审核中" value="inReview"></el-option>
-                  <el-option label="已做" value="alreadyDo"></el-option>-->
+                  <!-- <el-option label="应做" value="shouldDo"></el-option>
+                  <el-option label="未做" value="notDo"></el-option>-->
+                  <el-option label="审核中" value="inReview"></el-option>
+                  <el-option label="完成" value="alreadyDo"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -49,6 +49,7 @@
           <div class="btn">
             <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
             <el-button size="mini" @click="onClear">重置</el-button>
+            <!-- <el-button type="primary" size="mini" @click="download" :disabled="flag">下载</el-button> -->
           </div>
         </el-form>
       </div>
@@ -140,7 +141,7 @@ export default {
         bizType: "",
         bizStatus: "",
         custName: "",
-        queryFlag: "1"
+        queryFlag: "2"
       },
       src: "",
       paramsDetail: {
@@ -209,12 +210,44 @@ export default {
         bizType: "",
         bizStatus: "",
         custName: "",
-        queryFlag: "1"
+        queryFlag: "2"
       };
       this.multipleSelection = [];
       this.$refs.multipleTable.clearSelection();
       this.pageNo = 1;
       this.pageSize = 10;
+    },
+    download() {
+      // console.log("111");
+      const arr = this.multipleSelection.map(item => item.bizId);
+      const bizIdString = arr.join(",");
+      console.log("bizIdString", bizIdString);
+      var a = document.createElement("a");
+      //需要下载的数据内容,我这里放的就是BLOB，如果你有下载链接就不需要了
+      var url = `${this.host}/postLoan/model/downZipPdfFile?bizIds=${bizIdString}`;
+      var filename = "pdfFile.zip";
+      a.href = url;
+      a.download = filename;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+      if (val && val.length > 0) {
+        this.flag = false;
+      } else {
+        this.flag = true;
+      }
+      console.log("val", this.multipleSelection);
+    },
+    selectable(row) {
+      let flag = true;
+      if (row.bizStatus == "alreadyDo") {
+        flag = true;
+      } else {
+        flag = false;
+      }
+      return flag;
     },
     returnType(row) {
       switch (row.bizType) {
@@ -241,7 +274,7 @@ export default {
         case "inReview":
           return "审核中";
         case "alreadyDo":
-          return "已做";
+          return "完成";
       }
     },
     handleEdit(row) {
@@ -261,6 +294,16 @@ export default {
     // 预览
     handlePreview(row) {
       this.url = `${this.host}/postLoan/model/viewPdfFile?bizId=${row.bizId}`;
+      // if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      //   window.open(this.url);
+      //   // previewPDF(this, { bizId: row.bizId }).then(res => {
+      //   //   var csvData = new Blob([res.data], { type: "application/pdf" });
+      //   //   console.log(csvData);
+      //   //   window.navigator.msSaveOrOpenBlob(csvData, "pdf");
+      //   // });
+      // } else {
+      //   this._loadFile(this.url);
+      // }
 
       // 下面代码都是处理IE浏览器的情况
       if (window.ActiveXObject || "ActiveXObject" in window) {

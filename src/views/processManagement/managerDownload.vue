@@ -34,8 +34,8 @@
                 <el-select v-model="searchForm.bizStatus" clearable style="width:100%">
                   <el-option label="应做" value="shouldDo"></el-option>
                   <el-option label="未做" value="notDo"></el-option>
-                  <!-- <el-option label="审核中" value="inReview"></el-option>
-                  <el-option label="已做" value="alreadyDo"></el-option>-->
+                  <el-option label="审核中" value="inReview"></el-option>
+                  <el-option label="已做" value="alreadyDo"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -49,6 +49,7 @@
           <div class="btn">
             <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
             <el-button size="mini" @click="onClear">重置</el-button>
+            <el-button type="primary" size="mini" @click="download" :disabled="flag">下载</el-button>
           </div>
         </el-form>
       </div>
@@ -61,7 +62,14 @@
             border
             style="width: 99.9%"
             :fit="true"
+            @selection-change="handleSelectionChange"
           >
+            <el-table-column
+              header-align="center"
+              type="selection"
+              width="55px"
+              :selectable="selectable"
+            ></el-table-column>
             <el-table-column
               header-align="center"
               prop="bizType"
@@ -84,22 +92,16 @@
               <template slot-scope="scope">
                 <el-button
                   size="mini"
-                  type="primary"
-                  @click="handleEdit(scope.row)"
-                  v-if="scope.row.bizStatus !== 'alreadyDo'"
-                >录入业务信息</el-button>
-                <el-button
-                  size="mini"
-                  type="primary"
-                  @click="handleEdit(scope.row)"
-                  v-if="scope.row.bizStatus == 'alreadyDo'"
-                >查看</el-button>
-                <!-- <el-button
-                  size="mini"
                   type="warning"
                   @click="handlePreview(scope.row)"
-                  v-if="scope.row.bizStatus == 'inReview'"
-                >预览</el-button>-->
+                  v-if="scope.row.bizStatus == 'alreadyDo'"
+                >查看</el-button>
+                <el-button
+                  size="mini"
+                  type="warning"
+                  @click="handleDownload(scope.row)"
+                  v-if="scope.row.bizStatus == 'alreadyDo'"
+                >下载</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -139,8 +141,8 @@ export default {
       searchForm: {
         bizType: "",
         bizStatus: "",
+        queryFlag: "3",
         custName: "",
-        queryFlag: "1"
       },
       src: "",
       paramsDetail: {
@@ -209,12 +211,56 @@ export default {
         bizType: "",
         bizStatus: "",
         custName: "",
-        queryFlag: "1"
+        queryFlag: "3"
       };
       this.multipleSelection = [];
       this.$refs.multipleTable.clearSelection();
       this.pageNo = 1;
       this.pageSize = 10;
+    },
+    download() {
+      // console.log("111");
+      const arr = this.multipleSelection.map(item => item.bizId);
+      const bizIdString = arr.join(",");
+      console.log("bizIdString", bizIdString);
+      var a = document.createElement("a");
+      //需要下载的数据内容,我这里放的就是BLOB，如果你有下载链接就不需要了
+      var url = `${this.host}/postLoan/model/downZipPdfFile?bizIds=${bizIdString}`;
+      var filename = "pdfFile.zip";
+      a.href = url;
+      a.download = filename;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    },
+    // 单个pdf 文件下载
+    handleDownload(row) {
+      const id = row.bizId;
+      var a = document.createElement("a");
+      //需要下载的数据内容,我这里放的就是BLOB，如果你有下载链接就不需要了
+      var url = `${this.host}/postLoan/model/downZipPdfFile?bizIds=${id}`;
+      var filename = "pdf.zip";
+      a.href = url;
+      a.download = filename;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+      if (val && val.length > 0) {
+        this.flag = false;
+      } else {
+        this.flag = true;
+      }
+      console.log("val", this.multipleSelection);
+    },
+    selectable(row) {
+      let flag = true;
+      if (row.bizStatus == "alreadyDo") {
+        flag = true;
+      } else {
+        flag = false;
+      }
+      return flag;
     },
     returnType(row) {
       switch (row.bizType) {
@@ -261,6 +307,16 @@ export default {
     // 预览
     handlePreview(row) {
       this.url = `${this.host}/postLoan/model/viewPdfFile?bizId=${row.bizId}`;
+      // if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      //   window.open(this.url);
+      //   // previewPDF(this, { bizId: row.bizId }).then(res => {
+      //   //   var csvData = new Blob([res.data], { type: "application/pdf" });
+      //   //   console.log(csvData);
+      //   //   window.navigator.msSaveOrOpenBlob(csvData, "pdf");
+      //   // });
+      // } else {
+      //   this._loadFile(this.url);
+      // }
 
       // 下面代码都是处理IE浏览器的情况
       if (window.ActiveXObject || "ActiveXObject" in window) {

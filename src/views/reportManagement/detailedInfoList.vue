@@ -69,7 +69,7 @@
                   <el-option label="应做" value="shouldDo"></el-option>
                   <el-option label="未做" value="notDo"></el-option>
                   <el-option label="审核中" value="inReview"></el-option>
-                  <el-option label="已做" value="complete"></el-option>
+                  <el-option label="完成" value="alreadyDo"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -273,7 +273,7 @@ export default {
           return "未做";
         case "inReview":
           return "审核中";
-        case "complete":
+        case "alreadyDo":
           return "完成";
       }
     }
