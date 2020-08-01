@@ -9,8 +9,7 @@
 	.aa
 		el-upload(
 		:on-preview.stop.prevent="handlePictureCardPreview" 
-		:file-list="fileList[item.vModel]" 
-		:data="bizId"
+		:file-list="fileList[item.vModel]"
 		:on-remove="handleRemove" 
 		:on-success="handleSuccess" 
 		:before-upload="handleBefore"
@@ -36,10 +35,7 @@ export default {
       dialogVisible: false,
       fileList: [],
       params: [],
-      imageHas: false,
-      bizId: {
-        bizId: "ssss"
-      }
+      imageHas: false
     };
   },
   mounted() {

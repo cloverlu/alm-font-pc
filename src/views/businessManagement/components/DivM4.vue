@@ -7,7 +7,7 @@
 <template lang="pug">
   <div class="m4">
     el-card(class='card')
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
+      el-form(:inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
         el-form-item(label="客户名称 :" class="formItem2")
           el-input(v-model="form.custName" disabled)
         el-form-item(label="贷款金额 :" class="formItem2")
@@ -29,12 +29,12 @@
         span(class='blue')
         span(class='title') 检查阶段
       .cardContent
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
+        el-form(:inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
           el-radio-group(v-model="form.stageData[0].checkStage" :disabled="type == 2")
               el-radio(label="1") 第一阶段
               el-radio(label="2") 第二阶段
               el-radio(label="3") 第三阶段
-        el-form(:model="form" v-for='(item,index) in form.stageData' :key='index' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
+        el-form(v-for='(item,index) in form.stageData' :key='index' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
           el-form-item(label="还款意愿 :" class="formItem2")
             el-select(v-model="item.payIntention" style="width:100%" clearable :disabled="type == 2")
               el-option(v-for="item in payArr" :key="item.value" :label="item.label" :value="item.value")
@@ -132,7 +132,6 @@ export default {
         repayKind: "", // 还款方式
         repayDate: "", // 还款日期
         repayAmout: "", // 还款金额
-        arr: [],
 
         // card 2
         stageData: [
@@ -147,18 +146,7 @@ export default {
           }
         ] //还款资金落实阶段数组
       },
-      list4: [
-        {
-          title: "其他",
-          url: "",
-          dimension: "",
-          longitude: ""
-        }
-      ],
-      type: 1,
-      dialogImageUrl: "",
-      dialogVisible: false,
-      formLabelWidth: "72px"
+      type: 1
     };
   },
   // 计算属性
@@ -186,22 +174,6 @@ export default {
   },
   // 组件方法
   methods: {
-    // onchange(e) {
-    //   this.form.stageData[0].checkStage = e;
-    // },
-    handleSuccess(res, fileList, index) {
-      console.log(res, fileList, index);
-    },
-    // 图片上传
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    // 预览
-    handlePictureCardPreview(file) {
-      console.log("file.url", file.url);
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
     // 图像模块匹配
     mVmodel(num) {
       const definite16 = {};
