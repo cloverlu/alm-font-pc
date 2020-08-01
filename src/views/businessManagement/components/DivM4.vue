@@ -7,7 +7,7 @@
 <template lang="pug">
   <div class="m4">
     el-card(class='card')
-      el-form(:inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
+      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
         el-form-item(label="客户名称 :" class="formItem2")
           el-input(v-model="form.custName" disabled)
         el-form-item(label="贷款金额 :" class="formItem2")
@@ -29,12 +29,12 @@
         span(class='blue')
         span(class='title') 检查阶段
       .cardContent
-        el-form(:inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
+        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
           el-radio-group(v-model="form.stageData[0].checkStage" :disabled="type == 2")
               el-radio(label="1") 第一阶段
               el-radio(label="2") 第二阶段
               el-radio(label="3") 第三阶段
-        el-form(v-for='(item,index) in form.stageData' :key='index' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
+        el-form(:model="form" v-for='(item,index) in form.stageData' :key='index' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
           el-form-item(label="还款意愿 :" class="formItem2")
             el-select(v-model="item.payIntention" style="width:100%" clearable :disabled="type == 2")
               el-option(v-for="item in payArr" :key="item.value" :label="item.label" :value="item.value")
