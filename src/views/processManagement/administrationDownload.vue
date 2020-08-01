@@ -157,7 +157,8 @@ export default {
     };
   },
   mounted() {
-    // 进入页面先调用查询接口const { custName } = this.$route.query;
+    // 进入页面先调用查询接口
+    const { custName } = this.$route.query;
     if (custName) {
       this.searchForm = {
         custName,

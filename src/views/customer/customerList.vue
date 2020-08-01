@@ -148,7 +148,7 @@ export default {
       });
       if (flag) {
         this.$router.push({
-          path: "/businessManagement/iouList",
+          path: "/customer/iouList",
           query: { custName: row.custName }
         });
       } else {

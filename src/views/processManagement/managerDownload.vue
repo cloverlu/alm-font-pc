@@ -142,7 +142,7 @@ export default {
         bizType: "",
         bizStatus: "",
         queryFlag: "3",
-        custName: "",
+        custName: ""
       },
       src: "",
       paramsDetail: {
@@ -158,6 +158,13 @@ export default {
   },
   mounted() {
     // 进入页面先调用查询接口
+    const { custName } = this.$route.query;
+    if (custName) {
+      this.searchForm = {
+        custName,
+        queryFlag: "3"
+      };
+    }
     this.onSubmit();
   },
   methods: {
