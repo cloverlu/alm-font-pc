@@ -70,18 +70,49 @@
               width="55px"
               :selectable="selectable"
             ></el-table-column>
-            <el-table-column header-align="center" prop="orgName" label="机构名称" min-width="15%"></el-table-column>
-            <el-table-column header-align="center" prop="emplName" label="客户经理名称" min-width="15%"></el-table-column>
-            <el-table-column header-align="center" prop="emplCode" label="客户经理工号" min-width="15%"></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="orgName"
+              sortable
+              label="机构名称"
+              min-width="15%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="emplName"
+              sortable
+              label="客户经理名称"
+              min-width="15%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="emplCode"
+              sortable
+              label="客户经理工号"
+              min-width="15%"
+            ></el-table-column>
             <el-table-column
               header-align="center"
               prop="bizType"
+              sortable
               :formatter="returnType"
               label="检查类型"
               min-width="15%"
             ></el-table-column>
-            <el-table-column header-align="center" prop="bizEndDate" label="完成时间" min-width="12%"></el-table-column>
-            <el-table-column header-align="center" prop="custName" label="客户名称" min-width="15%"></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="bizEndDate"
+              sortable
+              label="完成时间"
+              min-width="12%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="custName"
+              sortable
+              label="客户名称"
+              min-width="15%"
+            ></el-table-column>
             <el-table-column header-align="center" label="操作" width="150px">
               <template slot-scope="scope">
                 <el-button
