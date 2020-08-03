@@ -60,16 +60,35 @@
               width="55px"
               :selectable="selectable"
             ></el-table-column>
-            <el-table-column header-align="center" prop="custName" label="客户名称" min-width="20%"></el-table-column>
-            <el-table-column header-align="center" prop="custCode" label="客户编码" min-width="17%"></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="custName"
+              sortable
+              label="客户名称"
+              min-width="20%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="custCode"
+              sortable
+              label="客户编码"
+              min-width="17%"
+            ></el-table-column>
             <el-table-column
               header-align="center"
               prop="bizType"
+              sortable
               :formatter="returnType"
               label="检查类型"
               min-width="20%"
             ></el-table-column>
-            <el-table-column header-align="center" prop="bizEndDate" label="完成时间" min-width="15%"></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="bizEndDate"
+              sortable
+              label="完成时间"
+              min-width="15%"
+            ></el-table-column>
             <el-table-column header-align="center" label="操作" width="150px">
               <template slot-scope="scope">
                 <el-button
