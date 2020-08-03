@@ -5,9 +5,9 @@
   时间：2020年07月07日 16:40:13
 -->
 <template lang="pug">
-  <div class="m4">
-    el-card(class='card')
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
+  .m4
+    el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      el-card(class='card')
         el-form-item(label="客户名称 :" class="formItem2")
           el-input(v-model="form.custName" disabled)
         el-form-item(label="贷款金额 :" class="formItem2")
@@ -22,45 +22,44 @@
         el-form-item(label="还款日期 :" class="formItem2")
           el-date-picker(v-model="form.repayDate" @change="dateChange" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" placeholder="选择日期")
         el-form-item(label="还款金额 :" class="formItem2")
-          el-input(v-model="form.repayAmout" :disabled="type == 2")
+          el-input(v-model="form.repayAmout" :disabled="type == 2" clearable)
 
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') 检查阶段
-      .cardContent
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') 检查阶段
+        .cardContent
+          //- el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
           el-radio-group(v-model="form.stageData[0].checkStage" :disabled="type == 2")
               el-radio(label="1") 第一阶段
               el-radio(label="2") 第二阶段
               el-radio(label="3") 第三阶段
-        el-form(:model="form" v-for='(item,index) in form.stageData' :key='index' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
-          el-form-item(label="还款意愿 :" class="formItem2")
-            el-select(v-model="item.payIntention" style="width:100%" clearable :disabled="type == 2")
-              el-option(v-for="item in payArr" :key="item.value" :label="item.label" :value="item.value")
-          el-form-item(label="检查地点 :" class="formItem2")
-            el-input(v-model="item.practicableCheckAddr" :disabled="type == 2" clearable)
-          el-form-item(label="接待人员 :" class="formItem2")
-            el-input(v-model="item.practicableStaff" :disabled="type == 2" clearable)
-          el-form-item(label="还款资金来源 :" class="formItem2")
-            el-input(v-model="item.amoutSource" :disabled="type == 2" clearable)
-          el-form-item(label="预计还款/付息时间 :" class="formItem2")
-            el-date-picker(v-model="item.expectRepayDate" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" placeholder="选择日期" clearable)
-          el-form-item(label="还款资金落实情况说明 :" class="formItem2")
-            el-input(v-model="item.practicableMsg" type="textarea" :disabled="type == 2" :rows="3" clearable)
+          //- el-form(:model="form" v-for='(item,index) in form.stageData' :key='index' :inline="true" label-position="top" label-width="80px" size="mini")
+          .content(v-for='(item,index) in form.stageData' :key='index')
+            el-form-item(label="还款意愿 :" class="formItem2")
+              el-select(v-model="item.payIntention" style="width:100%" clearable :disabled="type == 2")
+                el-option(v-for="item in payArr" :key="item.value" :label="item.label" :value="item.value")
+            el-form-item(label="检查地点 :" class="formItem2")
+              el-input(v-model="item.practicableCheckAddr" :disabled="type == 2" clearable)
+            el-form-item(label="接待人员 :" class="formItem2")
+              el-input(v-model="item.practicableStaff" :disabled="type == 2" clearable)
+            el-form-item(label="还款资金来源 :" class="formItem2")
+              el-input(v-model="item.amoutSource" :disabled="type == 2" clearable)
+            el-form-item(label="预计还款/付息时间 :" class="formItem2")
+              el-date-picker(v-model="item.expectRepayDate" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" placeholder="选择日期" clearable)
+            el-form-item(label="还款资金落实情况说明 :" class="formItem2")
+              el-input(v-model="item.practicableMsg" type="textarea" :disabled="type == 2" :rows="3" clearable)
 
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') 影像维护
-      .upload
-        .item(v-for="(item,i) in titleList" :key="item.id")
-          .title {{item.text}}
-          .upload-wrapper
-            uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
-        //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
-     
-  </div>
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') 影像维护
+        .upload
+          .item(v-for="(item,i) in titleList" :key="item.id")
+            .title {{item.text}}
+            .upload-wrapper
+              uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
+        .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
 </template>
 
 <script>
@@ -156,6 +155,7 @@ export default {
     detail: function(newVal, oldVal) {
       this.form = newVal;
       this.params = this.matchImage(newVal);
+      console.log(this.params);
       if (!newVal.stageData || newVal.stageData.length == 0) {
         this.form.stageData = [
           {
@@ -169,13 +169,18 @@ export default {
           }
         ];
       }
+    },
+    params: function(newVal, oldVal) {
+      console.log(newVal, oldVal);
+      console.log(this.params);
     }
   },
   // 组件方法
   methods: {
     dateChange() {
-      console.log(this.form);
+      console.log(this.params);
       console.log(this.titleList);
+      console.log(this.$refs.definte160[0].fileList);
     },
     // 图像模块匹配
     mVmodel(num) {
@@ -374,8 +379,6 @@ export default {
     font-size: 16px;
     line-height: 31px;
     color: rgba(10, 10, 10, 1);
-  }
-  .checkForm {
   }
 }
 </style>

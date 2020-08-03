@@ -5,12 +5,12 @@
   时间：2020年07月07日 16:40:13
 -->
 <template lang="pug">
-  <div class="m2">
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') {{form.custName}}
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+  .m2
+    el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') {{form.custName}}
         el-form-item(label="检查类型 :" class="formItem2")
           el-select(v-model="form.bizType" disabled style="width:100%" )
             el-option(label="小企业授信业务首次跟踪检查" value="m1")
@@ -20,18 +20,17 @@
             el-option(label="小企业法人快捷贷首次检查" value="m5")
             el-option(label="小企业法人快捷贷贷后日常检查" value="m6")
         el-form-item(label="授信额度金额 :" class="formItem2")
-          el-input(v-model="form.lineAmout" :disabled="type == 2")
+          el-input(v-model="form.lineAmout" :disabled="type == 2" clearable)
         el-form-item(label="客户名称 :" class="formItem2")
           el-input(v-model="form.custName" disabled)
         el-form-item(label="贷款余额 :" class="formItem2")
           el-input(v-model="form.loanBalance" disabled)
 
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') 填写信息
-      .left
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') 填写信息
+        .left
           .blueTitle 审批意见中贷后日常检查要求及落实情况
           el-form-item(label="要求 :" class="formItem2")
             el-input(v-model="form.requireCheck" type="textarea" :disabled="type == 2" :rows="3" clearable)
@@ -43,8 +42,7 @@
           .blueTitle 近期检查发现的其他风险点
           el-form-item(class="formItem2")
             el-input(v-model="form.otherRisk" type="textarea" :disabled="type == 2" :rows="3" clearable)
-      .right
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+        .right
           .blueTitle 产品贷后日常检查特殊要求及落实情况
           el-form-item(label="要求 :" class="formItem2")
             el-input(v-model="form.specialRequireCheck" type="textarea" :disabled="type == 2" :rows="3" clearable)
@@ -54,8 +52,7 @@
           el-form-item(label="股权变化、关键管理人员变动、关联企业变动等，是否存在偏离主业、盲目扩张等问题 :" class="formItem2")
             el-input(v-model="form.managerRisk" type="textarea" :disabled="type == 2" :rows="3" clearable)
 
-    el-card(class='card')
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      el-card(class='card')
         el-form-item(label="检查地点 :" class="formItem2")
           el-input(v-model="form.checkAddr" clearable :disabled="type == 2")
         el-form-item(label="生产经营场所变动情况 :" class="formItem2")
@@ -63,15 +60,13 @@
         el-form-item(label="检查配合程度 :" class="formItem2")
           el-select(v-model="form.cooperate" style="width:100%" :disabled="type == 2" clearable)
             el-option(v-for="item in cooperateArr" :key="item.value" :label="item.label" :value="item.value")
-          //- el-input(v-model="form.cooperate" clearable)
         el-form-item(label="接待人员 :" class="formItem2")
           el-input(v-model="form.staff" :disabled="type == 2" clearable)
 
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') 征信情况
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') 征信情况
         .blueTitle 基于企业征信报告
         el-row(:gutter="20")
           el-col(:span="12")
@@ -152,10 +147,9 @@
           el-col(:span="12")
             el-form-item(style="width:96%")
               el-input(v-model="form.creditInfo.creditChageMsg1" :disabled="type == 2" type="textarea" :rows="3" clearable)
-    //- 2.关联企业征信：
-    el-card(class='card')
-      .left
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      //- 2.关联企业征信：
+      el-card(class='card')
+        .left
           .blueTitle1 2.关联企业征信：
           el-row(:gutter="20")
             el-col(:span="24")
@@ -166,8 +160,7 @@
             el-col(:span="24")
               el-form-item(style="width:96%")
                 el-input(v-model="form.creditInfo.creditChageMsg2" :disabled="type == 2" type="textarea" :rows="3" clearable)
-      .right
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+        .right
           .blueTitle1 3.法人保证人征信：
           el-row(:gutter="20")
             el-col(:span="24")
@@ -178,9 +171,8 @@
             el-col(:span="24")
               el-form-item(style="width:96%")
                 el-input(v-model="form.creditInfo.creditChageMsg3" :disabled="type == 2" type="textarea" :rows="3" clearable)
-    //- 基于个人征信报告(对于关注类及以下贷款及风险隐患客户每季度查询一次个人征信即可)
-    el-card(class='card')
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      //- 基于个人征信报告(对于关注类及以下贷款及风险隐患客户每季度查询一次个人征信即可)
+      el-card(class='card')
         .blueTitle1 基于个人征信报告(对于关注类及以下贷款及风险隐患客户每季度查询一次个人征信即可)：
         el-row(:gutter="20")
           el-col(:span="12")
@@ -258,9 +250,8 @@
               el-col(:span="24")
                 el-form-item(style="width:96%")
                   el-input(v-model="form.creditInfo.creditChageMsg4" :disabled="type == 2" type="textarea" :rows="3" clearable)
-    //- 2.企业法定代表人及其配偶（若有）征信
-    el-card(class='card')
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      //- 2.企业法定代表人及其配偶（若有）征信
+      el-card(class='card')
         .blueTitle1 2.企业法定代表人及其配偶（若有）征信 :
         .cardTitle1
           span(class='blue')
@@ -333,10 +324,9 @@
               el-col(:span="24")
                 el-form-item(style="width:96%")
                   el-input(v-model="form.creditInfo.creditChageMsg5" :disabled="type == 2" type="textarea" :rows="3" clearable)    
-    //- 3.其他保证人征信：
-    el-card(class='card')
-      .left
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      //- 3.其他保证人征信：
+      el-card(class='card')
+        .left
           .blueTitle1 3.其他保证人征信
           el-row(:gutter="20")
             el-col(:span="24")
@@ -347,9 +337,8 @@
             el-col(:span="24")
               el-form-item(style="width:96%")
                 el-input(v-model="form.creditInfo.creditChageMsg6" :disabled="type == 2" type="textarea" :rows="3" clearable)
-    //- 近期负面信息情况
-    el-card(class='card')
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      //- 近期负面信息情况
+      el-card(class='card')
         .cardTitle1
           span(class='blue')
           span(class='title') 近期负面信息情况
@@ -357,13 +346,12 @@
           el-col(:span="12")
             el-form-item(style="width:96%")
               el-input(v-model="form.msg" type="textarea" :disabled="type == 2" :rows="3" clearable) 
-    //- 财务信息
-    el-card(class='card')
-      .cardTitle1
-          span(class='blue')
-          span(class='title') 财务信息
-      .left
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      //- 财务信息
+      el-card(class='card')
+        .cardTitle1
+            span(class='blue')
+            span(class='title') 财务信息
+        .left
           .blueTitle1 存货
           el-row(:gutter="20")
             el-col(:span="24")
@@ -385,8 +373,7 @@
             el-col(:span="24")
               el-form-item(style="width:96%")
                 el-input(v-model="form.financeInfo.financeMsg" :disabled="type == 2" placeholder='根据财务信息及现场检查情况，判断企业是否生产经营异常(停产、半停产、员工数量骤减、设备开工率不足等)，并详细阐述异常情况对企业偿债能力的影响。' type="textarea" :rows="4" clearable)
-      .right
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+        .right
           .blueTitle1 营业收入
           el-row(:gutter="20")
             el-col(:span="24")
@@ -396,18 +383,18 @@
             el-col(:span="24")
               el-form-item(label='本次检查存货变动情况 :' style="width:96%")
                 el-input(v-model="form.financeInfo.busIncChangSitu" :disabled="type == 2" type="textarea" :rows="3" clearable)  
-    //- 影像维护
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') 影像维护
-      .upload
-        .item(v-for="(item,i) in titleList" :key="item.id")
-          .title {{item.text}}
-          .upload-wrapper
-            uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
-        //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
-  </div>
+      //- 影像维护
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') 影像维护
+        .upload
+          .item(v-for="(item,i) in titleList" :key="item.id")
+            .title {{item.text}}
+            .upload-wrapper
+              uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
+          //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
+
 </template>
 
 <script>
@@ -854,8 +841,6 @@ export default {
     font-size: 16px;
     line-height: 31px;
     color: rgba(10, 10, 10, 1);
-  }
-  .checkForm {
   }
 }
 </style>

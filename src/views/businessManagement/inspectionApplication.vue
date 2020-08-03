@@ -275,6 +275,9 @@ export default {
           if (!res.data.data.securityKind) {
             res.data.data.securityKind = ["1"];
           }
+          if (!res.data.data.payKind) {
+            res.data.data.payKind = "1";
+          }
           if (!res.data.data.creditInfo) {
             res.data.data.creditInfo = {
               queryDateForPer: "",
@@ -292,6 +295,7 @@ export default {
           }
           if (!res.data.data.financeInfo) {
             res.data.data.financeInfo = {
+              financeClassification: "1",
               stockLastBalance: "", // 上次全面检查或调查时余额--- 存货
               stockChangSitu: "", //本次检查存货变动情况
               dailyExpenLastBalance: "", //上次全面检查或调查时余额---水、电、煤、气费其中一项或多项
@@ -405,6 +409,9 @@ export default {
           if (!res.data.data.securityKind) {
             res.data.data.securityKind = ["1"];
           }
+          if (!res.data.data.payKind) {
+            res.data.data.payKind = "1";
+          }
           if (!res.data.data.creditInfo) {
             res.data.data.creditInfo = {
               queryDateForPer: "",
@@ -422,6 +429,7 @@ export default {
           }
           if (!res.data.data.financeInfo) {
             res.data.data.financeInfo = {
+              financeClassification: "1",
               stockLastBalance: "", // 上次全面检查或调查时余额--- 存货
               stockChangSitu: "", //本次检查存货变动情况
               dailyExpenLastBalance: "", //上次全面检查或调查时余额---水、电、煤、气费其中一项或多项
@@ -718,7 +726,13 @@ export default {
       );
       this.approval.opType = type;
       let data;
-      if (currPost) {
+      if (
+        currPost == "220" ||
+        currPost == "221" ||
+        currPost == "222" ||
+        currPost == "320" ||
+        currPost == "321"
+      ) {
         data = {
           ...this.approval,
           ...this.$refs.commpoent.params

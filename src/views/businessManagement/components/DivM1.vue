@@ -5,9 +5,9 @@
   时间：2020年07月07日 16:40:13
 -->
 <template lang="pug">
-  <div class="m1">
-    el-card(class='card')
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
+  .m1
+    el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
+      el-card(class='card')
         el-form-item(label="客户名称 :" class="formItem2")
           el-input(v-model="form.custName" disabled)
         el-form-item(label="贷款期限 :" class="formItem2")
@@ -16,7 +16,7 @@
         el-form-item(label="借据编号 :" class="formItem2")
           el-input(v-model="form.billNo" disabled)
         el-form-item(label="贷款支付方式 :" class="formItem2")
-          el-select(v-model="form.payKind" style="width:100%" clearable :disabled="type == 2")
+          el-select(v-model="form.payKind" style="width:100%" clearable)
             el-option(v-for="item in payKindArr" :key="item.value" :label="item.label" :value="item.value")
           //- el-input(v-model="form.payKind" clearable :disabled="type == 2")
         el-form-item(label="放款日期 :" class="formItem2")
@@ -26,44 +26,38 @@
         el-form-item(label="约定用途 :" class="formItem2")
           el-input(v-model="form.loanPurpose" type="textarea" :rows="3" clearable :disabled="type == 2")
 
-    el-card(class='card')
-      .left
-        .cardTitle1
-          span(class='blue')
-          span(class='title') 首次跟踪检查要求及落实情况
-        
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
+      el-card(class='card')
+        .left
+          .cardTitle1
+            span(class='blue')
+            span(class='title') 首次跟踪检查要求及落实情况
           el-form-item(label="要求 :" class="formItem2")
             el-input(v-model="form.requireCheck" type="textarea" :disabled="type == 2" :rows="3" clearable)
           el-form-item(label="落实情况 :" class="formItem2")
             el-input(v-model="form.checked" type="textarea" :disabled="type == 2" :rows="3" clearable)
-      .right
-        .cardTitle1
-          span(class='blue')
-          span(class='title') 首次跟踪特殊要求及落实情况
-        
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
+        .right
+          .cardTitle1
+            span(class='blue')
+            span(class='title') 首次跟踪特殊要求及落实情况
           el-form-item(label="要求 :" class="formItem2")
             el-input(v-model="form.specialRequireCheck" :disabled="type == 2" type="textarea" :rows="3" clearable)
           el-form-item(label="落实情况 :" class="formItem2")
             el-input(v-model="form.specialChecked" :disabled="type == 2" type="textarea" :rows="3" clearable)
 
-    el-card(class='card')
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
-          el-form-item(label="检查地点 :" class="formItem2")
-            el-input(v-model="form.checkAddr" clearable :disabled="type == 2")
-          el-form-item(label="接待人员 :" class="formItem2")
-            el-input(v-model="form.staff" clearable :disabled="type == 2")
-          el-form-item(label="检查配合程度 :" class="formItem2")
-            el-select(v-model="form.cooperate" style="width:100%" clearable :disabled="type == 2")
-              el-option(v-for="item in cooperateArr" :key="item.value" :label="item.label" :value="item.value")
-          el-form-item(label="生产经营场所变动情况 :" class="formItem2")
-            el-input(v-model="form.addrChangedMsg" type="textarea" :rows="3" clearable :disabled="type == 2")
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') 检查内容
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
+      el-card(class='card')
+        el-form-item(label="检查地点 :" class="formItem2")
+          el-input(v-model="form.checkAddr" clearable :disabled="type == 2")
+        el-form-item(label="接待人员 :" class="formItem2")
+          el-input(v-model="form.staff" clearable :disabled="type == 2")
+        el-form-item(label="检查配合程度 :" class="formItem2")
+          el-select(v-model="form.cooperate" style="width:100%" clearable :disabled="type == 2")
+            el-option(v-for="item in cooperateArr" :key="item.value" :label="item.label" :value="item.value")
+        el-form-item(label="生产经营场所变动情况 :" class="formItem2")
+          el-input(v-model="form.addrChangedMsg" type="textarea" :rows="3" clearable :disabled="type == 2")
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') 检查内容
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="资金使用情况详细说明 :" class="formItem1")
@@ -81,17 +75,17 @@
             el-form-item(label="情况说明 :" class="formItem1" )
               el-input(v-model="form.msg" type="textarea" :rows="3" clearable :disabled="type == 2")
         
-    el-card(class='card')
-      .cardTitle1 
-        span(class='blue')
-        span(class='title') 影像维护
-      .upload
-        .item(v-for="(item,i) in titleList" :key="item.id")
-          .title {{item.text}}
-          .upload-wrapper
-            uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
-        //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
-  </div>
+      el-card(class='card')
+        .cardTitle1 
+          span(class='blue')
+          span(class='title') 影像维护
+        .upload
+          .item(v-for="(item,i) in titleList" :key="item.id")
+            .title {{item.text}}
+            .upload-wrapper
+              uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
+          //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
+
 </template>
 
 <script>
@@ -182,7 +176,7 @@ export default {
         custName: "", // 客户名称  queryType为2时，必传；其他情况非必传
         loanLength: "", // 贷款期限
         billNo: "", //借据编号
-        payKind: "1", //贷款支付方式
+        payKind: "", //贷款支付方式
         loanDate: "", //放款日期
         loanAmout: "", //贷款金额
         loanPurpose: "", //约定用途
@@ -217,6 +211,7 @@ export default {
   watch: {
     detail: function(newVal) {
       this.form = newVal;
+      this.params = this.matchImage(newVal);
       if (!newVal.payKind) {
         this.form.payKind = "1";
       }
@@ -226,7 +221,6 @@ export default {
       if (!newVal.useAmoutByContract) {
         this.form.useAmoutByContract = 1;
       }
-      this.params = this.matchImage(newVal);
     }
   },
   // 组件方法
@@ -449,8 +443,6 @@ export default {
     font-size: 16px;
     line-height: 31px;
     color: rgba(10, 10, 10, 1);
-  }
-  .checkForm {
   }
   .upload {
     .item {

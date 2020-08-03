@@ -5,9 +5,9 @@
   时间：2020年07月07日 16:40:13
 -->
 <template lang="pug">
-  <div class="m5">
-    el-card(class='card')
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+  .m5
+    el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      el-card(class='card')
         el-form-item(label="客户名称 :" class="formItem2")
           el-input(v-model="form.custName" disabled)
         el-form-item(label="合同编号 :" class="formItem2")
@@ -26,11 +26,10 @@
         el-form-item(label="贷款支付方式 :" class="formItem2")
           el-input(v-model="form.repayKind" clearable :disabled="type == 2")
 
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') 检查内容
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') 检查内容
         el-form-item(label="是否按合同约定的用途使用信贷资金 :" class="formItem2")
           el-select(v-model="form.useAmoutByContract" :disabled="type == 2" placeholder="请选择" style="width:100%")
             el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
@@ -48,15 +47,15 @@
               el-option(v-for="item in cooperateArr" :key="item.value" :label="item.label" :value="item.value")
         el-form-item(label="情况说明 :" class="formItem2")
             el-input(v-model="form.cooperateMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') 影像维护
-      .upload
-        .item(v-for="(item,i) in titleList" :key="item.id")
-          .title {{item.text}}
-          .upload-wrapper
-            uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') 影像维护
+        .upload
+          .item(v-for="(item,i) in titleList" :key="item.id")
+            .title {{item.text}}
+            .upload-wrapper
+              uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
         //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
   </div>
 </template>

@@ -5,7 +5,6 @@
 -->
 
 <template lang="pug">
-  
 	.aa
 		el-upload(
 		:on-preview.stop.prevent="handlePictureCardPreview" 
@@ -15,7 +14,7 @@
 		:before-upload="handleBefore"
 		:multiple="false"
 		:action='`${this.host}/postLoan/business/uploadModelFile`'
-		list-type="picture-card" :disabled="modify"
+		list-type="picture-card" :disabled="modify" :data="bizId"
 		)
 			i(class="el-icon-plus")
 		el-dialog(:visible.sync="dialogVisible" :append-to-body="true")
@@ -35,7 +34,10 @@ export default {
       dialogVisible: false,
       fileList: [],
       params: [],
-      imageHas: false
+      imageHas: false,
+      bizId: {
+        bizId: "ycyh"
+      }
     };
   },
   mounted() {
