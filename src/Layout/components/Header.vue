@@ -37,7 +37,7 @@ export default {
   name: "Header",
   data() {
     return {
-      userName:sessionStorage.getItem('emplName')
+      userName: sessionStorage.getItem("emplName")
     };
   },
   methods: {
@@ -92,38 +92,45 @@ export default {
   .headerRight {
     position: absolute;
     display: inline-block;
-    width: 185px;
+    // width: 350px;
     height: 75px;
+    line-height: 75px;
     top: 0;
-    right: 0;
+    right: 27px;
     color: rgba(255, 255, 255, 1);
     .userIcon {
       line-height: 75px;
       display: inline-block;
       font-size: 28px;
-      margin-right: 12px;
+      // margin-right: 12px;
       color: #dededd;
     }
     .loginIcon {
+      // position: absolute;
+      right: 27px;
       line-height: 75px;
       font-size: 28px;
     }
     .nameBox {
       display: inline-block;
-      position: relative;
-      width: 80px;
+      // position: relative;
+      text-align: center;
+      // width: 250px;
       height: 20px;
+      margin-right: 10px;
+      margin-left: 10px;
     }
     .userName {
-      position: absolute;
-      display: inline-block;
-      top: -5px;
+      // position: absolute;
+      // width: 100%;
+      // display: inline-block;
+      // top: -5px;
+      // left: 0;
       // margin-right: 34px;
       font-family: MicrosoftYaHei;
-      font-size: 14px;
-      line-height: 25px;
-      letter-spacing: 1px;
-      height: 17px;
+      font-size: 16px;
+      // line-height: 17px;
+      // height: 17px;
     }
   }
 }

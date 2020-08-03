@@ -29,7 +29,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <!-- <el-col :span="6">
               <el-form-item label="状态" class="formItem5">
                 <el-select v-model="searchForm.bizStatus" clearable style="width:100%">
                   <el-option label="应做" value="shouldDo"></el-option>
@@ -38,7 +38,7 @@
                   <el-option label="已做" value="alreadyDo"></el-option>
                 </el-select>
               </el-form-item>
-            </el-col>
+            </el-col>-->
             <el-col :span="6">
               <el-form-item label="客户名称" class="formItem5">
                 <el-input v-model="searchForm.custName" clearable></el-input>
@@ -70,24 +70,18 @@
               width="55px"
               :selectable="selectable"
             ></el-table-column>
+            <el-table-column header-align="center" prop="orgName" label="机构名称" min-width="15%"></el-table-column>
+            <el-table-column header-align="center" prop="emplName" label="客户经理名称" min-width="15%"></el-table-column>
+            <el-table-column header-align="center" prop="emplCode" label="客户经理工号" min-width="15%"></el-table-column>
             <el-table-column
               header-align="center"
               prop="bizType"
               :formatter="returnType"
-              label="业务名称"
+              label="检查类型"
               min-width="15%"
             ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="bizStatus"
-              :formatter="returnBizStatus"
-              label="状态"
-              min-width="12%"
-            ></el-table-column>
-            <el-table-column header-align="center" prop="custName" label="客户名称" min-width="12%"></el-table-column>
-            <el-table-column header-align="center" prop="billNo" label="借据编号" min-width="25%"></el-table-column>
-            <el-table-column header-align="center" prop="noticeDate" label="提醒时间" min-width="15%"></el-table-column>
-            <el-table-column header-align="center" prop="bizEndDate" label="截止时间" min-width="15%"></el-table-column>
+            <el-table-column header-align="center" prop="bizEndDate" label="完成时间" min-width="12%"></el-table-column>
+            <el-table-column header-align="center" prop="custName" label="客户名称" min-width="15%"></el-table-column>
             <el-table-column header-align="center" label="操作" width="150px">
               <template slot-scope="scope">
                 <el-button

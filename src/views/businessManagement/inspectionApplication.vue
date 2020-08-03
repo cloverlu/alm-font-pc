@@ -705,7 +705,8 @@ export default {
               this.approval = res.data.data;
               this.approval.bizId = id;
               this.approvaList = res.data.data.aproveInfo || [];
-              const pa = { orgName: res.data.data.custOrg };
+              const { currPost } = this.$route.query;
+              const pa = { orgName: res.data.data.custOrg, currPost };
               getNextEmplName(this, pa).then(ress => {
                 this.nextEmplNameList = ress.data.data.nextEmplNameList;
               });
@@ -870,7 +871,7 @@ export default {
       }
     },
     handleClick() {
-      const { bizId } = this.$route.query;
+      const { bizId, currPost } = this.$route.query;
       if (this.activeName == "second") {
         // this.routerMatch();
         approveDetail(this, { bizId }).then(res => {
@@ -880,7 +881,7 @@ export default {
           this.approvaList = res.data.data.aproveInfo || [];
           const pa = {
             orgName: res.data.data.custOrg,
-            orgCode: sessionStorage.getItem("orgCode")
+            currPost
           };
           getNextEmplName(this, pa).then(ress => {
             this.nextEmplNameList = ress.data.data.nextEmplNameList;
