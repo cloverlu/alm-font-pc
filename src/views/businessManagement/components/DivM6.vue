@@ -578,7 +578,6 @@ export default {
   // 侦听器
   watch: {
     detail: function(newVal, oldVal) {
-      console.log(1, newVal, oldVal);
       this.form = newVal;
       if (newVal.securityKind.indexOf("5") != -1) {
         this.securityKindMsgShow = true;
@@ -696,13 +695,6 @@ export default {
   },
   // 组件方法
   methods: {
-    // 保存
-    onSubmitApproval() {
-      console.log(filterParams(this.approval));
-    },
-    handleClick() {
-      console.log(this.activeName);
-    },
     returnType(row) {
       switch (row.bizType) {
         case "m1":
@@ -720,7 +712,6 @@ export default {
       }
     },
     selectSecurityKind() {
-      console.log(this.form.securityKind);
       if (this.form.securityKind.indexOf("5") != -1) {
         this.securityKindMsgShow = true;
       } else {
@@ -729,21 +720,9 @@ export default {
       }
     },
     // 阶段多选框
-    onChange() {
-      console.log(this.check);
-    },
-    // 图片上传
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    // 预览
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
+    onChange() {},
     // 增加--检查要点小结
     addDomain1() {
-      console.log(this.form.assitInfoForPledge);
       this.form.assitInfoForPledge.push({
         assitName: "",
         assitAddr: "",

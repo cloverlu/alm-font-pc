@@ -146,7 +146,6 @@ export default {
       this.params.riskMsg = newVal.riskMsg;
       this.params.suggest = newVal.suggest;
       this.params.riskStage = newVal.riskStage;
-      console.log(newVal, this.params);
       if (!newVal.existRisk) {
         this.params.existRisk = 1;
       }

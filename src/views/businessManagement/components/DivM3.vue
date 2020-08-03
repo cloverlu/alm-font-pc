@@ -672,7 +672,6 @@ export default {
   // 侦听器
   watch: {
     detail: function(newVal, oldVal) {
-      console.log(1, newVal, oldVal);
       this.form = newVal;
       if (newVal.securityKind.indexOf("5") != -1) {
         this.securityKindMsgShow = true;
@@ -764,7 +763,6 @@ export default {
       this.loanBusiness = Object.assign({}, this.type, arrs);
     },
     selectSecurityKind() {
-      console.log(this.form.securityKind);
       if (this.form.securityKind.indexOf("5") != -1) {
         this.securityKindMsgShow = true;
       } else {
@@ -775,15 +773,6 @@ export default {
     financeInfoChange() {
       console.log(this.form.financeInfo.financeClassification);
     },
-    // 图片上传
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    // 预览
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    }
   },
   /**
    * el 被新创建的 vm.$ el 替换，并挂载到实例上去之后调用该钩子。
@@ -793,7 +782,6 @@ export default {
     // this.params = this.mVmodel(11);
     const { billNo, bizId, bizStatus } = this.$route.query;
     // this.params1 = this.form.financeInfo;
-    // console.log("this.params1", this.form);
     if (billNo) {
       // 借据
       this.type = 1;

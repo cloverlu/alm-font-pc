@@ -606,7 +606,6 @@ export default {
   // 侦听器
   watch: {
     detail: function(newVal, oldVal) {
-      console.log(1, newVal, oldVal);
       this.form = newVal;
       this.params = this.matchImage(newVal);
       if (!newVal.creditInfo) {
@@ -658,15 +657,6 @@ export default {
       }
     },
 
-    // 图片上传
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    // 预览
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
     // 图像模块匹配
     mVmodel(num) {
       const definite16 = {};

@@ -63,7 +63,6 @@ export default {
       }
     },
     submit() {
-      console.log(this.emplCode, this.password);
       const params = {
         emplCode: this.emplCode,
         password: this.password
@@ -79,7 +78,6 @@ export default {
             orgName,
             postCode
           } = res.data.data;
-          console.log(res.data.data);
           // this.$cookies.set("emplCode", emplCode);
           // this.$cookies.set("emplName", emplName);
           // this.$cookies.set("menuList", JSON.stringify(menuList));

@@ -20,7 +20,7 @@
         el-form-item(label="还款方式 :" class="formItem2")
           el-input(v-model="form.repayKind" disabled)
         el-form-item(label="还款日期 :" class="formItem2")
-          el-date-picker(v-model="form.repayDate" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" placeholder="选择日期")
+          el-date-picker(v-model="form.repayDate" @change="dateChange" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" placeholder="选择日期")
         el-form-item(label="还款金额 :" class="formItem2")
           el-input(v-model="form.repayAmout" :disabled="type == 2")
 
@@ -154,7 +154,6 @@ export default {
   // 侦听器
   watch: {
     detail: function(newVal, oldVal) {
-      console.log(1, newVal, oldVal);
       this.form = newVal;
       this.params = this.matchImage(newVal);
       if (!newVal.stageData || newVal.stageData.length == 0) {
@@ -174,6 +173,10 @@ export default {
   },
   // 组件方法
   methods: {
+    dateChange() {
+      console.log(this.form);
+      console.log(this.titleList);
+    },
     // 图像模块匹配
     mVmodel(num) {
       const definite16 = {};

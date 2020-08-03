@@ -231,9 +231,6 @@ export default {
   },
   // 组件方法
   methods: {
-    handleSuccess(res, fileList, index) {
-      console.log(res, fileList, index);
-    },
     returnType(row) {
       switch (row.bizType) {
         case "m1":
@@ -249,15 +246,6 @@ export default {
         case "m6":
           return "小企业法人快捷贷贷后日常检查";
       }
-    },
-    // 图片上传
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    // 预览
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
     },
     // 图像模块匹配
     mVmodel(num) {

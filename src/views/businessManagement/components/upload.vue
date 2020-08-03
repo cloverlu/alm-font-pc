@@ -102,7 +102,6 @@ export default {
       }
     },
     modify(val) {
-      console.log("val", val);
       if (val) {
         this.canModify = true;
       } else {
@@ -120,7 +119,6 @@ export default {
       });
     },
     handlePictureCardPreview(file) {
-      console.log(file);
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
@@ -142,7 +140,6 @@ export default {
         };
         this.fileList[this.item.vModel][index] = item;
         this.fileList[this.item.vModel][index].url = response.picUrl;
-        console.log(this.fileList);
         this.getLo(file.raw, index);
 
         return this.fileList[this.item.vModel];
@@ -156,7 +153,6 @@ export default {
       var getdate = function(e) {
         EXIF.getData(e, function() {
           let SubjectLocation = EXIF.getAllTags(e);
-          // console.log("imgdata", SubjectLocation);
 
           if (SubjectLocation.GPSLongitude) {
             const LongitudeArry = SubjectLocation.GPSLongitude;
@@ -194,7 +190,6 @@ export default {
         //此处的this是reader
         let result = this.result;
         let img = new Image();
-        // console.log(result,'2222222222222')
         img.src = result;
         //判断图片是否大于500K,是就直接上传，反之压缩图片
         if (this.result.length <= 500 * 1024) {
@@ -204,7 +199,6 @@ export default {
           img.onload = function() {
             let data = self.compress(img);
             file.cusContent = data;
-            // console.log(file.size);
             self.isloadImg = false;
           };
         }
@@ -236,7 +230,6 @@ export default {
       //如果图片像素大于100万则使用瓦片绘制
       let count;
       if ((count = (width * height) / 1000000) > 1) {
-        // console.log("超过100W像素"); ~~ 是利于符号转换成数字类型
         count = ~~(Math.sqrt(count) + 1); //计算要分成多少块瓦片
         //      计算每块瓦片的宽和高
         let nw = ~~(width / count);

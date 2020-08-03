@@ -159,7 +159,6 @@ export default {
   // 侦听器
   watch: {
     detail: function(newVal, oldVal) {
-      console.log(1, newVal, oldVal);
       this.form = newVal;
       this.params = this.matchImage(newVal);
       if (!newVal.executeCon) {
@@ -190,19 +189,6 @@ export default {
         case "m6":
           return "小企业法人快捷贷贷后日常检查";
       }
-    },
-    // 图片上传
-    handleSuccess(res, fileList, index) {
-      console.log(res, fileList, index);
-    },
-    // 图片删除
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    // 预览
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
     },
     // 图像模块匹配
     mVmodel(num) {

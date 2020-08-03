@@ -120,7 +120,6 @@ export default {
   },
   methods: {
     getPath() {
-      console.log("this.$route.path", this.$route.path);
       this.defaultActive = this.$route.path;
     },
     getMenuList() {
@@ -135,14 +134,11 @@ export default {
         return arr;
       });
       this.subMenuArr = arr;
-      // console.log("this.subMenuArr", this.subMenuArr);
     }
   },
   mounted() {
     this.getMenuList();
     this.getPath();
-    // console.log(this.$route.path);
-    // const { custName } = this.$route.query;
   },
   watch: {
     $route: "getPath"

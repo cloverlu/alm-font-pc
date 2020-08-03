@@ -225,7 +225,6 @@ export default {
         bizType: this.form.bizType
       }).then(res => {
         if (res.data.returnCode == "200000") {
-          console.log(res.data.data.useAmoutByContract);
           for (var key in res.data.data) {
             if (res.data.data[key] == null) {
               res.data.data[key] = "";
@@ -407,7 +406,6 @@ export default {
             res.data.data.securityKind = ["1"];
           }
           if (!res.data.data.creditInfo) {
-            // console.log("没有creditInfo");
             res.data.data.creditInfo = {
               queryDateForPer: "",
               queryDateForCom: "",
@@ -468,7 +466,6 @@ export default {
   methods: {
     // 保存
     onSave: function() {
-      console.log("save");
       let data = {};
       let arrs = {};
       if (this.form.bizType == "m1") {
@@ -478,7 +475,6 @@ export default {
           arrs[a] = this.$refs.DivM1.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
         data = {
           ...filterParams(this.$refs.DivM1.form),
           ...this.loanBusiness,
@@ -491,7 +487,6 @@ export default {
           arrs[a] = this.$refs.DivM2.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
         data = {
           ...filterParams(this.$refs.DivM2.form),
           ...this.loanBusiness,
@@ -507,7 +502,6 @@ export default {
           arrs[a] = this.$refs.DivM3.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
         this.$refs.DivM3.form.financeInfo.financeClassification = "1";
         data = {
           ...filterParams(this.$refs.DivM3.form),
@@ -525,7 +519,6 @@ export default {
           arrs[a] = this.$refs.DivM3.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
         data = {
           ...filterParams(this.$refs.DivM3.form),
           ...filterParams(this.$refs.DivM3.$refs.tabForm2.form),
@@ -539,7 +532,6 @@ export default {
           arrs[a] = this.$refs.DivM4.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
         data = {
           ...filterParams(this.$refs.DivM4.form),
           ...this.loanBusiness,
@@ -552,7 +544,6 @@ export default {
           arrs[a] = this.$refs.DivM5.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
         data = {
           ...filterParams(this.$refs.DivM5.form),
           ...this.loanBusiness,
@@ -565,7 +556,6 @@ export default {
           arrs[a] = this.$refs.DivM6.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
         data = {
           ...filterParams(this.$refs.DivM6.form),
           ...this.loanBusiness,
@@ -573,7 +563,7 @@ export default {
         };
       }
 
-      console.log(data);
+      // console.log(data);
       saveEditModelBusiness(this, {
         ...data
       }).then(res => {
@@ -770,7 +760,7 @@ export default {
         belongBranch,
         bizType
       } = this.$route.query;
-      console.log(currPost, biggerThan500, belongBranch, bizType);
+      // console.log(currPost, biggerThan500, belongBranch, bizType);
       if (currPost) {
         this.approveContent = true;
       }
@@ -867,7 +857,6 @@ export default {
     },
     handleClick() {
       const { bizId } = this.$route.query;
-      console.log(this.activeName);
       if (this.activeName == "second") {
         // this.routerMatch();
         approveDetail(this, { bizId }).then(res => {
@@ -903,8 +892,6 @@ export default {
     },
     // 阶段多选框
     onChange() {
-      console.log(this.form.bizType);
-
       if (this.form.bizType === "m1") {
         this.paramsM1 = this.params;
       } else if (this.form.bizType === "m2") {
@@ -924,7 +911,6 @@ export default {
       this.dialogVisible = true;
       let board = document.getElementById("board");
       this.ctx = board.getContext("2d");
-      console.log("this.canvas", board);
     },
     // 鼠标按下(开始)
     pcStart(e) {

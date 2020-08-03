@@ -1,4 +1,11 @@
 <!--
+ * @Date: 2020-07-09 15:42:48
+ * @Author: sunhua
+ * @Describe: 
+ * @LastEditTime: 2020-08-03 09:17:31
+ * @FilePath: \alm-font-pc\src\views\businessManagement\components\FormContent4.vue
+--> 
+<!--
   功能：FormContent2
   作者：sunhua
   邮箱：947545659@qq.com
@@ -62,9 +69,6 @@ export default {
   watch: {},
   // 组件方法
   methods: {
-    handleClick() {
-      console.log(this.activeName);
-    }
   },
   /**
    * el 被新创建的 vm.$ el 替换，并挂载到实例上去之后调用该钩子。

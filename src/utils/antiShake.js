@@ -1,3 +1,11 @@
+/*
+ * @Date: 2020-07-27 08:47:48
+ * @Author: sunhua
+ * @Describe:
+ * @LastEditTime: 2020-08-03 09:14:14
+ * @FilePath: \alm-font-pc\src\utils\antiShake.js
+ */
+
 // 防抖节流函数
 export function antiShake(func, wait, immediate = true) {
   let timeout;

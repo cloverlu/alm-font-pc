@@ -112,7 +112,6 @@ export default {
         pageNo: 1,
         pageSize: 10
       };
-      console.log("pageSize", this.pageSize);
     },
     // 翻页
     handleCurrentChange: function(e) {
@@ -126,12 +125,9 @@ export default {
         pageNo: 1,
         pageSize: 10
       };
-      console.log("pageIndex", this.pageNo);
     },
     // 表单查询
     onSubmit() {
-      console.log(filterParams(this.searchForm));
-      console.log(this.pageSize, this.pageNo);
       getCustomers(this, {
         ...filterParams(this.searchForm),
         emplCode: sessionStorage.getItem("emplCode"),
@@ -142,7 +138,6 @@ export default {
       }).then(res => {
         this.tableData = res.data.data;
         this.total = res.data.total;
-        console.log(res);
       });
     },
     onClear() {

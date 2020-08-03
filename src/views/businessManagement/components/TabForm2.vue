@@ -258,14 +258,12 @@ export default {
   // 侦听器
   watch: {
     contentDetail: function(newVal) {
-      console.log(123, newVal);
       this.form.financeInfo = newVal;
     }
   },
   // 组件方法
   methods: {
     handleClick1() {
-      console.log(this.activeTab1);
       this.resetValue1();
     },
     resetValue1() {
@@ -284,7 +282,6 @@ export default {
       // this.form.financeInfo.payDebtChang30Msg = ""; // 应付票据变动超过30%，原因
     },
     handleClick2() {
-      console.log(this.activeTab2);
       this.resetValue2();
     },
     resetValue2() {
@@ -300,7 +297,6 @@ export default {
       // this.form.financeInfo.payCapitalChang30Msg = ""; // 应付账款变动超过30%，原因
     },
     handleClick3() {
-      console.log(this.activeTab3);
       this.resetValue3();
     },
     resetValue3() {
@@ -315,7 +311,6 @@ export default {
       // this.form.financeInfo.profitChang30Msg = ""; // 应收账款变动超过30%，原因
     },
     handleClick4() {
-      console.log(this.activeTab4);
       this.resetValue4();
     },
     resetValue4() {

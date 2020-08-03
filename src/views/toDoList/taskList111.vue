@@ -124,8 +124,6 @@ export default {
     },
     // 表单查询
     onSubmit: function() {
-      console.log(filterParams(this.searchForm));
-      console.log(this.pageSize, this.pageNo);
       getTaskList(this, {
         ...filterParams(this.searchForm),
         emplName: sessionStorage.getItem("emplName"),

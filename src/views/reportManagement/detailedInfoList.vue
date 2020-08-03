@@ -169,7 +169,6 @@ export default {
     handleSizeChange: function(e) {
       this.pageSize = e;
       this.pageNo = 1;
-      console.log(111);
       this.paramsDetail = {
         pageNo: this.pageNo,
         pageSize: this.pageSize
@@ -183,7 +182,6 @@ export default {
     // 翻页
     handleCurrentChange: function(e) {
       this.pageNo = e;
-      console.log(222);
       this.paramsDetail = {
         pageNo: this.pageNo,
         pageSize: this.pageSize
@@ -206,8 +204,6 @@ export default {
           "L"
         );
       }
-      console.log("this.searchForm", this.searchForm);
-      console.log("params", this.paramsDetail);
       getReportFormList(this, {
         ...filterParams(this.searchForm),
         pageSize: 10,
@@ -240,7 +236,6 @@ export default {
           queryStr += `&${key}=${queryFormValues[key]}`;
         }
       });
-      console.log(queryStr);
       const url = `${this.host}/postLoan/business/exportReportFormList?${queryStr}`;
       window.location.href = url;
       // outPutReport(this, {

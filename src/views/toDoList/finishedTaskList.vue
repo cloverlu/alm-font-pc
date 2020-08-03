@@ -173,7 +173,6 @@ export default {
         pageNo: 1,
         pageSize: 10
       };
-      console.log("pageSize", this.pageSize);
     },
     // 翻页
     handleCurrentChange: function(e) {
@@ -187,12 +186,9 @@ export default {
         pageNo: 1,
         pageSize: 10
       };
-      console.log("pageIndex", this.pageNo);
     },
     // 表单查询
     onSubmit: function() {
-      console.log(filterParams(this.searchForm));
-      console.log(this.pageSize, this.pageNo);
       getTaskList(this, {
         ...filterParams(this.searchForm),
         emplName: sessionStorage.getItem("emplName"),
@@ -218,10 +214,8 @@ export default {
       this.pageSize = 10;
     },
     download() {
-      // console.log("111");
       const arr = this.multipleSelection.map(item => item.bizId);
       const bizIdString = arr.join(",");
-      console.log("bizIdString", bizIdString);
       var a = document.createElement("a");
       //需要下载的数据内容,我这里放的就是BLOB，如果你有下载链接就不需要了
       var url = `${this.host}/postLoan/model/downZipPdfFile?bizIds=${bizIdString}`;
@@ -238,7 +232,6 @@ export default {
       } else {
         this.flag = true;
       }
-      console.log("val", this.multipleSelection);
     },
     selectable(row) {
       let flag = true;
@@ -298,7 +291,6 @@ export default {
       //   window.open(this.url);
       //   // previewPDF(this, { bizId: row.bizId }).then(res => {
       //   //   var csvData = new Blob([res.data], { type: "application/pdf" });
-      //   //   console.log(csvData);
       //   //   window.navigator.msSaveOrOpenBlob(csvData, "pdf");
       //   // });
       // } else {
@@ -307,7 +299,6 @@ export default {
 
       // 下面代码都是处理IE浏览器的情况
       if (window.ActiveXObject || "ActiveXObject" in window) {
-        console.log(1111, "ie");
         let flag;
         //判断是否为IE浏览器，"ActiveXObject" in window判断是否为IE11
         //判断是否安装了adobe Reader
@@ -355,7 +346,6 @@ export default {
       }
     },
     _loadFile(url) {
-      console.log(url);
       var a = document.createElement("a");
       a.href = url;
       a.target = "_blank";
