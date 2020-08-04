@@ -61,11 +61,7 @@ export default {
   // 侦听器
   watch: {},
   // 组件方法
-  methods: {
-    handleClick() {
-      console.log(this.activeName);
-    }
-  },
+  methods: {},
   /**
    * el 被新创建的 vm.$ el 替换，并挂载到实例上去之后调用该钩子。
    * 如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$ el 也在文档内。

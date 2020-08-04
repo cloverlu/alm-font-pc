@@ -8,6 +8,10 @@ const changeTask = ({ $axios }, data) =>
 
 // 下载
 const outPutTaskList = ({ $axios }, data) =>
-  $axios.post(`/alm/postLoan/business/exportReportFormList`, data);
+  $axios.get(`/alm/postLoan/model/downZipPdfFile`, { params: data });
 
-export { getTaskList, changeTask, outPutTaskList };
+// 预览
+const previewPDF = ({ $axios }, data) =>
+  $axios.get(`/alm/postLoan/model/viewPdfFile`, { params: data });
+
+export { getTaskList, changeTask, outPutTaskList, previewPDF };

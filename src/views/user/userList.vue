@@ -198,23 +198,40 @@ export default {
     handleSizeChange: function(e) {
       this.pageSize = e;
       this.pageNo = 1;
+      this.paramsDetail = {
+        pageNo: this.pageNo,
+        pageSize: this.pageSize
+      };
       this.onSubmit();
+      this.paramsDetail = {
+        pageNo: 1,
+        pageSize: 10
+      };
     },
     // 翻页
     handleCurrentChange: function(e) {
       this.pageNo = e;
+      this.paramsDetail = {
+        pageNo: this.pageNo,
+        pageSize: this.pageSize
+      };
       this.onSubmit();
+      this.paramsDetail = {
+        pageNo: 1,
+        pageSize: 10
+      };
     },
     // 表单查询
     onSubmit: function() {
       const params = {
         ...this.searchForm,
         postCode: this.searchForm.postCode.join(","),
-        pageSize: this.pageSize,
-        pageNo: this.pageNo
+        pageSize: 10,
+        pageNo: 1
       };
       getUsers(this, {
-        ...filterParams(params)
+        ...filterParams(params),
+        ...this.paramsDetail
       }).then(res => {
         this.tableData = res.data.data;
         this.total = res.data.total;
@@ -225,7 +242,6 @@ export default {
       getPostList(this).then(res => {
         if (res && res.data && res.data.data) {
           this.postNameList = res.data.data;
-          console.log(res.data.data);
         }
       });
     },
@@ -237,7 +253,6 @@ export default {
       this.form = {
         postCode: []
       };
-      console.log(1);
     },
     // 重置
     onClear() {
@@ -251,7 +266,6 @@ export default {
     handleEdit: function(item) {
       this.currentItem = item.id;
       getUserDetail(this, { id: item.id }).then(res => {
-        console.log(res.data.data);
         this.form.orgName = res.data.data.orgName;
         this.form.emplName = res.data.data.emplName;
         this.form.emplCode = res.data.data.emplCode;
@@ -264,14 +278,12 @@ export default {
         // this.form.postCode = res.data.data.postCode.split(",");
         this.dialogFormVisible = true;
         this.type = 2;
-        console.log(this.type == 2);
       });
     },
     // 删除按钮-触发弹窗
     handleDelete: function(item) {
       this.currentItem = item.id;
       this.dialogVisible = true;
-      console.log(item.id);
     },
     // 新建编辑弹窗的 重置按钮
     editCancel: function(refname) {
@@ -285,7 +297,6 @@ export default {
       this.$refs[refname].resetFields();
       this.dialogFormVisible = false;
       this.type = 1;
-      console.log(this.form);
     },
     // 新建编辑弹窗的 确认按钮
     editOk: function(refname) {
@@ -296,7 +307,6 @@ export default {
         //   this.form.postCode = "";
         // }
         // 新建
-        console.log("新建");
         addUser(this, {
           ...filterParams(this.form),
           postCode: this.form.postCode ? this.form.postCode.join(",") : ""
@@ -326,7 +336,6 @@ export default {
         });
       } else {
         // 编辑
-        console.log("编辑");
         updateUser(this, {
           ...filterParams(this.form),
           postCode: this.form.postCode ? this.form.postCode.join(",") : "",
@@ -366,9 +375,10 @@ export default {
     deleteOk: function() {
       deleteUser(this, { id: this.currentItem })
         .then(res => {
-          console.log(res);
-          this.dialogVisible = false;
-          this.currentItem = "";
+          if (res.data.returnCode === "200000") {
+            this.dialogVisible = false;
+            this.currentItem = "";
+          }
         })
         .then(() => {
           this.onSubmit();

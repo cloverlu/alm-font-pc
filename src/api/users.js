@@ -1,6 +1,6 @@
 // 获取邮储用户信息
 const getUserInfo = ({ $axios }, data) =>
-  $axios.post(`/alm/employee/getUserInfo`, data);
+  $axios.get(`/alm/employee/getUserInfo`, { params: data });
 
 //用户列表
 const getUsers = ({ $axios }, data) =>

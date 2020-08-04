@@ -29,7 +29,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <!-- <el-col :span="6">
               <el-form-item label="状态" class="formItem5">
                 <el-select v-model="searchForm.bizStatus" clearable style="width:100%">
                   <el-option label="应做" value="shouldDo"></el-option>
@@ -38,7 +38,7 @@
                   <el-option label="已做" value="alreadyDo"></el-option>
                 </el-select>
               </el-form-item>
-            </el-col>
+            </el-col>-->
             <el-col :span="6">
               <el-form-item label="客户名称" class="formItem5">
                 <el-input v-model="searchForm.custName" clearable></el-input>
@@ -72,35 +72,60 @@
             ></el-table-column>
             <el-table-column
               header-align="center"
-              prop="bizType"
-              :formatter="returnType"
-              label="业务名称"
+              prop="orgName"
+              sortable
+              label="机构名称"
               min-width="15%"
             ></el-table-column>
             <el-table-column
               header-align="center"
-              prop="bizStatus"
-              :formatter="returnBizStatus"
-              label="状态"
+              prop="emplName"
+              sortable
+              label="客户经理名称"
+              min-width="15%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="emplCode"
+              sortable
+              label="客户经理工号"
+              min-width="15%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="bizType"
+              sortable
+              :formatter="returnType"
+              label="检查类型"
+              min-width="15%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="bizEndDate"
+              sortable
+              label="完成时间"
               min-width="12%"
             ></el-table-column>
-            <el-table-column header-align="center" prop="custName" label="客户名称" min-width="12%"></el-table-column>
-            <el-table-column header-align="center" prop="billNo" label="借据编号" min-width="25%"></el-table-column>
-            <el-table-column header-align="center" prop="noticeDate" label="提醒时间" min-width="15%"></el-table-column>
-            <el-table-column header-align="center" prop="bizEndDate" label="截止时间" min-width="15%"></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="custName"
+              sortable
+              label="客户名称"
+              min-width="15%"
+            ></el-table-column>
             <el-table-column header-align="center" label="操作" width="150px">
               <template slot-scope="scope">
                 <el-button
                   size="mini"
                   type="warning"
                   @click="handlePreview(scope.row)"
-                  v-if="scope.row.bizStatus == 'inReview'"
+                  v-if="scope.row.bizStatus == 'alreadyDo'"
                 >查看</el-button>
                 <el-button
                   size="mini"
                   type="warning"
                   @click="handleDownload(scope.row)"
-                  v-if="scope.row.bizStatus == 'inReview'"
+                  v-if="scope.row.bizStatus == 'alreadyDo'"
                 >下载</el-button>
               </template>
             </el-table-column>
@@ -140,8 +165,8 @@ export default {
       flag: true,
       searchForm: {
         bizType: "",
-        bizStatus: "",
-        custName: ""
+        custName: "",
+        queryFlag: "4"
       },
       src: "",
       paramsDetail: {
@@ -157,6 +182,13 @@ export default {
   },
   mounted() {
     // 进入页面先调用查询接口
+    const { custName } = this.$route.query;
+    if (custName) {
+      this.searchForm = {
+        custName,
+        queryFlag: "4"
+      };
+    }
     this.onSubmit();
   },
   methods: {
@@ -191,6 +223,8 @@ export default {
     onSubmit: function() {
       getTaskList(this, {
         ...filterParams(this.searchForm),
+        emplCode: sessionStorage.getItem("emplCode"),
+        orgCode: sessionStorage.getItem("orgCode"),
         emplName: sessionStorage.getItem("emplName"),
         pageSize: 10,
         pageNo: 1,
@@ -202,13 +236,17 @@ export default {
     },
     //
     onClear() {
-      this.searchForm = {};
+      this.searchForm = {
+        bizType: "",
+        bizStatus: "",
+        custName: "",
+        queryFlag: "4"
+      };
       this.multipleSelection = [];
       this.$refs.multipleTable.clearSelection();
       this.pageNo = 1;
       this.pageSize = 10;
     },
-    // 压缩包下载
     download() {
       const arr = this.multipleSelection.map(item => item.bizId);
       const bizIdString = arr.join(",");
@@ -226,7 +264,7 @@ export default {
       const id = row.bizId;
       var a = document.createElement("a");
       //需要下载的数据内容,我这里放的就是BLOB，如果你有下载链接就不需要了
-      var url = `${this.host}/postLoan/model/downZipPdfFile?bizIds=${id}`;
+      var url = `${this.host}/postLoan/model/downPdfFile?bizId=${id}`;
       var filename = "pdf.zip";
       a.href = url;
       a.download = filename;

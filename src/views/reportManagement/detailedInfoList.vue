@@ -69,7 +69,7 @@
                   <el-option label="应做" value="shouldDo"></el-option>
                   <el-option label="未做" value="notDo"></el-option>
                   <el-option label="审核中" value="inReview"></el-option>
-                  <el-option label="已做" value="complete"></el-option>
+                  <el-option label="完成" value="alreadyDo"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -132,12 +132,11 @@
 <script>
 import { filterParams } from "../../utils/utils";
 import { getReportFormList } from "../../api/report";
-import { host } from "../../api/host";
 export default {
   name: "detailedInfoList",
   data() {
     return {
-      host: host,
+      host: window.config.host.authorization,
       tableData: [],
       pageNo: 1,
       pageSize: 10,
@@ -150,6 +149,10 @@ export default {
         emplName: "",
         bizType: "",
         bizStatus: ""
+      },
+      paramsDetail: {
+        pageNo: 1,
+        pageSize: 10
       },
       multipleSelection: [],
       flag: true,
@@ -166,17 +169,31 @@ export default {
     handleSizeChange: function(e) {
       this.pageSize = e;
       this.pageNo = 1;
-      console.log(111);
+      this.paramsDetail = {
+        pageNo: this.pageNo,
+        pageSize: this.pageSize
+      };
       this.onSubmit();
+      this.paramsDetail = {
+        pageNo: 1,
+        pageSize: 10
+      };
     },
     // 翻页
     handleCurrentChange: function(e) {
       this.pageNo = e;
-      console.log(222);
+      this.paramsDetail = {
+        pageNo: this.pageNo,
+        pageSize: this.pageSize
+      };
       this.onSubmit();
+      this.paramsDetail = {
+        pageNo: 1,
+        pageSize: 10
+      };
     },
     // 表单查询
-    onSubmit: function() {
+    onSubmit() {
       if (this.searchForm.beginDate) {
         this.searchForm.beginDate = this.$moment(
           this.searchForm.beginDate
@@ -189,11 +206,14 @@ export default {
       }
       getReportFormList(this, {
         ...filterParams(this.searchForm),
-        pageSize: this.pageSize,
-        pageNo: this.pageNo
+        pageSize: 10,
+        pageNo: 1,
+        ...this.paramsDetail
       }).then(res => {
         this.tableData = res.data.data;
         this.total = res.data.total;
+        // this.pageSize = this.paramsDetail.pageSize;
+        // this.pageNo = this.paramsDetail.pageNo;
       });
     },
     // 重置
@@ -216,7 +236,6 @@ export default {
           queryStr += `&${key}=${queryFormValues[key]}`;
         }
       });
-      console.log(queryStr);
       const url = `${this.host}/postLoan/business/exportReportFormList?${queryStr}`;
       window.location.href = url;
       // outPutReport(this, {
@@ -249,7 +268,7 @@ export default {
           return "未做";
         case "inReview":
           return "审核中";
-        case "complete":
+        case "alreadyDo":
           return "完成";
       }
     }

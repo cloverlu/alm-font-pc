@@ -55,7 +55,6 @@ export default {
     getBreadcrumb() {
       let matched = this.$route.matched.filter(item => item.name);
       this.levelList = matched;
-      // console.log("this.levelList", this.levelList);
     }
   }
 };

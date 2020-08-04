@@ -14,14 +14,14 @@
       .contentTop
         el-form(:model="form" :inline="true" label-position="left" label-width="80px" size="mini" class="demo-form-inline formBox")
           el-form-item(label="检查类型" class="formItem5")
-            el-select(v-model="form.bizType" clearable @change='onChange' style="width:100%" :disabled='type == 2')
+            el-select(v-model="form.bizType" clearable @change='onChange' style="width:100%" :disabled='canChange == 2')
               el-option(label="小企业授信业务首次跟踪检查" value="m1")
               el-option(label="小企业授信业务贷后例行检查" value="m2")
               el-option(label="小企业授信业务贷后全面检查" value="m3")
               el-option(label="小企业授信业务还款资金落实情况检查" value="m4")
               el-option(label="小企业法人快捷贷首次检查" value="m5")
               el-option(label="小企业法人快捷贷贷后日常检查" value="m6")
-          el-button(type="primary" size="mini" @click="onSave" class="btn" v-if='type==1') 保存
+          el-button(type="primary" size="mini" v-antiShake="[() => { onSave() }, 1000]" class="btn" v-if='status==1 && type==1') 保存
       .contentBody
         .type(v-show="form.bizType == 'm1'")
           DivM1(:detail="paramsM1" ref="DivM1")
@@ -37,7 +37,7 @@
           DivM6(:detail="paramsM6" ref="DivM6")
       //- 提交
       .footer
-        el-button(type="warning" @click='onSubmit' v-if='type==1') 提交
+        el-button(type="warning" v-antiShake="[() => { onSubmit() }, 1000]" v-if='status==1 && type==1') 提交
         //- el-button(type="warning" @click='onSubmit') 提交
 
     .content2(v-show="activeName == 'second'")
@@ -59,19 +59,25 @@
               el-form-item(label="意见 :" class='noBorder')
                 el-input(v-model="item.agreeResult" disabled)
 
-        el-card(class='card')
-          el-button(type="primary" style="textAlien:right" @click="onSubmitApproval('0')" class='save') 保存
-          el-form(label-position="left" label-width="200px" :model="approval" style="marginTop:20px")
-            el-form-item(label="客户名称:" class="formItem2")
-              span {{approval.custName}}
-            el-form-item(label="业务上报至:" class="formItem2")
-              span {{approval.currentLinkName}}
-            el-form-item(label="业务接收人:" class="formItem2")
-              el-select(v-model="approval.nextEmplName" placeholder="请选择" style='width:100%')
-                el-option(v-for="item in nextEmplNameList" :key="item" :label="item" :value="item") 
-            el-form-item(label="上报时间:" class="formItem2")
-              //- span {{approval.approveTime}}
-              span {{this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss")}}
+        el-card(class='card' v-if='!allBtn')
+          el-button(type="primary" style="textAlien:right" v-antiShake="[() => { onSubmitApproval('0') }, 1000]" v-if="!allBtn" class='save') 保存
+          el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px")
+            el-row
+              el-col(:span="24")
+                el-form-item(label="客户名称:" class="formItem2")
+                  span {{approval.custName}}
+              el-col(:span="24")
+                el-form-item(label="业务上报至:" class="formItem2")
+                  span {{approval.nextLinkName}}
+              el-col(:span="24")
+                el-form-item(label="业务接收人:" class="formItem2")
+                  el-select(v-model="approval.nextEmplName" placeholder="请选择" style='width:100%')
+                    el-option(v-for="item in nextEmplNameList" :key="item" :label="item" :value="item")
+              el-col(:span="24")
+                el-form-item(label="上报时间:" class="formItem2")
+                  span {{this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss")}}
+          components(:is="commpoentName" ref="commpoent" :approveDetail='approval' v-if='approveContent')
+          el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px" v-if='!approveContent')
             el-form-item(label="是否存在风险预警信号:" class="formItem2")
               el-select(v-model="approval.existRisk" placeholder="请选择" style='width:100%')
                 el-option(label="是" value="1")
@@ -80,14 +86,17 @@
               el-input(v-model="approval.riskMsg" type="textarea" :rows="2" clearable)
             el-form-item(label="检查结论及措施建议:" class="formItem2")
               el-input(v-model="approval.suggest" type="textarea" :rows="2" clearable)
-            el-form-item(label="检查人员:" class="formItem2")
-              //- el-button(class="qianzi" @click="goSign" size='mini' type='primary') 签字
-              img(:src='approval.empSign' class='imgContent')
-      .footer
-          el-button(type="warning" @click="onSubmitApproval('1')" v-if="approvaList.length == 0") 提交审批
-          el-button(type="warning" size='normal' @click="onSubmitApproval('1')" v-if="approvaList.length !== 0") 提交
-          el-button(type="info" @click="onSubmitApproval('2')" v-if="approvaList.length !== 0") 回退
-          el-button(type="primary" @click="onSubmitApproval('3')" v-if="approvaList.length !== 0") 退回上一岗位
+          el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px")
+            el-col(:span="24")
+              el-form-item(label="检查人员:" class="formItem2")
+                //- el-button(class="qianzi" @click="goSign" size='mini' type='primary') 签字
+                img(:src='approval.empSign' v-if='approval.empSign' class='imgContent')
+                img(:src='bg' v-if='!approval.empSign' class='imgContent')
+      .footer(v-if='!allBtn')
+          el-button(type="warning" v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="!allBtn && approvaList.length == 0") 提交审批
+          el-button(type="warning" size='normal' v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="!allBtn && approvaList.length !== 0") 提交
+          el-button(type="info" v-antiShake="[() => { onSubmitApproval('2') }, 1000]" v-if="!allBtn && approvaList.length !== 0") 回退
+          el-button(type="primary" v-antiShake="[() => { onSubmitApproval('3') }, 1000]" v-if="!allBtn && approvaList.length !== 0") 退回上一岗位
     el-dialog(:visible.sync="dialogVisible" :append-to-body="true" width="800px" v-alterELDialogMarginTop="{marginTop:'30vh'}" ref="signArea")
       .title
         span 签名:
@@ -115,6 +124,18 @@ import DivM3 from "./components/DivM3.vue";
 import DivM4 from "./components/DivM4.vue";
 import DivM5 from "./components/DivM5.vue";
 import DivM6 from "./components/DivM6.vue";
+import processing2 from "./approve/processing2";
+import processing21 from "./approve/processing21";
+import processing23 from "./approve/processing23";
+import processing25 from "./approve/processing25";
+import processing26 from "./approve/processing26";
+import processing27 from "./approve/processing27";
+import processing28 from "./approve/processing28";
+import processing29 from "./approve/processing29";
+import processing210 from "./approve/processing210";
+import processing211 from "./approve/processing211";
+import processing212 from "./approve/processing212";
+import processing213 from "./approve/processing213";
 
 export default {
   name: "iouList",
@@ -124,7 +145,19 @@ export default {
     DivM3,
     DivM4,
     DivM5,
-    DivM6
+    DivM6,
+    processing2,
+    processing21,
+    processing23,
+    processing25,
+    processing26,
+    processing27,
+    processing28,
+    processing29,
+    processing210,
+    processing211,
+    processing212,
+    processing213
   },
   data() {
     this.$moment.locale("zh-cn");
@@ -136,18 +169,22 @@ export default {
         bizType: "m1" // 检查类型
       },
       type: 1,
+      bg: bg,
+      canChange: 1,
       approvaList: [],
       approval: {
         // 流程上报
         custName: "", // 客户名称
-        currentLinkName: "", // 业务上报至
+        nextLinkName: "", // 业务上报至
         nextEmplName: "", // 业务接收人
         approveTime: dateTime, // 上报时间
         existRisk: "", // 是否存在风险预警信号
         riskMsg: "", // 预警信号说明
         suggest: "", // 检查结论及措施建议
-        empSign: bg // 检查人员
+        empSign: "" // 检查人员
       },
+      status: 1,
+      currPost1: "",
       paramsM1: {},
       paramsM2: {},
       paramsM3: {},
@@ -155,7 +192,11 @@ export default {
       paramsM5: {},
       paramsM6: {},
       params: {},
+      signName: "",
+      allBtn: false,
+      approveContent: false,
       submitBtn: true,
+      commpoentName: "",
       loanBusiness: {},
       dialogVisible: false,
       formLabelWidth: "72px",
@@ -172,10 +213,12 @@ export default {
   mounted() {
     this.$moment.locale("zh-cn");
     // 进入页面先调用查询接口
-    const { billNo, bizId, bizStatus } = this.$route.query;
+    const { billNo, bizId, bizStatus, status } = this.$route.query;
+    this.status = status;
     if (billNo) {
       // 借据
       this.type = 1;
+      this.canChange = 1;
       this.submitBtn = false;
       this.paramsM1.billNo = billNo;
       this.paramsM1.type = 1;
@@ -184,31 +227,100 @@ export default {
         billNo,
         bizType: this.form.bizType
       }).then(res => {
+        this.currPost1 = res.data.data.currPost;
         if (res.data.returnCode == "200000") {
-          console.log(res.data.data.useAmoutByContract);
-          // for (var key in res.data.data) {
-          //   if (res.data.data[key] == null) {
-          //     // console.log("没有key", key);
-          //     res.data.data[key] = "";
-          //   }
-          // }
+          for (var key in res.data.data) {
+            if (res.data.data[key] == null) {
+              res.data.data[key] = "";
+            }
+          }
+          if (!res.data.data.assetCreditInfo) {
+            res.data.data.assetCreditInfo = {
+              queryDate: "", //征信报告查询日期
+              fiveClass: "", // 当前企业及实际控制人征信情况(注明征信查询分类结果)
+              shrinkLoanScale: 1, //企业或企业主是否有他行收缩贷款规模
+              shrinkLoanScaleMsg: "", //收缩贷款规模说明
+              addedOverdues: 1, //企业或企业主征信是否有新增逾期记录
+              addedOverduesMsg: "", //新增逾期记录说明
+              addedGuarantees: 1, // 企业或企业主是否有新增对外担保记录
+              addedGuaranteesMsg: "", //新增对外担保记录说明
+              addedLoans: 1, //企业或企业主是否有他行新增贷款
+              addedLoansMsg: "", //他行新增贷款说明
+              otherSitu: 1, //企业或企业主是否有其他异常变化
+              otherSituMsg: "" //其他异常变化说明
+            };
+          }
+          if (!res.data.data.assitInfoForGuarantee) {
+            res.data.data.assitInfoForGuarantee = [
+              {
+                assitName: "",
+                CooperatStatus: "",
+                assitFiveClass: ""
+              }
+            ];
+          }
+          if (!res.data.data.assitInfoForPledge) {
+            res.data.data.assitInfoForPledge = [
+              {
+                assitName: "",
+                assitAddr: "",
+                firstEstimateDate: "",
+                firstEstimateValue: "",
+                firstMortAndpleRate: "",
+                LastEstimateDate: "",
+                LastEstimateValue: "",
+                LastMortAndpleRate: "",
+                thisEstimateDate: "",
+                thisEstimateValue: "",
+                thisMortAndpleRate: ""
+              }
+            ];
+          }
+          if (!res.data.data.securityKind) {
+            res.data.data.securityKind = ["1"];
+          }
+          if (!res.data.data.payKind) {
+            res.data.data.payKind = "1";
+          }
           if (!res.data.data.creditInfo) {
-            // console.log("没有creditInfo");
             res.data.data.creditInfo = {
-              queryDateForPer: ""
+              queryDateForPer: "",
+              queryDateForCom: "",
+              existBadRecord: 1,
+              existCreditChage1: 1,
+              existCreditChage2: 1,
+              existCreditChage3: 1,
+              existBadRecordCon: 1,
+              existCreditChage4: 1,
+              existBadRecordJur: 1,
+              existCreditChage5: 1,
+              existCreditChager6: 1
             };
           }
           if (!res.data.data.financeInfo) {
-            // console.log("financeInfo");
-            res.data.data.financeInfo = {};
+            res.data.data.financeInfo = {
+              financeClassification: "1",
+              stockLastBalance: "", // 上次全面检查或调查时余额--- 存货
+              stockChangSitu: "", //本次检查存货变动情况
+              dailyExpenLastBalance: "", //上次全面检查或调查时余额---水、电、煤、气费其中一项或多项
+              dailyExpenChangSitu: "", //本次检查存货变动情况
+              busIncLastBalance: "", //上次全面检查或调查时余额--- 营业收入
+              busIncChangSitu: "", //本次检查存货变动情况
+              financeMsg: ""
+            };
           }
-          if (!res.data.data.stageData) {
-            // console.log("financeInfo");
-            res.data.data.stageData = [{ checkStage: "1" }];
-          }
-          if (!res.data.data.assetCreditInfo) {
-            // console.log("assetCreditInfo");
-            res.data.data.assetCreditInfo = {};
+          if (!res.data.data.stageData || res.data.data.stageData.length == 0) {
+            res.data.data.stageData = [
+              {
+                checkStage: "1", // 检查阶段
+                payIntention: "1", // 还款意愿
+                practicableCheckAddr: "", // 检查地点
+                practicableStaff: "", // 接待人员
+                amoutSource: "", // 还款资金来源
+                expectRepayDate: "", // 预计还款/付息时间
+                practicableMsg: "" // 还款资金落实情况说明
+              }
+            ];
           }
 
           this.form.bizType = res.data.data.bizType;
@@ -226,19 +338,23 @@ export default {
           } else {
             this.paramsM6 = this.params;
           }
-          // console.log("res.data.data", res.data.data);
         }
       });
     }
     if (bizStatus === "alreadyDo" || bizStatus === "inReview") {
       this.type = 2;
     }
+    if (bizStatus === "alreadyDo" || this.status == 2) {
+      this.allBtn = true;
+    }
     if (bizStatus === "shouldDo" || bizStatus === "notDo") {
       this.submitBtn = false;
     }
     if (bizId) {
+      this.routerMatch();
       // 业务
       this.form.billNo = "";
+      this.canChange = 2;
       this.canTouch = false;
       this.form.bizId = bizId;
       queryForBizDtail(this, {
@@ -246,30 +362,99 @@ export default {
         bizType: this.form.bizType
       }).then(res => {
         if (res.data.returnCode == "200000") {
-          console.log(!res.data.data.useAmoutByContract);
           for (var key in res.data.data) {
             if (res.data.data[key] == null) {
-              // console.log("没有key", key);
               res.data.data[key] = "";
             }
           }
+
+          if (!res.data.data.assetCreditInfo) {
+            res.data.data.assetCreditInfo = {
+              queryDate: "", //征信报告查询日期
+              fiveClass: "", // 当前企业及实际控制人征信情况(注明征信查询分类结果)
+              shrinkLoanScale: 1, //企业或企业主是否有他行收缩贷款规模
+              shrinkLoanScaleMsg: "", //收缩贷款规模说明
+              addedOverdues: 1, //企业或企业主征信是否有新增逾期记录
+              addedOverduesMsg: "", //新增逾期记录说明
+              addedGuarantees: 1, // 企业或企业主是否有新增对外担保记录
+              addedGuaranteesMsg: "", //新增对外担保记录说明
+              addedLoans: 1, //企业或企业主是否有他行新增贷款
+              addedLoansMsg: "", //他行新增贷款说明
+              otherSitu: 1, //企业或企业主是否有其他异常变化
+              otherSituMsg: "" //其他异常变化说明
+            };
+          }
+          if (!res.data.data.assitInfoForGuarantee) {
+            res.data.data.assitInfoForGuarantee = [
+              {
+                assitName: "",
+                CooperatStatus: "",
+                assitFiveClass: ""
+              }
+            ];
+          }
+          if (!res.data.data.assitInfoForPledge) {
+            res.data.data.assitInfoForPledge = [
+              {
+                assitName: "",
+                assitAddr: "",
+                firstEstimateDate: "",
+                firstEstimateValue: "",
+                firstMortAndpleRate: "",
+                LastEstimateDate: "",
+                LastEstimateValue: "",
+                LastMortAndpleRate: "",
+                thisEstimateDate: "",
+                thisEstimateValue: "",
+                thisMortAndpleRate: ""
+              }
+            ];
+          }
+          if (!res.data.data.securityKind) {
+            res.data.data.securityKind = ["1"];
+          }
+          if (!res.data.data.payKind) {
+            res.data.data.payKind = "1";
+          }
           if (!res.data.data.creditInfo) {
-            // console.log("没有creditInfo");
             res.data.data.creditInfo = {
-              queryDateForPer: ""
+              queryDateForPer: "",
+              queryDateForCom: "",
+              existBadRecord: 1,
+              existCreditChage1: 1,
+              existCreditChage2: 1,
+              existCreditChage3: 1,
+              existBadRecordCon: 1,
+              existCreditChage4: 1,
+              existBadRecordJur: 1,
+              existCreditChage5: 1,
+              existCreditChager6: 1
             };
           }
           if (!res.data.data.financeInfo) {
-            // console.log("financeInfo");
-            res.data.data.financeInfo = {};
+            res.data.data.financeInfo = {
+              financeClassification: "1",
+              stockLastBalance: "", // 上次全面检查或调查时余额--- 存货
+              stockChangSitu: "", //本次检查存货变动情况
+              dailyExpenLastBalance: "", //上次全面检查或调查时余额---水、电、煤、气费其中一项或多项
+              dailyExpenChangSitu: "", //本次检查存货变动情况
+              busIncLastBalance: "", //上次全面检查或调查时余额--- 营业收入
+              busIncChangSitu: "", //本次检查存货变动情况
+              financeMsg: ""
+            };
           }
-          if (!res.data.data.stageData) {
-            // console.log("financeInfo");
-            res.data.data.stageData = [{ checkStage: "1" }];
-          }
-          if (!res.data.data.assetCreditInfo) {
-            // console.log("assetCreditInfo");
-            res.data.data.assetCreditInfo = {};
+          if (!res.data.data.stageData || res.data.data.stageData.length == 0) {
+            res.data.data.stageData = [
+              {
+                checkStage: "1", // 检查阶段
+                payIntention: "1", // 还款意愿
+                practicableCheckAddr: "", // 检查地点
+                practicableStaff: "", // 接待人员
+                amoutSource: "", // 还款资金来源
+                expectRepayDate: "", // 预计还款/付息时间
+                practicableMsg: "" // 还款资金落实情况说明
+              }
+            ];
           }
           this.form.bizType = res.data.data.bizType;
           this.params = res.data.data;
@@ -292,7 +477,7 @@ export default {
   },
   methods: {
     // 保存
-    onSave() {
+    onSave: function() {
       let data = {};
       let arrs = {};
       if (this.form.bizType == "m1") {
@@ -302,9 +487,8 @@ export default {
           arrs[a] = this.$refs.DivM1.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
         data = {
-          ...this.$refs.DivM1.form,
+          ...filterParams(this.$refs.DivM1.form),
           ...this.loanBusiness,
           bizType: "m1"
         };
@@ -315,9 +499,8 @@ export default {
           arrs[a] = this.$refs.DivM2.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
         data = {
-          ...this.$refs.DivM2.form,
+          ...filterParams(this.$refs.DivM2.form),
           ...this.loanBusiness,
           bizType: "m2"
         };
@@ -331,10 +514,10 @@ export default {
           arrs[a] = this.$refs.DivM3.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
+        this.$refs.DivM3.form.financeInfo.financeClassification = "1";
         data = {
-          ...this.$refs.DivM3.form,
-          ...this.$refs.DivM3.$refs.tabForm1.form,
+          ...filterParams(this.$refs.DivM3.form),
+          ...filterParams(this.$refs.DivM3.$refs.tabForm1.form),
           ...this.loanBusiness,
           bizType: "m3"
         };
@@ -348,10 +531,9 @@ export default {
           arrs[a] = this.$refs.DivM3.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
         data = {
-          ...this.$refs.DivM3.form,
-          ...this.$refs.DivM3.$refs.tabForm2.form,
+          ...filterParams(this.$refs.DivM3.form),
+          ...filterParams(this.$refs.DivM3.$refs.tabForm2.form),
           ...this.loanBusiness,
           bizType: "m3"
         };
@@ -362,9 +544,8 @@ export default {
           arrs[a] = this.$refs.DivM4.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
         data = {
-          ...this.$refs.DivM4.form,
+          ...filterParams(this.$refs.DivM4.form),
           ...this.loanBusiness,
           bizType: "m4"
         };
@@ -375,9 +556,8 @@ export default {
           arrs[a] = this.$refs.DivM5.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
         data = {
-          ...this.$refs.DivM5.form,
+          ...filterParams(this.$refs.DivM5.form),
           ...this.loanBusiness,
           bizType: "m5"
         };
@@ -388,17 +568,16 @@ export default {
           arrs[a] = this.$refs.DivM6.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
         data = {
-          ...this.$refs.DivM6.form,
+          ...filterParams(this.$refs.DivM6.form),
           ...this.loanBusiness,
           bizType: "m6"
         };
       }
 
-      console.log(data);
+      // console.log(data);
       saveEditModelBusiness(this, {
-        ...filterParams(data)
+        ...data
       }).then(res => {
         if (res.data.returnCode === "200000") {
           this.$message({
@@ -408,6 +587,11 @@ export default {
           setTimeout(() => {
             history.go(-1);
           }, 500);
+        } else {
+          this.$message({
+            message: res.data.returnMsg,
+            type: "success"
+          });
         }
       });
     },
@@ -423,7 +607,7 @@ export default {
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
         data = {
-          ...this.$refs.DivM1.form,
+          ...filterParams(this.$refs.DivM1.form),
           ...this.loanBusiness,
           bizType: "m1"
         };
@@ -435,7 +619,7 @@ export default {
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
         data = {
-          ...this.$refs.DivM2.form,
+          ...filterParams(this.$refs.DivM2.form),
           ...this.loanBusiness,
           bizType: "m2"
         };
@@ -450,8 +634,8 @@ export default {
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
         data = {
-          ...this.$refs.DivM3.form,
-          ...this.$refs.DivM3.$refs.tabForm1.form,
+          ...filterParams(this.$refs.DivM3.form),
+          ...filterParams(this.$refs.DivM3.$refs.tabForm1.form),
           ...this.loanBusiness,
           bizType: "m3"
         };
@@ -466,8 +650,8 @@ export default {
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
         data = {
-          ...this.$refs.DivM3.form,
-          ...this.$refs.DivM3.$refs.tabForm2.form,
+          ...filterParams(this.$refs.DivM3.form),
+          ...filterParams(this.$refs.DivM3.$refs.tabForm2.form),
           ...this.loanBusiness,
           bizType: "m3"
         };
@@ -479,7 +663,7 @@ export default {
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
         data = {
-          ...this.$refs.DivM4.form,
+          ...filterParams(this.$refs.DivM4.form),
           ...this.loanBusiness,
           bizType: "m4"
         };
@@ -491,7 +675,7 @@ export default {
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
         data = {
-          ...this.$refs.DivM5.form,
+          ...filterParams(this.$refs.DivM5.form),
           ...this.loanBusiness,
           bizType: "m5"
         };
@@ -503,7 +687,7 @@ export default {
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
         data = {
-          ...this.$refs.DivM6.form,
+          ...filterParams(this.$refs.DivM6.form),
           ...this.loanBusiness,
           bizType: "m6"
         };
@@ -511,9 +695,7 @@ export default {
 
       // console.log(data);
 
-      saveEditModelBusiness(this, {
-        ...filterParams(data)
-      }).then(res => {
+      saveEditModelBusiness(this, { ...data }).then(res => {
         if (res.data.returnCode === "200000") {
           this.$message({
             message: "检查申请编辑操作成功",
@@ -521,32 +703,59 @@ export default {
           });
           this.submitBtn = true;
           const id = res.data.bizId;
+          const currPost1 = this.currPost1;
           setTimeout(() => {
             approveDetail(this, { bizId: id }).then(res => {
               this.activeName = "second";
               this.approval = res.data.data;
               this.approval.bizId = id;
-              if (!res.data.data.empSign) {
-                this.approval.empSign = bg;
-              }
               this.approvaList = res.data.data.aproveInfo || [];
-              const pa = { orgName: res.data.data.custOrg };
+              const { currPost } = this.$route.query;
+              let pa;
+              if (currPost) {
+                pa = { orgName: res.data.data.custOrg, currPost };
+              } else {
+                pa = { orgName: res.data.data.custOrg, currPost: currPost1 };
+              }
               getNextEmplName(this, pa).then(ress => {
                 this.nextEmplNameList = ress.data.data.nextEmplNameList;
               });
             });
           }, 500);
+        } else {
+          this.$message({
+            message: res.data.returnMsg,
+            type: "success"
+          });
         }
       });
     },
-
     onSubmitApproval(type) {
+      const { currPost } = this.$route.query;
       this.approval.approveTime = this.$moment(new Date()).format(
         "YYYY-MM-DD HH:mm:ss"
       );
       this.approval.opType = type;
-      console.log(filterParams(this.approval));
-      approve(this, { ...filterParams(this.approval) }).then(res => {
+      let data;
+      if (
+        currPost == "220" ||
+        currPost == "221" ||
+        currPost == "222" ||
+        currPost == "320" ||
+        currPost == "321"
+      ) {
+        data = {
+          ...this.approval,
+          ...this.$refs.commpoent.params
+        };
+      } else {
+        data = {
+          ...this.approval
+        };
+      }
+
+      delete data.aproveInfo;
+      approve(this, { ...filterParams(data) }).then(res => {
         if (res.data.returnCode === "200000") {
           this.$message({
             message: "操作成功",
@@ -563,21 +772,126 @@ export default {
         }
       });
     },
+    // 审批页面的展示判断
+    routerMatch() {
+      //一级支行主管岗     321
+      //一级支行第二经营主责任人  320
+      //二级分行贷后管理岗        222
+      //二级分行主管岗         221
+      //二级分行第二经营主责任人   220
+      const {
+        currPost,
+        biggerThan500,
+        belongBranch,
+        bizType
+      } = this.$route.query;
+      // console.log(currPost, biggerThan500, belongBranch, bizType);
+      if (currPost) {
+        this.approveContent = true;
+      }
+
+      if (currPost === "321") {
+        if (bizType === "m1" || bizType === "m3") {
+          this.commpoentName = "processing2";
+        } else if (bizType === "m2" || bizType === "m5") {
+          this.commpoentName = "processing27";
+        } else if (bizType === "m4") {
+          this.commpoentName = "processing25";
+        } else if (bizType === "m6") {
+          this.commpoentName = "processing29";
+        }
+      } else if (currPost === "320") {
+        if (biggerThan500 === 1) {
+          if (bizType === "m1") {
+            this.commpoentName = "processing2";
+          } else if (bizType === "m2" || bizType === "m5") {
+            this.commpoentName = "processing27";
+          } else if (bizType === "m3") {
+            this.commpoentName = "processing21";
+          } else if (bizType === "m4") {
+            this.commpoentName = "processing25";
+          } else if (bizType === "m6") {
+            this.commpoentName = "processing29";
+          }
+        } else {
+          if (bizType === "m1" || bizType === "m3") {
+            this.commpoentName = "processing23";
+            this.signName = "审核";
+          } else if (bizType === "m2" || bizType === "m5") {
+            this.commpoentName = "processing28";
+            this.signName = "审核";
+          } else if (bizType === "m4") {
+            this.commpoentName = "processing26";
+            this.signName = "审核";
+          } else if (bizType === "m6") {
+            this.commpoentName = "processing210";
+            this.signName = "审核";
+          }
+        }
+      } else if (currPost === "222") {
+        if (belongBranch === 1) {
+          if (bizType === "m1" || bizType === "m3") {
+            this.commpoentName = "processing2";
+          } else if (bizType === "m2" || bizType === "m5") {
+            this.commpoentName = "processing27";
+          } else if (bizType === "m4") {
+            this.commpoentName = "processing25";
+          } else if (bizType === "m6") {
+            this.commpoentName = "processing29";
+          }
+        } else {
+          if (bizType === "m1" || bizType === "m3") {
+            this.commpoentName = "processing213";
+            this.signName = "审核";
+          } else if (bizType === "m2" || bizType === "m5") {
+            this.commpoentName = "processing210";
+            this.signName = "审核";
+          } else if (bizType === "m4") {
+            this.commpoentName = "processing26";
+            this.signName = "审核";
+          } else if (bizType === "m6") {
+            this.commpoentName = "processing210";
+            this.signName = "审核";
+          }
+        }
+      } else if (currPost === "221") {
+        if (bizType === "m1" || bizType === "m3") {
+          this.commpoentName = "processing2";
+        } else if (bizType === "m2" || bizType === "m5") {
+          this.commpoentName = "processing27";
+        } else if (bizType === "m4") {
+          this.commpoentName = "processing25";
+        } else if (bizType === "m6") {
+          this.commpoentName = "processing29";
+        }
+      } else if (currPost === "220") {
+        if (bizType === "m1" || bizType === "m3") {
+          this.commpoentName = "processing23";
+          this.signName = "审核";
+        } else if (bizType === "m2" || bizType === "m5") {
+          this.commpoentName = "processing28";
+          this.signName = "审核";
+        } else if (bizType === "m4") {
+          this.commpoentName = "processing26";
+          this.signName = "审核";
+        } else if (bizType === "m6") {
+          this.commpoentName = "processing210";
+          this.signName = "审核";
+        }
+      }
+    },
     handleClick() {
-      const { bizId } = this.$route.query;
-      console.log(this.activeName);
+      const { bizId, currPost } = this.$route.query;
       if (this.activeName == "second") {
+        // this.routerMatch();
         approveDetail(this, { bizId }).then(res => {
           this.activeName = "second";
           this.approval = res.data.data;
           this.approval.bizId = bizId;
-          if (!res.data.data.empSign) {
-            this.approval.empSign = bg;
-          }
           this.approvaList = res.data.data.aproveInfo || [];
           const pa = {
             orgName: res.data.data.custOrg,
-            orgCode: localStorage.getItem("orgCode")
+            currPost
           };
           getNextEmplName(this, pa).then(ress => {
             this.nextEmplNameList = ress.data.data.nextEmplNameList;
@@ -603,8 +917,6 @@ export default {
     },
     // 阶段多选框
     onChange() {
-      console.log(this.form.bizType);
-
       if (this.form.bizType === "m1") {
         this.paramsM1 = this.params;
       } else if (this.form.bizType === "m2") {
@@ -624,7 +936,6 @@ export default {
       this.dialogVisible = true;
       let board = document.getElementById("board");
       this.ctx = board.getContext("2d");
-      console.log("this.canvas", board);
     },
     // 鼠标按下(开始)
     pcStart(e) {
@@ -878,14 +1189,6 @@ export default {
           font-size: 16px;
           line-height: 31px;
           color: rgba(10, 10, 10, 1);
-        }
-        .checkForm {
-          // border-bottom: 1px dashed #ccc;
-          // .blueTitle {
-          //   font-size: 18px;
-          //   line-height: 31px;
-          //   color: rgba(78, 120, 222, 1);
-          // }
         }
         .uploadBox {
           // height: 175px;

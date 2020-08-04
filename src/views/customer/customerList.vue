@@ -35,7 +35,9 @@
             <el-table-column header-align="center" prop="custCode" label="客户编号" min-width="40%"></el-table-column>
             <el-table-column header-align="center" label="借据信息" min-width="25%">
               <template slot-scope="scope">
-                <span class="linkTo" @click="link(scope.row)">用户借据列表</span>
+                <el-button size="mini" type="primary" @click="link1(scope.row)">用户借据列表</el-button>
+                <el-button size="mini" type="warning" @click="link2(scope.row)">检查记录</el-button>
+                <!-- <span class="linkTo" @click="link(scope.row)">用户借据列表</span> -->
               </template>
             </el-table-column>
           </el-table>
@@ -71,7 +73,11 @@ export default {
       searchForm: {
         custName: "",
         queryType: "3",
-        orgName: "南京"
+        orgName: sessionStorage.getItem("orgName")
+      },
+      paramsDetail: {
+        pageNo: 1,
+        pageSize: 10
       },
       formLabelWidth: "72px"
     };
@@ -84,35 +90,47 @@ export default {
     // 修改分页大小
     handleSizeChange: function(e) {
       this.pageSize = e;
+      this.pageNo = 1;
+      this.paramsDetail = {
+        pageNo: this.pageNo,
+        pageSize: this.pageSize
+      };
       this.onSubmit();
-      console.log("pageSize", this.pageSize);
+      this.paramsDetail = {
+        pageNo: 1,
+        pageSize: 10
+      };
     },
     // 翻页
     handleCurrentChange: function(e) {
       this.pageNo = e;
+      this.paramsDetail = {
+        pageNo: this.pageNo,
+        pageSize: this.pageSize
+      };
       this.onSubmit();
-      console.log("pageIndex", this.pageNo);
+      this.paramsDetail = {
+        pageNo: 1,
+        pageSize: 10
+      };
     },
     // 表单查询
     onSubmit: function() {
-      console.log(filterParams(this.searchForm));
-      console.log(this.pageSize, this.pageNo);
       getCustomers(this, {
         ...filterParams(this.searchForm),
-        emplCode: localStorage.getItem("emplCode"),
-        emplName: "金林" || localStorage.getItem("emplName"),
-        pageSize: this.pageSize,
-        pageNo: this.pageNo
+        emplCode: sessionStorage.getItem("emplCode"),
+        emplName: sessionStorage.getItem("emplName"),
+        pageSize: 10,
+        pageNo: 1,
+        ...this.paramsDetail
       }).then(res => {
         this.tableData = res.data.data;
         this.total = res.data.total;
-        console.log(res);
       });
     },
-    link(row) {
-      console.log(row);
+    link1(row) {
       let flag = false;
-      const menuArr = JSON.parse(localStorage.getItem("menuList"));
+      const menuArr = JSON.parse(sessionStorage.getItem("menuList"));
       menuArr.map(item => {
         if (item.children && item.children.length) {
           item.children.map(i => {
@@ -124,7 +142,31 @@ export default {
       });
       if (flag) {
         this.$router.push({
-          path: "/businessManagement/iouList",
+          path: "/customer/iouList",
+          query: { custName: row.custName }
+        });
+      } else {
+        this.$message({
+          message: "当前没有权限",
+          type: "warning"
+        });
+      }
+    },
+    link2(row) {
+      let flag = false;
+      const menuArr = JSON.parse(sessionStorage.getItem("menuList"));
+      menuArr.map(item => {
+        if (item.children && item.children.length) {
+          item.children.map(i => {
+            if (i.name == "管理岗报告下载") {
+              flag = true;
+            }
+          });
+        }
+      });
+      if (flag) {
+        this.$router.push({
+          path: "/processManagement/administrationDownload",
           query: { custName: row.custName }
         });
       } else {

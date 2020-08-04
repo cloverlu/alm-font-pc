@@ -5,17 +5,18 @@
   时间：2020年07月07日 16:40:13
 -->
 <template lang="pug">
-  <div class="m1">
-    el-card(class='card')
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
+  .m1
+    el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
+      el-card(class='card')
         el-form-item(label="客户名称 :" class="formItem2")
           el-input(v-model="form.custName" disabled)
         el-form-item(label="贷款期限 :" class="formItem2")
           el-input(v-model="form.loanLength" disabled)
+            i(slot="suffix" style="font-style:normal") 月
         el-form-item(label="借据编号 :" class="formItem2")
           el-input(v-model="form.billNo" disabled)
         el-form-item(label="贷款支付方式 :" class="formItem2")
-          el-select(v-model="form.payKind" style="width:100%" clearable :disabled="type == 2")
+          el-select(v-model="form.payKind" style="width:100%" clearable)
             el-option(v-for="item in payKindArr" :key="item.value" :label="item.label" :value="item.value")
           //- el-input(v-model="form.payKind" clearable :disabled="type == 2")
         el-form-item(label="放款日期 :" class="formItem2")
@@ -25,59 +26,55 @@
         el-form-item(label="约定用途 :" class="formItem2")
           el-input(v-model="form.loanPurpose" type="textarea" :rows="3" clearable :disabled="type == 2")
 
-    el-card(class='card')
-      .left
-        .cardTitle1
-          span(class='blue')
-          span(class='title') 首次跟踪检查要求及落实情况
-        
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
+      el-card(class='card')
+        .left
+          .cardTitle1
+            span(class='blue')
+            span(class='title') 首次跟踪检查要求及落实情况
           el-form-item(label="要求 :" class="formItem2")
             el-input(v-model="form.requireCheck" type="textarea" :disabled="type == 2" :rows="3" clearable)
           el-form-item(label="落实情况 :" class="formItem2")
             el-input(v-model="form.checked" type="textarea" :disabled="type == 2" :rows="3" clearable)
-      .right
-        .cardTitle1
-          span(class='blue')
-          span(class='title') 首次跟踪特殊要求及落实情况
-        
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
+        .right
+          .cardTitle1
+            span(class='blue')
+            span(class='title') 首次跟踪特殊要求及落实情况
           el-form-item(label="要求 :" class="formItem2")
             el-input(v-model="form.specialRequireCheck" :disabled="type == 2" type="textarea" :rows="3" clearable)
           el-form-item(label="落实情况 :" class="formItem2")
             el-input(v-model="form.specialChecked" :disabled="type == 2" type="textarea" :rows="3" clearable)
 
-    el-card(class='card')
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
-          el-form-item(label="检查地点 :" class="formItem2")
-            el-input(v-model="form.checkAddr" clearable :disabled="type == 2")
-          el-form-item(label="接待人员 :" class="formItem2")
-            el-input(v-model="form.staff" clearable :disabled="type == 2")
-          el-form-item(label="检查配合程度 :" class="formItem2")
-            el-select(v-model="form.cooperate" style="width:100%" clearable :disabled="type == 2")
-              el-option(v-for="item in cooperateArr" :key="item.value" :label="item.label" :value="item.value")
-          el-form-item(label="生产经营场所变动情况 :" class="formItem2")
-            el-input(v-model="form.addrChangedMsg" type="textarea" :rows="3" clearable :disabled="type == 2")
-    el-card(class='card')
-      .left
+      el-card(class='card')
+        el-form-item(label="检查地点 :" class="formItem2")
+          el-input(v-model="form.checkAddr" clearable :disabled="type == 2")
+        el-form-item(label="接待人员 :" class="formItem2")
+          el-input(v-model="form.staff" clearable :disabled="type == 2")
+        el-form-item(label="检查配合程度 :" class="formItem2")
+          el-select(v-model="form.cooperate" style="width:100%" clearable :disabled="type == 2")
+            el-option(v-for="item in cooperateArr" :key="item.value" :label="item.label" :value="item.value")
+        el-form-item(label="生产经营场所变动情况 :" class="formItem2")
+          el-input(v-model="form.addrChangedMsg" type="textarea" :rows="3" clearable :disabled="type == 2")
+      el-card(class='card')
         .cardTitle1
           span(class='blue')
           span(class='title') 检查内容
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
-          el-form-item(label="资金使用情况详细说明 :" class="formItem2")
-            el-input(v-model="form.detailMsg4useAmout" type="textarea" :disabled="type == 2" :rows="3" clearable)
-          el-form-item(label="提供纸质或影像资料的信息来源 :" class="formItem2")
-            el-input(v-model="form.msgSource" type="textarea" :disabled="type == 2" :rows="3" clearable)
-            .notes ※注：1、贷款发放如采用贷款人受托支付方式，信息来源包括《小企业授信业务额度借款支用单》、《小企业贷款受托支付申请书》、汇款凭证、账户流水、合同、入库单、贷款购买标的(如原材料、机器设备等)等。2、贷款发放如采用借款人自主支付方式，信息来源包括《实际支付清单》、汇款凭证、合同、入库单、贷款购买标的( 如原材料、机器设备等)等。
-      .right
-        .cardTitle
-          span(class='title') 
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
-          el-form-item(label="是否按合同约定的用途使用信贷资金 :" class="formItem2")
-            el-select(v-model="form.useAmoutByContract" style="width:100%" clearable :disabled="type == 2")
-              el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
-          el-form-item(label="情况说明 :" class="formItem2" style="marginTop:54px")
-            el-input(v-model="form.msg" type="textarea" :rows="3" clearable :disabled="type == 2")
+        el-row(:gutter="20")
+          el-col(:span="12")
+            el-form-item(label="资金使用情况详细说明 :" class="formItem1")
+              el-input(v-model="form.detailMsg4useAmout" type="textarea" :disabled="type == 2" :rows="3" clearable)
+          el-col(:span="12")
+            el-form-item(label="是否按合同约定的用途使用信贷资金 :" class="formItem1")
+              el-select(v-model="form.useAmoutByContract" style="width:100%" clearable :disabled="type == 2")
+                el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
+        el-row(:gutter="20")
+          el-col(:span="12")
+            el-form-item(label="提供纸质或影像资料的信息来源 :" class="formItem1")
+              el-input(v-model="form.msgSource" type="textarea" :disabled="type == 2" :rows="3" clearable)
+              .notes ※注：1、贷款发放如采用贷款人受托支付方式，信息来源包括《小企业授信业务额度借款支用单》、《小企业贷款受托支付申请书》、汇款凭证、账户流水、合同、入库单、贷款购买标的(如原材料、机器设备等)等。2、贷款发放如采用借款人自主支付方式，信息来源包括《实际支付清单》、汇款凭证、合同、入库单、贷款购买标的( 如原材料、机器设备等)等。
+          el-col(:span="12")
+            el-form-item(label="情况说明 :" class="formItem1" )
+              el-input(v-model="form.msg" type="textarea" :rows="3" clearable :disabled="type == 2")
+        
     el-card(class='card')
       .cardTitle1 
         span(class='blue')
@@ -86,9 +83,9 @@
         .item(v-for="(item,i) in titleList" :key="item.id")
           .title {{item.text}}
           .upload-wrapper
-            uploadTest(:item="item" :itemVmodel="params" :read="false" :ref="`definte16${i}`")
+            uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
         //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
-  </div>
+
 </template>
 
 <script>
@@ -215,13 +212,19 @@ export default {
     detail: function(newVal) {
       this.form = newVal;
       this.params = this.matchImage(newVal);
+      if (!newVal.payKind) {
+        this.form.payKind = "1";
+      }
+      if (!newVal.cooperate) {
+        this.form.cooperate = "1";
+      }
+      if (!newVal.useAmoutByContract) {
+        this.form.useAmoutByContract = 1;
+      }
     }
   },
   // 组件方法
   methods: {
-    handleSuccess(res, fileList, index) {
-      console.log(res, fileList, index);
-    },
     returnType(row) {
       switch (row.bizType) {
         case "m1":
@@ -237,15 +240,6 @@ export default {
         case "m6":
           return "小企业法人快捷贷贷后日常检查";
       }
-    },
-    // 图片上传
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    // 预览
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
     },
     // 图像模块匹配
     mVmodel(num) {
@@ -267,7 +261,7 @@ export default {
       var forBizDetail = data;
       var obj2 = {};
       //  this.mVmodel(num)的num参数为各个类型所需字段的个数
-      obj2 = this.mVmodel(11);
+      obj2 = this.mVmodel(12);
       Object.keys(obj2).forEach(key => {
         if (forBizDetail) {
           obj2[key] = forBizDetail[key];
@@ -317,6 +311,11 @@ export default {
     width: 50%;
     margin: 0;
     padding-right: 20px;
+  }
+  .formItem1 {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
   }
   /deep/.el-form-item__label {
     padding: 10px 0 0;
@@ -444,8 +443,6 @@ export default {
     font-size: 16px;
     line-height: 31px;
     color: rgba(10, 10, 10, 1);
-  }
-  .checkForm {
   }
   .upload {
     .item {

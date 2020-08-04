@@ -5,9 +5,9 @@
   时间：2020年07月07日 16:40:13
 -->
 <template lang="pug">
-  <div class="m4">
-    el-card(class='card')
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
+  .m4
+    el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      el-card(class='card')
         el-form-item(label="客户名称 :" class="formItem2")
           el-input(v-model="form.custName" disabled)
         el-form-item(label="贷款金额 :" class="formItem2")
@@ -16,36 +16,39 @@
           el-input(v-model="form.loanBalance" disabled)
         el-form-item(label="贷款期限 :" class="formItem2")
           el-input(v-model="form.loanLength" disabled)
+            i(slot="suffix" style="font-style:normal") 月
         el-form-item(label="还款方式 :" class="formItem2")
           el-input(v-model="form.repayKind" disabled)
         el-form-item(label="还款日期 :" class="formItem2")
-          el-date-picker(v-model="form.repayDate" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" placeholder="选择日期")
+          el-date-picker(v-model="form.repayDate" @change="dateChange" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" placeholder="选择日期")
         el-form-item(label="还款金额 :" class="formItem2")
-          el-input(v-model="form.repayAmout" :disabled="type == 2")
+          el-input(v-model="form.repayAmout" :disabled="type == 2" clearable)
 
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') 检查阶段
-      .cardContent
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') 检查阶段
+        .cardContent
+          //- el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
           el-radio-group(v-model="form.stageData[0].checkStage" :disabled="type == 2")
               el-radio(label="1") 第一阶段
               el-radio(label="2") 第二阶段
               el-radio(label="3") 第三阶段
-        el-form(:model="form" v-for='(item,index) in form.stageData' :key='index' :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
-          el-form-item(label="还款意愿 :" class="formItem2")
-            el-input(v-model="item.payIntention" :disabled="type == 2" clearable)
-          el-form-item(label="检查地点 :" class="formItem2")
-            el-input(v-model="item.practicableCheckAddr" :disabled="type == 2" clearable)
-          el-form-item(label="接待人员 :" class="formItem2")
-            el-input(v-model="item.practicableStaff" :disabled="type == 2" clearable)
-          el-form-item(label="还款资金来源 :" class="formItem2")
-            el-input(v-model="item.amoutSource" :disabled="type == 2" clearable)
-          el-form-item(label="预计还款/付息时间 :" class="formItem2")
-            el-date-picker(v-model="item.expectRepayDate" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" placeholder="选择日期" clearable)
-          el-form-item(label="还款资金落实情况说明 :" class="formItem2")
-            el-input(v-model="item.practicableMsg" type="textarea" :disabled="type == 2" :rows="3" clearable)
+          //- el-form(:model="form" v-for='(item,index) in form.stageData' :key='index' :inline="true" label-position="top" label-width="80px" size="mini")
+          .content(v-for='(item,index) in form.stageData' :key='index')
+            el-form-item(label="还款意愿 :" class="formItem2")
+              el-select(v-model="item.payIntention" style="width:100%" clearable :disabled="type == 2")
+                el-option(v-for="item in payArr" :key="item.value" :label="item.label" :value="item.value")
+            el-form-item(label="检查地点 :" class="formItem2")
+              el-input(v-model="item.practicableCheckAddr" :disabled="type == 2" clearable)
+            el-form-item(label="接待人员 :" class="formItem2")
+              el-input(v-model="item.practicableStaff" :disabled="type == 2" clearable)
+            el-form-item(label="还款资金来源 :" class="formItem2")
+              el-input(v-model="item.amoutSource" :disabled="type == 2" clearable)
+            el-form-item(label="预计还款/付息时间 :" class="formItem2")
+              el-date-picker(v-model="item.expectRepayDate" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" placeholder="选择日期" clearable)
+            el-form-item(label="还款资金落实情况说明 :" class="formItem2")
+              el-input(v-model="item.practicableMsg" type="textarea" :disabled="type == 2" :rows="3" clearable)
 
     el-card(class='card')
       .cardTitle1
@@ -55,10 +58,8 @@
         .item(v-for="(item,i) in titleList" :key="item.id")
           .title {{item.text}}
           .upload-wrapper
-            uploadTest(:item="item" :itemVmodel="params" :read="false" :ref="`definte16${i}`")
-        //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
-     
-  </div>
+            uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
+      //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
 </template>
 
 <script>
@@ -93,6 +94,23 @@ export default {
       titleList: definte17(),
       params: {},
       loanBusiness: {},
+      payArr: [
+        {
+          key: "1",
+          label: "良好",
+          value: "1"
+        },
+        {
+          key: "2",
+          label: "较差",
+          value: "2"
+        },
+        {
+          key: "3",
+          label: "无",
+          value: "3"
+        }
+      ],
       options: [
         {
           label: "是",
@@ -113,13 +131,12 @@ export default {
         repayKind: "", // 还款方式
         repayDate: "", // 还款日期
         repayAmout: "", // 还款金额
-        arr: [],
 
         // card 2
         stageData: [
           {
-            checkStage: "", // 检查阶段
-            payIntention: "", // 还款意愿
+            checkStage: "1", // 检查阶段
+            payIntention: "1", // 还款意愿
             practicableCheckAddr: "", // 检查地点
             practicableStaff: "", // 接待人员
             amoutSource: "", // 还款资金来源
@@ -128,18 +145,7 @@ export default {
           }
         ] //还款资金落实阶段数组
       },
-      list4: [
-        {
-          title: "其他",
-          url: "",
-          dimension: "",
-          longitude: ""
-        }
-      ],
-      type: 1,
-      dialogImageUrl: "",
-      dialogVisible: false,
-      formLabelWidth: "72px"
+      type: 1
     };
   },
   // 计算属性
@@ -147,28 +153,34 @@ export default {
   // 侦听器
   watch: {
     detail: function(newVal, oldVal) {
-      console.log(1, newVal, oldVal);
       this.form = newVal;
       this.params = this.matchImage(newVal);
+      console.log(this.params);
+      if (!newVal.stageData || newVal.stageData.length == 0) {
+        this.form.stageData = [
+          {
+            checkStage: "1", // 检查阶段
+            payIntention: "1", // 还款意愿
+            practicableCheckAddr: "", // 检查地点
+            practicableStaff: "", // 接待人员
+            amoutSource: "", // 还款资金来源
+            expectRepayDate: "", // 预计还款/付息时间
+            practicableMsg: "" // 还款资金落实情况说明
+          }
+        ];
+      }
+    },
+    params: function(newVal, oldVal) {
+      console.log(newVal, oldVal);
+      console.log(this.params);
     }
   },
   // 组件方法
   methods: {
-    // onchange(e) {
-    //   this.form.stageData[0].checkStage = e;
-    // },
-    handleSuccess(res, fileList, index) {
-      console.log(res, fileList, index);
-    },
-    // 图片上传
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    // 预览
-    handlePictureCardPreview(file) {
-      console.log("file.url", file.url);
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
+    dateChange() {
+      console.log(this.params);
+      console.log(this.titleList);
+      console.log(this.$refs.definte160[0].fileList);
     },
     // 图像模块匹配
     mVmodel(num) {
@@ -367,8 +379,6 @@ export default {
     font-size: 16px;
     line-height: 31px;
     color: rgba(10, 10, 10, 1);
-  }
-  .checkForm {
   }
 }
 </style>

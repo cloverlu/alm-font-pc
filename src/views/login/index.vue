@@ -5,7 +5,7 @@
   时间：2020年07月02日 08:54:09
 -->
 <template>
-  <div class="login">
+  <div class="login" v-show="visible">
     <div class="content">
       <div class="coName">
         <i class="iconfont iconjiedaixiaofeirenzheng-01 leftIcon"></i>
@@ -41,6 +41,7 @@ export default {
   // 组件状态值
   data() {
     return {
+      visible: true,
       emplCode: "",
       password: ""
     };
@@ -62,7 +63,6 @@ export default {
       }
     },
     submit() {
-      console.log(this.emplCode, this.password);
       const params = {
         emplCode: this.emplCode,
         password: this.password
@@ -78,17 +78,16 @@ export default {
             orgName,
             postCode
           } = res.data.data;
-          console.log(res.data.data);
           // this.$cookies.set("emplCode", emplCode);
           // this.$cookies.set("emplName", emplName);
           // this.$cookies.set("menuList", JSON.stringify(menuList));
-          localStorage.setItem("emplCode", emplCode);
-          localStorage.setItem("emplName", emplName);
-          localStorage.setItem("noticeFlag", noticeFlag);
-          localStorage.setItem("orgCode", orgCode);
-          localStorage.setItem("orgName", orgName);
-          localStorage.setItem("postCode", postCode);
-          localStorage.setItem("menuList", JSON.stringify(menuList));
+          sessionStorage.setItem("emplCode", emplCode);
+          sessionStorage.setItem("emplName", emplName);
+          sessionStorage.setItem("noticeFlag", noticeFlag);
+          sessionStorage.setItem("orgCode", orgCode);
+          sessionStorage.setItem("orgName", orgName);
+          sessionStorage.setItem("postCode", postCode);
+          sessionStorage.setItem("menuList", JSON.stringify(menuList));
           menuList.map(item => {
             if (item.children && item.children.length) {
               item.children.map(i => {
@@ -113,10 +112,48 @@ export default {
   mounted() {
     var accessToken = this.GetQueryValue("accessToken");
     if (accessToken) {
-      getUserInfo(this, { accessToken });
-      console.log("获取到token");
+      this.visible = false;
+      alert("拿到token");
+      getUserInfo(this, { accessToken }).then(res => {
+        alert(res.data);
+        if (res.data.returnCode === "200000") {
+          const {
+            emplCode,
+            emplName,
+            menuList,
+            noticeFlag,
+            orgCode,
+            orgName,
+            postCode
+          } = res.data.data;
+          sessionStorage.setItem("emplCode", emplCode);
+          sessionStorage.setItem("emplName", emplName);
+          sessionStorage.setItem("noticeFlag", noticeFlag);
+          sessionStorage.setItem("orgCode", orgCode);
+          sessionStorage.setItem("orgName", orgName);
+          sessionStorage.setItem("postCode", postCode);
+          sessionStorage.setItem("menuList", JSON.stringify(menuList));
+          menuList.map(item => {
+            if (item.children && item.children.length) {
+              item.children.map(i => {
+                (i.path = `/${i.path}`), (i.index = `${i.path}`);
+              });
+            }
+          });
+          let first = menuList[0].children[0].path;
+          this.$router.push(first);
+        } else {
+          this.$message({
+            message: "登陆失败",
+            type: "error"
+          });
+          setTimeout(() => {
+            this.visible = true;
+          }, 1000);
+        }
+      });
     } else {
-      console.log("无法获取token");
+      this.visible = true;
     }
   }
 };

@@ -5,12 +5,12 @@
   时间：2020年07月07日 16:40:13
 -->
 <template lang="pug">
-  <div class="m3">
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') {{form.custName}}
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
+  .m3
+    el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') {{form.custName}}
         el-form-item(label="检查类型 :" class="formItem2")
           el-select(v-model="form.bizType" disabled style="width:100%" )
             el-option(label="小企业授信业务首次跟踪检查" value="m1")
@@ -20,23 +20,22 @@
             el-option(label="小企业法人快捷贷首次检查" value="m5")
             el-option(label="小企业法人快捷贷贷后日常检查" value="m6")
         el-form-item(label="担保方式 :" class="formItem2")
-          el-checkbox-group(v-model="form.securityKind" style="width:100%" clearable :disabled="type == 2")
+          el-checkbox-group(v-model="form.securityKind" style="width:100%" clearable :disabled="type == 2" @change='selectSecurityKind')
             el-checkbox(v-for="item in securityKindsArr" :key="item.value" :label="item.value" :value="item.value") {{item.label}}
         el-form-item(label="授信金额 :" class="formItem2")
           el-input(v-model="form.lineAmout" :disabled="type == 2" clearable)
-        el-form-item(label=" " class="formItem2")
-          el-input(v-model="form.otherSecurityKindMsg" type="textarea" :rows="3" clearable :disabled="type == 2")
+        el-form-item(label=" " class="formItem2" )
+          el-input(v-model="form.otherSecurityKindMsg" v-if='securityKindMsgShow' type="textarea" :rows="3" clearable :disabled="type == 2")
         el-form-item(label="授信余额 :" class="formItem2")
           el-input(v-model="form.lineBalance" :disabled="type == 2" clearable)
         el-form-item(label="还款方式 :" class="formItem2")
           el-input(v-model="form.repayKind" clearable :disabled="type == 2")
 
-    el-card(class='card')
-      .cardTitle1
-          span(class='blue')
-          span(class='title') 填写信息
-      .left
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
+      el-card(class='card')
+        .cardTitle1
+            span(class='blue')
+            span(class='title') 填写信息
+        .left
           .blueTitle 审批意见中贷后日常检查要求及落实情况
           el-form-item(label="要求 :" class="formItem2")
             el-input(v-model="form.requireCheck" :disabled="type == 2" type="textarea" :rows="3" clearable)
@@ -50,8 +49,7 @@
           .blueTitle 近期检查发现的其他风险点
           el-form-item(class="formItem2")
             el-input(v-model="form.otherRisk" type="textarea" :disabled="type == 2" :rows="3" clearable)
-      .right
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm')
+        .right
           .blueTitle 产品贷后日常检查特殊要求及落实情况
           el-form-item(label="要求 :" class="formItem2")
             el-input(v-model="form.specialRequireCheck" type="textarea" :disabled="type == 2" :rows="3" clearable)
@@ -59,35 +57,32 @@
             el-input(v-model="form.specialChecked" type="textarea" :disabled="type == 2" :rows="3" clearable)
           .blueTitle 实际控制人或法定代表人风险点
           el-form-item(label="健康、 嗜好、家庭关系等方面 :" class="formItem2")
-            el-input(v-model="form.HoldPensonRisk" type="textarea" :disabled="type == 2" :rows="3" clearable)
+            el-input(v-model="form.holdPensonRisk" type="textarea" :disabled="type == 2" :rows="3" clearable)
           el-form-item(label="股权变化、关键管理人员变动、关联企业变动等，是否存在偏离主业、盲目扩张等问题 :" class="formItem2")
             el-input(v-model="form.managerRisk" type="textarea" :disabled="type == 2" :rows="3" clearable)
 
-    el-card(class='card')
-      .left
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
+      el-card(class='card')
+        .left
           el-form-item(label="检查地点 :" class="formItem2")
             el-input(v-model="form.checkAddr" :disabled="type == 2" clearable)
           el-form-item(label="检查配合程度 :" class="formItem2")
             el-select(v-model="form.cooperate" :disabled="type == 2" style="width:100%" clearable)
               el-option(v-for="item in cooperateArr" :key="item.value" :label="item.label" :value="item.value")
-      .right
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
+        .right
           el-form-item(label="生产经营场所变动情况 :" class="formItem2")
             el-input(v-model="form.addrChangedMsg" :disabled="type == 2" clearable)
           el-form-item(label="接待人员 :" class="formItem2")
             el-input(v-model="form.staff" :disabled="type == 2" clearable)
 
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') 征信情况
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') 征信情况
         .blueTitle 基于企业征信报告
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="征信报告查询日期 :" style="width:96%")
-              el-date-picker(v-model="form.creditInfo.queryDateForPer" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
+              el-date-picker(v-model="form.creditInfo.queryDateForCom" :picker-options="pickerOptions" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
         .blueTitle1 1.借款企业征信 :
         .cardTitle1
           span(class='blue')
@@ -98,27 +93,34 @@
           el-col(:span="12")
             el-form-item(label="未结清贷款笔数 :" style="width:96%")
               el-input(v-model="form.creditInfo.unPayOffLoanNum" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 笔
           el-col(:span="12")
             el-form-item(label="对外担保笔数 :" style="width:96%")
               el-input(v-model="form.creditInfo.guaranteeNum" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 笔
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="未结清贷款金额 :" style="width:96%")
               el-input(v-model="form.creditInfo.unPayOffAmout" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="对外担保金额 :" style="width:96%")
               el-input(v-model="form.creditInfo.guaranteeAmout" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="涉及金融机构 :" style="width:96%")
               el-input(v-model="form.creditInfo.finInstitutionNum" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 家
           el-col(:span="12")
             el-form-item(label="对外担保结余 :" style="width:96%")
               el-input(v-model="form.creditInfo.guaranteeBalance" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="未结清贷款结余 :" style="width:96%")
               el-input(v-model="form.creditInfo.sumBalance" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
         .cardTitle2
           span (2)逾期及欠息等不良记录
         el-row(:gutter="20")
@@ -156,10 +158,9 @@
           el-col(:span="12")
             el-form-item(style="width:96%")
               el-input(v-model="form.creditInfo.creditChageMsg1" :disabled="type == 2" type="textarea" :rows="3" clearable)
-    //- 2.关联企业征信：
-    el-card(class='card')
-      .left
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      //- 2.关联企业征信：
+      el-card(class='card')
+        .left
           .blueTitle1 2.关联企业征信：
           el-row(:gutter="20")
             el-col(:span="24")
@@ -170,8 +171,7 @@
             el-col(:span="24")
               el-form-item(style="width:96%")
                 el-input(v-model="form.creditInfo.creditChageMsg2" :disabled="type == 2" type="textarea" :rows="2" clearable)
-      .right
-        el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+        .right
           .blueTitle1 3.法人保证人征信：
           el-row(:gutter="20")
             el-col(:span="24")
@@ -182,14 +182,13 @@
             el-col(:span="24")
               el-form-item(style="width:96%")
                 el-input(v-model="form.creditInfo.creditChageMsg3" :disabled="type == 2" type="textarea" :rows="2" clearable)
-    //- 基于个人征信报告(对于关注类及以下贷款及风险隐患客户每季度查询一次个人征信即可)
-    el-card(class='card')
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      //- 基于个人征信报告(对于关注类及以下贷款及风险隐患客户每季度查询一次个人征信即可)
+      el-card(class='card')
         .blueTitle1 基于个人征信报告(对于关注类及以下贷款及风险隐患客户每季度查询一次个人征信即可)：
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="征信报告查询日期 :" style="width:96%")
-              el-date-picker(v-model="form.creditInfo.startDate" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
+              el-date-picker(v-model="form.creditInfo.queryDateForPer" :picker-options="pickerOptions" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
         .blueTitle1 1.企业实际控制人及其配偶(若有)征信 :
         .cardTitle1
           span(class='blue')
@@ -207,30 +206,39 @@
           el-col(:span="12")
             el-form-item(label="未结清贷款笔数 :" style="width:96%")
               el-input(v-model="form.creditInfo.unPayOffLoanNumCon" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 笔
           el-col(:span="12")
             el-form-item(label="授信总金额 :" style="width:96%")
               el-input(v-model="form.creditInfo.debitCardLineAmoutCon" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="未结清贷款金额 :" style="width:96%")
               el-input(v-model="form.creditInfo.unPayOffAmoutCon" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="对外担保笔数 :" style="width:96%")
               el-input(v-model="form.creditInfo.guaranteeNumCon" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 笔
           el-col(:span="12")
             el-form-item(label="涉及金融机构 :" style="width:96%")
               el-input(v-model="form.creditInfo.finInstitutionNumCon" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 家
           el-col(:span="12")
             el-form-item(label="对外担保金额 :" style="width:96%")
               el-input(v-model="form.creditInfo.guaranteeAmoutCon" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="未结清贷款结余 :" style="width:96%")
               el-input(v-model="form.creditInfo.sumBalanceCon" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="对外担保结余 :" style="width:96%")
               el-input(v-model="form.creditInfo.guaranteeBalanceCon" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="未销户贷记卡账户 :" style="width:96%")
               el-input(v-model="form.creditInfo.debitCardNumCon" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 个
         .left
             .cardTitle2 (2)逾期及违约:
             el-row(:gutter="20")
@@ -253,9 +261,8 @@
               el-col(:span="24")
                 el-form-item(style="width:96%")
                   el-input(v-model="form.creditInfo.creditChageMsg4" :disabled="type == 2" type="textarea" :rows="3" clearable)
-    //- 2.企业法定代表人及其配偶（若有）征信
-    el-card(class='card')
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      //- 2.企业法定代表人及其配偶（若有）征信
+      el-card(class='card')
         .blueTitle1 2.企业法定代表人及其配偶（若有）征信 :
         .cardTitle1
           span(class='blue')
@@ -273,30 +280,39 @@
           el-col(:span="12")
             el-form-item(label="未结清贷款笔数 :" style="width:96%")
               el-input(v-model="form.creditInfo.unPayOffLoanNumJur" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 笔
           el-col(:span="12")
             el-form-item(label="未销户贷记卡担保金额 :" style="width:96%")
               el-input(v-model="form.creditInfo.debitCardLineAmoutJur" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="未结清贷款金额 :" style="width:96%")
               el-input(v-model="form.creditInfo.unPayOffAmoutJur" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="对外担保笔数 :" style="width:96%")
               el-input(v-model="form.creditInfo.guaranteeNumJur" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 笔
           el-col(:span="12")
             el-form-item(label="涉及金融机构 :" style="width:96%")
               el-input(v-model="form.creditInfo.finInstitutionNumJur" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 家
           el-col(:span="12")
             el-form-item(label="对外担保金额 :" style="width:96%")
               el-input(v-model="form.creditInfo.guaranteeAmoutJur" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="未结清贷款结余 :" style="width:96%")
               el-input(v-model="form.creditInfo.sumBalanceJur" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="对外担保结余 :" style="width:96%")
               el-input(v-model="form.creditInfo.guaranteeBalanceJur" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
           el-col(:span="12")
             el-form-item(label="未销户贷记卡账户 :" style="width:96%")
               el-input(v-model="form.creditInfo.debitCardNumJur" :disabled="type == 2" clearable)
+                i(slot="suffix" style="font-style:normal") 个
         .left
             .cardTitle2 (2)逾期及违约:
             el-row(:gutter="20")
@@ -319,9 +335,8 @@
               el-col(:span="24")
                 el-form-item(style="width:96%")
                   el-input(v-model="form.creditInfo.creditChageMsg5" :disabled="type == 2" type="textarea" :rows="3" clearable)    
-    //- 3.其他保证人征信
-    el-card(class='card')
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      //- 3.其他保证人征信
+      el-card(class='card')
         .blueTitle1 3.其他保证人征信
         el-row(:gutter="20")
           el-col(:span="12")
@@ -332,33 +347,30 @@
           el-col(:span="12")
             el-form-item(style="width:96%")
               el-input(v-model="form.creditInfo.creditChageMsg6" :disabled="type == 2" type="textarea" :rows="3" clearable)
-    //- 近期负面信息情况
-    el-card(class='card')
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      //- 近期负面信息情况
+      el-card(class='card')
         .cardTitle
           span(class='blue')
           span(class='title') 近期负面信息情况
         el-row(:gutter="20" style="marginTop:20px")
           el-col(:span="12")
             el-form-item(style="width:96%")
-              el-input(v-model="form.creditInfo.msg" type="textarea" :disabled="type == 2" :rows="3" clearable) 
-    //- 企业财务情况
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') 企业财务情况 
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+              el-input(v-model="form.msg" type="textarea" :disabled="type == 2" :rows="3" clearable) 
+      //- 企业财务情况
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') 企业财务情况 
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="" style="width:96%")
               el-select(v-model="form.financeInfo.financeClassification" @change='financeInfoChange' :disabled="type == 2" placeholder="请选择" style="width:100%")
                 el-option(v-for="item in financeList" :key="item.value" :label="item.label" :value="item.value")
-      .cardContent
-        tab-form1(:contentDetail="params1" v-if="form.financeInfo.financeClassification=='1'" ref="tabForm1")
-        tab-form2(:contentDetail="params2" v-if="form.financeInfo.financeClassification=='2'" ref="tabForm2")
-    //- 现场检查其他要点
-    el-card(class='card')
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+        .cardContent
+          tab-form1(:contentDetail="params1" v-show="form.financeInfo.financeClassification =='1'" ref="tabForm1")
+          tab-form2(:contentDetail="params2" v-show="form.financeInfo.financeClassification =='2'" ref="tabForm2")
+      //- 现场检查其他要点
+      el-card(class='card')
         .cardTitle1
             span(class='blue')
             span(class='title1') 现场检查其他要点
@@ -366,13 +378,16 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="企业所在行业是否发生重大不利变化 :" style="width:96%")
-              el-input(v-model="form.industrycChangSiut" :disabled="type == 2" type="textarea" :rows="3" clearable)
+              el-select(v-model="form.industrycChangSiut" :disabled="type == 2" placeholder="请选择" style="width:100%" clearable)
+                el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label="生产经营是否存在安全隐患 :" style="width:96%")
-              el-input(v-model="form.hiddenTroubleSitu" :disabled="type == 2" type="textarea" :rows="3" clearable)
+              el-select(v-model="form.hiddenTroubleSitu" :disabled="type == 2" placeholder="请选择" style="width:100%" clearable)
+                el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label="企业是否有与主业无关的扩张计划 :" style="width:96%")
-              el-input(v-model="form.planExpandSitu" :disabled="type == 2" type="textarea" :rows="3" clearable)
+              el-select(v-model="form.planExpandSitu" :disabled="type == 2" placeholder="请选择" style="width:100%" clearable)
+                el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label="其他 :" style="width:96%")
               el-input(v-model="form.otherSitu" :disabled="type == 2" type="textarea" :rows="3" clearable)
@@ -388,7 +403,7 @@
             el-form-item(label="上次抵质押物评估或重估金额 :" style="width:96%")
               el-input(v-model="form.collEstimateValue" :disabled="type == 2" clearable)
           
-    //- 影像维护
+      //- 影像维护
     el-card(class='card')
       .cardTitle
         span(class='blue')
@@ -397,9 +412,9 @@
         .item(v-for="(item,i) in titleList" :key="item.id")
           .title {{item.text}}
           .upload-wrapper
-            uploadTest(:item="item" :itemVmodel="params" :read="false" :ref="`definte16${i}`")
+            uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
         //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
-  </div>
+
 </template>
 
 <script>
@@ -452,6 +467,15 @@ export default {
       titleList: definte17(),
       params: {},
       loanBusiness: {},
+      pickerOptions: {
+        disabledDate(time) {
+          let curDate = new Date().toString(); // 当前时间戳转为字符串
+          let curDateYear = new Date().getFullYear(); // 当前时间的年份
+          let oneYearAgoDate = curDate.replace(curDateYear, curDateYear - 1); // 字符串年份替换为一年前
+          let oneYear = new Date(oneYearAgoDate).getTime(); //一年前字符串转为时间戳
+          return time.getTime() > Date.now() || time.getTime() < oneYear;
+        }
+      },
       securityKindsArr: [
         {
           label: "信用",
@@ -512,7 +536,7 @@ export default {
         // card 1
         bizType: "m3", // 检查类型
         custName: "", // 客户名称  queryType为2时，必传；其他情况非必传
-        securityKind: "", //担保方式
+        securityKind: [], //担保方式
         otherSecurityKindMsg: "", //担保方式说明
         lineAmout: "", //授信金额
         lineBalance: "", //授信余额
@@ -526,18 +550,18 @@ export default {
         otherRisk: "", // 近期检查发现的其他风险点
         specialRequireCheck: "", //产品贷后日常检查特殊要求
         specialChecked: "", // 落实情况
-        HoldPensonRisk: "", //实际控制人风险点
+        holdPensonRisk: "", //实际控制人风险点
         managerRisk: "", //管理层风险点
 
         // card 3
         checkAddr: "", //检查地点
-        cooperate: "", //检查配合程度
+        cooperate: "1", //检查配合程度
         addrChangedMsg: "", //生产经营场所变动情况
         staff: "", //接待人员
 
         // card 4  基于企业征信报告
         creditInfo: {
-          queryDateForPer: "", //征信报告查询日期
+          queryDateForCom: "", //征信报告查询日期
           // 1.借款企业征信
           // (1)未结清贷款及对外担保情况
           unPayOffLoanNum: "", //未结清贷款笔数
@@ -557,15 +581,15 @@ export default {
           administRecordNum: "", // 行政处罚记录
           // (4)征信记录
           creditChageMsg1: "", // 	借款企业 征信变化情况说明
-          existCreditChage1: 0, // 借款企业 征信变化是否变化
+          existCreditChage1: 1, // 借款企业 征信变化是否变化
           // card 5
           creditChageMsg2: "", // 	关联企业 征信变化情况说明
-          existCreditChage2: 0, // 关联企业 征信变化是否变化
+          existCreditChage2: 1, // 关联企业 征信变化是否变化
           creditChageMsg3: "", // 	法人保证人 征信变化情况说明
-          existCreditChage3: 0, // 法人保证人 征信变化是否变化
+          existCreditChage3: 1, // 法人保证人 征信变化是否变化
 
           // 基于个人征信报告
-          startDate: "", //征信报告查询日期
+          queryDateForPer: "", //征信报告查询日期
           // 1.企业实际控制人及其配偶(若有)征信
           creditClassification: "", //征信分类
           // (1)未结清贷款、未销户贷记卡（含准贷记）及对外担保情况
@@ -579,10 +603,10 @@ export default {
           guaranteeBalanceCon: "", //对外担保结余
           debitCardNumCon: "", //未销户贷记卡账户
           // (2)逾期及违约
-          existBadRecordCon: "", //是否存在逾期及违约记录
+          existBadRecordCon: 1, //是否存在逾期及违约记录
           badRecordMsgCon: "", //说明
           // (3)征信记录
-          existCreditChage4: "", //征信记录是否有异常变化
+          existCreditChage4: 1, //征信记录是否有异常变化
           creditChageMsg4: "", //说明
           // 2.企业法定代表人及其配偶（若有）征信
           creditClassificationJur: "", //征信分类
@@ -597,18 +621,17 @@ export default {
           guaranteeBalanceJur: "", //对外担保结余
           debitCardNumJur: "", //未销户贷记卡账户
           // (2)逾期及违约
-          existBadRecordJur: "", //是否存在逾期及违约记录
+          existBadRecordJur: 1, //是否存在逾期及违约记录
           badRecordMsgJur: "", //说明
           // (3)征信记录
-          existCreditChage5: "", //征信记录是否有异常变化
+          existCreditChage5: 1, //征信记录是否有异常变化
           creditChageMsg5: "", //说明
           // 3.其他保证人征信
-          existCreditChage6: "", //征信记录是否有异常变化
-          creditChageMsg6: "", //说明
+          existCreditChage6: 1, //征信记录是否有异常变化
+          creditChageMsg6: "" //说明
           // 近期负面信息情况
-          msg: "" //近期负面信息情况
         },
-
+        msg: "", //近期负面信息情况
         // 企业财务情况
         financeInfo: {
           financeClassification: "1",
@@ -626,6 +649,7 @@ export default {
       params1: {},
       params2: {},
       dialogImageUrl: "",
+      securityKindMsgShow: false,
       dialogVisible: false,
       formLabelWidth: "72px"
     };
@@ -635,8 +659,54 @@ export default {
   // 侦听器
   watch: {
     detail: function(newVal, oldVal) {
-      console.log(1, newVal, oldVal);
       this.form = newVal;
+      if (newVal.securityKind.indexOf("5") != -1) {
+        this.securityKindMsgShow = true;
+      }
+      if (!newVal.creditInfo) {
+        this.form.creditInfo = {
+          queryDateForPer: "",
+          queryDateForCom: "",
+          existBadRecord: 1,
+          existCreditChage1: 1,
+          existCreditChage2: 1,
+          existCreditChage3: 1,
+          existBadRecordCon: 1,
+          existCreditChage4: 1,
+          existBadRecordJur: 1,
+          existCreditChage5: 1,
+          existCreditChager6: 1
+        };
+        // this.form.creditInfo.queryDateForPer = "";
+        // this.form.creditInfo.queryDateForCom = "";
+        // this.form.creditInfo.existBadRecord = 1;
+        // this.form.creditInfo.existCreditChage1 = 1;
+        // this.form.creditInfo.existCreditChage2 = 1;
+        // this.form.creditInfo.existCreditChage3 = 1;
+        // this.form.creditInfo.existBadRecordCon = 1;
+        // this.form.creditInfo.existCreditChage4 = 1;
+        // this.form.creditInfo.existBadRecordJur = 1;
+        // this.form.creditInfo.existCreditChage5 = 1;
+        // this.form.creditInfo.existCreditChager6 = 1;
+      }
+      if (!newVal.securityKind) {
+        this.form.securityKind = ["1"];
+      }
+      if (!newVal.cooperate) {
+        this.form.cooperate = "1";
+      }
+      if (!newVal.financeInfo) {
+        this.form.financeInfo = {
+          financeClassification: "1",
+          industrycChangSiut: 1, //企业所在行业是否发生重大不利变化
+          hiddenTroubleSitu: 1, //生产经营是否存在安全隐患
+          planExpandSitu: 1, //企业是否有与主业无关的扩张计划
+          otherSitu: "", //其他
+          collEstimateDate: "", //上次抵质押物评估或重估日期
+          collEstimateValue: "" //上次抵质押物评估或重估金额
+        };
+      }
+
       this.params = this.matchImage(newVal);
       this.params1 = newVal.financeInfo;
       this.params2 = newVal.financeInfo;
@@ -663,7 +733,7 @@ export default {
       var forBizDetail = data;
       var obj2 = {};
       //  this.mVmodel(num)的num参数为各个类型所需字段的个数
-      obj2 = this.mVmodel(11);
+      obj2 = this.mVmodel(12);
       Object.keys(obj2).forEach(key => {
         if (forBizDetail) {
           obj2[key] = forBizDetail[key];
@@ -679,18 +749,16 @@ export default {
       }
       this.loanBusiness = Object.assign({}, this.type, arrs);
     },
+    selectSecurityKind() {
+      if (this.form.securityKind.indexOf("5") != -1) {
+        this.securityKindMsgShow = true;
+      } else {
+        this.securityKindMsgShow = false;
+      }
+    },
     // 阶段多选框
     financeInfoChange() {
       console.log(this.form.financeInfo.financeClassification);
-    },
-    // 图片上传
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    // 预览
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
     }
   },
   /**
@@ -701,7 +769,6 @@ export default {
     // this.params = this.mVmodel(11);
     const { billNo, bizId, bizStatus } = this.$route.query;
     // this.params1 = this.form.financeInfo;
-    // console.log("this.params1", this.form);
     if (billNo) {
       // 借据
       this.type = 1;
@@ -866,8 +933,6 @@ export default {
     font-size: 16px;
     line-height: 31px;
     color: rgba(10, 10, 10, 1);
-  }
-  .checkForm {
   }
 }
 </style>
