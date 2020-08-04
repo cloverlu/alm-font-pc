@@ -71,10 +71,10 @@
               el-col(:span="24")
                 el-form-item(label="客户名称:" class="formItem2")
                   span {{approval.custName}}
-              el-col(:span="24")
+              el-col(:span="24" v-if="showNextEmplName")
                 el-form-item(label="业务上报至:" class="formItem2")
                   span {{approval.nextLinkName}}
-              el-col(:span="24")
+              el-col(:span="24" v-if="showNextEmplName")
                 el-form-item(label="业务接收人:" class="formItem2")
                   el-select(v-model="approval.nextEmplName" placeholder="请选择" style='width:100%')
                     el-option(v-for="item in nextEmplNameList" :key="item" :label="item" :value="item")
@@ -190,6 +190,7 @@ export default {
       },
       status: 1,
       biggerThan500: 1,
+      showNextEmplName: true,
       currPost1: "",
       paramsM1: {},
       paramsM2: {},
@@ -234,7 +235,6 @@ export default {
         bizType: this.form.bizType
       }).then(res => {
         this.currPost1 = res.data.data.currPost;
-        this.biggerThan500 = res.data.data.biggerThan500;
         if (res.data.returnCode == "200000") {
           for (var key in res.data.data) {
             if (res.data.data[key] == null) {
@@ -369,7 +369,6 @@ export default {
         bizType: this.form.bizType
       }).then(res => {
         this.currPost1 = res.data.data.currPost;
-        this.biggerThan500 = res.data.data.biggerThan500;
         if (res.data.returnCode == "200000") {
           for (var key in res.data.data) {
             if (res.data.data[key] == null) {
@@ -719,6 +718,7 @@ export default {
               this.approval = res.data.data;
               this.approval.bizId = id;
               this.approvaList = res.data.data.aproveInfo || [];
+              this.biggerThan500 = res.data.data.biggerThan500;
               const { currPost } = this.$route.query;
               let pa;
               if (currPost) {
@@ -806,8 +806,21 @@ export default {
       if (currPost) {
         this.approveContent = true;
       }
+      if (currPost == "320" && biggerThan500 == 0) {
+        this.showNextEmplName = false;
+      }
 
-      if (currPost === "321") {
+      if (currPost === "322") {
+        if (bizType === "m1" || bizType === "m3") {
+          this.commpoentName = "processing2";
+        } else if (bizType === "m2" || bizType === "m5") {
+          this.commpoentName = "processing27";
+        } else if (bizType === "m4") {
+          this.commpoentName = "processing25";
+        } else if (bizType === "m6") {
+          this.commpoentName = "processing29";
+        }
+      } else if (currPost === "321") {
         if (bizType === "m1" || bizType === "m3") {
           this.commpoentName = "processing2";
         } else if (bizType === "m2" || bizType === "m5") {
@@ -906,6 +919,7 @@ export default {
           this.approval = res.data.data;
           this.approval.bizId = bizId;
           this.approvaList = res.data.data.aproveInfo || [];
+          this.biggerThan500 = res.data.data.biggerThan500;
           const pa = {
             orgName: res.data.data.custOrg,
             currPost,
