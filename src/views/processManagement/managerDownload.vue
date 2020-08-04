@@ -141,7 +141,6 @@ export default {
       flag: true,
       searchForm: {
         bizType: "",
-        bizStatus: "",
         queryFlag: "3",
         custName: ""
       },

@@ -137,6 +137,7 @@ export default {
       ie: false,
       currentItem: 1,
       flag: true,
+      status: 1,
       searchForm: {
         bizType: "",
         bizStatus: "",
@@ -280,7 +281,8 @@ export default {
           currPost: row.currPost,
           biggerThan500: row.biggerThan500,
           belongBranch: row.belongBranch,
-          bizType: row.bizType
+          bizType: row.bizType,
+          status: this.status
         }
       });
     },

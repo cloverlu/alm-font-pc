@@ -75,16 +75,16 @@
             el-form-item(label="情况说明 :" class="formItem1" )
               el-input(v-model="form.msg" type="textarea" :rows="3" clearable :disabled="type == 2")
         
-      el-card(class='card')
-        .cardTitle1 
-          span(class='blue')
-          span(class='title') 影像维护
-        .upload
-          .item(v-for="(item,i) in titleList" :key="item.id")
-            .title {{item.text}}
-            .upload-wrapper
-              uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
-          //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
+    el-card(class='card')
+      .cardTitle1 
+        span(class='blue')
+        span(class='title') 影像维护
+      .upload
+        .item(v-for="(item,i) in titleList" :key="item.id")
+          .title {{item.text}}
+          .upload-wrapper
+            uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
+        //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
 
 </template>
 

@@ -384,16 +384,16 @@
               el-form-item(label='本次检查存货变动情况 :' style="width:96%")
                 el-input(v-model="form.financeInfo.busIncChangSitu" :disabled="type == 2" type="textarea" :rows="3" clearable)  
       //- 影像维护
-      el-card(class='card')
-        .cardTitle1
-          span(class='blue')
-          span(class='title') 影像维护
-        .upload
-          .item(v-for="(item,i) in titleList" :key="item.id")
-            .title {{item.text}}
-            .upload-wrapper
-              uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
-          //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
+    el-card(class='card')
+      .cardTitle1
+        span(class='blue')
+        span(class='title') 影像维护
+      .upload
+        .item(v-for="(item,i) in titleList" :key="item.id")
+          .title {{item.text}}
+          .upload-wrapper
+            uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
+        //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
 
 </template>
 

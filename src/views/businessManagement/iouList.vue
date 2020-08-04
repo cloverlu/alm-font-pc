@@ -80,6 +80,7 @@ export default {
         billNo: "",
         queryType: "1"
       },
+      status: 1,
       paramsDetail: {
         pageNo: 1,
         pageSize: 10
@@ -167,7 +168,7 @@ export default {
       // 跳转检查申请
       this.$router.push({
         path: "/toDoList/inspectionApplication",
-        query: { type: 1, billNo: row.billNo }
+        query: { type: 1, billNo: row.billNo, status: this.status }
       });
     }
   }

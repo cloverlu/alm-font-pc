@@ -21,7 +21,7 @@
               el-option(label="小企业授信业务还款资金落实情况检查" value="m4")
               el-option(label="小企业法人快捷贷首次检查" value="m5")
               el-option(label="小企业法人快捷贷贷后日常检查" value="m6")
-          el-button(type="primary" size="mini" v-antiShake="[() => { onSave() }, 1000]" class="btn" v-if='type==1') 保存
+          el-button(type="primary" size="mini" v-antiShake="[() => { onSave() }, 1000]" class="btn" v-if='status==1 && type==1') 保存
       .contentBody
         .type(v-show="form.bizType == 'm1'")
           DivM1(:detail="paramsM1" ref="DivM1")
@@ -37,7 +37,7 @@
           DivM6(:detail="paramsM6" ref="DivM6")
       //- 提交
       .footer
-        el-button(type="warning" v-antiShake="[() => { onSubmit() }, 1000]" v-if='type==1') 提交
+        el-button(type="warning" v-antiShake="[() => { onSubmit() }, 1000]" v-if='status==1 && type==1') 提交
         //- el-button(type="warning" @click='onSubmit') 提交
 
     .content2(v-show="activeName == 'second'")
@@ -183,6 +183,8 @@ export default {
         suggest: "", // 检查结论及措施建议
         empSign: "" // 检查人员
       },
+      status: 1,
+      currPost1: "",
       paramsM1: {},
       paramsM2: {},
       paramsM3: {},
@@ -211,7 +213,8 @@ export default {
   mounted() {
     this.$moment.locale("zh-cn");
     // 进入页面先调用查询接口
-    const { billNo, bizId, bizStatus } = this.$route.query;
+    const { billNo, bizId, bizStatus, status } = this.$route.query;
+    this.status = status;
     if (billNo) {
       // 借据
       this.type = 1;
@@ -224,6 +227,7 @@ export default {
         billNo,
         bizType: this.form.bizType
       }).then(res => {
+        this.currPost1 = res.data.data.currPost;
         if (res.data.returnCode == "200000") {
           for (var key in res.data.data) {
             if (res.data.data[key] == null) {
@@ -340,7 +344,7 @@ export default {
     if (bizStatus === "alreadyDo" || bizStatus === "inReview") {
       this.type = 2;
     }
-    if (bizStatus === "alreadyDo") {
+    if (bizStatus === "alreadyDo" || this.status == 2) {
       this.allBtn = true;
     }
     if (bizStatus === "shouldDo" || bizStatus === "notDo") {
@@ -699,6 +703,7 @@ export default {
           });
           this.submitBtn = true;
           const id = res.data.bizId;
+          const currPost1 = this.currPost1;
           setTimeout(() => {
             approveDetail(this, { bizId: id }).then(res => {
               this.activeName = "second";
@@ -706,7 +711,12 @@ export default {
               this.approval.bizId = id;
               this.approvaList = res.data.data.aproveInfo || [];
               const { currPost } = this.$route.query;
-              const pa = { orgName: res.data.data.custOrg, currPost };
+              let pa;
+              if (currPost) {
+                pa = { orgName: res.data.data.custOrg, currPost };
+              } else {
+                pa = { orgName: res.data.data.custOrg, currPost: currPost1 };
+              }
               getNextEmplName(this, pa).then(ress => {
                 this.nextEmplNameList = ress.data.data.nextEmplNameList;
               });
