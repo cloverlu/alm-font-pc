@@ -81,20 +81,15 @@
             <el-table-column header-align="center" prop="billNo" label="借据编号" min-width="25%"></el-table-column>
             <el-table-column header-align="center" prop="noticeDate" label="提醒时间" min-width="15%"></el-table-column>
             <el-table-column header-align="center" prop="bizEndDate" label="截止时间" min-width="15%"></el-table-column>
-            <el-table-column header-align="center" label="操作" width="150px">
+            <el-table-column header-align="center" label="操作" width="100px">
               <template slot-scope="scope">
-                <el-button
-                  size="mini"
-                  type="primary"
-                  @click="handleEdit(scope.row)"
-                  v-if="scope.row.bizStatus !== 'alreadyDo'"
-                >录入业务信息</el-button>
-                <el-button
+                <el-button size="mini" type="primary" @click="handleEdit(scope.row)">查看</el-button>
+                <!-- <el-button
                   size="mini"
                   type="primary"
                   @click="handleEdit(scope.row)"
                   v-if="scope.row.bizStatus == 'alreadyDo'"
-                >查看</el-button>
+                >查看</el-button>-->
                 <!-- <el-button
                   size="mini"
                   type="warning"

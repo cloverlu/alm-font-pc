@@ -65,7 +65,7 @@
                 //- el-input(v-model="item.agreeResult" disabled)
 
         el-card(class='card' v-if='status==1')
-          el-button(type="primary" style="textAlien:right" v-antiShake="[() => { onSubmitApproval('0') }, 1000]" v-if="status==1" class='save') 保存
+          el-button(type="primary" v-antiShake="[() => { onSubmitApproval('0') }, 1000]" v-if="status==1" class='save') 保存
           el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px")
             el-row
               el-col(:span="24")
@@ -358,7 +358,7 @@ export default {
       this.submitBtn = false;
     }
     if (bizId) {
-      this.routerMatch();
+      // this.routerMatch();
       // 业务
       this.form.billNo = "";
       this.canChange = 2;
@@ -719,6 +719,7 @@ export default {
               this.approval.bizId = id;
               this.approvaList = res.data.data.aproveInfo || [];
               this.biggerThan500 = res.data.data.biggerThan500;
+              this.routerMatch();
               const { currPost } = this.$route.query;
               let pa;
               if (currPost) {
@@ -807,6 +808,10 @@ export default {
         this.approveContent = true;
       }
       if (currPost == "320" && biggerThan500 == 0) {
+        this.showNextEmplName = false;
+      }
+      console.log(this.approvaList);
+      if (currPost == "222" && this.approvaList.length == 3) {
         this.showNextEmplName = false;
       }
 
@@ -913,13 +918,13 @@ export default {
     handleClick() {
       const { bizId, currPost } = this.$route.query;
       if (this.activeName == "second") {
-        // this.routerMatch();
         approveDetail(this, { bizId }).then(res => {
           this.activeName = "second";
           this.approval = res.data.data;
           this.approval.bizId = bizId;
           this.approvaList = res.data.data.aproveInfo || [];
           this.biggerThan500 = res.data.data.biggerThan500;
+          this.routerMatch();
           const pa = {
             orgName: res.data.data.custOrg,
             currPost,
