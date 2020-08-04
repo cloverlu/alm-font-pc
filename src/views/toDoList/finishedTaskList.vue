@@ -137,7 +137,7 @@ export default {
       ie: false,
       currentItem: 1,
       flag: true,
-      status: 1,
+      status: 2,
       searchForm: {
         bizType: "",
         bizStatus: "",

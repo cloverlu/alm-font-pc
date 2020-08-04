@@ -12,7 +12,7 @@
 		:on-remove="handleRemove" 
 		:on-success="handleSuccess" 
 		:before-upload="handleBefore"
-		:multiple="false"
+		:multiple="true"
 		:action='`${this.host}/postLoan/business/uploadModelFile`'
 		list-type="picture-card" :disabled="modify" :data="bizId"
 		)
@@ -133,19 +133,41 @@ export default {
     },
 
     handleSuccess(response, file, fileList) {
-      if (response.returnCode === "200000") {
-        const index = fileList.length - 1;
-        const item = {
-          url: "",
-          dimension: "",
-          longitude: ""
-        };
-        this.fileList[this.item.vModel][index] = item;
-        this.fileList[this.item.vModel][index].url = response.picUrl;
-        this.getLo(file.raw, index);
+      // console.log(fileList);
+      fileList.forEach((element, index) => {
+        this.getLo(element.raw, index);
+        // console.log(element);
+        if (
+          element.status == "success" &&
+          element.response.returnCode === "200000"
+        ) {
+          let item = {
+            url: element.response.picUrl,
+            dimension: "",
+            longitude: ""
+          };
 
+          // console.log(index);
+          this.fileList[this.item.vModel][index] = item;
+        }
+        // console.log(this.fileList[this.item.vModel]);
         return this.fileList[this.item.vModel];
-      }
+      });
+
+      // if (response.returnCode === "200000") {
+      //   const index = fileList.length - 1;
+      //   const item = {
+      //     url: "",
+      //     dimension: "",
+      //     longitude: ""
+      //   };
+      //   this.fileList[this.item.vModel][index] = item;
+      //   this.fileList[this.item.vModel][index].url = response.picUrl;
+      //   this.getLo(file.raw, index);
+      //   return this.fileList[this.item.vModel];
+      // }
+
+      // console.log(this.fileList);
     },
     // 获取图片坐标(文件法)
     getLo(file, index) {

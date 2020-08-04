@@ -64,8 +64,8 @@
                 span(v-if="!item.agreeResult") 无
                 //- el-input(v-model="item.agreeResult" disabled)
 
-        el-card(class='card' v-if='!allBtn')
-          el-button(type="primary" style="textAlien:right" v-antiShake="[() => { onSubmitApproval('0') }, 1000]" v-if="!allBtn" class='save') 保存
+        el-card(class='card' v-if='status==1')
+          el-button(type="primary" style="textAlien:right" v-antiShake="[() => { onSubmitApproval('0') }, 1000]" v-if="status==1" class='save') 保存
           el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px")
             el-row
               el-col(:span="24")
@@ -97,11 +97,11 @@
                 //- el-button(class="qianzi" @click="goSign" size='mini' type='primary') 签字
                 img(:src='approval.empSign' v-if='approval.empSign' class='imgContent')
                 img(:src='bg' v-if='!approval.empSign' class='imgContent')
-      .footer(v-if='!allBtn')
-          el-button(type="warning" v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="!allBtn && approvaList.length == 0") 提交审批
-          el-button(type="warning" size='normal' v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="!allBtn && approvaList.length !== 0") 提交
-          el-button(type="info" v-antiShake="[() => { onSubmitApproval('2') }, 1000]" v-if="!allBtn && approvaList.length !== 0") 回退
-          el-button(type="primary" v-antiShake="[() => { onSubmitApproval('3') }, 1000]" v-if="!allBtn && approvaList.length !== 0") 退回上一岗位
+      .footer(v-if='status==1')
+          el-button(type="warning" v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="status==1 && approvaList.length == 0") 提交审批
+          el-button(type="warning" size='normal' v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="status==1 && approvaList.length !== 0") 提交
+          el-button(type="info" v-antiShake="[() => { onSubmitApproval('2') }, 1000]" v-if="status==1 && approvaList.length !== 0") 回退
+          el-button(type="primary" v-antiShake="[() => { onSubmitApproval('3') }, 1000]" v-if="status==1 && approvaList.length !== 0") 退回上一岗位
     el-dialog(:visible.sync="dialogVisible" :append-to-body="true" width="800px" v-alterELDialogMarginTop="{marginTop:'30vh'}" ref="signArea")
       .title
         span 签名:
