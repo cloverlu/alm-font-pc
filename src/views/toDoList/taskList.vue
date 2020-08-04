@@ -1,39 +1,67 @@
 <!--
-  功能：代办提醒
+  功能：流程管理
   作者：sunhua
   邮箱：947545659@qq.com
   时间：2020年07月02日 08:54:09
 -->
 <template>
-  <div class="taskList">
+  <div class="processManagement">
     <div class="userContent">
       <div class="userForm">
         <el-form
           :model="searchForm"
           :inline="true"
-          label-position="left"
-          label-width="60px"
+          label-position="right"
+          label-width="80px"
           size="mini"
           class="demo-form-inline formBox"
         >
-          <el-form-item label="业务名称" class="formItem5">
-            <el-select v-model="searchForm.bizType" clearable style="width:100%">
-              <el-option label="小企业授信业务首次跟踪检查" value="m1"></el-option>
-              <el-option label="小企业授信业务贷后例行检查" value="m2"></el-option>
-              <el-option label="小企业授信业务贷后全面检查" value="m3"></el-option>
-              <el-option label="小企业授信业务还款资金落实情况检查" value="m4"></el-option>
-              <el-option label="小企业法人快捷贷首次检查" value="m5"></el-option>
-              <el-option label="小企业法人快捷贷贷后日常检查" value="m6"></el-option>
-            </el-select>
-          </el-form-item>
+          <el-row :gutter="20">
+            <el-col :span="8">
+              <el-form-item label="业务名称" class="formItem5">
+                <el-select v-model="searchForm.bizType" clearable style="width:100%">
+                  <el-option label="小企业授信业务首次跟踪检查" value="m1"></el-option>
+                  <el-option label="小企业授信业务贷后例行检查" value="m2"></el-option>
+                  <el-option label="小企业授信业务贷后全面检查" value="m3"></el-option>
+                  <el-option label="小企业授信业务还款资金落实情况检查" value="m4"></el-option>
+                  <el-option label="小企业法人快捷贷首次检查" value="m5"></el-option>
+                  <el-option label="小企业法人快捷贷贷后日常检查" value="m6"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="状态" class="formItem5">
+                <el-select v-model="searchForm.bizStatus" clearable style="width:100%">
+                  <el-option label="应做" value="shouldDo"></el-option>
+                  <el-option label="未做" value="notDo"></el-option>
+                  <!-- <el-option label="审核中" value="inReview"></el-option>
+                  <el-option label="已做" value="alreadyDo"></el-option>-->
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="客户名称" class="formItem5">
+                <el-input v-model="searchForm.custName" clearable></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
 
-          <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
-          <el-button size="mini" @click="onClear">重置</el-button>
+          <div class="btn">
+            <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
+            <el-button size="mini" @click="onClear">重置</el-button>
+          </div>
         </el-form>
       </div>
       <div class="userTable">
         <div class="tableBox">
-          <el-table stripe :data="tableData" border style="width: 99.9%" :fit="true">
+          <el-table
+            ref="multipleTable"
+            stripe
+            :data="tableData"
+            border
+            style="width: 99.9%"
+            :fit="true"
+          >
             <el-table-column
               header-align="center"
               prop="bizType"
@@ -41,13 +69,37 @@
               label="业务名称"
               min-width="15%"
             ></el-table-column>
-            <el-table-column header-align="center" prop="custName" label="客户" min-width="12%"></el-table-column>
-            <el-table-column header-align="center" prop="billNo" label="业务编号" min-width="25%"></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="bizStatus"
+              :formatter="returnBizStatus"
+              label="状态"
+              min-width="12%"
+            ></el-table-column>
+            <el-table-column header-align="center" prop="custName" label="客户名称" min-width="12%"></el-table-column>
+            <el-table-column header-align="center" prop="billNo" label="借据编号" min-width="25%"></el-table-column>
             <el-table-column header-align="center" prop="noticeDate" label="提醒时间" min-width="15%"></el-table-column>
             <el-table-column header-align="center" prop="bizEndDate" label="截止时间" min-width="15%"></el-table-column>
-            <el-table-column header-align="center" label="操作" min-width="15%">
-              <template slot-scope="scope" width="120px">
-                <el-button size="mini" type="primary" @click="link(scope.row)">编辑检查申请</el-button>
+            <el-table-column header-align="center" label="操作" width="150px">
+              <template slot-scope="scope">
+                <el-button
+                  size="mini"
+                  type="primary"
+                  @click="handleEdit(scope.row)"
+                  v-if="scope.row.bizStatus !== 'alreadyDo'"
+                >录入业务信息</el-button>
+                <el-button
+                  size="mini"
+                  type="primary"
+                  @click="handleEdit(scope.row)"
+                  v-if="scope.row.bizStatus == 'alreadyDo'"
+                >查看</el-button>
+                <!-- <el-button
+                  size="mini"
+                  type="warning"
+                  @click="handlePreview(scope.row)"
+                  v-if="scope.row.bizStatus == 'inReview'"
+                >预览</el-button>-->
               </template>
             </el-table-column>
           </el-table>
@@ -70,24 +122,37 @@
 
 <script>
 import { filterParams } from "../../utils/utils";
+
 import { getTaskList } from "../../api/processManagement";
 export default {
-  name: "taskList",
+  name: "processManagement",
   data() {
     return {
+      host: window.config.host.authorization,
       tableData: [],
       pageNo: 1,
       pageSize: 10,
       total: 10,
+      ie: false,
       currentItem: 1,
+      flag: true,
+      status: 1,
       searchForm: {
-        bizType: ""
+        bizType: "",
+        bizStatus: "",
+        custName: "",
+        queryFlag: "1"
       },
+      src: "",
       paramsDetail: {
         pageNo: 1,
         pageSize: 10
       },
-      formLabelWidth: "72px"
+      pages: "",
+      url: "",
+      dialogVisible: false,
+      formLabelWidth: "72px",
+      multipleSelection: []
     };
   },
   mounted() {
@@ -124,23 +189,27 @@ export default {
     },
     // 表单查询
     onSubmit: function() {
-      console.log(filterParams(this.searchForm));
-      console.log(this.pageSize, this.pageNo);
       getTaskList(this, {
         ...filterParams(this.searchForm),
-        emplName: "金林" || localStorage.getItem("emplName"),
-        pageSize: this.pageSize,
-        pageNo: this.pageNo,
+        emplName: sessionStorage.getItem("emplName"),
+        pageSize: 10,
+        pageNo: 1,
         ...this.paramsDetail
       }).then(res => {
         this.tableData = res.data.data;
         this.total = res.data.total;
       });
-    }, // 重置
+    },
+    //
     onClear() {
       this.searchForm = {
-        bizType: ""
+        bizType: "",
+        bizStatus: "",
+        custName: "",
+        queryFlag: "1"
       };
+      this.multipleSelection = [];
+      this.$refs.multipleTable.clearSelection();
       this.pageNo = 1;
       this.pageSize = 10;
     },
@@ -160,32 +229,102 @@ export default {
           return "小企业法人快捷贷贷后日常检查";
       }
     },
-    link(row) {
-      // 跳转检查申请
+    returnBizStatus(row) {
+      switch (row.bizStatus) {
+        case "shouldDo":
+          return "应做";
+        case "notDo":
+          return "未做";
+        case "inReview":
+          return "审核中";
+        case "alreadyDo":
+          return "已做";
+      }
+    },
+    handleEdit(row) {
       this.$router.push({
-        path: "/businessManagement/inspectionApplication",
+        path: "/toDoList/inspectionApplication",
         query: {
-          type: 2,
+          type: 1,
           bizId: row.bizId,
           bizStatus: row.bizStatus,
           currPost: row.currPost,
           biggerThan500: row.biggerThan500,
           belongBranch: row.belongBranch,
-          bizType: row.bizType
+          bizType: row.bizType,
+          status: this.status
         }
       });
+    },
+    // 预览
+    handlePreview(row) {
+      this.url = `${this.host}/postLoan/model/viewPdfFile?bizId=${row.bizId}`;
+
+      // 下面代码都是处理IE浏览器的情况
+      if (window.ActiveXObject || "ActiveXObject" in window) {
+        let flag;
+        //判断是否为IE浏览器，"ActiveXObject" in window判断是否为IE11
+        //判断是否安装了adobe Reader
+        for (var x = 2; x < 10; x++) {
+          try {
+            var oAcro = eval("new ActiveXObject('PDF.PdfCtrl." + x + "');");
+            if (oAcro) {
+              flag = true;
+            }
+          } catch (e) {
+            flag = false;
+          }
+        }
+        try {
+          var oAcro4 = new ActiveXObject("PDF.PdfCtrl.1");
+          if (oAcro4) {
+            flag = true;
+          }
+        } catch (e) {
+          flag = false;
+        }
+
+        try {
+          var oAcro7 = new ActiveXObject("AcroPDF.PDF.1");
+          if (oAcro7) {
+            flag = true;
+          }
+        } catch (e) {
+          flag = false;
+        }
+
+        if (flag) {
+          //支持
+          window.open(this.url); //调用显示的方法
+        } else {
+          //不支持
+          alert(
+            "对不起,您还没有安装PDF阅读器软件呢,为了方便预览PDF文档,请选择安装！"
+          );
+          location =
+            "http://ardownload.adobe.com/pub/adobe/reader/win/9.x/9.3/chs/AdbeRdr930_zh_CN.exe";
+        }
+      } else {
+        this._loadFile(this.url); //调用显示的方法
+      }
+    },
+    _loadFile(url) {
+      var a = document.createElement("a");
+      a.href = url;
+      a.target = "_blank";
+      a.click();
+      window.URL.revokeObjectURL(url);
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/style/global.scss";
-.taskList {
+.processManagement {
   box-sizing: border-box;
   width: 100%;
   min-height: 100%;
-  position: relative;
+  // position: relative;
   .userHeader {
     box-sizing: border-box;
     height: 35px;
@@ -205,7 +344,7 @@ export default {
     width: 100%;
     .userForm {
       box-sizing: border-box;
-      height: 53px;
+      height: 100px;
       width: 100%;
       .formBox {
         box-sizing: border-box;
@@ -214,15 +353,16 @@ export default {
         width: 100%;
         font-size: 12px;
         padding-left: 14px;
+        padding-right: 14px;
         font-family: Source Han Sans CN;
         font-weight: 500;
         color: rgba(102, 102, 102, 1);
         opacity: 1;
         .formItem5 {
           display: inline-block;
-          width: 33%;
-          margin: 0;
-          padding-right: 10px;
+          width: 100%;
+          // margin-right: 20px;
+          // min-width: 310px;
         }
         /deep/.el-form-item {
           margin-bottom: 0;
@@ -231,27 +371,38 @@ export default {
           }
           /deep/.el-form-item__content {
             margin-top: 13px;
-            width: calc(100% - 60px);
+            width: calc(100% - 80px);
           }
         }
-        /deep/.el-button {
-          width: 66px;
-          height: 28px;
-          margin-top: 13px;
-          min-width: 30px;
-          margin-left: 0;
-          margin-right: 10px;
-          text-align: center;
-          .el-button--primary {
-            background: rgba(78, 120, 222, 1);
-            /deep/span {
-              font-size: 14px;
-              font-family: Segoe UI;
-              font-weight: 400;
-              color: rgba(255, 255, 255, 1);
-              opacity: 1;
-              text-align: center;
-              padding: 0;
+        .btn {
+          display: inline-block;
+          text-align: right;
+          box-sizing: border-box;
+          width: 100%;
+          height: 47px;
+          line-height: 47px;
+          /deep/.el-button {
+            width: 66px;
+            height: 28px;
+            margin-top: 13px;
+            min-width: 30px;
+            margin-left: 0;
+            margin-right: 10px;
+            text-align: center;
+            &:last-of-type {
+              margin-right: 0;
+            }
+            .el-button--primary {
+              background: rgba(78, 120, 222, 1);
+              /deep/span {
+                font-size: 14px;
+                font-family: Segoe UI;
+                font-weight: 400;
+                color: rgba(255, 255, 255, 1);
+                opacity: 1;
+                text-align: center;
+                padding: 0;
+              }
             }
           }
         }
@@ -300,13 +451,37 @@ export default {
       }
     }
   }
+  // .follow {
+  //   /deep/.el-dialog {
+  //     height: 100%;
+  //     .el-dialog__body {
+  //       height: 95%;
+  //       background-color: #ccc;
+  //     }
+  //   }
+  // }
 }
 </style>
 
 <style lang="scss">
-.taskList {
+.processManagement {
   .el-table__row td .cell {
     text-align: center !important;
   }
+  // .follow {
+  .el-dialog {
+    height: 100%;
+    .el-dialog__body {
+      height: 95% !important;
+      background-color: #ccc;
+    }
+  }
+  // }
+  // .agreement_picture {
+  //   height: 95%;
+  // }
+  // .dialog-footer {
+  //   height: 5%;
+  // }
 }
 </style>

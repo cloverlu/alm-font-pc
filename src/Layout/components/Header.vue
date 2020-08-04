@@ -16,7 +16,7 @@
       <i class="iconfont iconPC-morentouxiang userIcon"></i>
 
       <div class="nameBox">
-        <span class="userName">王建国</span>
+        <span class="userName">{{userName}}</span>
       </div>
       <el-popconfirm
         confirmButtonText="确定"
@@ -35,15 +35,20 @@
 <script>
 export default {
   name: "Header",
+  data() {
+    return {
+      userName: sessionStorage.getItem("emplName")
+    };
+  },
   methods: {
     loginOut() {
-      localStorage.removeItem("emplCode");
-      localStorage.removeItem("emplName");
-      localStorage.removeItem("noticeFlag");
-      localStorage.removeItem("orgCode");
-      localStorage.removeItem("orgName");
-      localStorage.removeItem("postCode");
-      localStorage.removeItem("menuList");
+      sessionStorage.removeItem("emplCode");
+      sessionStorage.removeItem("emplName");
+      sessionStorage.removeItem("noticeFlag");
+      sessionStorage.removeItem("orgCode");
+      sessionStorage.removeItem("orgName");
+      sessionStorage.removeItem("postCode");
+      sessionStorage.removeItem("menuList");
       this.$message({
         message: "成功退出系统",
         type: "success"
@@ -87,38 +92,45 @@ export default {
   .headerRight {
     position: absolute;
     display: inline-block;
-    width: 185px;
+    // width: 350px;
     height: 75px;
+    line-height: 75px;
     top: 0;
-    right: 0;
+    right: 27px;
     color: rgba(255, 255, 255, 1);
     .userIcon {
       line-height: 75px;
       display: inline-block;
       font-size: 28px;
-      margin-right: 12px;
+      // margin-right: 12px;
       color: #dededd;
     }
     .loginIcon {
+      // position: absolute;
+      right: 27px;
       line-height: 75px;
       font-size: 28px;
     }
     .nameBox {
       display: inline-block;
-      position: relative;
-      width: 80px;
+      // position: relative;
+      text-align: center;
+      // width: 250px;
       height: 20px;
+      margin-right: 10px;
+      margin-left: 10px;
     }
     .userName {
-      position: absolute;
-      display: inline-block;
-      top: -5px;
+      // position: absolute;
+      // width: 100%;
+      // display: inline-block;
+      // top: -5px;
+      // left: 0;
       // margin-right: 34px;
       font-family: MicrosoftYaHei;
-      font-size: 14px;
-      line-height: 25px;
-      letter-spacing: 1px;
-      height: 17px;
+      font-size: 16px;
+      // line-height: 17px;
+      // height: 17px;
     }
   }
 }

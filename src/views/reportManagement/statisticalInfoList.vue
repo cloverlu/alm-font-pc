@@ -28,96 +28,149 @@
         <div class="tableBox">
           <el-table stripe :data="tableData" border style="width: 99.9%" :fit="true">
             <el-table-column header-align="center" prop="orgName" label="机构名称" min-width="15%"></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="completeNumOfM1"
-              label="首次检查按时完成"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="overTimeCompleteNumOfM1"
-              label="首次检查超时完成"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="notCompleteNumOfM1"
-              label="首次检查未完成"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="completeNumOfM2"
-              label="例行检查按时完成"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="overTimeCompleteNumOfM2"
-              label="例行检查超时完成"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="notCompleteNumOfM2"
-              label="例行检查未完成"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="completeNumOfM3"
-              label="全面检查按时完成"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="overTimeCompleteNumOfM3"
-              label="全面检查超时完成"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="notCompleteNumOfM3"
-              label="全面检查未完成"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="completeNumOfM4"
-              label="还款资金落实按时完成"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="overTimeCompleteNumOfM4"
-              label="还款资金落实超时完成"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="notCompleteNumOfM4"
-              label="还款资金落实未完成"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="completeNumOfM6"
-              label="日常检查按时完成"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="overTimeCompleteNumOfM6"
-              label="日常检查超时完成"
-              min-width="8%"
-            ></el-table-column>
-            <el-table-column
-              header-align="center"
-              prop="notCompleteNumOfM6"
-              label="日常检查未完成"
-              min-width="8%"
-            ></el-table-column>
+            <el-table-column header-align="center" label="首次跟踪检查">
+              <el-table-column header-align="center" label="按时完成" min-width="8%">
+                <template slot-scope="scope">
+                  <div slot="reference" class="name-wrapper" @click="link(scope.row)">
+                    <span>{{ scope.row.completeNumOfM1 }}</span>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column header-align="center" label="超时完成" min-width="8%">
+                <template slot-scope="scope">
+                  <div slot="reference" class="name-wrapper" @click="link(scope.row)">
+                    <span>{{ scope.row.overTimeCompleteNumOfM1 }}</span>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column header-align="center" label="未完成" min-width="8%">
+                <template slot-scope="scope">
+                  <div slot="reference" class="name-wrapper" @click="link(scope.row)">
+                    <span>{{ scope.row.notCompleteNumOfM1 }}</span>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table-column>
+
+            <el-table-column header-align="center" label="贷后例行检查">
+              <el-table-column header-align="center" label="按时完成" min-width="8%">
+                <template slot-scope="scope">
+                  <div slot="reference" class="name-wrapper" @click="link(scope.row)">
+                    <span>{{ scope.row.completeNumOfM2 }}</span>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column header-align="center" label="超时完成" min-width="8%">
+                <template slot-scope="scope">
+                  <div slot="reference" class="name-wrapper" @click="link(scope.row)">
+                    <span>{{ scope.row.overTimeCompleteNumOfM2 }}</span>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column header-align="center" label="未完成" min-width="8%">
+                <template slot-scope="scope">
+                  <div slot="reference" class="name-wrapper" @click="link(scope.row)">
+                    <span>{{ scope.row.notCompleteNumOfM2 }}</span>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table-column>
+
+            <el-table-column header-align="center" label="贷后全面检查">
+              <el-table-column header-align="center" label="按时完成" min-width="8%">
+                <template slot-scope="scope">
+                  <div slot="reference" class="name-wrapper" @click="link(scope.row)">
+                    <span>{{ scope.row.completeNumOfM3 }}</span>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column header-align="center" label="超时完成" min-width="8%">
+                <template slot-scope="scope">
+                  <div slot="reference" class="name-wrapper" @click="link(scope.row)">
+                    <span>{{ scope.row.overTimeCompleteNumOfM3 }}</span>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column header-align="center" label="未完成" min-width="8%">
+                <template slot-scope="scope">
+                  <div slot="reference" class="name-wrapper" @click="link(scope.row)">
+                    <span>{{ scope.row.notCompleteNumOfM3 }}</span>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table-column>
+
+            <el-table-column header-align="center" label="还款资金落实检查">
+              <el-table-column header-align="center" label="按时完成" min-width="8%">
+                <template slot-scope="scope">
+                  <div slot="reference" class="name-wrapper" @click="link(scope.row)">
+                    <span>{{ scope.row.completeNumOfM4 }}</span>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column header-align="center" label="超时完成" min-width="8%">
+                <template slot-scope="scope">
+                  <div slot="reference" class="name-wrapper" @click="link(scope.row)">
+                    <span>{{ scope.row.overTimeCompleteNumOfM4 }}</span>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column header-align="center" label="未完成" min-width="8%">
+                <template slot-scope="scope">
+                  <div slot="reference" class="name-wrapper" @click="link(scope.row)">
+                    <span>{{ scope.row.notCompleteNumOfM4 }}</span>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table-column>
+
+            <el-table-column header-align="center" label="快捷贷首次检查">
+              <el-table-column header-align="center" label="按时完成" min-width="8%">
+                <template slot-scope="scope">
+                  <div slot="reference" class="name-wrapper" @click="link(scope.row)">
+                    <span>{{ scope.row.completeNumOfM5 }}</span>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column header-align="center" label="超时完成" min-width="8%">
+                <template slot-scope="scope">
+                  <div slot="reference" class="name-wrapper" @click="link(scope.row)">
+                    <span>{{ scope.row.overTimeCompleteNumOfM5 }}</span>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column header-align="center" label="未完成" min-width="8%">
+                <template slot-scope="scope">
+                  <div slot="reference" class="name-wrapper" @click="link(scope.row)">
+                    <span>{{ scope.row.notCompleteNumOfM5 }}</span>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table-column>
+
+            <el-table-column header-align="center" label="快捷贷贷后日常检查">
+              <el-table-column header-align="center" label="按时完成" min-width="8%">
+                <template slot-scope="scope">
+                  <div slot="reference" class="name-wrapper" @click="link(scope.row)">
+                    <span>{{ scope.row.completeNumOfM6 }}</span>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column header-align="center" label="超时完成" min-width="8%">
+                <template slot-scope="scope">
+                  <div slot="reference" class="name-wrapper" @click="link(scope.row)">
+                    <span>{{ scope.row.overTimeCompleteNumOfM6 }}</span>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column header-align="center" label="未完成" min-width="8%">
+                <template slot-scope="scope">
+                  <div slot="reference" class="name-wrapper" @click="link(scope.row)">
+                    <span>{{ scope.row.notCompleteNumOfM6 }}</span>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table-column>
           </el-table>
         </div>
         <div class="block">
@@ -214,6 +267,9 @@ export default {
         case "0":
           return "否";
       }
+    },
+    link(row) {
+      console.log(row);
     }
   }
 };
@@ -357,6 +413,25 @@ export default {
         height: 34px;
         padding-left: 5px;
         padding-right: 5px;
+      }
+    }
+  }
+}
+.statisticalInfoList {
+  .tableBox {
+    .el-table__row {
+      height: 100%;
+      width: 100%;
+      td {
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        .cell {
+          height: 100%;
+          width: 100%;
+          padding-top: 12px;
+          padding-bottom: 12px;
+        }
       }
     }
   }

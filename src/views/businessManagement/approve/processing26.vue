@@ -44,6 +44,18 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
+          <el-form-item label="发生阶段:" class="formItem2">
+            <el-select v-model="params.riskStage" style="width: 100%">
+              <el-option
+                v-for="item in stageArr"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
           <el-form-item label="预警信号说明:" class="formItem2">
             <el-input v-model="params.riskMsg" type="textarea" :rows="3" clearable></el-input>
           </el-form-item>
@@ -99,12 +111,27 @@ export default {
           value: "3"
         }
       ],
+      stageArr: [
+        {
+          label: "第一阶段",
+          value: "一"
+        },
+        {
+          label: "第二阶段",
+          value: "二"
+        },
+        {
+          label: "第三阶段",
+          value: "三"
+        }
+      ],
       params: {
         existRisk: 1, // 存在风险
         agreeResult: 1, // 一级支行/二级分行复核意见
         msg: "", // 一级支行/二级分行复核意见说明
         riskMsg: "", // 风险说明
-        suggest: "" // 措施建议
+        suggest: "", // 措施建议
+        riskStage: "一"
       }
     };
   },
@@ -118,12 +145,15 @@ export default {
       this.params.msg = newVal.msg;
       this.params.riskMsg = newVal.riskMsg;
       this.params.suggest = newVal.suggest;
-      console.log(newVal, this.params);
+      this.params.riskStage = newVal.riskStage;
       if (!newVal.existRisk) {
         this.params.existRisk = 1;
       }
       if (!newVal.agreeResult) {
         this.params.agreeResult = 1;
+      }
+      if (!newVal.riskStage) {
+        this.params.riskStage = "一";
       }
     }
   }

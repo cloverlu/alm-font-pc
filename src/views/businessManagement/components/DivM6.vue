@@ -5,12 +5,12 @@
   时间：2020年07月07日 16:40:13
 -->
 <template lang="pug">
-  <div class="m6">
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') {{form.custName}}
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini" class='checkForm' )
+  .m6
+    el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') {{form.custName}}
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="贷后检查模式 :" class="formItem2")
@@ -33,27 +33,24 @@
                 el-option(v-for="item in cooperateArr" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label="担保方式 :" class="formItem2")
-              el-checkbox-group(v-model="form.securityKind" style="width:100%" clearable :disabled="type == 2")
+              el-checkbox-group(v-model="form.securityKind" style="width:100%" clearable :disabled="type == 2" @change='selectSecurityKind')
                 el-checkbox(v-for="item in securityKindsArr" :key="item.value" :label="item.value" :value="item.value") {{item.label}}
-              //- el-select(v-model="form.securityKind" style="width:100%" clearable)
-              //-   el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label="额度年检 :" class="formItem2")
               el-select(v-model="form.yearlyInspection" style="width:100%" :disabled="type == 2")
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
-              el-input(v-model="form.otherSecurityKindMsg" type="textarea" :rows="3" :disabled="type == 2" clearable)
+              el-input(v-model="form.otherSecurityKindMsg" v-if='securityKindMsgShow' type="textarea" :rows="3" :disabled="type == 2" clearable)
           el-col(:span="12")
             el-form-item(label="押品重估 :" class="formItem2")
               el-select(v-model="form.revalOfColl" style="width:100%" :disabled="type == 2")
                 el-option(v-for="item in options" :key="item.value"  :label="item.label" :value="item.value")
-    //- 
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') 客户资信情况检查
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      //- 
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') 客户资信情况检查
         .blueTitle 客户资信检查
         el-row(:gutter="20")
           el-col(:span="12")
@@ -73,7 +70,7 @@
             el-form-item(label="企业或企业主征信是否有新增逾期记录 :" class="formItem2")
               el-select(v-model="form.assetCreditInfo.addedOverdues" :disabled="type == 2" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
-         
+          
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
@@ -81,8 +78,8 @@
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
               el-input(v-model="form.assetCreditInfo.addedOverduesMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
-         
-  
+          
+
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="企业或企业主是否有新增对外担保记录 :" class="formItem2")
@@ -108,22 +105,20 @@
             el-form-item(label=" " class="formItem2")
               el-input(v-model="form.assetCreditInfo.otherSituMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
         
-    //- 检查要点小结
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') 检查要点小结
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      //- 检查要点小结
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') 检查要点小结
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(class="formItem2")
-              el-input(v-model="form.loanLength" :disabled="type == 2" type="textarea" :rows="3" clearable)
-    //- 客户经营情况检查
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') 客户经营情况检查
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+              el-input(v-model="form.assetCreditInfo.summarySituMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
+      //- 客户经营情况检查
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') 客户经营情况检查
         .blueTitle1 企业经营情况
         .cardTitle2
           span 检查要点
@@ -162,7 +157,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="企业生产经营场所是否发生或即将发生变动 :" class="formItem2")
-              el-select(v-model="form.proAndOpeAbnormalSuit" :disabled="type == 2" style="width:100%" clearable)
+              el-select(v-model="form.addrIsChanged" :disabled="type == 2" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label="企业主要原材料或货物的采购成本是否明显上升 :" class="formItem2")
@@ -171,14 +166,14 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
-              el-input(v-model="form.proAndOpeAbnormalSuitMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.addrChangedMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
               el-input(v-model="form.purchaseCostMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="企业生产经营是否出现异常情况(停产、半停产、销售大规模退货、员工数量骤减、劳资关系紧张、设备开工率不足、拖欠租金等) :" class="formItem2")
-              el-select(v-model="form.orderDecline" :disabled="type == 2" style="width:100%" clearable)
+              el-select(v-model="form.proAndOpeAbnormalSuit" :disabled="type == 2" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12" style='paddingTop:24px')
             el-form-item(label="企业销售是否出现异常情况(销售大规模退货、存货积压严重) :" class="formItem2")
@@ -187,7 +182,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
-              el-input(v-model="form.orderDeclineMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.proAndOpeAbnormalSuitMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
               el-input(v-model="form.saleAbnormalSuitMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
@@ -197,7 +192,7 @@
               el-select(v-model="form.chainChange" :disabled="type == 2" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
-            el-form-item(label="制造型企业水、电、煤、气等资源消耗量是否较上年同期明显下降(降幅达30%) : :" class="formItem2")
+            el-form-item(label="制造型企业水、电、煤、气等资源消耗量是否较上年同期明显下降(降幅达30%) :" class="formItem2")
               el-select(v-model="form.dailyCostDecline" :disabled="type == 2" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
         el-row(:gutter="20")
@@ -209,24 +204,33 @@
               el-input(v-model="form.dailyCostDeclineMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
         el-row(:gutter="20")
           el-col(:span="12")
+            el-form-item(label="企业订单是否出现大幅下降(降幅达30%) :" class="formItem2")
+              el-select(v-model="form.orderDecline" :disabled="type == 2" style="width:100%" clearable)
+                el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
+          el-col(:span="12")
             el-form-item(label="企业生产经营是否有安全隐患 :" class="formItem2")
               el-select(v-model="form.hiddenTroubleSitu" :disabled="type == 2" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
+          
+        el-row(:gutter="20")
+          el-col(:span="12")
+            el-form-item(label=" " class="formItem2")
+              el-input(v-model="form.orderDeclineMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
+          el-col(:span="12")
+            el-form-item(label=" " class="formItem2")
+              el-input(v-model="form.hiddenTroubleSituMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
+        el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="其他 :" class="formItem2" style='paddingTop:24px')
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
-              el-input(v-model="form.hiddenTroubleSituMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
-          el-col(:span="12")
-            el-form-item(label=" " class="formItem2")
               el-input(v-model="form.msg" type="textarea" :disabled="type == 2" :rows="3" clearable)
         
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') 现金流调查
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') 现金流调查
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="剔除季节性因素后的现金流是否有大幅下降(降幅超30%) :" class="formItem2")
@@ -243,98 +247,91 @@
           el-col(:span="12")
             el-form-item(label="其他 :" class="formItem2")
               el-input(v-model="form.cashOtherMsg" :disabled="type == 2" type="textarea" :rows="3" clearable)
-    //- 检查要点小结
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') 检查要点小结
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      //- 检查要点小结
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') 检查要点小结
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label=" " class="formItem2")
               el-input(v-model="form.summaryForCheck" :disabled="type == 2" type="textarea" :rows="3" clearable)
 
-    //- 房地产抵押担保适用
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') 房地产抵押担保适用
-      el-form(v-for="(item,index) in form.assitInfoForPledge" :key="index" :inline="true" label-position="top" label-width="80px" size="mini")
-        el-row(:gutter="20")
-          el-col(:span="12")
-            el-form-item(label="押品名称: " class="formItem2")
-              el-input(v-model="item.assitName" :disabled="type == 2" clearable)
-          el-col(:span="12")
-            el-form-item(label="押品位置地址: " class="formItem2")
-              el-input(v-model="item.assitAddr" :disabled="type == 2" clearable)
-        el-row(:gutter="20")
-          el-col(:span="12")
-            el-form-item(label="首次评估情况: " class="formItem2")
-              el-input(v-model="item.firstEstimateDate" :disabled="type == 2" clearable)
-          el-col(:span="12")
-            el-form-item(label="我行认定价值: " class="formItem2")
-              el-input(v-model="item.firstEstimateValue" :disabled="type == 2" clearable)
-          el-col(:span="12")
-            el-form-item(label="抵质押率: " class="formItem2")
-              el-input(v-model="item.firstMortAndpleRate" :disabled="type == 2" clearable)
-        el-row(:gutter="20")
-          el-col(:span="12")
-            el-form-item(label="最近一次评估情况: " class="formItem2")
-              el-input(v-model="item.lastEstimateDate" :disabled="type == 2" clearable)
-          el-col(:span="12")
-            el-form-item(label="我行认定价值: " class="formItem2")
-              el-input(v-model="item.lastEstimateValue" :disabled="type == 2" clearable)
-          el-col(:span="12")
-            el-form-item(label="抵质押率: " class="formItem2")
-              el-input(v-model="item.lastMortAndpleRate" :disabled="type == 2" clearable)
-          el-col(:span="12")
-            el-form-item(label="本次评估情况: " class="formItem2")
-              el-input(v-model="item.thisEstimateDate" :disabled="type == 2" clearable)
-        el-row(:gutter="20")
-          el-col(:span="12")
-            el-form-item(label="我行认定价值: " class="formItem2")
-              el-input(v-model="item.thisEstimateValue" :disabled="type == 2" clearable)
-          el-col(:span="12")
-            el-form-item(label="抵质押率: " class="formItem2")
-              el-input(v-model="item.thisMortAndpleRate" :disabled="type == 2" clearable)
-        el-row(:gutter="20")
-          el-col(:span="12")
-            el-form-item(label="押品价值及变现能力变动情况: " class="formItem2")
-              el-input(v-model="item.assitChangeSuit" :disabled="type == 2" type="textarea" :rows="3" clearable)
-          el-col(:span="12" style="marginTop:24px")
-            el-button(@click="addDomain1" type='primary' :disabled="type == 2" v-if="index == 0") 新增
-            el-button(@click="removeDomain1(item)" type='primary' :disabled="type == 2" v-if="index !== 0") 删除
+      //- 房地产抵押担保适用
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') 房地产抵押担保适用
+        .content(v-for="(item,index) in form.assitInfoForPledge" :key="index")
+          el-row(:gutter="20")
+            el-col(:span="12")
+              el-form-item(label="押品名称: " class="formItem2")
+                el-input(v-model="item.assitName" :disabled="type == 2" clearable)
+            el-col(:span="12")
+              el-form-item(label="押品位置地址: " class="formItem2")
+                el-input(v-model="item.assitAddr" :disabled="type == 2" clearable)
+          el-row(:gutter="20")
+            el-col(:span="12")
+              el-form-item(label="首次评估情况: " class="formItem2")
+                el-input(v-model="item.firstEstimateDate" :disabled="type == 2" clearable)
+            el-col(:span="12")
+              el-form-item(label="我行认定价值: " class="formItem2")
+                el-input(v-model="item.firstEstimateValue" :disabled="type == 2" clearable)
+            el-col(:span="12")
+              el-form-item(label="抵质押率: " class="formItem2")
+                el-input(v-model="item.firstMortAndpleRate" :disabled="type == 2" clearable)
+          el-row(:gutter="20")
+            el-col(:span="12")
+              el-form-item(label="最近一次评估情况: " class="formItem2")
+                el-input(v-model="item.lastEstimateDate" :disabled="type == 2" clearable)
+            el-col(:span="12")
+              el-form-item(label="我行认定价值: " class="formItem2")
+                el-input(v-model="item.lastEstimateValue" :disabled="type == 2" clearable)
+            el-col(:span="12")
+              el-form-item(label="抵质押率: " class="formItem2")
+                el-input(v-model="item.lastMortAndpleRate" :disabled="type == 2" clearable)
+            el-col(:span="12")
+              el-form-item(label="本次评估情况: " class="formItem2")
+                el-input(v-model="item.thisEstimateDate" :disabled="type == 2" clearable)
+          el-row(:gutter="20")
+            el-col(:span="12")
+              el-form-item(label="我行认定价值: " class="formItem2")
+                el-input(v-model="item.thisEstimateValue" :disabled="type == 2" clearable)
+            el-col(:span="12")
+              el-form-item(label="抵质押率: " class="formItem2")
+                el-input(v-model="item.thisMortAndpleRate" :disabled="type == 2" clearable)
+          el-row(:gutter="20")
+            el-col(:span="12")
+              el-form-item(label="押品价值及变现能力变动情况: " class="formItem2")
+                el-input(v-model="item.assitChangeSuit" :disabled="type == 2" type="textarea" :rows="3" clearable)
+            el-col(:span="12" style="marginTop:24px")
+              el-button(@click="addDomain1" type='primary' :disabled="type == 2" v-if="index == 0") 新增
+              el-button(@click="removeDomain1(item)" type='primary' :disabled="type == 2" v-if="index !== 0") 删除
     
-    //- 房地产抵押担保适用
-    el-card(class='card')
-      .cardTitle1
-        span(class='blue')
-        span(class='title') 融资担保机构担保适用
-      el-form(v-for="(item,index) in form.assitInfoForGuarantee" :key="index" :inline="true" label-position="top" label-width="80px" size="mini")
-        el-row(:gutter="20")
-          el-col(:span="12")
-            el-form-item(label="担保公司名称: " class="formItem2")
-              el-input(v-model="item.assitName" :disabled="type == 2" clearable)
-          el-col(:span="12")
-            el-form-item(label="我行合作状态: " class="formItem2")
-              el-input(v-model="item.cooperatStatus" :disabled="type == 2" clearable)
-        el-row(:gutter="20")
-          el-col(:span="12")
-            el-form-item(label="风险分类: " class="formItem2")
-              el-input(v-model="item.assitFiveClass" :disabled="type == 2" clearable)
-          el-col(:span="12" style="marginTop:24px")
-            el-button(@click="addDomain2" type='primary' :disabled="type == 2" v-if="index == 0") 新增
-            el-button(@click="removeDomain2(item)" type='primary' :disabled="type == 2" v-if="index !== 0") 删除
+      //- 房地产抵押担保适用
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') 融资担保机构担保适用
+        .content(v-for="(item,index) in form.assitInfoForGuarantee" :key="index")
+          el-row(:gutter="20")
+            el-col(:span="12")
+              el-form-item(label="担保公司名称: " class="formItem2")
+                el-input(v-model="item.assitName" :disabled="type == 2" clearable)
+            el-col(:span="12")
+              el-form-item(label="我行合作状态: " class="formItem2")
+                el-input(v-model="item.cooperatStatus" :disabled="type == 2" clearable)
+          el-row(:gutter="20")
+            el-col(:span="12")
+              el-form-item(label="风险分类: " class="formItem2")
+                el-input(v-model="item.assitFiveClass" :disabled="type == 2" clearable)
+            el-col(:span="12" style="marginTop:24px")
+              el-button(@click="addDomain2" type='primary' :disabled="type == 2" v-if="index == 0") 新增
+              el-button(@click="removeDomain2(item)" type='primary' :disabled="type == 2" v-if="index !== 0") 删除
     
-    //- 押品价值及变现能力变动情况
-    el-card(class='card')
-      el-form(:model="form" :inline="true" label-position="top" label-width="80px" size="mini")
+      //- 押品价值及变现能力变动情况
+      el-card(class='card')
         el-row(:gutter="20")
-          //- el-col(:span="12")
-          //-   .cardTitle1
-          //-     span(class='title') 押品价值及变现能力变动情况
-          //-   el-form-item(label=" " class="formItem2")
-          //-     el-input(v-model="form.assitChangeSuit" :disabled="type == 2" type="textarea" :rows="3" clearable)
           el-col(:span="12")
             .cardTitle1
               span(class='title') 押品其他情况
@@ -346,7 +343,7 @@
             el-form-item(label=" " class="formItem2")
               el-input(v-model="form.summaryForAssit" :disabled="type == 2" type="textarea" :rows="3" clearable)
     
-    //- 影像维护
+      //- 影像维护
     el-card(class='card')
       .cardTitle1
         span(class='blue')
@@ -357,7 +354,7 @@
           .upload-wrapper
             uploadTest(:item="item" :itemVmodel="params" :modify='type == 2' :read="false" :ref="`definte16${i}`")
         //- .aa(@click="submit") 点我啦，展示imageList =>  {{loanBusiness}}
-  </div>
+
 </template>
 
 <script>
@@ -475,16 +472,17 @@ export default {
         assetCreditInfo: {
           queryDate: "", //征信报告查询日期
           fiveClass: "", // 当前企业及实际控制人征信情况(注明征信查询分类结果)
-          shrinkLoanScale: "", //企业或企业主是否有他行收缩贷款规模
+          shrinkLoanScale: 1, //企业或企业主是否有他行收缩贷款规模
           shrinkLoanScaleMsg: "", //收缩贷款规模说明
-          addedOverdues: "", //企业或企业主征信是否有新增逾期记录
+          addedOverdues: 1, //企业或企业主征信是否有新增逾期记录
           addedOverduesMsg: "", //新增逾期记录说明
-          addedGuarantees: "", // 企业或企业主是否有新增对外担保记录
+          addedGuarantees: 1, // 企业或企业主是否有新增对外担保记录
           addedGuaranteesMsg: "", //新增对外担保记录说明
-          addedLoans: "", //企业或企业主是否有他行新增贷款
+          addedLoans: 1, //企业或企业主是否有他行新增贷款
           addedLoansMsg: "", //他行新增贷款说明
-          otherSitu: "", //企业或企业主是否有其他异常变化
-          otherSituMsg: "" //其他异常变化说明
+          otherSitu: 1, //企业或企业主是否有其他异常变化
+          otherSituMsg: "", //其他异常变化说明
+          summarySituMsg: "" // 检查要点小结
         },
 
         summaryForCheck: "", //检查要点小结
@@ -498,12 +496,14 @@ export default {
         mainBusIsChangedMsg: "", //企业主营业务情况是否发生变更说明
         planExpandSitu: "", //企业是否有与主业无关的扩张计划
         planExpandSituMsg: "", //企业是否有与主业无关的扩张计划说明
-        proAndOpeAbnormalSuit: "", //企业生产经营场所是否发生或即将发生变动
-        proAndOpeAbnormalSuitMsg: "", //企业生产经营场所是否发生或即将发生变动说明
+        addrIsChanged: "", //企业生产经营场所是否发生或即将发生变动
+        addrChangedMsg: "", //企业生产经营场所是否发生或即将发生变动说明
+        proAndOpeAbnormalSuit: "", //企业生产经营是否出现异常情况
+        proAndOpeAbnormalSuitMsg: "", //企业生产经营是否出现异常情况说明
         purchaseCost: "", //企业主要原材料或货物的采购成本是否明显上升
         purchaseCostMsg: "", //企业主要原材料或货物的采购成本是否明显上升说明
-        orderDecline: "", //企业生产经营是否出现异常情况
-        orderDeclinemsg: "", //企业生产经营是否出现异常情况说明
+        orderDecline: "", //企业订单是否出现大幅下降（降幅达30)
+        orderDeclineMsg: "", //企业订单出现大幅下降（降幅达30%）说明
         saleAbnormalSuit: "", //企业销售是否出现异常情况
         saleAbnormalSuitMsg: "", //企业销售是否出现异常情况说明
         chainChange: "", //企业上下游核心客户是否发生重大变更
@@ -555,6 +555,7 @@ export default {
       params1: {},
       params2: {},
       dialogImageUrl: "",
+      securityKindMsgShow: false,
       dialogVisible: false,
       formLabelWidth: "72px"
     };
@@ -564,8 +565,10 @@ export default {
   // 侦听器
   watch: {
     detail: function(newVal, oldVal) {
-      console.log(1, newVal, oldVal);
       this.form = newVal;
+      if (newVal.securityKind.indexOf("5") != -1) {
+        this.securityKindMsgShow = true;
+      }
       this.params = this.matchImage(newVal);
       if (!newVal.cooperate) {
         this.form.cooperate = "1";
@@ -590,6 +593,9 @@ export default {
       }
       if (!newVal.proAndOpeAbnormalSuit) {
         this.form.proAndOpeAbnormalSuit = 1;
+      }
+      if (!newVal.addrIsChanged) {
+        this.form.addrIsChanged = 1;
       }
       if (!newVal.purchaseCost) {
         this.form.purchaseCost = 1;
@@ -643,7 +649,7 @@ export default {
             assitName: "",
             cooperatStatus: "",
             assitFiveClass: "",
-            assitClassification: "2"
+            assitClassification: "1"
           }
         ];
       }
@@ -656,23 +662,26 @@ export default {
           addedLoans: 1,
           otherSitu: 1
         };
-        // this.form.assetCreditInfo.shrinkLoanScale = 1;
-        // this.form.assetCreditInfo.addedOverdues = 1;
-        // this.form.assetCreditInfo.addedGuarantees = 1;
-        // this.form.assetCreditInfo.addedLoans = 1;
-        // this.form.assetCreditInfo.otherSitu = 1;
+      }
+      if (newVal.assetCreditInfo.shrinkLoanScale != 0) {
+        this.form.assetCreditInfo.shrinkLoanScale = 1;
+      }
+      if (newVal.assetCreditInfo.addedOverdues != 0) {
+        this.form.assetCreditInfo.addedOverdues = 1;
+      }
+      if (newVal.assetCreditInfo.addedGuarantees != 0) {
+        this.form.assetCreditInfo.addedGuarantees = 1;
+      }
+      if (newVal.assetCreditInfo.addedLoans != 0) {
+        this.form.assetCreditInfo.addedLoans = 1;
+      }
+      if (newVal.assetCreditInfo.otherSitu != 0) {
+        this.form.assetCreditInfo.otherSitu = 1;
       }
     }
   },
   // 组件方法
   methods: {
-    // 保存
-    onSubmitApproval() {
-      console.log(filterParams(this.approval));
-    },
-    handleClick() {
-      console.log(this.activeName);
-    },
     returnType(row) {
       switch (row.bizType) {
         case "m1":
@@ -689,22 +698,18 @@ export default {
           return "小企业法人快捷贷贷后日常检查";
       }
     },
+    selectSecurityKind() {
+      if (this.form.securityKind.indexOf("5") != -1) {
+        this.securityKindMsgShow = true;
+      } else {
+        this.securityKindMsgShow = false;
+        this.otherSecurityKindMsg = "";
+      }
+    },
     // 阶段多选框
-    onChange() {
-      console.log(this.check);
-    },
-    // 图片上传
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    // 预览
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
+    onChange() {},
     // 增加--检查要点小结
     addDomain1() {
-      console.log(this.form.assitInfoForPledge);
       this.form.assitInfoForPledge.push({
         assitName: "",
         assitAddr: "",
@@ -949,8 +954,6 @@ export default {
     font-size: 16px;
     line-height: 31px;
     color: rgba(10, 10, 10, 1);
-  }
-  .checkForm {
   }
 }
 </style>

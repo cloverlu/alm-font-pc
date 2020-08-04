@@ -120,11 +120,10 @@ export default {
   },
   methods: {
     getPath() {
-      console.log("this.$route.path", this.$route.path);
       this.defaultActive = this.$route.path;
     },
     getMenuList() {
-      const arr = JSON.parse(localStorage.getItem("menuList"));
+      const arr = JSON.parse(sessionStorage.getItem("menuList"));
       arr.map(item => {
         item.icon = "el-icon" + " iconfont " + item.icon;
         if (item.children && item.children.length) {
@@ -135,14 +134,11 @@ export default {
         return arr;
       });
       this.subMenuArr = arr;
-      // console.log("this.subMenuArr", this.subMenuArr);
     }
   },
   mounted() {
     this.getMenuList();
     this.getPath();
-    // console.log(this.$route.path);
-    // const { custName } = this.$route.query;
   },
   watch: {
     $route: "getPath"

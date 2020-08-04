@@ -1,11 +1,11 @@
 <!--
-  功能：登录
+  功能：代办提醒
   作者：sunhua
   邮箱：947545659@qq.com
   时间：2020年07月02日 08:54:09
 -->
 <template>
-  <div class="iouList">
+  <div class="taskList">
     <div class="userContent">
       <div class="userForm">
         <el-form
@@ -16,12 +16,17 @@
           size="mini"
           class="demo-form-inline formBox"
         >
-          <el-form-item label="客户名称" class="formItem5">
-            <el-input v-model="searchForm.custName" clearable></el-input>
+          <el-form-item label="业务名称" class="formItem5">
+            <el-select v-model="searchForm.bizType" clearable style="width:100%">
+              <el-option label="小企业授信业务首次跟踪检查" value="m1"></el-option>
+              <el-option label="小企业授信业务贷后例行检查" value="m2"></el-option>
+              <el-option label="小企业授信业务贷后全面检查" value="m3"></el-option>
+              <el-option label="小企业授信业务还款资金落实情况检查" value="m4"></el-option>
+              <el-option label="小企业法人快捷贷首次检查" value="m5"></el-option>
+              <el-option label="小企业法人快捷贷贷后日常检查" value="m6"></el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="借据编号" class="formItem5">
-            <el-input v-model="searchForm.billNo" clearable></el-input>
-          </el-form-item>
+
           <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
           <el-button size="mini" @click="onClear">重置</el-button>
         </el-form>
@@ -29,20 +34,20 @@
       <div class="userTable">
         <div class="tableBox">
           <el-table stripe :data="tableData" border style="width: 99.9%" :fit="true">
-            <el-table-column header-align="center" prop="custName" label="客户名称" min-width="20%"></el-table-column>
-            <el-table-column header-align="center" prop="billNo" label="借据编号" min-width="20%"></el-table-column>
             <el-table-column
               header-align="center"
-              prop="billBeginDate"
-              label="借据起期"
+              prop="bizType"
+              :formatter="returnType"
+              label="业务名称"
               min-width="15%"
             ></el-table-column>
-            <el-table-column header-align="center" prop="billEndDate" label="借据止期" min-width="15%"></el-table-column>
-            <el-table-column header-align="center" prop="billAmout" label="借据金额" min-width="15%"></el-table-column>
-            <el-table-column header-align="center" prop="billBlance" label="借据余额" min-width="15%"></el-table-column>
-            <el-table-column header-align="center" label="借据信息" min-width="25%">
-              <template slot-scope="scope">
-                <el-button size="mini" type="primary" @click="link(scope.row)">发起检查申请</el-button>
+            <el-table-column header-align="center" prop="custName" label="客户" min-width="12%"></el-table-column>
+            <el-table-column header-align="center" prop="billNo" label="业务编号" min-width="25%"></el-table-column>
+            <el-table-column header-align="center" prop="noticeDate" label="提醒时间" min-width="15%"></el-table-column>
+            <el-table-column header-align="center" prop="bizEndDate" label="截止时间" min-width="15%"></el-table-column>
+            <el-table-column header-align="center" label="操作" min-width="15%">
+              <template slot-scope="scope" width="120px">
+                <el-button size="mini" type="primary" @click="link(scope.row)">编辑检查申请</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -65,9 +70,9 @@
 
 <script>
 import { filterParams } from "../../utils/utils";
-import { getCustomers } from "../../api/customer";
+import { getTaskList } from "../../api/processManagement";
 export default {
-  name: "iouList",
+  name: "taskList",
   data() {
     return {
       tableData: [],
@@ -76,11 +81,8 @@ export default {
       total: 10,
       currentItem: 1,
       searchForm: {
-        custName: "",
-        billNo: "",
-        queryType: "1"
+        bizType: ""
       },
-      status: 1,
       paramsDetail: {
         pageNo: 1,
         pageSize: 10
@@ -90,13 +92,6 @@ export default {
   },
   mounted() {
     // 进入页面先调用查询接口
-    const { custName } = this.$route.query;
-    if (custName) {
-      this.searchForm = {
-        custName,
-        queryType: "2"
-      };
-    }
     this.onSubmit();
   },
   methods: {
@@ -128,25 +123,24 @@ export default {
       };
     },
     // 表单查询
-    onSubmit() {
-      getCustomers(this, {
+    onSubmit: function() {
+      getTaskList(this, {
         ...filterParams(this.searchForm),
-        emplCode: sessionStorage.getItem("emplCode"),
         emplName: sessionStorage.getItem("emplName"),
-        pageSize: 10,
-        pageNo: 1,
+        pageSize: this.pageSize,
+        pageNo: this.pageNo,
         ...this.paramsDetail
       }).then(res => {
         this.tableData = res.data.data;
         this.total = res.data.total;
       });
-    },
+    }, // 重置
     onClear() {
       this.searchForm = {
-        queryType: "1"
+        bizType: ""
       };
-      this.pageSize = 10;
       this.pageNo = 1;
+      this.pageSize = 10;
     },
     returnType(row) {
       switch (row.bizType) {
@@ -168,7 +162,15 @@ export default {
       // 跳转检查申请
       this.$router.push({
         path: "/toDoList/inspectionApplication",
-        query: { type: 1, billNo: row.billNo, status: this.status }
+        query: {
+          type: 2,
+          bizId: row.bizId,
+          bizStatus: row.bizStatus,
+          currPost: row.currPost,
+          biggerThan500: row.biggerThan500,
+          belongBranch: row.belongBranch,
+          bizType: row.bizType
+        }
       });
     }
   }
@@ -177,7 +179,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../assets/style/global.scss";
-.iouList {
+.taskList {
   box-sizing: border-box;
   width: 100%;
   min-height: 100%;
@@ -216,8 +218,7 @@ export default {
         opacity: 1;
         .formItem5 {
           display: inline-block;
-          width: 23%;
-          min-width: 250px;
+          width: 33%;
           margin: 0;
           padding-right: 10px;
         }
@@ -237,7 +238,7 @@ export default {
           margin-top: 13px;
           min-width: 30px;
           margin-left: 0;
-          margin-right: 15px;
+          margin-right: 10px;
           text-align: center;
           .el-button--primary {
             background: rgba(78, 120, 222, 1);
@@ -301,7 +302,7 @@ export default {
 </style>
 
 <style lang="scss">
-.iouList {
+.taskList {
   .el-table__row td .cell {
     text-align: center !important;
   }

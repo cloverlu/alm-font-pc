@@ -9,9 +9,9 @@ apiIntercept.install = (vue) => {
   Axios.interceptors.request.use(
     (config) => {
       // 判断是否存在token，如果存在的话，则每个http header都加上token
-      if (localStorage.token) {
-        config.headers["B-AUTH-TOKEN"] = localStorage.token;
-        config.headers["Authorization"] = localStorage.token;
+      if (sessionStorage.token) {
+        config.headers["B-AUTH-TOKEN"] = sessionStorage.token;
+        config.headers["Authorization"] = sessionStorage.token;
       }
       return config;
     },
@@ -27,8 +27,8 @@ apiIntercept.install = (vue) => {
           switch (response.data.code) {
             case 401:
               // 返回 401 清除token信息并跳转到登录页面
-              localStorage.removeItem("token");
-              localStorage.removeItem("userInfo");
+              sessionStorage.removeItem("token");
+              sessionStorage.removeItem("userInfo");
               router.replace({
                 path: "/login",
               });

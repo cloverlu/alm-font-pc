@@ -83,7 +83,12 @@
             ></el-table-column>
             <el-table-column header-align="center" prop="billNo" label="借据编号" min-width="12%"></el-table-column>
             <el-table-column header-align="center" prop="billAmout" label="借据金额" min-width="8%"></el-table-column>
-            <el-table-column header-align="center" prop="billLength" label="借据期限" min-width="10%"></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="billLength"
+              label="借据期限(月)"
+              min-width="10%"
+            ></el-table-column>
             <el-table-column
               header-align="center"
               prop="billBeginDate"
@@ -169,8 +174,6 @@ export default {
     },
     // 表单查询
     onSubmit: function() {
-      console.log(filterParams(this.searchForm));
-      console.log(this.pageSize, this.pageNo);
       getCustomers(this, {
         ...filterParams(this.searchForm),
         pageSize: this.pageSize,
@@ -179,7 +182,6 @@ export default {
       }).then(res => {
         this.tableData = res.data.data;
         this.total = res.data.total;
-        console.log(res);
       });
     },
     // 重置
@@ -191,7 +193,6 @@ export default {
       this.pageSize = 10;
     },
     sendSuccess(res) {
-      console.log(res);
       if (res.returnCode == "200000") {
         this.$message({
           message: "文件导入操作成功",

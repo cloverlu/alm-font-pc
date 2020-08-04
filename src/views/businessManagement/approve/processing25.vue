@@ -15,7 +15,7 @@
     >
       <el-row>
         <el-col :span="24">
-          <el-form-item label="一级支行/二级分行复核意见" class="formItem2">
+          <el-form-item label="一级支行/二级分行复核意见:" class="formItem2">
             <el-select v-model="params.agreeResult" style="width:100%" clearable>
               <el-option
                 v-for="item in agreeOrNot"
@@ -27,12 +27,12 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="意见说明" class="formItem2">
+          <el-form-item label="意见说明:" class="formItem2">
             <el-input v-model="params.msg" type="textarea" :rows="3" clearable></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="是否存在风险预警信号" class="formItem2">
+          <el-form-item label="是否存在风险预警信号:" class="formItem2">
             <el-select v-model="params.existRisk" style="width: 100%">
               <el-option
                 v-for="item in options"
@@ -44,17 +44,24 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="发生阶段" class="formItem2">
-            <el-input v-model="params.riskStage" type="textarea" :rows="3" clearable></el-input>
+          <el-form-item label="发生阶段:" class="formItem2">
+            <el-select v-model="params.riskStage" style="width: 100%">
+              <el-option
+                v-for="item in stageArr"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="预警信号说明" class="formItem2">
+          <el-form-item label="预警信号说明:" class="formItem2">
             <el-input v-model="params.riskMsg" type="textarea" :rows="3" clearable></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="复核意见及行动建议" class="formItem2">
+          <el-form-item label="复核意见及行动建议:" class="formItem2">
             <el-input v-model="params.suggest" type="textarea" :rows="3" clearable></el-input>
           </el-form-item>
         </el-col>
@@ -104,11 +111,25 @@ export default {
           value: "3"
         }
       ],
-      approveParams: {
+      stageArr: [
+        {
+          label: "第一阶段",
+          value: "一"
+        },
+        {
+          label: "第二阶段",
+          value: "二"
+        },
+        {
+          label: "第三阶段",
+          value: "三"
+        }
+      ],
+      params: {
         existRisk: 1, // 存在风险
         agreeResult: 1, // 一级支行/二级分行复核意见
         msg: "", // 一级支行/二级分行复核意见说明
-        riskStage: "",
+        riskStage: "一",
         riskMsg: "", // 风险说明
         suggest: "" // 措施建议
       }
@@ -123,12 +144,14 @@ export default {
       this.params.riskStage = newVal.riskStage;
       this.params.riskMsg = newVal.riskMsg;
       this.params.suggest = newVal.suggest;
-      console.log(newVal, this.params);
       if (!newVal.existRisk) {
         this.params.existRisk = 1;
       }
       if (!newVal.agreeResult) {
         this.params.agreeResult = 1;
+      }
+      if (!newVal.riskStage) {
+        this.params.riskStage = "一";
       }
     }
   },

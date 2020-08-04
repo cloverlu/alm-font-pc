@@ -21,7 +21,7 @@
               el-option(label="小企业授信业务还款资金落实情况检查" value="m4")
               el-option(label="小企业法人快捷贷首次检查" value="m5")
               el-option(label="小企业法人快捷贷贷后日常检查" value="m6")
-          el-button(type="primary" size="mini" v-antiShake="[() => { onSave() }, 1000]" class="btn" v-if='type==1') 保存
+          el-button(type="primary" size="mini" v-antiShake="[() => { onSave() }, 1000]" class="btn" v-if='status==1 && type==1') 保存
       .contentBody
         .type(v-show="form.bizType == 'm1'")
           DivM1(:detail="paramsM1" ref="DivM1")
@@ -37,7 +37,7 @@
           DivM6(:detail="paramsM6" ref="DivM6")
       //- 提交
       .footer
-        el-button(type="warning" v-antiShake="[() => { onSubmit() }, 1000]" v-if='type==1') 提交
+        el-button(type="warning" v-antiShake="[() => { onSubmit() }, 1000]" v-if='status==1 && type==1') 提交
         //- el-button(type="warning" @click='onSubmit') 提交
 
     .content2(v-show="activeName == 'second'")
@@ -59,7 +59,7 @@
               el-form-item(label="意见 :" class='noBorder')
                 el-input(v-model="item.agreeResult" disabled)
 
-        el-card(class='card')
+        el-card(class='card' v-if='!allBtn')
           el-button(type="primary" style="textAlien:right" v-antiShake="[() => { onSubmitApproval('0') }, 1000]" v-if="!allBtn" class='save') 保存
           el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px")
             el-row
@@ -76,22 +76,23 @@
               el-col(:span="24")
                 el-form-item(label="上报时间:" class="formItem2")
                   span {{this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss")}}
-          components(:is="commpoentName" ref="commpoent" :approveDetail='approval')
-            //- el-form-item(label="是否存在风险预警信号:" class="formItem2")
-            //-   el-select(v-model="approval.existRisk" placeholder="请选择" style='width:100%')
-            //-     el-option(label="是" value="1")
-            //-     el-option(label="否" value="0")
-            //- el-form-item(label="预警信号说明:" class="formItem2")
-            //-   el-input(v-model="approval.riskMsg" type="textarea" :rows="2" clearable)
-            //- el-form-item(label="检查结论及措施建议:" class="formItem2")
-            //-   el-input(v-model="approval.suggest" type="textarea" :rows="2" clearable)
+          components(:is="commpoentName" ref="commpoent" :approveDetail='approval' v-if='approveContent')
+          el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px" v-if='!approveContent')
+            el-form-item(label="是否存在风险预警信号:" class="formItem2")
+              el-select(v-model="approval.existRisk" placeholder="请选择" style='width:100%')
+                el-option(label="是" value="1")
+                el-option(label="否" value="0")
+            el-form-item(label="预警信号说明:" class="formItem2")
+              el-input(v-model="approval.riskMsg" type="textarea" :rows="2" clearable)
+            el-form-item(label="检查结论及措施建议:" class="formItem2")
+              el-input(v-model="approval.suggest" type="textarea" :rows="2" clearable)
           el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px")
             el-col(:span="24")
               el-form-item(label="检查人员:" class="formItem2")
                 //- el-button(class="qianzi" @click="goSign" size='mini' type='primary') 签字
                 img(:src='approval.empSign' v-if='approval.empSign' class='imgContent')
                 img(:src='bg' v-if='!approval.empSign' class='imgContent')
-      .footer
+      .footer(v-if='!allBtn')
           el-button(type="warning" v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="!allBtn && approvaList.length == 0") 提交审批
           el-button(type="warning" size='normal' v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="!allBtn && approvaList.length !== 0") 提交
           el-button(type="info" v-antiShake="[() => { onSubmitApproval('2') }, 1000]" v-if="!allBtn && approvaList.length !== 0") 回退
@@ -182,6 +183,8 @@ export default {
         suggest: "", // 检查结论及措施建议
         empSign: "" // 检查人员
       },
+      status: 1,
+      currPost1: "",
       paramsM1: {},
       paramsM2: {},
       paramsM3: {},
@@ -191,6 +194,7 @@ export default {
       params: {},
       signName: "",
       allBtn: false,
+      approveContent: false,
       submitBtn: true,
       commpoentName: "",
       loanBusiness: {},
@@ -209,7 +213,8 @@ export default {
   mounted() {
     this.$moment.locale("zh-cn");
     // 进入页面先调用查询接口
-    const { billNo, bizId, bizStatus } = this.$route.query;
+    const { billNo, bizId, bizStatus, status } = this.$route.query;
+    this.status = status;
     if (billNo) {
       // 借据
       this.type = 1;
@@ -222,8 +227,8 @@ export default {
         billNo,
         bizType: this.form.bizType
       }).then(res => {
+        this.currPost1 = res.data.data.currPost;
         if (res.data.returnCode == "200000") {
-          console.log(res.data.data.useAmoutByContract);
           for (var key in res.data.data) {
             if (res.data.data[key] == null) {
               res.data.data[key] = "";
@@ -274,10 +279,13 @@ export default {
           if (!res.data.data.securityKind) {
             res.data.data.securityKind = ["1"];
           }
+          if (!res.data.data.payKind) {
+            res.data.data.payKind = "1";
+          }
           if (!res.data.data.creditInfo) {
             res.data.data.creditInfo = {
               queryDateForPer: "",
-              startDate: "",
+              queryDateForCom: "",
               existBadRecord: 1,
               existCreditChage1: 1,
               existCreditChage2: 1,
@@ -287,6 +295,18 @@ export default {
               existBadRecordJur: 1,
               existCreditChage5: 1,
               existCreditChager6: 1
+            };
+          }
+          if (!res.data.data.financeInfo) {
+            res.data.data.financeInfo = {
+              financeClassification: "1",
+              stockLastBalance: "", // 上次全面检查或调查时余额--- 存货
+              stockChangSitu: "", //本次检查存货变动情况
+              dailyExpenLastBalance: "", //上次全面检查或调查时余额---水、电、煤、气费其中一项或多项
+              dailyExpenChangSitu: "", //本次检查存货变动情况
+              busIncLastBalance: "", //上次全面检查或调查时余额--- 营业收入
+              busIncChangSitu: "", //本次检查存货变动情况
+              financeMsg: ""
             };
           }
           if (!res.data.data.stageData || res.data.data.stageData.length == 0) {
@@ -324,7 +344,7 @@ export default {
     if (bizStatus === "alreadyDo" || bizStatus === "inReview") {
       this.type = 2;
     }
-    if (bizStatus === "alreadyDo") {
+    if (bizStatus === "alreadyDo" || this.status == 2) {
       this.allBtn = true;
     }
     if (bizStatus === "shouldDo" || bizStatus === "notDo") {
@@ -393,11 +413,13 @@ export default {
           if (!res.data.data.securityKind) {
             res.data.data.securityKind = ["1"];
           }
+          if (!res.data.data.payKind) {
+            res.data.data.payKind = "1";
+          }
           if (!res.data.data.creditInfo) {
-            // console.log("没有creditInfo");
             res.data.data.creditInfo = {
               queryDateForPer: "",
-              startDate: "",
+              queryDateForCom: "",
               existBadRecord: 1,
               existCreditChage1: 1,
               existCreditChage2: 1,
@@ -407,6 +429,18 @@ export default {
               existBadRecordJur: 1,
               existCreditChage5: 1,
               existCreditChager6: 1
+            };
+          }
+          if (!res.data.data.financeInfo) {
+            res.data.data.financeInfo = {
+              financeClassification: "1",
+              stockLastBalance: "", // 上次全面检查或调查时余额--- 存货
+              stockChangSitu: "", //本次检查存货变动情况
+              dailyExpenLastBalance: "", //上次全面检查或调查时余额---水、电、煤、气费其中一项或多项
+              dailyExpenChangSitu: "", //本次检查存货变动情况
+              busIncLastBalance: "", //上次全面检查或调查时余额--- 营业收入
+              busIncChangSitu: "", //本次检查存货变动情况
+              financeMsg: ""
             };
           }
           if (!res.data.data.stageData || res.data.data.stageData.length == 0) {
@@ -444,7 +478,6 @@ export default {
   methods: {
     // 保存
     onSave: function() {
-      console.log("save");
       let data = {};
       let arrs = {};
       if (this.form.bizType == "m1") {
@@ -454,7 +487,6 @@ export default {
           arrs[a] = this.$refs.DivM1.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
         data = {
           ...filterParams(this.$refs.DivM1.form),
           ...this.loanBusiness,
@@ -467,7 +499,6 @@ export default {
           arrs[a] = this.$refs.DivM2.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
         data = {
           ...filterParams(this.$refs.DivM2.form),
           ...this.loanBusiness,
@@ -483,7 +514,6 @@ export default {
           arrs[a] = this.$refs.DivM3.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
         this.$refs.DivM3.form.financeInfo.financeClassification = "1";
         data = {
           ...filterParams(this.$refs.DivM3.form),
@@ -501,7 +531,6 @@ export default {
           arrs[a] = this.$refs.DivM3.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
         data = {
           ...filterParams(this.$refs.DivM3.form),
           ...filterParams(this.$refs.DivM3.$refs.tabForm2.form),
@@ -515,7 +544,6 @@ export default {
           arrs[a] = this.$refs.DivM4.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
         data = {
           ...filterParams(this.$refs.DivM4.form),
           ...this.loanBusiness,
@@ -528,7 +556,6 @@ export default {
           arrs[a] = this.$refs.DivM5.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
         data = {
           ...filterParams(this.$refs.DivM5.form),
           ...this.loanBusiness,
@@ -541,7 +568,6 @@ export default {
           arrs[a] = this.$refs.DivM6.$refs[`definte16${i}`][0].fileList[a];
         }
         this.loanBusiness = Object.assign({}, this.type, arrs);
-        // console.log("this.loanBusiness", this.loanBusiness);
         data = {
           ...filterParams(this.$refs.DivM6.form),
           ...this.loanBusiness,
@@ -549,7 +575,7 @@ export default {
         };
       }
 
-      console.log(data);
+      // console.log(data);
       saveEditModelBusiness(this, {
         ...data
       }).then(res => {
@@ -677,13 +703,20 @@ export default {
           });
           this.submitBtn = true;
           const id = res.data.bizId;
+          const currPost1 = this.currPost1;
           setTimeout(() => {
             approveDetail(this, { bizId: id }).then(res => {
               this.activeName = "second";
               this.approval = res.data.data;
               this.approval.bizId = id;
               this.approvaList = res.data.data.aproveInfo || [];
-              const pa = { orgName: res.data.data.custOrg };
+              const { currPost } = this.$route.query;
+              let pa;
+              if (currPost) {
+                pa = { orgName: res.data.data.custOrg, currPost };
+              } else {
+                pa = { orgName: res.data.data.custOrg, currPost: currPost1 };
+              }
               getNextEmplName(this, pa).then(ress => {
                 this.nextEmplNameList = ress.data.data.nextEmplNameList;
               });
@@ -704,7 +737,13 @@ export default {
       );
       this.approval.opType = type;
       let data;
-      if (currPost) {
+      if (
+        currPost == "220" ||
+        currPost == "221" ||
+        currPost == "222" ||
+        currPost == "320" ||
+        currPost == "321"
+      ) {
         data = {
           ...this.approval,
           ...this.$refs.commpoent.params
@@ -746,7 +785,10 @@ export default {
         belongBranch,
         bizType
       } = this.$route.query;
-      console.log(currPost, biggerThan500, belongBranch, bizType);
+      // console.log(currPost, biggerThan500, belongBranch, bizType);
+      if (currPost) {
+        this.approveContent = true;
+      }
 
       if (currPost === "321") {
         if (bizType === "m1" || bizType === "m3") {
@@ -839,8 +881,7 @@ export default {
       }
     },
     handleClick() {
-      const { bizId } = this.$route.query;
-      console.log(this.activeName);
+      const { bizId, currPost } = this.$route.query;
       if (this.activeName == "second") {
         // this.routerMatch();
         approveDetail(this, { bizId }).then(res => {
@@ -850,7 +891,7 @@ export default {
           this.approvaList = res.data.data.aproveInfo || [];
           const pa = {
             orgName: res.data.data.custOrg,
-            orgCode: localStorage.getItem("orgCode")
+            currPost
           };
           getNextEmplName(this, pa).then(ress => {
             this.nextEmplNameList = ress.data.data.nextEmplNameList;
@@ -876,8 +917,6 @@ export default {
     },
     // 阶段多选框
     onChange() {
-      console.log(this.form.bizType);
-
       if (this.form.bizType === "m1") {
         this.paramsM1 = this.params;
       } else if (this.form.bizType === "m2") {
@@ -897,7 +936,6 @@ export default {
       this.dialogVisible = true;
       let board = document.getElementById("board");
       this.ctx = board.getContext("2d");
-      console.log("this.canvas", board);
     },
     // 鼠标按下(开始)
     pcStart(e) {

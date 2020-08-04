@@ -30,16 +30,6 @@
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="状态" class="formItem5">
-                <el-select v-model="searchForm.bizStatus" clearable style="width:100%">
-                  <el-option label="应做" value="shouldDo"></el-option>
-                  <el-option label="未做" value="notDo"></el-option>
-                  <el-option label="审核中" value="inReview"></el-option>
-                  <el-option label="已做" value="alreadyDo"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
               <el-form-item label="客户名称" class="formItem5">
                 <el-input v-model="searchForm.custName" clearable></el-input>
               </el-form-item>
@@ -72,35 +62,46 @@
             ></el-table-column>
             <el-table-column
               header-align="center"
-              prop="bizType"
-              :formatter="returnType"
-              label="业务名称"
-              min-width="15%"
+              prop="custName"
+              sortable
+              label="客户名称"
+              min-width="20%"
             ></el-table-column>
             <el-table-column
               header-align="center"
-              prop="bizStatus"
-              :formatter="returnBizStatus"
-              label="状态"
-              min-width="12%"
+              prop="custCode"
+              sortable
+              label="客户编码"
+              min-width="17%"
             ></el-table-column>
-            <el-table-column header-align="center" prop="custName" label="客户名称" min-width="12%"></el-table-column>
-            <el-table-column header-align="center" prop="billNo" label="借据编号" min-width="25%"></el-table-column>
-            <el-table-column header-align="center" prop="noticeDate" label="提醒时间" min-width="15%"></el-table-column>
-            <el-table-column header-align="center" prop="bizEndDate" label="截止时间" min-width="15%"></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="bizType"
+              sortable
+              :formatter="returnType"
+              label="检查类型"
+              min-width="20%"
+            ></el-table-column>
+            <el-table-column
+              header-align="center"
+              prop="bizEndDate"
+              sortable
+              label="完成时间"
+              min-width="15%"
+            ></el-table-column>
             <el-table-column header-align="center" label="操作" width="150px">
               <template slot-scope="scope">
                 <el-button
                   size="mini"
                   type="warning"
                   @click="handlePreview(scope.row)"
-                  v-if="scope.row.bizStatus == 'inReview'"
+                  v-if="scope.row.bizStatus == 'alreadyDo'"
                 >查看</el-button>
                 <el-button
                   size="mini"
                   type="warning"
                   @click="handleDownload(scope.row)"
-                  v-if="scope.row.bizStatus == 'inReview'"
+                  v-if="scope.row.bizStatus == 'alreadyDo'"
                 >下载</el-button>
               </template>
             </el-table-column>
@@ -140,7 +141,7 @@ export default {
       flag: true,
       searchForm: {
         bizType: "",
-        bizStatus: "",
+        queryFlag: "3",
         custName: ""
       },
       src: "",
@@ -157,6 +158,13 @@ export default {
   },
   mounted() {
     // 进入页面先调用查询接口
+    const { custName } = this.$route.query;
+    if (custName) {
+      this.searchForm = {
+        custName,
+        queryFlag: "3"
+      };
+    }
     this.onSubmit();
   },
   methods: {
@@ -202,13 +210,17 @@ export default {
     },
     //
     onClear() {
-      this.searchForm = {};
+      this.searchForm = {
+        bizType: "",
+        bizStatus: "",
+        custName: "",
+        queryFlag: "3"
+      };
       this.multipleSelection = [];
       this.$refs.multipleTable.clearSelection();
       this.pageNo = 1;
       this.pageSize = 10;
     },
-    // 压缩包下载
     download() {
       const arr = this.multipleSelection.map(item => item.bizId);
       const bizIdString = arr.join(",");

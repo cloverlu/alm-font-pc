@@ -32,10 +32,10 @@
             <el-col :span="6">
               <el-form-item label="状态" class="formItem5">
                 <el-select v-model="searchForm.bizStatus" clearable style="width:100%">
-                  <el-option label="应做" value="shouldDo"></el-option>
-                  <el-option label="未做" value="notDo"></el-option>
+                  <!-- <el-option label="应做" value="shouldDo"></el-option>
+                  <el-option label="未做" value="notDo"></el-option>-->
                   <el-option label="审核中" value="inReview"></el-option>
-                  <el-option label="已做" value="alreadyDo"></el-option>
+                  <el-option label="完成" value="alreadyDo"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -49,7 +49,7 @@
           <div class="btn">
             <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
             <el-button size="mini" @click="onClear">重置</el-button>
-            <el-button type="primary" size="mini" @click="download" :disabled="flag">下载</el-button>
+            <!-- <el-button type="primary" size="mini" @click="download" :disabled="flag">下载</el-button> -->
           </div>
         </el-form>
       </div>
@@ -62,14 +62,7 @@
             border
             style="width: 99.9%"
             :fit="true"
-            @selection-change="handleSelectionChange"
           >
-            <el-table-column
-              header-align="center"
-              type="selection"
-              width="55px"
-              :selectable="selectable"
-            ></el-table-column>
             <el-table-column
               header-align="center"
               prop="bizType"
@@ -92,16 +85,22 @@
               <template slot-scope="scope">
                 <el-button
                   size="mini"
+                  type="primary"
+                  @click="handleEdit(scope.row)"
+                  v-if="scope.row.bizStatus !== 'alreadyDo'"
+                >录入业务信息</el-button>
+                <el-button
+                  size="mini"
+                  type="primary"
+                  @click="handleEdit(scope.row)"
+                  v-if="scope.row.bizStatus == 'alreadyDo'"
+                >查看</el-button>
+                <!-- <el-button
+                  size="mini"
                   type="warning"
                   @click="handlePreview(scope.row)"
                   v-if="scope.row.bizStatus == 'inReview'"
-                >查看</el-button>
-                <el-button
-                  size="mini"
-                  type="warning"
-                  @click="handleDownload(scope.row)"
-                  v-if="scope.row.bizStatus == 'inReview'"
-                >下载</el-button>
+                >预览</el-button>-->
               </template>
             </el-table-column>
           </el-table>
@@ -138,10 +137,12 @@ export default {
       ie: false,
       currentItem: 1,
       flag: true,
+      status: 1,
       searchForm: {
         bizType: "",
         bizStatus: "",
-        custName: ""
+        custName: "",
+        queryFlag: "2"
       },
       src: "",
       paramsDetail: {
@@ -202,13 +203,17 @@ export default {
     },
     //
     onClear() {
-      this.searchForm = {};
+      this.searchForm = {
+        bizType: "",
+        bizStatus: "",
+        custName: "",
+        queryFlag: "2"
+      };
       this.multipleSelection = [];
       this.$refs.multipleTable.clearSelection();
       this.pageNo = 1;
       this.pageSize = 10;
     },
-    // 压缩包下载
     download() {
       const arr = this.multipleSelection.map(item => item.bizId);
       const bizIdString = arr.join(",");
@@ -216,18 +221,6 @@ export default {
       //需要下载的数据内容,我这里放的就是BLOB，如果你有下载链接就不需要了
       var url = `${this.host}/postLoan/model/downZipPdfFile?bizIds=${bizIdString}`;
       var filename = "pdfFile.zip";
-      a.href = url;
-      a.download = filename;
-      a.click();
-      window.URL.revokeObjectURL(url);
-    },
-    // 单个pdf 文件下载
-    handleDownload(row) {
-      const id = row.bizId;
-      var a = document.createElement("a");
-      //需要下载的数据内容,我这里放的就是BLOB，如果你有下载链接就不需要了
-      var url = `${this.host}/postLoan/model/downZipPdfFile?bizIds=${id}`;
-      var filename = "pdf.zip";
       a.href = url;
       a.download = filename;
       a.click();
@@ -275,7 +268,7 @@ export default {
         case "inReview":
           return "审核中";
         case "alreadyDo":
-          return "已做";
+          return "完成";
       }
     },
     handleEdit(row) {
@@ -288,7 +281,8 @@ export default {
           currPost: row.currPost,
           biggerThan500: row.biggerThan500,
           belongBranch: row.belongBranch,
-          bizType: row.bizType
+          bizType: row.bizType,
+          status: this.status
         }
       });
     },

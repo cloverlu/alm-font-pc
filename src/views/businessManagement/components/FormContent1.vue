@@ -1,4 +1,11 @@
 <!--
+ * @Date: 2020-07-09 11:18:38
+ * @Author: sunhua
+ * @Describe: 
+ * @LastEditTime: 2020-08-03 09:17:01
+ * @FilePath: \alm-font-pc\src\views\businessManagement\components\FormContent1.vue
+--> 
+<!--
   功能：FormContent1
   作者：sunhua
   邮箱：947545659@qq.com
@@ -62,17 +69,11 @@ export default {
   // 侦听器
   watch: {
     formContent1: function(newVal) {
-      // console.log(1, newVal, oldVal);
       this.params = newVal;
-      console.log("this.params", this.params);
     }
   },
   // 组件方法
-  methods: {
-    handleClick() {
-      console.log(this.activeName);
-    }
-  },
+  methods: {},
   /**
    * el 被新创建的 vm.$ el 替换，并挂载到实例上去之后调用该钩子。
    * 如果 root 实例挂载了一个文档内元素，当 mounted 被调用时 vm.$ el 也在文档内。

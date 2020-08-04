@@ -96,7 +96,6 @@ export default {
       this.params.agreeResult = newVal.agreeResult;
       this.params.msg = newVal.msg;
       this.params.suggest = newVal.suggest;
-      console.log(newVal, this.params);
       if (!newVal.agreeResult) {
         this.params.agreeResult = 1;
       }
