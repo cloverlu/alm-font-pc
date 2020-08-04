@@ -64,8 +64,8 @@ export default {
     },
     submit() {
       const params = {
-        emplCode: this.emplCode,
-        password: this.password
+        emplCode: this.emplCode.replace(/^\s+|\s+$/g, ""),
+        password: this.password.replace(/^\s+|\s+$/g, "")
       };
       login(this, { ...params }).then(res => {
         if (res.data.returnCode === "200000") {
