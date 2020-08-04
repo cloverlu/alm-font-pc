@@ -57,7 +57,12 @@
               el-form-item(label="处理时间 :" class='noBorder')
                 el-input(v-model="item.processTime" disabled)
               el-form-item(label="意见 :" class='noBorder')
-                el-input(v-model="item.agreeResult" disabled)
+                el-select(v-model="item.agreeResult" disabled v-if="item.agreeResult")
+                  el-option(label="同意" value="1")
+                  el-option(label="不同意" value="0")
+                  el-option(label="" value="")
+                span(v-if="!item.agreeResult") 无
+                //- el-input(v-model="item.agreeResult" disabled)
 
         el-card(class='card' v-if='!allBtn')
           el-button(type="primary" style="textAlien:right" v-antiShake="[() => { onSubmitApproval('0') }, 1000]" v-if="!allBtn" class='save') 保存
@@ -1239,6 +1244,11 @@ export default {
             padding: 0;
             height: 26px;
             line-height: 26px;
+          }
+        }
+        /deep/.el-select {
+          /deep/.el-input__suffix {
+            display: none;
           }
         }
       }
