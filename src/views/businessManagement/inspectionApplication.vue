@@ -189,6 +189,7 @@ export default {
         empSign: "" // 检查人员
       },
       status: 1,
+      biggerThan500: 1,
       currPost1: "",
       paramsM1: {},
       paramsM2: {},
@@ -233,6 +234,7 @@ export default {
         bizType: this.form.bizType
       }).then(res => {
         this.currPost1 = res.data.data.currPost;
+        this.biggerThan500 = res.data.data.biggerThan500;
         if (res.data.returnCode == "200000") {
           for (var key in res.data.data) {
             if (res.data.data[key] == null) {
@@ -366,6 +368,8 @@ export default {
         bizId,
         bizType: this.form.bizType
       }).then(res => {
+        this.currPost1 = res.data.data.currPost;
+        this.biggerThan500 = res.data.data.biggerThan500;
         if (res.data.returnCode == "200000") {
           for (var key in res.data.data) {
             if (res.data.data[key] == null) {
@@ -718,9 +722,17 @@ export default {
               const { currPost } = this.$route.query;
               let pa;
               if (currPost) {
-                pa = { orgName: res.data.data.custOrg, currPost };
+                pa = {
+                  orgName: res.data.data.custOrg,
+                  currPost,
+                  biggerThan500: this.biggerThan500
+                };
               } else {
-                pa = { orgName: res.data.data.custOrg, currPost: currPost1 };
+                pa = {
+                  orgName: res.data.data.custOrg,
+                  currPost: currPost1,
+                  biggerThan500: this.biggerThan500
+                };
               }
               getNextEmplName(this, pa).then(ress => {
                 this.nextEmplNameList = ress.data.data.nextEmplNameList;
@@ -896,11 +908,14 @@ export default {
           this.approvaList = res.data.data.aproveInfo || [];
           const pa = {
             orgName: res.data.data.custOrg,
-            currPost
+            currPost,
+            biggerThan500: this.biggerThan500
           };
-          getNextEmplName(this, pa).then(ress => {
-            this.nextEmplNameList = ress.data.data.nextEmplNameList;
-          });
+          if (this.status == 1) {
+            getNextEmplName(this, pa).then(ress => {
+              this.nextEmplNameList = ress.data.data.nextEmplNameList;
+            });
+          }
         });
       }
     },
