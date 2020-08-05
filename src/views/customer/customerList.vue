@@ -12,17 +12,16 @@
           :model="searchForm"
           :inline="true"
           label-position="left"
-          label-width="60px"
           size="mini"
           class="demo-form-inline formBox"
         >
           <el-row :gutter="20">
-            <el-col :span="6">
+            <el-col :span="8">
               <el-form-item label="客户名称" class="formItem5">
                 <el-input v-model="searchForm.custName" clearable></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
               <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
             </el-col>
           </el-row>
@@ -187,22 +186,8 @@ export default {
   width: 100%;
   min-height: 100%;
   position: relative;
-  .userHeader {
-    box-sizing: border-box;
-    height: 35px;
-    width: 100%;
-    font-size: 14px;
-    padding: 0 14px;
-    font-family: Source Han Sans CN;
-    font-weight: bold;
-    line-height: 35px;
-    color: rgba(78, 120, 222, 1);
-    letter-spacing: 0px;
-    opacity: 1;
-    border-bottom: 1px solid rgba(231, 231, 231, 1);
-  }
   .userContent {
-    min-height: calc(100% - 35px);
+    height: 100%;
     width: 100%;
     .userForm {
       box-sizing: border-box;
@@ -233,7 +218,7 @@ export default {
           }
           /deep/.el-form-item__content {
             margin-top: 13px;
-            width: calc(100% - 60px);
+            width: calc(100% - 100px);
           }
         }
         /deep/.el-button {

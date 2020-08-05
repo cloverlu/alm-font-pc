@@ -15,7 +15,6 @@
           :model="searchForm"
           :inline="true"
           label-position="left"
-          label-width="60px"
           size="mini"
           class="demo-form-inline formBox"
         >
@@ -438,14 +437,18 @@ export default {
           padding-right: 10px;
         }
         /deep/.el-form-item {
-          margin-bottom: 0;
+          position: relative;
+          // margin-bottom: 0;
           /deep/.el-form-item__label {
             font-size: 12px;
-            // padding: 0;
           }
           /deep/.el-form-item__content {
-            margin-top: 13px;
-            width: calc(100% - 60px);
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translate(0, -50%);
+            // margin-top: 13px;
+            width: calc(100% - 80px);
           }
         }
         .btn {

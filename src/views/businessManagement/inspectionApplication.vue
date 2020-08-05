@@ -716,6 +716,7 @@ export default {
             approveDetail(this, { bizId: id }).then(res => {
               this.activeName = "second";
               this.approval = res.data.data;
+              this.approval.emplSign = sessionStorage.getItem("emplSign");
               this.approval.bizId = id;
               this.approvaList = res.data.data.aproveInfo || [];
               this.biggerThan500 = res.data.data.biggerThan500;
@@ -914,6 +915,7 @@ export default {
           this.activeName = "second";
           this.approval = res.data.data;
           this.approval.bizId = bizId;
+          this.approval.empSign = sessionStorage.getItem("emplSign");
           this.approvaList = res.data.data.aproveInfo || [];
           this.biggerThan500 = res.data.data.biggerThan500;
           this.routerMatch();

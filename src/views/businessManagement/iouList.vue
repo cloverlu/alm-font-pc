@@ -12,18 +12,25 @@
           :model="searchForm"
           :inline="true"
           label-position="left"
-          label-width="60px"
           size="mini"
           class="demo-form-inline formBox"
         >
-          <el-form-item label="客户名称" class="formItem5">
-            <el-input v-model="searchForm.custName" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="借据编号" class="formItem5">
-            <el-input v-model="searchForm.billNo" clearable></el-input>
-          </el-form-item>
-          <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
-          <el-button size="mini" @click="onClear">重置</el-button>
+          <el-row :gutter="20">
+            <el-col :span="8">
+              <el-form-item label="客户名称" class="formItem5">
+                <el-input v-model="searchForm.custName" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="借据编号" class="formItem5">
+                <el-input v-model="searchForm.billNo" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8" style="paddingLeft:20px">
+              <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
+              <el-button size="mini" @click="onClear">重置</el-button>
+            </el-col>
+          </el-row>
         </el-form>
       </div>
       <div class="userTable">
@@ -182,22 +189,8 @@ export default {
   width: 100%;
   min-height: 100%;
   position: relative;
-  .userHeader {
-    box-sizing: border-box;
-    height: 35px;
-    width: 100%;
-    font-size: 14px;
-    padding: 0 14px;
-    font-family: Source Han Sans CN;
-    font-weight: bold;
-    line-height: 35px;
-    color: rgba(78, 120, 222, 1);
-    letter-spacing: 0px;
-    opacity: 1;
-    border-bottom: 1px solid rgba(231, 231, 231, 1);
-  }
   .userContent {
-    min-height: calc(100% - 35px);
+    height: 100%;
     width: 100%;
     .userForm {
       box-sizing: border-box;
@@ -216,7 +209,7 @@ export default {
         opacity: 1;
         .formItem5 {
           display: inline-block;
-          width: 23%;
+          width: 100%;
           min-width: 250px;
           margin: 0;
           padding-right: 10px;
@@ -228,7 +221,7 @@ export default {
           }
           /deep/.el-form-item__content {
             margin-top: 13px;
-            width: calc(100% - 60px);
+            width: calc(100% - 120px);
           }
         }
         /deep/.el-button {

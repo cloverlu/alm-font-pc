@@ -11,14 +11,23 @@
         <el-form
           :model="searchForm"
           :inline="true"
-          label-position="right"
-          label-width="80px"
+          label-position="left"
           size="mini"
           class="demo-form-inline formBox"
         >
           <el-row :gutter="20">
             <el-col :span="8">
-              <el-form-item label="业务名称" class="formItem5">
+              <el-form-item label="客户名称" class="formItem5">
+                <el-input v-model="searchForm.custName" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="客户编码" class="formItem5">
+                <el-input v-model="searchForm.custCode" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="检查类型" class="formItem5">
                 <el-select v-model="searchForm.bizType" clearable style="width:100%">
                   <el-option label="小企业授信业务首次跟踪检查" value="m1"></el-option>
                   <el-option label="小企业授信业务贷后例行检查" value="m2"></el-option>
@@ -29,9 +38,33 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
-              <el-form-item label="客户名称" class="formItem5">
-                <el-input v-model="searchForm.custName" clearable></el-input>
+          </el-row>
+
+          <el-row :gutter="20">
+            <el-col :span="8">
+              <el-form-item label="开始日期" class="formItem5">
+                <el-date-picker
+                  v-model="searchForm.queryBeginTime"
+                  style="width:100%"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  format="yyyy-MM-dd"
+                  placeholder="选择日期"
+                  clearable
+                ></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="结束日期" class="formItem5">
+                <el-date-picker
+                  v-model="searchForm.queryEndTime"
+                  style="width:100%"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  format="yyyy-MM-dd"
+                  placeholder="选择日期"
+                  clearable
+                ></el-date-picker>
               </el-form-item>
             </el-col>
           </el-row>
@@ -140,19 +173,19 @@ export default {
       currentItem: 1,
       flag: true,
       searchForm: {
+        custName: "",
+        custCode: "",
         bizType: "",
-        queryFlag: "3",
-        custName: ""
+        queryBeginTime: "",
+        queryEndTime: "",
+        queryFlag: "3"
       },
       src: "",
       paramsDetail: {
         pageNo: 1,
         pageSize: 10
       },
-      pages: "",
       url: "",
-      dialogVisible: false,
-      formLabelWidth: "72px",
       multipleSelection: []
     };
   },
@@ -211,9 +244,11 @@ export default {
     //
     onClear() {
       this.searchForm = {
-        bizType: "",
-        bizStatus: "",
         custName: "",
+        custCode: "",
+        bizType: "",
+        queryBeginTime: "",
+        queryEndTime: "",
         queryFlag: "3"
       };
       this.multipleSelection = [];
@@ -225,8 +260,12 @@ export default {
       const arr = this.multipleSelection.map(item => item.bizId);
       const bizIdString = arr.join(",");
       var a = document.createElement("a");
+      const zipName =
+        sessionStorage.getItem("emplName") +
+        "_" +
+        sessionStorage.getItem("emplCode");
       //需要下载的数据内容,我这里放的就是BLOB，如果你有下载链接就不需要了
-      var url = `${this.host}/postLoan/model/downZipPdfFile?bizIds=${bizIdString}`;
+      var url = `${this.host}/postLoan/model/downZipPdfFile?bizIds=${bizIdString}&zipName=${zipName}`;
       var filename = "pdfFile.zip";
       a.href = url;
       a.download = filename;
@@ -238,10 +277,8 @@ export default {
       const id = row.bizId;
       var a = document.createElement("a");
       //需要下载的数据内容,我这里放的就是BLOB，如果你有下载链接就不需要了
-      var url = `${this.host}/postLoan/model/downZipPdfFile?bizIds=${id}`;
-      var filename = "pdf.zip";
+      var url = `${this.host}/postLoan/model/downPdfFile?bizId=${id}`;
       a.href = url;
-      a.download = filename;
       a.click();
       window.URL.revokeObjectURL(url);
     },
@@ -382,29 +419,16 @@ export default {
   width: 100%;
   min-height: 100%;
   // position: relative;
-  .userHeader {
-    box-sizing: border-box;
-    height: 35px;
-    width: 100%;
-    font-size: 14px;
-    padding: 0 14px;
-    font-family: Source Han Sans CN;
-    font-weight: bold;
-    line-height: 35px;
-    color: rgba(78, 120, 222, 1);
-    letter-spacing: 0px;
-    opacity: 1;
-    border-bottom: 1px solid rgba(231, 231, 231, 1);
-  }
   .userContent {
-    min-height: calc(100% - 35px);
+    height: 100%;
     width: 100%;
     .userForm {
       box-sizing: border-box;
-      height: 100px;
+      height: 106px;
       width: 100%;
       .formBox {
         box-sizing: border-box;
+        position: relative;
         height: 100%;
         line-height: 53px;
         width: 100%;
@@ -428,14 +452,17 @@ export default {
           }
           /deep/.el-form-item__content {
             margin-top: 13px;
-            width: calc(100% - 80px);
+            width: calc(100% - 100px);
           }
         }
         .btn {
+          position: absolute;
+          right: 15px;
+          bottom: 0;
           display: inline-block;
           text-align: right;
           box-sizing: border-box;
-          width: 100%;
+          width: 30%;
           height: 47px;
           line-height: 47px;
           /deep/.el-button {
@@ -443,7 +470,7 @@ export default {
             height: 28px;
             margin-top: 13px;
             min-width: 30px;
-            margin-left: 0;
+            margin-left: 5px;
             margin-right: 10px;
             text-align: center;
             &:last-of-type {
@@ -467,7 +494,7 @@ export default {
     }
     .userTable {
       box-sizing: border-box;
-      min-height: calc(100% - 53px);
+      min-height: calc(100% - 106px);
       width: 100%;
       padding: 10px 14px;
       .tableBox {

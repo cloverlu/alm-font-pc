@@ -12,7 +12,6 @@
           :model="searchForm"
           :inline="true"
           label-position="left"
-          label-width="60px"
           size="mini"
           class="demo-form-inline formBox"
         >
@@ -291,22 +290,8 @@ export default {
   width: 100%;
   min-height: 100%;
   position: relative;
-  .userHeader {
-    box-sizing: border-box;
-    height: 35px;
-    width: 100%;
-    font-size: 14px;
-    padding: 0 14px;
-    font-family: Source Han Sans CN;
-    font-weight: bold;
-    line-height: 35px;
-    color: rgba(78, 120, 222, 1);
-    letter-spacing: 0px;
-    opacity: 1;
-    border-bottom: 1px solid rgba(231, 231, 231, 1);
-  }
   .userContent {
-    min-height: calc(100% - 35px);
+    height: 100%;
     width: 100%;
     .userForm {
       box-sizing: border-box;
@@ -337,7 +322,7 @@ export default {
           }
           /deep/.el-form-item__content {
             margin-top: 13px;
-            width: calc(100% - 60px);
+            width: calc(100% - 80px);
           }
         }
         .btn {
