@@ -592,9 +592,9 @@ export default {
             message: "检查申请编辑操作成功",
             type: "success"
           });
-          setTimeout(() => {
-            history.go(-1);
-          }, 500);
+          // setTimeout(() => {
+          //   history.go(-1);
+          // }, 500);
         } else {
           this.$message({
             message: res.data.returnMsg,
@@ -779,9 +779,11 @@ export default {
             message: "操作成功",
             type: "success"
           });
-          setTimeout(() => {
-            history.go(-1);
-          }, 500);
+          if (type != "0") {
+            setTimeout(() => {
+              history.go(-1);
+            }, 500);
+          }
         } else {
           this.$message({
             message: res.data.returnMsg,
@@ -815,17 +817,7 @@ export default {
         this.showNextEmplName = false;
       }
 
-      if (currPost === "322") {
-        if (bizType === "m1" || bizType === "m3") {
-          this.commpoentName = "processing2";
-        } else if (bizType === "m2" || bizType === "m5") {
-          this.commpoentName = "processing27";
-        } else if (bizType === "m4") {
-          this.commpoentName = "processing25";
-        } else if (bizType === "m6") {
-          this.commpoentName = "processing29";
-        }
-      } else if (currPost === "321") {
+      if (currPost === "322" || currPost === "321") {
         if (bizType === "m1" || bizType === "m3") {
           this.commpoentName = "processing2";
         } else if (bizType === "m2" || bizType === "m5") {

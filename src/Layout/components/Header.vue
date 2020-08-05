@@ -37,22 +37,28 @@
       title="修改密码"
       center
       :visible="dialogFormVisible"
-      width="698px"
+      width="500px"
       :append-to-body="true"
       v-alterELDialogMarginTop="{marginTop:'30vh'}"
       :before-close="editCancel"
     >
-      <el-form :model="user" label-position="left" label-width="100px">
-        <el-form-item label="账号">
+      <el-form
+        :model="user"
+        label-position="left"
+        ref="changePwd"
+        label-width="100px"
+        :rules="dialogRules"
+      >
+        <el-form-item label="账号" prop="userName">
           <el-input v-model="user.userName" disabled></el-input>
         </el-form-item>
-        <el-form-item label="原密码">
+        <el-form-item label="原密码" prop="oldPassWord">
           <el-input v-model="user.oldPassWord" show-password clearable></el-input>
         </el-form-item>
-        <el-form-item label="新密码">
+        <el-form-item label="新密码" prop="newPassword">
           <el-input v-model="user.newPassword" show-password clearable></el-input>
         </el-form-item>
-        <el-form-item label="确认新密码">
+        <el-form-item label="确认新密码" prop="newPasswordAgain">
           <el-input v-model="user.newPasswordAgain" show-password clearable></el-input>
         </el-form-item>
       </el-form>
@@ -65,12 +71,61 @@
 </template>
 
 <script>
+import { updateUser } from "../../api/users";
 export default {
   name: "Header",
   data() {
+    const verifyPassword = (rule, value, callback) => {
+      if (this.user.oldPassWord == sessionStorage.getItem("emplPwd")) {
+        callback();
+      } else {
+        callback(new Error("原密码输入不正确"));
+      }
+    };
+    const pwdAgain = (rule, value, callback) => {
+      if (this.user.newPasswordAgain == this.user.newPassword) {
+        callback();
+      } else {
+        callback(new Error("新密码两次输入不一致"));
+      }
+    };
     return {
+      verifyPassword: verifyPassword,
+      pwdAgain: pwdAgain,
       userName: sessionStorage.getItem("emplName"),
       dialogFormVisible: false,
+      dialogRules: {
+        userName: [
+          { required: true, message: "请输入用户名", trigger: "blur" }
+        ],
+        oldPassWord: [
+          { required: true, message: "请输入原密码", trigger: "blur" },
+          {
+            validator: verifyPassword,
+            trigger: "blur"
+          }
+        ],
+        newPassword: [
+          { required: true, message: "请输入新密码", trigger: "blur" },
+          {
+            pattern: /^[^\s]*$/g,
+            message: "不允许输入空格",
+            trigger: "blur"
+          }
+        ],
+        newPasswordAgain: [
+          { required: true, message: "请输入新密码", trigger: "blur" },
+          {
+            pattern: /^[^\s]*$/g,
+            message: "不允许输入空格",
+            trigger: "blur"
+          },
+          {
+            validator: pwdAgain,
+            trigger: "blur"
+          }
+        ]
+      },
       user: {
         userName: "",
         oldPassWord: "",
@@ -88,13 +143,7 @@ export default {
       }
     },
     loginOut() {
-      sessionStorage.removeItem("emplCode");
-      sessionStorage.removeItem("emplName");
-      sessionStorage.removeItem("noticeFlag");
-      sessionStorage.removeItem("orgCode");
-      sessionStorage.removeItem("orgName");
-      sessionStorage.removeItem("postCode");
-      sessionStorage.removeItem("menuList");
+      sessionStorage.clear();
       this.$message({
         message: "成功退出系统",
         type: "success"
@@ -107,22 +156,45 @@ export default {
     },
     ChangePassword() {
       console.log(222);
+      this.user.userName = sessionStorage.getItem("emplCode");
       this.dialogFormVisible = true;
     },
     editOk() {
       console.log(this.user);
+      // 提交数据
       if (this.user.newPassword !== this.user.newPasswordAgain) {
-        this.$message({
-          message: "两次输入不一致",
-          type: "error"
-        });
-      } else {
-        // 提交数据
-        this.editCancel();
+        return;
       }
+      if (this.user.oldPassWord !== sessionStorage.getItem("emplPwd")) {
+        return;
+      }
+      updateUser(this, {
+        id: sessionStorage.getItem("id"),
+        emplPwd: this.user.newPassword
+      }).then(res => {
+        if (res.data.returnCode === "200000") {
+          this.editCancel();
+          this.$message({
+            message: "修改密码成功,请重新登录",
+            type: "success"
+          });
+          sessionStorage.clear();
+          setTimeout(() => {
+            this.$router.push({
+              path: "/login"
+            });
+          }, 1000);
+        } else {
+          this.$message({
+            message: res.data.returnMsg,
+            type: "error"
+          });
+        }
+      });
     },
     editCancel() {
       this.dialogFormVisible = false;
+      this.$refs.changePwd.resetFields();
       this.user = {
         userName: "",
         oldPassWord: "",

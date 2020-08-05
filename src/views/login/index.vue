@@ -72,17 +72,23 @@ export default {
           const {
             emplCode,
             emplName,
+            emplPwd,
+            emplSign,
             menuList,
             noticeFlag,
             orgCode,
             orgName,
-            postCode
+            postCode,
+            id
           } = res.data.data;
           // this.$cookies.set("emplCode", emplCode);
           // this.$cookies.set("emplName", emplName);
           // this.$cookies.set("menuList", JSON.stringify(menuList));
           sessionStorage.setItem("emplCode", emplCode);
           sessionStorage.setItem("emplName", emplName);
+          sessionStorage.setItem("id", id);
+          sessionStorage.setItem("emplPwd", emplPwd);
+          sessionStorage.setItem("emplSign", emplSign);
           sessionStorage.setItem("noticeFlag", noticeFlag);
           sessionStorage.setItem("orgCode", orgCode);
           sessionStorage.setItem("orgName", orgName);
@@ -120,14 +126,20 @@ export default {
           const {
             emplCode,
             emplName,
+            emplPwd,
+            emplSign,
             menuList,
             noticeFlag,
             orgCode,
             orgName,
-            postCode
+            postCode,
+            id
           } = res.data.data;
           sessionStorage.setItem("emplCode", emplCode);
           sessionStorage.setItem("emplName", emplName);
+          sessionStorage.setItem("id", id);
+          sessionStorage.setItem("emplPwd", emplPwd);
+          sessionStorage.setItem("emplSign", emplSign);
           sessionStorage.setItem("noticeFlag", noticeFlag);
           sessionStorage.setItem("orgCode", orgCode);
           sessionStorage.setItem("orgName", orgName);
