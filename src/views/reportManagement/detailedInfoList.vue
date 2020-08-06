@@ -22,6 +22,8 @@
                   v-model="searchForm.beginDate"
                   style="width:100%"
                   type="date"
+                  value-format="yyyy-MM-dd"
+                  format="yyyy-MM-dd"
                   placeholder="选择日期"
                   clearable
                 ></el-date-picker>
@@ -33,6 +35,8 @@
                   v-model="searchForm.endDate"
                   style="width:100%"
                   type="date"
+                  value-format="yyyy-MM-dd"
+                  format="yyyy-MM-dd"
                   placeholder="选择日期"
                   clearable
                 ></el-date-picker>
@@ -63,16 +67,15 @@
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="完成状态" class="formItem4">
+              <el-form-item label="完成状态" class="formItem4" v-show="visible">
                 <el-select v-model="searchForm.bizStatus" clearable style="width:100%">
                   <el-option label="应做" value="shouldDo"></el-option>
                   <el-option label="未做" value="notDo"></el-option>
                   <el-option label="审核中" value="inReview"></el-option>
-                  <el-option label="完成" value="alreadyDo"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="12" class="rightBottom">
               <div class="btn">
                 <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
                 <el-button size="mini" @click="onClear">重置</el-button>
@@ -147,8 +150,10 @@ export default {
         orgName: "",
         emplName: "",
         bizType: "",
-        bizStatus: ""
+        bizStatus: "",
+        workProgress: "onTime"
       },
+      visible: false,
       paramsDetail: {
         pageNo: 1,
         pageSize: 10
@@ -161,6 +166,29 @@ export default {
   mounted() {
     // 进入页面先调用查询接口
     this.$moment.locale("zh-cn");
+    const { workProgress } = this.$route.params;
+    if (workProgress == "inComplete") {
+      this.visible = true;
+    } else {
+      this.visible = false;
+    }
+    this.searchForm.workProgress = workProgress;
+    const {
+      orgName,
+      bizType,
+      queryBeginTime,
+      queryEndTime
+    } = this.$route.query;
+    if (orgName && bizType) {
+      this.searchForm.orgName = orgName;
+      this.searchForm.bizType = bizType;
+    }
+    if (queryBeginTime) {
+      this.searchForm.beginDate = queryBeginTime;
+    }
+    if (queryEndTime) {
+      this.searchForm.endDate = queryEndTime;
+    }
     this.onSubmit();
   },
   methods: {
@@ -193,16 +221,6 @@ export default {
     },
     // 表单查询
     onSubmit() {
-      if (this.searchForm.beginDate) {
-        this.searchForm.beginDate = this.$moment(
-          this.searchForm.beginDate
-        ).format("L");
-      }
-      if (this.searchForm.endDate) {
-        this.searchForm.endDate = this.$moment(this.searchForm.endDate).format(
-          "L"
-        );
-      }
       getReportFormList(this, {
         ...filterParams(this.searchForm),
         pageSize: 10,
@@ -211,13 +229,20 @@ export default {
       }).then(res => {
         this.tableData = res.data.data;
         this.total = res.data.total;
-        // this.pageSize = this.paramsDetail.pageSize;
-        // this.pageNo = this.paramsDetail.pageNo;
       });
     },
     // 重置
     onClear() {
-      this.searchForm = {};
+      const { workProgress } = this.$route.params;
+      this.searchForm = {
+        beginDate: "",
+        endDate: "",
+        orgName: "",
+        emplName: "",
+        bizType: "",
+        bizStatus: "",
+        workProgress
+      };
       this.pageNo = 1;
       this.pageSize = 10;
     },
@@ -279,6 +304,19 @@ export default {
     //     this.flag = true;
     //   }
     // }
+  },
+  watch: {
+    $route(to, from) {
+      if (to.params.workProgress != from.params.workProgress) {
+        const workProgress = to.params.workProgress;
+        if (workProgress == "inComplete") {
+          this.visible = true;
+        } else {
+          this.visible = false;
+        }
+        this.searchForm.workProgress = workProgress;
+      }
+    }
   }
 };
 </script>
@@ -299,6 +337,7 @@ export default {
       width: 100%;
       .formBox {
         box-sizing: border-box;
+        position: relative;
         height: 100%;
         line-height: 50px;
         width: 100%;
@@ -309,6 +348,11 @@ export default {
         font-weight: 500;
         color: rgba(102, 102, 102, 1);
         opacity: 1;
+        .rightBottom {
+          position: absolute;
+          right: 0;
+          bottom: 0;
+        }
         .formItem4 {
           display: inline-block;
           width: 100%;

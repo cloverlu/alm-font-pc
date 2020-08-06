@@ -1,3 +1,10 @@
+/*
+ * @Date: 2020-07-02 20:06:47
+ * @Author: sunhua
+ * @Describe:
+ * @LastEditTime: 2020-08-06 11:27:04
+ * @FilePath: \alm-font-pc\src\router\index.js
+ */
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Layout from "../Layout/index.vue";
@@ -122,7 +129,7 @@ const routes = [
     meta: { title: "统计查询" },
     children: [
       {
-        path: "detailedInfoList",
+        path: "detailedInfoList/:workProgress",
         component: () => import("@/views/reportManagement/detailedInfoList"),
         name: "明细信息",
         meta: { title: "明细信息", noCache: true },
