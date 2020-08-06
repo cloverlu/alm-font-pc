@@ -11,13 +11,14 @@
         <el-form
           :model="searchForm"
           :inline="true"
-          label-position="left"
+          label-position="right"
+          label-width="100px"
           size="mini"
           class="demo-form-inline formBox"
         >
           <el-row :gutter="20">
             <el-col :span="6">
-              <el-form-item label="开始日期" class="formItem4">
+              <el-form-item :label="label1" class="formItem4">
                 <el-date-picker
                   v-model="searchForm.beginDate"
                   style="width:100%"
@@ -30,7 +31,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="结束日期" class="formItem4">
+              <el-form-item :label="label2" class="formItem4">
                 <el-date-picker
                   v-model="searchForm.endDate"
                   style="width:100%"
@@ -111,7 +112,20 @@
             <el-table-column header-align="center" prop="billBeginDate" label="借据起期" min-width="8%"></el-table-column>
             <el-table-column header-align="center" prop="billEndDate" label="借据止期" min-width="8%"></el-table-column>
             <el-table-column header-align="center" prop="billBlance" label="借据余额" min-width="8%"></el-table-column>
-            <el-table-column header-align="center" prop="dealDate" label="完成时间" min-width="8%"></el-table-column>
+            <el-table-column
+              v-if="visible"
+              header-align="center"
+              prop="createTime"
+              label="创建时间"
+              min-width="8%"
+            ></el-table-column>
+            <el-table-column
+              v-if="!visible"
+              header-align="center"
+              prop="dealDate"
+              label="完成时间"
+              min-width="8%"
+            ></el-table-column>
             <el-table-column header-align="center" prop="bizEndDate" label="应完成时间" min-width="8%"></el-table-column>
           </el-table>
         </div>
@@ -144,6 +158,8 @@ export default {
       pageSize: 10,
       total: 10,
       currentItem: 1,
+      label1: "开始日期",
+      label2: "结束日期",
       searchForm: {
         beginDate: "",
         endDate: "",
@@ -169,8 +185,12 @@ export default {
     const { workProgress } = this.$route.params;
     if (workProgress == "inComplete") {
       this.visible = true;
+      this.label1 = "业务创建日期";
+      this.label2 = "业务结束日期";
     } else {
       this.visible = false;
+      this.label1 = "开始日期";
+      this.label2 = "结束日期";
     }
     this.searchForm.workProgress = workProgress;
     const {
@@ -311,10 +331,17 @@ export default {
         const workProgress = to.params.workProgress;
         if (workProgress == "inComplete") {
           this.visible = true;
+          this.label1 = "业务创建日期";
+          this.label2 = "业务结束日期";
         } else {
           this.visible = false;
+          this.label1 = "开始日期";
+          this.label2 = "结束日期";
         }
         this.searchForm.workProgress = workProgress;
+        this.pageNo = 1;
+        this.pageSize = 10;
+        this.onSubmit();
       }
     }
   }

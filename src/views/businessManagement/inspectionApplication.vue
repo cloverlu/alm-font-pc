@@ -767,10 +767,12 @@ export default {
       ) {
         data = {
           ...this.approval,
+          orgCode: sessionStorage.getItem("orgCode"),
           ...this.$refs.commpoent.params
         };
       } else {
         data = {
+          orgCode: sessionStorage.getItem("orgCode"),
           ...this.approval
         };
       }
