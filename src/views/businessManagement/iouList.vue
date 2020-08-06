@@ -210,18 +210,16 @@ export default {
         .formItem5 {
           display: inline-block;
           width: 100%;
-          min-width: 250px;
           margin: 0;
           padding-right: 10px;
-        }
-        /deep/.el-form-item {
-          margin-bottom: 0;
           /deep/.el-form-item__label {
             font-size: 12px;
           }
           /deep/.el-form-item__content {
-            margin-top: 13px;
-            width: calc(100% - 120px);
+            padding-top: 13px;
+            -webkit-padding-top: 13px;
+            -ms-padding-top: 13px;
+            width: calc(100% - 100px);
           }
         }
         /deep/.el-button {

@@ -133,7 +133,7 @@
             ></el-table-column>
             <el-table-column
               header-align="center"
-              prop="bizEndDate"
+              prop="dealDate"
               sortable
               label="完成时间"
               min-width="12%"
@@ -260,15 +260,15 @@ export default {
     onSubmit: function() {
       getTaskList(this, {
         ...filterParams(this.searchForm),
-        emplCode: this.searchForm.emplCode
-          ? this.searchForm.emplCode
-          : sessionStorage.getItem("emplCode"),
+        // emplCode: this.searchForm.emplCode
+        //   ? this.searchForm.emplCode
+        //   : sessionStorage.getItem("emplCode"),
         orgCode: this.searchForm.orgCode
           ? this.searchForm.orgCode
           : sessionStorage.getItem("orgCode"),
-        emplName: this.searchForm.emplName
-          ? this.searchForm.emplName
-          : sessionStorage.getItem("emplName"),
+        // emplName: this.searchForm.emplName
+        //   ? this.searchForm.emplName
+        //   : sessionStorage.getItem("emplName"),
         pageSize: 10,
         pageNo: 1,
         ...this.paramsDetail
@@ -482,15 +482,15 @@ export default {
         .formItem5 {
           display: inline-block;
           width: 100%;
-        }
-        /deep/.el-form-item {
-          margin-bottom: 0;
+          margin: 0;
           /deep/.el-form-item__label {
             font-size: 12px;
           }
           /deep/.el-form-item__content {
-            margin-top: 13px;
-            width: calc(100% - 130px);
+            padding-top: 13px;
+            -webkit-padding-top: 13px;
+            -ms-padding-top: 13px;
+            width: calc(100% - 120px);
           }
         }
         .btn {

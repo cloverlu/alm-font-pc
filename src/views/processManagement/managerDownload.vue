@@ -117,7 +117,7 @@
             ></el-table-column>
             <el-table-column
               header-align="center"
-              prop="bizEndDate"
+              prop="dealDate"
               sortable
               label="完成时间"
               min-width="15%"
@@ -442,16 +442,15 @@ export default {
         .formItem5 {
           display: inline-block;
           width: 100%;
-          // margin-right: 20px;
-          // min-width: 310px;
-        }
-        /deep/.el-form-item {
-          margin-bottom: 0;
+          margin: 0;
+          padding-right: 10px;
           /deep/.el-form-item__label {
             font-size: 12px;
           }
           /deep/.el-form-item__content {
-            margin-top: 13px;
+            padding-top: 13px;
+            -webkit-padding-top: 13px;
+            -ms-padding-top: 13px;
             width: calc(100% - 100px);
           }
         }

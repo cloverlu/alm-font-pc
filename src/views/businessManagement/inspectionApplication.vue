@@ -1109,17 +1109,18 @@ export default {
           width: 50%;
           margin: 0;
           padding-right: 20px;
+          /deep/.el-form-item__label {
+            padding: 10px 0 0;
+            font-size: 16px;
+            color: rgba(96, 98, 102, 1);
+          }
+          /deep/.el-form-item__content {
+            width: 100%;
+            // max-width: 542px;
+            // min-width: 300px;
+          }
         }
-        /deep/.el-form-item__label {
-          padding: 10px 0 0;
-          font-size: 16px;
-          color: rgba(96, 98, 102, 1);
-        }
-        /deep/.el-form-item__content {
-          width: 100%;
-          // max-width: 542px;
-          // min-width: 300px;
-        }
+
         .cardTitle {
           margin: 0;
           padding: 0;

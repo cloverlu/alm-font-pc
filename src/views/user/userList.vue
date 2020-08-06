@@ -435,22 +435,17 @@ export default {
           width: 100%;
           margin: 0;
           padding-right: 10px;
-        }
-        /deep/.el-form-item {
-          position: relative;
-          // margin-bottom: 0;
           /deep/.el-form-item__label {
             font-size: 12px;
           }
           /deep/.el-form-item__content {
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translate(0, -50%);
-            // margin-top: 13px;
-            width: calc(100% - 80px);
+            padding-top: 13px;
+            -webkit-padding-top: 13px;
+            -ms-padding-top: 13px;
+            width: calc(100% - 100px);
           }
         }
+
         .btn {
           display: inline-block;
           position: absolute;
