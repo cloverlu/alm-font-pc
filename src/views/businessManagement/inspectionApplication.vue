@@ -941,6 +941,9 @@ export default {
       if (currPost == "320" && biggerThan500 == 0) {
         this.showNextEmplName = false;
       }
+      if (currPost == "220") {
+        this.showNextEmplName = false;
+      }
       console.log(this.approvaList);
       if (currPost == "222" && this.approvaList.length == 3) {
         this.showNextEmplName = false;
