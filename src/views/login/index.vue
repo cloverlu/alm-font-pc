@@ -12,7 +12,7 @@
         <span>小企业无纸化贷后管理系统</span>
       </div>
       <div class="userInfo">
-        <el-input placeholder="请输入您的用户名" v-model="emplCode">
+        <el-input placeholder="请输入您的用户编号" v-model="emplCode">
           <i slot="prepend" class="iconfont iconwode-01"></i>
         </el-input>
       </div>
