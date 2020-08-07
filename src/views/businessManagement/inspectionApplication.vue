@@ -241,6 +241,66 @@ export default {
               res.data.data[key] = "";
             }
           }
+
+          if (!res.data.data.cooperate) {
+            res.data.data.cooperate = "1";
+          }
+          if (!res.data.data.useAmoutByContract) {
+            res.data.data.useAmoutByContract = 1;
+          }
+          if (!res.data.data.executeCon) {
+            res.data.data.executeCon = 1;
+          }
+          if (!res.data.data.yearlyInspection) {
+            res.data.data.yearlyInspection = 1;
+          }
+          if (!res.data.data.revalOfColl) {
+            res.data.data.revalOfColl = 1;
+          }
+
+          if (!res.data.data.ownerStruSame) {
+            res.data.data.ownerStruSame = 1;
+          }
+          if (!res.data.data.industrycChangSiut) {
+            res.data.data.industrycChangSiut = 1;
+          }
+          if (!res.data.data.mainBusIsChanged) {
+            res.data.data.mainBusIsChanged = 1;
+          }
+          if (!res.data.data.planExpandSitu) {
+            res.data.data.planExpandSitu = 1;
+          }
+          if (!res.data.data.proAndOpeAbnormalSuit) {
+            res.data.data.proAndOpeAbnormalSuit = 1;
+          }
+          if (!res.data.data.addrIsChanged) {
+            res.data.data.addrIsChanged = 1;
+          }
+          if (!res.data.data.purchaseCost) {
+            res.data.data.purchaseCost = 1;
+          }
+          if (!res.data.data.orderDecline) {
+            res.data.data.orderDecline = 1;
+          }
+          if (!res.data.data.saleAbnormalSuit) {
+            res.data.data.saleAbnormalSuit = 1;
+          }
+          if (!res.data.data.chainChange) {
+            res.data.data.chainChange = 1;
+          }
+          if (!res.data.data.dailyCostDecline) {
+            res.data.data.dailyCostDecline = 1;
+          }
+          if (!res.data.data.hiddenTroubleSitu) {
+            res.data.data.hiddenTroubleSitu = 1;
+          }
+          if (!res.data.data.cashDecline) {
+            res.data.data.cashDecline = 1;
+          }
+          if (!res.data.data.cashMatchesAndProAndOpe) {
+            res.data.data.cashMatchesAndProAndOpe = 1;
+          }
+
           if (!res.data.data.assetCreditInfo) {
             res.data.data.assetCreditInfo = {
               queryDate: "", //征信报告查询日期
@@ -306,6 +366,9 @@ export default {
           }
           if (!res.data.data.financeInfo) {
             res.data.data.financeInfo = {
+              industrycChangSiut: 1, //企业所在行业是否发生重大不利变化
+              hiddenTroubleSitu: 1, //生产经营是否存在安全隐患
+              planExpandSitu: 1, //企业是否有与主业无关的扩张计划
               financeClassification: "1",
               stockLastBalance: "", // 上次全面检查或调查时余额--- 存货
               stockChangSitu: "", //本次检查存货变动情况
@@ -375,6 +438,64 @@ export default {
               res.data.data[key] = "";
             }
           }
+          if (!res.data.data.cooperate) {
+            res.data.data.cooperate = "1";
+          }
+          if (!res.data.data.useAmoutByContract) {
+            res.data.data.useAmoutByContract = 1;
+          }
+          if (!res.data.data.executeCon) {
+            res.data.data.executeCon = 1;
+          }
+          if (!res.data.data.yearlyInspection) {
+            res.data.data.yearlyInspection = 1;
+          }
+          if (!res.data.data.revalOfColl) {
+            res.data.data.revalOfColl = 1;
+          }
+
+          if (!res.data.data.ownerStruSame) {
+            res.data.data.ownerStruSame = 1;
+          }
+          if (!res.data.data.industrycChangSiut) {
+            res.data.data.industrycChangSiut = 1;
+          }
+          if (!res.data.data.mainBusIsChanged) {
+            res.data.data.mainBusIsChanged = 1;
+          }
+          if (!res.data.data.planExpandSitu) {
+            res.data.data.planExpandSitu = 1;
+          }
+          if (!res.data.data.proAndOpeAbnormalSuit) {
+            res.data.data.proAndOpeAbnormalSuit = 1;
+          }
+          if (!res.data.data.addrIsChanged) {
+            res.data.data.addrIsChanged = 1;
+          }
+          if (!res.data.data.purchaseCost) {
+            res.data.data.purchaseCost = 1;
+          }
+          if (!res.data.data.orderDecline) {
+            res.data.data.orderDecline = 1;
+          }
+          if (!res.data.data.saleAbnormalSuit) {
+            res.data.data.saleAbnormalSuit = 1;
+          }
+          if (!res.data.data.chainChange) {
+            res.data.data.chainChange = 1;
+          }
+          if (!res.data.data.dailyCostDecline) {
+            res.data.data.dailyCostDecline = 1;
+          }
+          if (!res.data.data.hiddenTroubleSitu) {
+            res.data.data.hiddenTroubleSitu = 1;
+          }
+          if (!res.data.data.cashDecline) {
+            res.data.data.cashDecline = 1;
+          }
+          if (!res.data.data.cashMatchesAndProAndOpe) {
+            res.data.data.cashMatchesAndProAndOpe = 1;
+          }
 
           if (!res.data.data.assetCreditInfo) {
             res.data.data.assetCreditInfo = {
@@ -442,6 +563,9 @@ export default {
           if (!res.data.data.financeInfo) {
             res.data.data.financeInfo = {
               financeClassification: "1",
+              industrycChangSiut: 1, //企业所在行业是否发生重大不利变化
+              hiddenTroubleSitu: 1, //生产经营是否存在安全隐患
+              planExpandSitu: 1, //企业是否有与主业无关的扩张计划
               stockLastBalance: "", // 上次全面检查或调查时余额--- 存货
               stockChangSitu: "", //本次检查存货变动情况
               dailyExpenLastBalance: "", //上次全面检查或调查时余额---水、电、煤、气费其中一项或多项

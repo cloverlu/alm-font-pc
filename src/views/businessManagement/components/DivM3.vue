@@ -378,30 +378,30 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="企业所在行业是否发生重大不利变化 :" style="width:96%")
-              el-select(v-model="form.industrycChangSiut" :disabled="type == 2" placeholder="请选择" style="width:100%" clearable)
+              el-select(v-model="form.financeInfo.industrycChangSiut" :disabled="type == 2" placeholder="请选择" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label="生产经营是否存在安全隐患 :" style="width:96%")
-              el-select(v-model="form.hiddenTroubleSitu" :disabled="type == 2" placeholder="请选择" style="width:100%" clearable)
+              el-select(v-model="form.financeInfo.hiddenTroubleSitu" :disabled="type == 2" placeholder="请选择" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label="企业是否有与主业无关的扩张计划 :" style="width:96%")
-              el-select(v-model="form.planExpandSitu" :disabled="type == 2" placeholder="请选择" style="width:100%" clearable)
+              el-select(v-model="form.financeInfo.planExpandSitu" :disabled="type == 2" placeholder="请选择" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
             el-form-item(label="其他 :" style="width:96%")
-              el-input(v-model="form.otherSitu" :disabled="type == 2" type="textarea" :rows="3" clearable)
+              el-input(v-model="form.financeInfo.otherSitu" :disabled="type == 2" type="textarea" :rows="3" clearable)
         .blueTitle1 担保情况
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="上次抵质押物评估或重估日期 :" style="width:96%")
-              el-date-picker(v-model="form.collEstimateDate" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
+              el-date-picker(v-model="form.financeInfo.collEstimateDate" :disabled="type == 2" value-format='yyyy-MM-dd' format='yyyy-MM-dd' style="width:100%" type="date" clearable)
           el-col(:span="12")
             span(class="greyContent") 根据现场检查及非现场查询情况，从抵(质)押物市场价值和变现能力方面分析，判|断抵(质)押物是否出现约定的需增加、置换等变动情形。
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="上次抵质押物评估或重估金额 :" style="width:96%")
-              el-input(v-model="form.collEstimateValue" :disabled="type == 2" clearable)
+              el-input(v-model="form.financeInfo.collEstimateValue" :disabled="type == 2" clearable)
           
       //- 影像维护
     el-card(class='card')
@@ -637,9 +637,9 @@ export default {
           financeClassification: "1",
 
           // 现场检查其他要点
-          industrycChangSiut: "", //企业所在行业是否发生重大不利变化
-          hiddenTroubleSitu: "", //生产经营是否存在安全隐患
-          planExpandSitu: "", //企业是否有与主业无关的扩张计划
+          industrycChangSiut: 1, //企业所在行业是否发生重大不利变化
+          hiddenTroubleSitu: 1, //生产经营是否存在安全隐患
+          planExpandSitu: 1, //企业是否有与主业无关的扩张计划
           otherSitu: "", //其他
           collEstimateDate: "", //上次抵质押物评估或重估日期
           collEstimateValue: "" //上次抵质押物评估或重估金额
