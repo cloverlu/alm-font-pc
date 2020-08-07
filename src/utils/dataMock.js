@@ -52,6 +52,147 @@ const bizType = [
   "小企业法人快捷贷贷后日常检查",
 ];
 
+const bizTypesTable = [
+  {
+    label: "首次跟踪检查",
+    children: [
+      {
+        label: "按时完成",
+        bizType: "m1",
+        workProgress: "onTime",
+        prop: "completeNumOfM1",
+      },
+      {
+        label: "超时完成",
+        bizType: "m1",
+        workProgress: "overtime",
+        prop: "overTimeCompleteNumOfM1",
+      },
+      {
+        label: "未完成",
+        bizType: "m1",
+        workProgress: "incomplete",
+        prop: "notCompleteNumOfM1",
+      },
+    ],
+  },
+  {
+    label: "贷后例行检查",
+    children: [
+      {
+        label: "按时完成",
+        bizType: "m2",
+        workProgress: "onTime",
+        prop: "completeNumOfM1",
+      },
+      {
+        label: "超时完成",
+        bizType: "m2",
+        workProgress: "overtime",
+        prop: "completeNumOfM1",
+      },
+      {
+        label: "未完成",
+        bizType: "m2",
+        workProgress: "incomplete",
+        prop: "completeNumOfM1",
+      },
+    ],
+  },
+  {
+    label: "贷后全面检查",
+    children: [
+      {
+        label: "按时完成",
+        bizType: "m3",
+        workProgress: "onTime",
+        prop: "completeNumOfM1",
+      },
+      {
+        label: "超时完成",
+        bizType: "m3",
+        workProgress: "overtime",
+        prop: "completeNumOfM1",
+      },
+      {
+        label: "未完成",
+        bizType: "m3",
+        workProgress: "incomplete",
+        prop: "completeNumOfM1",
+      },
+    ],
+  },
+  {
+    label: "还款资金落实检查",
+    children: [
+      {
+        label: "按时完成",
+        bizType: "m4",
+        workProgress: "onTime",
+        prop: "completeNumOfM1",
+      },
+      {
+        label: "超时完成",
+        bizType: "m4",
+        workProgress: "overtime",
+        prop: "completeNumOfM1",
+      },
+      {
+        label: "未完成",
+        bizType: "m4",
+        workProgress: "incomplete",
+        prop: "completeNumOfM1",
+      },
+    ],
+  },
+  {
+    label: "快捷贷首次检查",
+    children: [
+      {
+        label: "按时完成",
+        bizType: "m5",
+        workProgress: "onTime",
+        prop: "completeNumOfM1",
+      },
+      {
+        label: "超时完成",
+        bizType: "m5",
+        workProgress: "overtime",
+        prop: "completeNumOfM1",
+      },
+      {
+        label: "未完成",
+        bizType: "m5",
+        workProgress: "incomplete",
+        prop: "completeNumOfM1",
+      },
+    ],
+  },
+  {
+    label: "快捷贷贷后日常检查",
+    children: [
+      {
+        label: "按时完成",
+        bizType: "m6",
+        workProgress: "onTime",
+        prop: "completeNumOfM1",
+      },
+      {
+        label: "超时完成",
+        bizType: "m6",
+        workProgress: "overtime",
+        prop: "completeNumOfM1",
+      },
+      {
+        label: "未完成",
+        bizType: "m6",
+        workProgress: "incomplete",
+        prop: "completeNumOfM1",
+      },
+    ],
+  },
+];
+
 const DetailsOfIOU = {
   queryType: "1", // 查询类型
   orgName: "张三有限责任公司", // 机构名称
@@ -872,4 +1013,5 @@ export {
   definite16Normal,
   agreeOrNot,
   nextPositionHandlersArr,
+  bizTypesTable,
 };

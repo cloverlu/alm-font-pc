@@ -11,29 +11,33 @@
         <el-form
           :model="searchForm"
           :inline="true"
-          label-position="left"
-          label-width="60px"
+          label-position="right"
+          label-width="100px"
           size="mini"
           class="demo-form-inline formBox"
         >
           <el-row :gutter="20">
             <el-col :span="6">
-              <el-form-item label="开始日期" class="formItem4">
+              <el-form-item :label="label1" class="formItem4">
                 <el-date-picker
                   v-model="searchForm.beginDate"
                   style="width:100%"
                   type="date"
+                  value-format="yyyy-MM-dd"
+                  format="yyyy-MM-dd"
                   placeholder="选择日期"
                   clearable
                 ></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="结束日期" class="formItem4">
+              <el-form-item :label="label2" class="formItem4">
                 <el-date-picker
                   v-model="searchForm.endDate"
                   style="width:100%"
                   type="date"
+                  value-format="yyyy-MM-dd"
+                  format="yyyy-MM-dd"
                   placeholder="选择日期"
                   clearable
                 ></el-date-picker>
@@ -64,16 +68,15 @@
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="完成状态" class="formItem4">
+              <el-form-item label="完成状态" class="formItem4" v-show="visible">
                 <el-select v-model="searchForm.bizStatus" clearable style="width:100%">
                   <el-option label="应做" value="shouldDo"></el-option>
                   <el-option label="未做" value="notDo"></el-option>
                   <el-option label="审核中" value="inReview"></el-option>
-                  <el-option label="完成" value="alreadyDo"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="12" class="rightBottom">
               <div class="btn">
                 <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
                 <el-button size="mini" @click="onClear">重置</el-button>
@@ -109,7 +112,20 @@
             <el-table-column header-align="center" prop="billBeginDate" label="借据起期" min-width="8%"></el-table-column>
             <el-table-column header-align="center" prop="billEndDate" label="借据止期" min-width="8%"></el-table-column>
             <el-table-column header-align="center" prop="billBlance" label="借据余额" min-width="8%"></el-table-column>
-            <el-table-column header-align="center" prop="dealDate" label="完成时间" min-width="8%"></el-table-column>
+            <el-table-column
+              v-if="visible"
+              header-align="center"
+              prop="createTime"
+              label="创建时间"
+              min-width="8%"
+            ></el-table-column>
+            <el-table-column
+              v-if="!visible"
+              header-align="center"
+              prop="dealDate"
+              label="完成时间"
+              min-width="8%"
+            ></el-table-column>
             <el-table-column header-align="center" prop="bizEndDate" label="应完成时间" min-width="8%"></el-table-column>
           </el-table>
         </div>
@@ -142,14 +158,18 @@ export default {
       pageSize: 10,
       total: 10,
       currentItem: 1,
+      label1: "开始日期",
+      label2: "结束日期",
       searchForm: {
         beginDate: "",
         endDate: "",
         orgName: "",
         emplName: "",
         bizType: "",
-        bizStatus: ""
+        bizStatus: "",
+        workProgress: "onTime"
       },
+      visible: false,
       paramsDetail: {
         pageNo: 1,
         pageSize: 10
@@ -162,6 +182,33 @@ export default {
   mounted() {
     // 进入页面先调用查询接口
     this.$moment.locale("zh-cn");
+    const { workProgress } = this.$route.params;
+    if (workProgress == "inComplete") {
+      this.visible = true;
+      this.label1 = "业务创建日期";
+      this.label2 = "业务结束日期";
+    } else {
+      this.visible = false;
+      this.label1 = "开始日期";
+      this.label2 = "结束日期";
+    }
+    this.searchForm.workProgress = workProgress;
+    const {
+      orgName,
+      bizType,
+      queryBeginTime,
+      queryEndTime
+    } = this.$route.query;
+    if (orgName && bizType) {
+      this.searchForm.orgName = orgName;
+      this.searchForm.bizType = bizType;
+    }
+    if (queryBeginTime) {
+      this.searchForm.beginDate = queryBeginTime;
+    }
+    if (queryEndTime) {
+      this.searchForm.endDate = queryEndTime;
+    }
     this.onSubmit();
   },
   methods: {
@@ -194,16 +241,6 @@ export default {
     },
     // 表单查询
     onSubmit() {
-      if (this.searchForm.beginDate) {
-        this.searchForm.beginDate = this.$moment(
-          this.searchForm.beginDate
-        ).format("L");
-      }
-      if (this.searchForm.endDate) {
-        this.searchForm.endDate = this.$moment(this.searchForm.endDate).format(
-          "L"
-        );
-      }
       getReportFormList(this, {
         ...filterParams(this.searchForm),
         pageSize: 10,
@@ -212,13 +249,20 @@ export default {
       }).then(res => {
         this.tableData = res.data.data;
         this.total = res.data.total;
-        // this.pageSize = this.paramsDetail.pageSize;
-        // this.pageNo = this.paramsDetail.pageNo;
       });
     },
     // 重置
     onClear() {
-      this.searchForm = {};
+      const { workProgress } = this.$route.params;
+      this.searchForm = {
+        beginDate: "",
+        endDate: "",
+        orgName: "",
+        emplName: "",
+        bizType: "",
+        bizStatus: "",
+        workProgress
+      };
       this.pageNo = 1;
       this.pageSize = 10;
     },
@@ -280,6 +324,26 @@ export default {
     //     this.flag = true;
     //   }
     // }
+  },
+  watch: {
+    $route(to, from) {
+      if (to.params.workProgress != from.params.workProgress) {
+        const workProgress = to.params.workProgress;
+        if (workProgress == "inComplete") {
+          this.visible = true;
+          this.label1 = "业务创建日期";
+          this.label2 = "业务结束日期";
+        } else {
+          this.visible = false;
+          this.label1 = "开始日期";
+          this.label2 = "结束日期";
+        }
+        this.searchForm.workProgress = workProgress;
+        this.pageNo = 1;
+        this.pageSize = 10;
+        this.onSubmit();
+      }
+    }
   }
 };
 </script>
@@ -291,22 +355,8 @@ export default {
   width: 100%;
   min-height: 100%;
   position: relative;
-  .userHeader {
-    box-sizing: border-box;
-    height: 35px;
-    width: 100%;
-    font-size: 14px;
-    padding: 0 14px;
-    font-family: Source Han Sans CN;
-    font-weight: bold;
-    line-height: 35px;
-    color: rgba(78, 120, 222, 1);
-    letter-spacing: 0px;
-    opacity: 1;
-    border-bottom: 1px solid rgba(231, 231, 231, 1);
-  }
   .userContent {
-    min-height: calc(100% - 35px);
+    height: 100%;
     width: 100%;
     .userForm {
       box-sizing: border-box;
@@ -314,6 +364,7 @@ export default {
       width: 100%;
       .formBox {
         box-sizing: border-box;
+        position: relative;
         height: 100%;
         line-height: 50px;
         width: 100%;
@@ -324,20 +375,23 @@ export default {
         font-weight: 500;
         color: rgba(102, 102, 102, 1);
         opacity: 1;
+        .rightBottom {
+          position: absolute;
+          right: 0;
+          bottom: 0;
+        }
         .formItem4 {
           display: inline-block;
           width: 100%;
           margin: 0;
-          // padding-right: 10px;
-        }
-        /deep/.el-form-item {
-          margin-bottom: 0;
           /deep/.el-form-item__label {
             font-size: 12px;
           }
           /deep/.el-form-item__content {
-            margin-top: 13px;
-            width: calc(100% - 60px);
+            padding-top: 13px;
+            -webkit-padding-top: 13px;
+            -ms-padding-top: 13px;
+            width: calc(100% - 100px);
           }
         }
         .btn {

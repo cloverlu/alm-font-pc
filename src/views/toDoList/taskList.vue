@@ -11,8 +11,7 @@
         <el-form
           :model="searchForm"
           :inline="true"
-          label-position="right"
-          label-width="80px"
+          label-position="left"
           size="mini"
           class="demo-form-inline formBox"
         >
@@ -29,7 +28,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
               <el-form-item label="状态" class="formItem5">
                 <el-select v-model="searchForm.bizStatus" clearable style="width:100%">
                   <el-option label="应做" value="shouldDo"></el-option>
@@ -39,7 +38,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
               <el-form-item label="客户名称" class="formItem5">
                 <el-input v-model="searchForm.custName" clearable></el-input>
               </el-form-item>
@@ -82,18 +81,13 @@
             <el-table-column header-align="center" prop="bizEndDate" label="截止时间" min-width="15%"></el-table-column>
             <el-table-column header-align="center" label="操作" width="150px">
               <template slot-scope="scope">
-                <el-button
-                  size="mini"
-                  type="primary"
-                  @click="handleEdit(scope.row)"
-                  v-if="scope.row.bizStatus !== 'alreadyDo'"
-                >录入业务信息</el-button>
-                <el-button
+                <el-button size="mini" type="primary" @click="handleEdit(scope.row)">录入业务信息</el-button>
+                <!-- <el-button
                   size="mini"
                   type="primary"
                   @click="handleEdit(scope.row)"
                   v-if="scope.row.bizStatus == 'alreadyDo'"
-                >查看</el-button>
+                >查看</el-button>-->
                 <!-- <el-button
                   size="mini"
                   type="warning"
@@ -325,22 +319,8 @@ export default {
   width: 100%;
   min-height: 100%;
   // position: relative;
-  .userHeader {
-    box-sizing: border-box;
-    height: 35px;
-    width: 100%;
-    font-size: 14px;
-    padding: 0 14px;
-    font-family: Source Han Sans CN;
-    font-weight: bold;
-    line-height: 35px;
-    color: rgba(78, 120, 222, 1);
-    letter-spacing: 0px;
-    opacity: 1;
-    border-bottom: 1px solid rgba(231, 231, 231, 1);
-  }
   .userContent {
-    min-height: calc(100% - 35px);
+    height: 100%;
     width: 100%;
     .userForm {
       box-sizing: border-box;
@@ -361,17 +341,16 @@ export default {
         .formItem5 {
           display: inline-block;
           width: 100%;
-          // margin-right: 20px;
-          // min-width: 310px;
-        }
-        /deep/.el-form-item {
-          margin-bottom: 0;
+          margin: 0;
+          padding-right: 10px;
           /deep/.el-form-item__label {
             font-size: 12px;
           }
           /deep/.el-form-item__content {
-            margin-top: 13px;
-            width: calc(100% - 80px);
+            padding-top: 13px;
+            -webkit-padding-top: 13px;
+            -ms-padding-top: 13px;
+            width: calc(100% - 100px);
           }
         }
         .btn {

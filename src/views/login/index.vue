@@ -17,7 +17,7 @@
         </el-input>
       </div>
       <div class="userInfo">
-        <el-input placeholder="请输入您的密码" v-model="password" show-passWord @change="enterLogin">
+        <el-input placeholder="请输入您的密码" v-model="password" show-password @change="enterLogin">
           <i slot="prepend" class="iconfont iconmima-01"></i>
         </el-input>
       </div>
@@ -64,25 +64,31 @@ export default {
     },
     submit() {
       const params = {
-        emplCode: this.emplCode,
-        password: this.password
+        emplCode: this.emplCode.replace(/^\s+|\s+$/g, ""),
+        password: this.password.replace(/^\s+|\s+$/g, "")
       };
       login(this, { ...params }).then(res => {
         if (res.data.returnCode === "200000") {
           const {
             emplCode,
             emplName,
+            emplPwd,
+            emplSign,
             menuList,
             noticeFlag,
             orgCode,
             orgName,
-            postCode
+            postCode,
+            id
           } = res.data.data;
           // this.$cookies.set("emplCode", emplCode);
           // this.$cookies.set("emplName", emplName);
           // this.$cookies.set("menuList", JSON.stringify(menuList));
           sessionStorage.setItem("emplCode", emplCode);
           sessionStorage.setItem("emplName", emplName);
+          sessionStorage.setItem("id", id);
+          sessionStorage.setItem("emplPwd", emplPwd);
+          sessionStorage.setItem("emplSign", emplSign);
           sessionStorage.setItem("noticeFlag", noticeFlag);
           sessionStorage.setItem("orgCode", orgCode);
           sessionStorage.setItem("orgName", orgName);
@@ -120,14 +126,20 @@ export default {
           const {
             emplCode,
             emplName,
+            emplPwd,
+            emplSign,
             menuList,
             noticeFlag,
             orgCode,
             orgName,
-            postCode
+            postCode,
+            id
           } = res.data.data;
           sessionStorage.setItem("emplCode", emplCode);
           sessionStorage.setItem("emplName", emplName);
+          sessionStorage.setItem("id", id);
+          sessionStorage.setItem("emplPwd", emplPwd);
+          sessionStorage.setItem("emplSign", emplSign);
           sessionStorage.setItem("noticeFlag", noticeFlag);
           sessionStorage.setItem("orgCode", orgCode);
           sessionStorage.setItem("orgName", orgName);

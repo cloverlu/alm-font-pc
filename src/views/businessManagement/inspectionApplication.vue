@@ -57,19 +57,24 @@
               el-form-item(label="处理时间 :" class='noBorder')
                 el-input(v-model="item.processTime" disabled)
               el-form-item(label="意见 :" class='noBorder')
-                el-input(v-model="item.agreeResult" disabled)
+                el-select(v-model="item.agreeResult" disabled v-if="item.agreeResult")
+                  el-option(label="同意" value="1")
+                  el-option(label="不同意" value="0")
+                  el-option(label="" value="")
+                span(v-if="!item.agreeResult") 无
+                //- el-input(v-model="item.agreeResult" disabled)
 
-        el-card(class='card' v-if='!allBtn')
-          el-button(type="primary" style="textAlien:right" v-antiShake="[() => { onSubmitApproval('0') }, 1000]" v-if="!allBtn" class='save') 保存
+        el-card(class='card' v-if='status==1')
+          el-button(type="primary" v-antiShake="[() => { onSubmitApproval('0') }, 1000]" v-if="status==1" class='save') 保存
           el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px")
             el-row
               el-col(:span="24")
                 el-form-item(label="客户名称:" class="formItem2")
                   span {{approval.custName}}
-              el-col(:span="24")
+              el-col(:span="24" v-if="showNextEmplName")
                 el-form-item(label="业务上报至:" class="formItem2")
                   span {{approval.nextLinkName}}
-              el-col(:span="24")
+              el-col(:span="24" v-if="showNextEmplName")
                 el-form-item(label="业务接收人:" class="formItem2")
                   el-select(v-model="approval.nextEmplName" placeholder="请选择" style='width:100%')
                     el-option(v-for="item in nextEmplNameList" :key="item" :label="item" :value="item")
@@ -92,11 +97,11 @@
                 //- el-button(class="qianzi" @click="goSign" size='mini' type='primary') 签字
                 img(:src='approval.empSign' v-if='approval.empSign' class='imgContent')
                 img(:src='bg' v-if='!approval.empSign' class='imgContent')
-      .footer(v-if='!allBtn')
-          el-button(type="warning" v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="!allBtn && approvaList.length == 0") 提交审批
-          el-button(type="warning" size='normal' v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="!allBtn && approvaList.length !== 0") 提交
-          el-button(type="info" v-antiShake="[() => { onSubmitApproval('2') }, 1000]" v-if="!allBtn && approvaList.length !== 0") 回退
-          el-button(type="primary" v-antiShake="[() => { onSubmitApproval('3') }, 1000]" v-if="!allBtn && approvaList.length !== 0") 退回上一岗位
+      .footer(v-if='status==1')
+          el-button(type="warning" v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="status==1 && approvaList.length == 0") 提交审批
+          el-button(type="warning" size='normal' v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="status==1 && approvaList.length !== 0") 提交
+          el-button(type="info" v-antiShake="[() => { onSubmitApproval('2') }, 1000]" v-if="status==1 && approvaList.length !== 0") 回退
+          el-button(type="primary" v-antiShake="[() => { onSubmitApproval('3') }, 1000]" v-if="status==1 && approvaList.length !== 0") 退回上一岗位
     el-dialog(:visible.sync="dialogVisible" :append-to-body="true" width="800px" v-alterELDialogMarginTop="{marginTop:'30vh'}" ref="signArea")
       .title
         span 签名:
@@ -184,6 +189,8 @@ export default {
         empSign: "" // 检查人员
       },
       status: 1,
+      biggerThan500: 1,
+      showNextEmplName: true,
       currPost1: "",
       paramsM1: {},
       paramsM2: {},
@@ -351,7 +358,7 @@ export default {
       this.submitBtn = false;
     }
     if (bizId) {
-      this.routerMatch();
+      // this.routerMatch();
       // 业务
       this.form.billNo = "";
       this.canChange = 2;
@@ -361,6 +368,7 @@ export default {
         bizId,
         bizType: this.form.bizType
       }).then(res => {
+        this.currPost1 = res.data.data.currPost;
         if (res.data.returnCode == "200000") {
           for (var key in res.data.data) {
             if (res.data.data[key] == null) {
@@ -584,9 +592,9 @@ export default {
             message: "检查申请编辑操作成功",
             type: "success"
           });
-          setTimeout(() => {
-            history.go(-1);
-          }, 500);
+          // setTimeout(() => {
+          //   history.go(-1);
+          // }, 500);
         } else {
           this.$message({
             message: res.data.returnMsg,
@@ -708,14 +716,27 @@ export default {
             approveDetail(this, { bizId: id }).then(res => {
               this.activeName = "second";
               this.approval = res.data.data;
+              if (sessionStorage.getItem("emplSign") !== "null") {
+                this.approval.empSign = sessionStorage.getItem("emplSign");
+              }
               this.approval.bizId = id;
               this.approvaList = res.data.data.aproveInfo || [];
+              this.biggerThan500 = res.data.data.biggerThan500;
+              this.routerMatch();
               const { currPost } = this.$route.query;
               let pa;
               if (currPost) {
-                pa = { orgName: res.data.data.custOrg, currPost };
+                pa = {
+                  orgName: res.data.data.custOrg,
+                  currPost,
+                  biggerThan500: this.biggerThan500
+                };
               } else {
-                pa = { orgName: res.data.data.custOrg, currPost: currPost1 };
+                pa = {
+                  orgName: res.data.data.custOrg,
+                  currPost: currPost1,
+                  biggerThan500: this.biggerThan500
+                };
               }
               getNextEmplName(this, pa).then(ress => {
                 this.nextEmplNameList = ress.data.data.nextEmplNameList;
@@ -746,10 +767,12 @@ export default {
       ) {
         data = {
           ...this.approval,
+          orgCode: sessionStorage.getItem("orgCode"),
           ...this.$refs.commpoent.params
         };
       } else {
         data = {
+          orgCode: sessionStorage.getItem("orgCode"),
           ...this.approval
         };
       }
@@ -761,9 +784,11 @@ export default {
             message: "操作成功",
             type: "success"
           });
-          setTimeout(() => {
-            history.go(-1);
-          }, 500);
+          if (type != "0") {
+            setTimeout(() => {
+              history.go(-1);
+            }, 500);
+          }
         } else {
           this.$message({
             message: res.data.returnMsg,
@@ -789,8 +814,15 @@ export default {
       if (currPost) {
         this.approveContent = true;
       }
+      if (currPost == "320" && biggerThan500 == 0) {
+        this.showNextEmplName = false;
+      }
+      console.log(this.approvaList);
+      if (currPost == "222" && this.approvaList.length == 3) {
+        this.showNextEmplName = false;
+      }
 
-      if (currPost === "321") {
+      if (currPost === "322" || currPost === "321") {
         if (bizType === "m1" || bizType === "m3") {
           this.commpoentName = "processing2";
         } else if (bizType === "m2" || bizType === "m5") {
@@ -883,19 +915,26 @@ export default {
     handleClick() {
       const { bizId, currPost } = this.$route.query;
       if (this.activeName == "second") {
-        // this.routerMatch();
         approveDetail(this, { bizId }).then(res => {
           this.activeName = "second";
           this.approval = res.data.data;
           this.approval.bizId = bizId;
+          if (sessionStorage.getItem("emplSign") !== "null") {
+            this.approval.empSign = sessionStorage.getItem("emplSign");
+          }
           this.approvaList = res.data.data.aproveInfo || [];
+          this.biggerThan500 = res.data.data.biggerThan500;
+          this.routerMatch();
           const pa = {
             orgName: res.data.data.custOrg,
-            currPost
+            currPost,
+            biggerThan500: this.biggerThan500
           };
-          getNextEmplName(this, pa).then(ress => {
-            this.nextEmplNameList = ress.data.data.nextEmplNameList;
-          });
+          if (this.status == 1) {
+            getNextEmplName(this, pa).then(ress => {
+              this.nextEmplNameList = ress.data.data.nextEmplNameList;
+            });
+          }
         });
       }
     },
@@ -1072,17 +1111,18 @@ export default {
           width: 50%;
           margin: 0;
           padding-right: 20px;
+          /deep/.el-form-item__label {
+            padding: 10px 0 0;
+            font-size: 16px;
+            color: rgba(96, 98, 102, 1);
+          }
+          /deep/.el-form-item__content {
+            width: 100%;
+            // max-width: 542px;
+            // min-width: 300px;
+          }
         }
-        /deep/.el-form-item__label {
-          padding: 10px 0 0;
-          font-size: 16px;
-          color: rgba(96, 98, 102, 1);
-        }
-        /deep/.el-form-item__content {
-          width: 100%;
-          // max-width: 542px;
-          // min-width: 300px;
-        }
+
         .cardTitle {
           margin: 0;
           padding: 0;
@@ -1239,6 +1279,11 @@ export default {
             padding: 0;
             height: 26px;
             line-height: 26px;
+          }
+        }
+        /deep/.el-select {
+          /deep/.el-input__suffix {
+            display: none;
           }
         }
       }
