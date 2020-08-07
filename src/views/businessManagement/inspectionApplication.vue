@@ -844,6 +844,16 @@ export default {
                 this.approval.empSign = sessionStorage.getItem("emplSign");
               }
               this.approval.bizId = id;
+              if (res.data.data.existRisk != 1) {
+                this.approval.existRisk = 0;
+              } else {
+                this.approval.existRisk = 1;
+              }
+              if (res.data.data.agreeResult != 1) {
+                this.approval.agreeResult = 0;
+              } else {
+                this.approval.agreeResult = 1;
+              }
               this.approvaList = res.data.data.aproveInfo || [];
               this.biggerThan500 = res.data.data.biggerThan500;
               this.routerMatch();
@@ -1046,6 +1056,17 @@ export default {
           this.activeName = "second";
           this.approval = res.data.data;
           this.approval.bizId = bizId;
+          if (res.data.data.existRisk != 1) {
+            this.approval.existRisk = 0;
+          } else {
+            this.approval.existRisk = 1;
+          }
+          if (res.data.data.agreeResult != 1) {
+            this.approval.agreeResult = 0;
+          } else {
+            this.approval.agreeResult = 1;
+          }
+
           if (sessionStorage.getItem("emplSign") !== "null") {
             this.approval.empSign = sessionStorage.getItem("emplSign");
           }
