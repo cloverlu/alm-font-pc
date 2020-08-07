@@ -183,7 +183,7 @@ export default {
         nextLinkName: "", // 业务上报至
         nextEmplName: "", // 业务接收人
         approveTime: dateTime, // 上报时间
-        existRisk: "", // 是否存在风险预警信号
+        existRisk: "1", // 是否存在风险预警信号
         riskMsg: "", // 预警信号说明
         suggest: "", // 检查结论及措施建议
         empSign: "" // 检查人员
@@ -844,16 +844,16 @@ export default {
                 this.approval.empSign = sessionStorage.getItem("emplSign");
               }
               this.approval.bizId = id;
-              if (res.data.data.existRisk != 1) {
-                this.approval.existRisk = 0;
-              } else {
-                this.approval.existRisk = 1;
-              }
-              if (res.data.data.agreeResult != 1) {
-                this.approval.agreeResult = 0;
-              } else {
-                this.approval.agreeResult = 1;
-              }
+              // if (res.data.data.existRisk != 1) {
+              //   this.approval.existRisk = 0;
+              // } else {
+              //   this.approval.existRisk = 1;
+              // }
+              // if (res.data.data.agreeResult != 1) {
+              //   this.approval.agreeResult = 0;
+              // } else {
+              //   this.approval.agreeResult = 1;
+              // }
               this.approvaList = res.data.data.aproveInfo || [];
               this.biggerThan500 = res.data.data.biggerThan500;
               this.routerMatch();
@@ -897,7 +897,8 @@ export default {
         currPost == "221" ||
         currPost == "222" ||
         currPost == "320" ||
-        currPost == "321"
+        currPost == "321" ||
+        currPost == "322"
       ) {
         data = {
           ...this.approval,
@@ -954,8 +955,7 @@ export default {
       if (currPost == "220") {
         this.showNextEmplName = false;
       }
-      console.log(this.approvaList);
-      if (currPost == "222" && this.approvaList.length == 3) {
+      if (currPost == "222" && this.approvaList.length >= 3) {
         this.showNextEmplName = false;
       }
 
@@ -1056,16 +1056,16 @@ export default {
           this.activeName = "second";
           this.approval = res.data.data;
           this.approval.bizId = bizId;
-          if (res.data.data.existRisk != 1) {
-            this.approval.existRisk = 0;
-          } else {
-            this.approval.existRisk = 1;
-          }
-          if (res.data.data.agreeResult != 1) {
-            this.approval.agreeResult = 0;
-          } else {
-            this.approval.agreeResult = 1;
-          }
+          // if (res.data.data.existRisk != 1) {
+          //   this.approval.existRisk = 0;
+          // } else {
+          //   this.approval.existRisk = 1;
+          // }
+          // if (res.data.data.agreeResult != 1) {
+          //   this.approval.agreeResult = 0;
+          // } else {
+          //   this.approval.agreeResult = 1;
+          // }
 
           if (sessionStorage.getItem("emplSign") !== "null") {
             this.approval.empSign = sessionStorage.getItem("emplSign");
