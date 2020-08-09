@@ -160,12 +160,6 @@ export default {
     detail: function(newVal, oldVal) {
       this.form = newVal;
       this.params = this.matchImage(newVal);
-      if (!newVal.executeCon) {
-        this.form.executeCon = 0;
-      }
-      if (!newVal.useAmoutByContract) {
-        this.form.useAmoutByContract = 0;
-      }
       if (!newVal.cooperate) {
         this.form.cooperate = "1";
       }

@@ -218,9 +218,6 @@ export default {
       if (!newVal.cooperate) {
         this.form.cooperate = "1";
       }
-      if (!newVal.useAmoutByContract) {
-        this.form.useAmoutByContract = 1;
-      }
     }
   },
   // 组件方法

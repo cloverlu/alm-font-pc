@@ -573,54 +573,6 @@ export default {
       if (!newVal.cooperate) {
         this.form.cooperate = "1";
       }
-      if (!newVal.yearlyInspection) {
-        this.form.yearlyInspection = 1;
-      }
-      if (!newVal.revalOfColl) {
-        this.form.revalOfColl = 1;
-      }
-      if (!newVal.ownerStruSame) {
-        this.form.ownerStruSame = 1;
-      }
-      if (!newVal.industrycChangSiut) {
-        this.form.industrycChangSiut = 1;
-      }
-      if (!newVal.mainBusIsChanged) {
-        this.form.mainBusIsChanged = 1;
-      }
-      if (!newVal.planExpandSitu) {
-        this.form.planExpandSitu = 1;
-      }
-      if (!newVal.proAndOpeAbnormalSuit) {
-        this.form.proAndOpeAbnormalSuit = 1;
-      }
-      if (!newVal.addrIsChanged) {
-        this.form.addrIsChanged = 1;
-      }
-      if (!newVal.purchaseCost) {
-        this.form.purchaseCost = 1;
-      }
-      if (!newVal.orderDecline) {
-        this.form.orderDecline = 1;
-      }
-      if (!newVal.saleAbnormalSuit) {
-        this.form.saleAbnormalSuit = 1;
-      }
-      if (!newVal.chainChange) {
-        this.form.chainChange = 1;
-      }
-      if (!newVal.dailyCostDecline) {
-        this.form.dailyCostDecline = 1;
-      }
-      if (!newVal.hiddenTroubleSitu) {
-        this.form.hiddenTroubleSitu = 1;
-      }
-      if (!newVal.cashDecline) {
-        this.form.cashDecline = 1;
-      }
-      if (!newVal.cashMatchesAndProAndOpe) {
-        this.form.cashMatchesAndProAndOpe = 1;
-      }
       if (!newVal.assitInfoForPledge || newVal.assitInfoForPledge.length == 0) {
         this.form.assitInfoForPledge = [
           {

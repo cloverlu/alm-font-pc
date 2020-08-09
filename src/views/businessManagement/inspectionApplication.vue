@@ -97,19 +97,19 @@
                 //- el-button(class="qianzi" @click="goSign" size='mini' type='primary') 签字
                 img(:src='approval.empSign' v-if='approval.empSign' class='imgContent')
                 img(:src='bg' v-if='!approval.empSign' class='imgContent')
-      .footer(v-if='status==1')
-          el-button(type="warning" v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="status==1 && approvaList.length == 0") 提交审批
-          el-button(type="warning" size='normal' v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="status==1 && approvaList.length !== 0") 提交
-          el-button(type="info" v-antiShake="[() => { onSubmitApproval('2') }, 1000]" v-if="status==1 && approvaList.length !== 0") 回退
-          el-button(type="primary" v-antiShake="[() => { onSubmitApproval('3') }, 1000]" v-if="status==1 && approvaList.length !== 0") 退回上一岗位
-    el-dialog(:visible.sync="dialogVisible" :append-to-body="true" width="800px" v-alterELDialogMarginTop="{marginTop:'30vh'}" ref="signArea")
-      .title
-        span 签名:
-      .boardBox(ref="boardBox")
-        canvas(ref="board" style="width:100%;height:100%" @mousedown="pcStart" @mousemove="pcMove" @mouseup="pcEnd" id="board")
-      .canvasBtn
-        el-button(type="primary" @click="saveCanvas") 确认签名
-        el-button(type="default" @click="clearCanvas" ref="clearCanvas") 重置签名
+      .footer(v-show='status==1')
+          el-button(type="warning" v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-show="status==1 && approvaList.length == 0") 提交审批
+          el-button(type="warning" size='normal' v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-show="status==1 && approvaList.length !== 0") 提交
+          el-button(type="info" v-antiShake="[() => { onSubmitApproval('2') }, 1000]" v-show="status==1 && approvaList.length !== 0") 回退
+          el-button(type="primary" size='normal' v-antiShake="[() => { onSubmitApproval('3') }, 1000]" v-show="status==1 && approvaList.length !== 0") 退回上一岗位
+    //- el-dialog(:visible.sync="dialogVisible" :append-to-body="true" width="800px" v-alterELDialogMarginTop="{marginTop:'30vh'}" ref="signArea")
+    //-   .title
+    //-     span 签名:
+    //-   .boardBox(ref="boardBox")
+    //-     canvas(ref="board" style="width:100%;height:100%" @mousedown="pcStart" @mousemove="pcMove" @mouseup="pcEnd" id="board")
+    //-   .canvasBtn
+    //-     el-button(type="primary" @click="saveCanvas") 确认签名
+    //-     el-button(type="default" @click="clearCanvas" ref="clearCanvas") 重置签名
 </template>
 
 <script>
@@ -242,62 +242,66 @@ export default {
             }
           }
 
+          if (res.data.data.industrycChangSiut != 0) {
+            res.data.data.industrycChangSiut = 1;
+          }
+          if (res.data.data.hiddenTroubleSitu != 0) {
+            res.data.data.hiddenTroubleSitu = 1;
+          }
+          if (res.data.data.planExpandSitu != 0) {
+            res.data.data.planExpandSitu = 1;
+          }
+
           if (!res.data.data.cooperate) {
             res.data.data.cooperate = "1";
           }
-          if (!res.data.data.useAmoutByContract) {
-            res.data.data.useAmoutByContract = 1;
+          if (res.data.data.useAmoutByContract != 1) {
+            res.data.data.useAmoutByContract = 0;
           }
-          if (!res.data.data.executeCon) {
-            res.data.data.executeCon = 1;
+          if (res.data.data.executeCon != 1) {
+            res.data.data.executeCon = 0;
           }
-          if (!res.data.data.yearlyInspection) {
+          if (res.data.data.yearlyInspection != 0) {
             res.data.data.yearlyInspection = 1;
           }
-          if (!res.data.data.revalOfColl) {
+          if (res.data.data.revalOfColl != 0) {
             res.data.data.revalOfColl = 1;
           }
 
-          if (!res.data.data.ownerStruSame) {
+          if (res.data.data.ownerStruSame != 0) {
             res.data.data.ownerStruSame = 1;
           }
-          if (!res.data.data.industrycChangSiut) {
-            res.data.data.industrycChangSiut = 1;
-          }
-          if (!res.data.data.mainBusIsChanged) {
+
+          if (res.data.data.mainBusIsChanged != 0) {
             res.data.data.mainBusIsChanged = 1;
           }
-          if (!res.data.data.planExpandSitu) {
-            res.data.data.planExpandSitu = 1;
-          }
-          if (!res.data.data.proAndOpeAbnormalSuit) {
+
+          if (res.data.data.proAndOpeAbnormalSuit != 0) {
             res.data.data.proAndOpeAbnormalSuit = 1;
           }
-          if (!res.data.data.addrIsChanged) {
+          if (res.data.data.addrIsChanged != 0) {
             res.data.data.addrIsChanged = 1;
           }
-          if (!res.data.data.purchaseCost) {
+          if (res.data.data.purchaseCost != 0) {
             res.data.data.purchaseCost = 1;
           }
-          if (!res.data.data.orderDecline) {
+          if (res.data.data.orderDecline != 0) {
             res.data.data.orderDecline = 1;
           }
-          if (!res.data.data.saleAbnormalSuit) {
+          if (res.data.data.saleAbnormalSuit != 0) {
             res.data.data.saleAbnormalSuit = 1;
           }
-          if (!res.data.data.chainChange) {
+          if (res.data.data.chainChange != 0) {
             res.data.data.chainChange = 1;
           }
-          if (!res.data.data.dailyCostDecline) {
+          if (res.data.data.dailyCostDecline != 0) {
             res.data.data.dailyCostDecline = 1;
           }
-          if (!res.data.data.hiddenTroubleSitu) {
-            res.data.data.hiddenTroubleSitu = 1;
-          }
-          if (!res.data.data.cashDecline) {
+
+          if (res.data.data.cashDecline != 0) {
             res.data.data.cashDecline = 1;
           }
-          if (!res.data.data.cashMatchesAndProAndOpe) {
+          if (res.data.data.cashMatchesAndProAndOpe != 0) {
             res.data.data.cashMatchesAndProAndOpe = 1;
           }
 
@@ -366,9 +370,6 @@ export default {
           }
           if (!res.data.data.financeInfo) {
             res.data.data.financeInfo = {
-              industrycChangSiut: 1, //企业所在行业是否发生重大不利变化
-              hiddenTroubleSitu: 1, //生产经营是否存在安全隐患
-              planExpandSitu: 1, //企业是否有与主业无关的扩张计划
               financeClassification: "1",
               stockLastBalance: "", // 上次全面检查或调查时余额--- 存货
               stockChangSitu: "", //本次检查存货变动情况
@@ -438,62 +439,66 @@ export default {
               res.data.data[key] = "";
             }
           }
+          if (res.data.data.industrycChangSiut != 0) {
+            res.data.data.industrycChangSiut = 1;
+          }
+          if (res.data.data.hiddenTroubleSitu != 0) {
+            res.data.data.hiddenTroubleSitu = 1;
+          }
+          if (res.data.data.planExpandSitu != 0) {
+            res.data.data.planExpandSitu = 1;
+          }
+
           if (!res.data.data.cooperate) {
             res.data.data.cooperate = "1";
           }
-          if (!res.data.data.useAmoutByContract) {
-            res.data.data.useAmoutByContract = 1;
+          if (res.data.data.useAmoutByContract != 1) {
+            res.data.data.useAmoutByContract = 0;
           }
-          if (!res.data.data.executeCon) {
-            res.data.data.executeCon = 1;
+          if (res.data.data.executeCon != 1) {
+            res.data.data.executeCon = 0;
           }
-          if (!res.data.data.yearlyInspection) {
+          if (res.data.data.yearlyInspection != 0) {
             res.data.data.yearlyInspection = 1;
           }
-          if (!res.data.data.revalOfColl) {
+          if (res.data.data.revalOfColl != 0) {
             res.data.data.revalOfColl = 1;
           }
 
-          if (!res.data.data.ownerStruSame) {
+          if (res.data.data.ownerStruSame != 0) {
             res.data.data.ownerStruSame = 1;
           }
-          if (!res.data.data.industrycChangSiut) {
-            res.data.data.industrycChangSiut = 1;
-          }
-          if (!res.data.data.mainBusIsChanged) {
+
+          if (res.data.data.mainBusIsChanged != 0) {
             res.data.data.mainBusIsChanged = 1;
           }
-          if (!res.data.data.planExpandSitu) {
-            res.data.data.planExpandSitu = 1;
-          }
-          if (!res.data.data.proAndOpeAbnormalSuit) {
+
+          if (res.data.data.proAndOpeAbnormalSuit != 0) {
             res.data.data.proAndOpeAbnormalSuit = 1;
           }
-          if (!res.data.data.addrIsChanged) {
+          if (res.data.data.addrIsChanged != 0) {
             res.data.data.addrIsChanged = 1;
           }
-          if (!res.data.data.purchaseCost) {
+          if (res.data.data.purchaseCost != 0) {
             res.data.data.purchaseCost = 1;
           }
-          if (!res.data.data.orderDecline) {
+          if (res.data.data.orderDecline != 0) {
             res.data.data.orderDecline = 1;
           }
-          if (!res.data.data.saleAbnormalSuit) {
+          if (res.data.data.saleAbnormalSuit != 0) {
             res.data.data.saleAbnormalSuit = 1;
           }
-          if (!res.data.data.chainChange) {
+          if (res.data.data.chainChange != 0) {
             res.data.data.chainChange = 1;
           }
-          if (!res.data.data.dailyCostDecline) {
+          if (res.data.data.dailyCostDecline != 0) {
             res.data.data.dailyCostDecline = 1;
           }
-          if (!res.data.data.hiddenTroubleSitu) {
-            res.data.data.hiddenTroubleSitu = 1;
-          }
-          if (!res.data.data.cashDecline) {
+
+          if (res.data.data.cashDecline != 0) {
             res.data.data.cashDecline = 1;
           }
-          if (!res.data.data.cashMatchesAndProAndOpe) {
+          if (res.data.data.cashMatchesAndProAndOpe != 0) {
             res.data.data.cashMatchesAndProAndOpe = 1;
           }
 
@@ -563,9 +568,6 @@ export default {
           if (!res.data.data.financeInfo) {
             res.data.data.financeInfo = {
               financeClassification: "1",
-              industrycChangSiut: 1, //企业所在行业是否发生重大不利变化
-              hiddenTroubleSitu: 1, //生产经营是否存在安全隐患
-              planExpandSitu: 1, //企业是否有与主业无关的扩张计划
               stockLastBalance: "", // 上次全面检查或调查时余额--- 存货
               stockChangSitu: "", //本次检查存货变动情况
               dailyExpenLastBalance: "", //上次全面检查或调查时余额---水、电、煤、气费其中一项或多项
@@ -885,12 +887,12 @@ export default {
         }
       });
     },
-    onSubmitApproval(type) {
+    onSubmitApproval(subType) {
       const { currPost } = this.$route.query;
       this.approval.approveTime = this.$moment(new Date()).format(
         "YYYY-MM-DD HH:mm:ss"
       );
-      this.approval.opType = type;
+      this.approval.opType = subType;
       let data;
       if (
         currPost == "220" ||
@@ -919,7 +921,7 @@ export default {
             message: "操作成功",
             type: "success"
           });
-          if (type != "0") {
+          if (subType != "0") {
             setTimeout(() => {
               history.go(-1);
             }, 500);
