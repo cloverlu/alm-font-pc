@@ -660,6 +660,7 @@ export default {
     detail: function(newVal, oldVal) {
       console.log(newVal);
       this.form = newVal;
+      this.form.bizType = "m3";
       if (newVal.securityKind.indexOf("5") != -1) {
         this.securityKindMsgShow = true;
       }
