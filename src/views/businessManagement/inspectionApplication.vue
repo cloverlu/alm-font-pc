@@ -65,8 +65,9 @@
                 //- el-input(v-model="item.agreeResult" disabled)
 
         el-card(class='card' v-if='status==1')
-          el-button(type="primary" v-antiShake="[() => { onSubmitApproval('0') }, 1000]" v-if="status==1" class='save') 保存
-          el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px")
+          .btnRight
+            el-button(type="primary" size='normal' v-antiShake="[() => { onSubmitApproval('0') }, 1000]" v-show="status==1" class='save') 保存
+          el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px;width:80%")
             el-row
               el-col(:span="24")
                 el-form-item(label="客户名称:" class="formItem2")
@@ -81,22 +82,29 @@
               el-col(:span="24")
                 el-form-item(label="上报时间:" class="formItem2")
                   span {{this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss")}}
-          components(:is="commpoentName" ref="commpoent" :approveDetail='approval' v-if='approveContent')
-          el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px" v-if='!approveContent')
-            el-form-item(label="是否存在风险预警信号:" class="formItem2")
-              el-select(v-model="approval.existRisk" placeholder="请选择" style='width:100%')
-                el-option(label="是" value="1")
-                el-option(label="否" value="0")
-            el-form-item(label="预警信号说明:" class="formItem2")
-              el-input(v-model="approval.riskMsg" type="textarea" :rows="2" clearable)
-            el-form-item(label="检查结论及措施建议:" class="formItem2")
-              el-input(v-model="approval.suggest" type="textarea" :rows="2" clearable)
-          el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px")
-            el-col(:span="24")
-              el-form-item(label="检查人员:" class="formItem2")
-                //- el-button(class="qianzi" @click="goSign" size='mini' type='primary') 签字
-                img(:src='approval.empSign' v-if='approval.empSign' class='imgContent')
-                img(:src='bg' v-if='!approval.empSign' class='imgContent')
+          components(:is="commpoentName" ref="commpoent" :approveDetail='approval' v-if='!approveContent')
+          el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px;width:80%" v-if='approveContent')
+            el-row
+              el-col(:span="24")
+                el-form-item(label="是否存在风险预警信号:" class="formItem2")
+                  el-select(v-model="approval.existRisk" placeholder="请选择" style='width:100%')
+                    el-option(label="是" value="1")
+                    el-option(label="否" value="0")
+              el-col(:span="24")
+                el-form-item(label="发生阶段:" class="formItem2" v-if="form.bizType == 'm4'")
+                  el-select(v-model="approval.riskStage" placeholder="请选择" style='width:100%')
+                    el-option(v-for="item in stageArr" :key="item.value" :label="item.label" :value="item.value")
+              el-col(:span="24")
+                el-form-item(label="预警信号说明:" class="formItem2")
+                  el-input(v-model="approval.riskMsg" type="textarea" :rows="2" clearable)
+              el-col(:span="24")
+                el-form-item(label="检查结论及措施建议:" class="formItem2")
+                  el-input(v-model="approval.suggest" type="textarea" :rows="2" clearable)
+              el-col(:span="24")
+                el-form-item(label="检查人员:" class="formItem2")
+                  //- el-button(class="qianzi" @click="goSign" size='mini' type='primary') 签字
+                  img(:src='approval.empSign' v-if='approval.empSign' class='imgContent')
+                  img(:src='bg' v-if='!approval.empSign' class='imgContent')
       .footer(v-show='status==1')
           el-button(type="warning" v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-show="status==1 && approvaList.length == 0") 提交审批
           el-button(type="warning" size='normal' v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-show="status==1 && approvaList.length !== 0") 提交
@@ -173,6 +181,20 @@ export default {
         // card 1
         bizType: "m1" // 检查类型
       },
+      stageArr: [
+        {
+          label: "第一阶段",
+          value: "一"
+        },
+        {
+          label: "第二阶段",
+          value: "二"
+        },
+        {
+          label: "第三阶段",
+          value: "三"
+        }
+      ],
       type: 1,
       bg: bg,
       canChange: 1,
@@ -184,6 +206,7 @@ export default {
         nextEmplName: "", // 业务接收人
         approveTime: dateTime, // 上报时间
         existRisk: "1", // 是否存在风险预警信号
+        riskStage: "一", //
         riskMsg: "", // 预警信号说明
         suggest: "", // 检查结论及措施建议
         empSign: "" // 检查人员
@@ -201,7 +224,7 @@ export default {
       params: {},
       signName: "",
       allBtn: false,
-      approveContent: false,
+      approveContent: true,
       submitBtn: true,
       commpoentName: "",
       loanBusiness: {},
@@ -948,8 +971,10 @@ export default {
         bizType
       } = this.$route.query;
       // console.log(currPost, biggerThan500, belongBranch, bizType);
-      if (currPost) {
+      if (!currPost || currPost == "323" || currPost == "223") {
         this.approveContent = true;
+      } else {
+        this.approveContent = false;
       }
       if (currPost == "320" && biggerThan500 == 0) {
         this.showNextEmplName = false;
@@ -1443,7 +1468,8 @@ export default {
     // }
     .formItem2 {
       box-sizing: border-box;
-      width: 542px;
+      width: 60%;
+      max-width: 542px;
       margin: 10px 0;
       padding-right: 20px;
       /deep/.el-form-item__label {
@@ -1480,10 +1506,24 @@ export default {
       width: 100%;
       margin-bottom: 10px;
       position: relative;
-      .save {
+      .btnRight {
         position: absolute;
-        right: 10%;
+        right: 5%;
+        width: 100px;
+        height: 55px;
+        line-height: 55px;
+        text-align: center;
+
+        .el-button {
+          span {
+            font-size: 16px;
+          }
+        }
       }
+      // .save {
+      //   position: absolute;
+      //   right: 10%;
+      // }
       .cardTitle {
         margin: 0;
         margin-bottom: 10px;

@@ -341,7 +341,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="征信记录是否有异常变化 :" style="width:96%")
-              el-select(v-model="form.creditInfo.existCreditChage6" :disabled="type == 2" placeholder="请选择" style="width:100%")
+              el-select(v-model="form.creditInfo.existCreditChager6" :disabled="type == 2" placeholder="请选择" style="width:100%")
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
         el-row(:gutter="20")
           el-col(:span="12")
