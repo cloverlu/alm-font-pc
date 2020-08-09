@@ -26,8 +26,8 @@
           el-input(v-model="form.lineAmout" :disabled="type == 2" clearable)
         el-form-item(label=" " class="formItem2" )
           el-input(v-model="form.otherSecurityKindMsg" v-if='securityKindMsgShow' type="textarea" :rows="3" clearable :disabled="type == 2")
-        el-form-item(label="授信余额 :" class="formItem2")
-          el-input(v-model="form.lineBalance" :disabled="type == 2" clearable)
+        el-form-item(label="贷款余额 :" class="formItem2")
+          el-input(v-model="form.loanBalance" disabled clearable)
         el-form-item(label="还款方式 :" class="formItem2")
           el-input(v-model="form.repayKind" clearable :disabled="type == 2")
 
@@ -539,7 +539,7 @@ export default {
         securityKind: [], //担保方式
         otherSecurityKindMsg: "", //担保方式说明
         lineAmout: "", //授信金额
-        lineBalance: "", //授信余额
+        loanBalance: "", //贷款余额
         repayKind: "", //还款方式
 
         // card 2
