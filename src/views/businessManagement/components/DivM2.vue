@@ -594,6 +594,7 @@ export default {
   watch: {
     detail: function(newVal, oldVal) {
       this.form = newVal;
+      this.form.bizType = "m2";
       this.params = this.matchImage(newVal);
       if (!newVal.creditInfo) {
         this.form.creditInfo.queryDateForPer = "";
