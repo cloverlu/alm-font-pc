@@ -1266,7 +1266,7 @@ export default {
           if (sessionStorage.getItem("emplSign") !== "null") {
             this.approval.empSign = sessionStorage.getItem("emplSign");
           }
-          this.approval.bizId = id;
+          this.approval.bizId = bizId;
           this.approvaList = res.data.data.aproveInfo || [];
           this.biggerThan500 = res.data.data.biggerThan500;
           const pa = {
