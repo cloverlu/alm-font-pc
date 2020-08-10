@@ -360,6 +360,9 @@ export default {
     onSubmit: function() {
       getReportFormStatistics(this, {
         ...filterParams(this.searchForm),
+        orgName: this.searchForm.orgName
+          ? this.searchForm.orgName
+          : sessionStorage.getItem("orgName"),
         pageSize: this.pageSize,
         pageNo: this.pageNo,
         ...this.paramsDetail

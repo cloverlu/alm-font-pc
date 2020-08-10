@@ -384,12 +384,26 @@
             el-form-item(label="生产经营是否存在安全隐患 :" style="width:96%")
               el-select(v-model="form.hiddenTroubleSitu" :disabled="type == 2" placeholder="请选择" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
+        el-row(:gutter="20")
+          el-col(:span="12")
+            el-form-item(label="" style="width:96%")
+              el-input(v-model="form.industrycChangSiutMsg" type="textarea" :rows="3" :disabled="type == 2" placeholder="请输入" style="width:100%" clearable)
+          el-col(:span="12")
+            el-form-item(label="" style="width:96%")
+              el-input(v-model="form.hiddenTroubleSituMsg" type="textarea" :rows="3" :disabled="type == 2" placeholder="请输入" style="width:100%" clearable)
+        el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="企业是否有与主业无关的扩张计划 :" style="width:96%")
               el-select(v-model="form.planExpandSitu" :disabled="type == 2" placeholder="请选择" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
-            el-form-item(label="其他 :" style="width:96%")
+            el-form-item(label="其他 :" style="width:96%;marginTop:20px")
+        el-row(:gutter="20")
+          el-col(:span="12")
+            el-form-item(label="" style="width:96%")
+              el-input(v-model="form.planExpandSituMsg" type="textarea" :rows="3" :disabled="type == 2" placeholder="请输入" style="width:100%" clearable)
+          el-col(:span="12")
+            el-form-item(label="" style="width:96%")
               el-input(v-model="form.otherSitu" :disabled="type == 2" type="textarea" :rows="3" clearable)
         .blueTitle1 担保情况
         el-row(:gutter="20")
@@ -638,8 +652,11 @@ export default {
         },
         // 现场检查其他要点
         industrycChangSiut: 1, //企业所在行业是否发生重大不利变化
+        industrycChangSiutMsg: "", //
         hiddenTroubleSitu: 1, //生产经营是否存在安全隐患
+        hiddenTroubleSituMsg: "", //
         planExpandSitu: 1, //企业是否有与主业无关的扩张计划
+        planExpandSituMsg: "", //
         otherSitu: "", //其他
         collEstimateDate: "", //上次抵质押物评估或重估日期
         collEstimateValue: "" //上次抵质押物评估或重估金额

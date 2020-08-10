@@ -265,67 +265,152 @@ export default {
             }
           }
 
-          if (res.data.data.industrycChangSiut != 0) {
+          if (
+            !res.data.data.industrycChangSiut ||
+            res.data.data.industrycChangSiut != 0
+          ) {
             res.data.data.industrycChangSiut = 1;
+          } else {
+            res.data.data.industrycChangSiut = 0;
           }
-          if (res.data.data.hiddenTroubleSitu != 0) {
+
+          if (
+            !res.data.data.hiddenTroubleSitu ||
+            res.data.data.hiddenTroubleSitu != 0
+          ) {
             res.data.data.hiddenTroubleSitu = 1;
+          } else {
+            res.data.data.hiddenTroubleSitu = 0;
           }
-          if (res.data.data.planExpandSitu != 0) {
+
+          if (
+            !res.data.data.planExpandSitu ||
+            res.data.data.planExpandSitu != 0
+          ) {
             res.data.data.planExpandSitu = 1;
+          } else {
+            res.data.data.planExpandSitu = 0;
           }
 
           if (!res.data.data.cooperate) {
             res.data.data.cooperate = "1";
           }
-          if (res.data.data.useAmoutByContract != 1) {
+
+          if (
+            !res.data.data.useAmoutByContract ||
+            res.data.data.useAmoutByContract != 0
+          ) {
+            res.data.data.useAmoutByContract = 1;
+          } else {
             res.data.data.useAmoutByContract = 0;
           }
-          if (res.data.data.executeCon != 1) {
+
+          if (!res.data.data.executeCon || res.data.data.executeCon != 0) {
+            res.data.data.executeCon = 1;
+          } else {
             res.data.data.executeCon = 0;
           }
-          if (res.data.data.yearlyInspection != 0) {
+
+          if (
+            !res.data.data.yearlyInspection ||
+            res.data.data.yearlyInspection != 0
+          ) {
             res.data.data.yearlyInspection = 1;
+          } else {
+            res.data.data.yearlyInspection = 0;
           }
-          if (res.data.data.revalOfColl != 0) {
+
+          if (!res.data.data.revalOfColl || res.data.data.revalOfColl != 0) {
             res.data.data.revalOfColl = 1;
+          } else {
+            res.data.data.revalOfColl = 0;
           }
 
-          if (res.data.data.ownerStruSame != 0) {
+          if (
+            !res.data.data.ownerStruSame ||
+            res.data.data.ownerStruSame != 0
+          ) {
             res.data.data.ownerStruSame = 1;
+          } else {
+            res.data.data.ownerStruSame = 0;
           }
 
-          if (res.data.data.mainBusIsChanged != 0) {
+          if (
+            !res.data.data.mainBusIsChanged ||
+            res.data.data.mainBusIsChanged != 0
+          ) {
             res.data.data.mainBusIsChanged = 1;
+          } else {
+            res.data.data.mainBusIsChanged = 0;
           }
 
-          if (res.data.data.proAndOpeAbnormalSuit != 0) {
+          if (
+            !res.data.data.proAndOpeAbnormalSuit ||
+            res.data.data.proAndOpeAbnormalSuit != 0
+          ) {
             res.data.data.proAndOpeAbnormalSuit = 1;
-          }
-          if (res.data.data.addrIsChanged != 0) {
-            res.data.data.addrIsChanged = 1;
-          }
-          if (res.data.data.purchaseCost != 0) {
-            res.data.data.purchaseCost = 1;
-          }
-          if (res.data.data.orderDecline != 0) {
-            res.data.data.orderDecline = 1;
-          }
-          if (res.data.data.saleAbnormalSuit != 0) {
-            res.data.data.saleAbnormalSuit = 1;
-          }
-          if (res.data.data.chainChange != 0) {
-            res.data.data.chainChange = 1;
-          }
-          if (res.data.data.dailyCostDecline != 0) {
-            res.data.data.dailyCostDecline = 1;
+          } else {
+            res.data.data.proAndOpeAbnormalSuit = 0;
           }
 
-          if (res.data.data.cashDecline != 0) {
-            res.data.data.cashDecline = 1;
+          if (
+            !res.data.data.addrIsChanged ||
+            res.data.data.addrIsChanged != 0
+          ) {
+            res.data.data.addrIsChanged = 1;
+          } else {
+            res.data.data.addrIsChanged = 0;
           }
-          if (res.data.data.cashMatchesAndProAndOpe != 0) {
+
+          if (!res.data.data.purchaseCost || res.data.data.purchaseCost != 0) {
+            res.data.data.purchaseCost = 1;
+          } else {
+            res.data.data.purchaseCost = 0;
+          }
+
+          if (!res.data.data.orderDecline || res.data.data.orderDecline != 0) {
+            res.data.data.orderDecline = 1;
+          } else {
+            res.data.data.orderDecline = 0;
+          }
+
+          if (
+            !res.data.data.saleAbnormalSuit ||
+            res.data.data.saleAbnormalSuit != 0
+          ) {
+            res.data.data.saleAbnormalSuit = 1;
+          } else {
+            res.data.data.saleAbnormalSuit = 0;
+          }
+
+          if (!res.data.data.chainChange || res.data.data.chainChange != 0) {
+            res.data.data.chainChange = 1;
+          } else {
+            res.data.data.chainChange = 0;
+          }
+
+          if (
+            !res.data.data.dailyCostDecline ||
+            res.data.data.dailyCostDecline != 0
+          ) {
+            res.data.data.dailyCostDecline = 1;
+          } else {
+            res.data.data.dailyCostDecline = 0;
+          }
+
+          if (!res.data.data.cashDecline || res.data.data.cashDecline != 0) {
+            res.data.data.cashDecline = 1;
+          } else {
+            res.data.data.cashDecline = 0;
+          }
+
+          if (
+            !res.data.data.cashMatchesAndProAndOpe ||
+            res.data.data.cashMatchesAndProAndOpe != 0
+          ) {
             res.data.data.cashMatchesAndProAndOpe = 1;
+          } else {
+            res.data.data.cashMatchesAndProAndOpe = 0;
           }
 
           if (!res.data.data.assetCreditInfo) {
@@ -391,6 +476,7 @@ export default {
               existCreditChager6: 1
             };
           }
+
           if (!res.data.data.financeInfo) {
             res.data.data.financeInfo = {
               financeClassification: "1",
@@ -462,67 +548,153 @@ export default {
               res.data.data[key] = "";
             }
           }
-          if (res.data.data.industrycChangSiut != 0) {
+
+          if (
+            !res.data.data.industrycChangSiut ||
+            res.data.data.industrycChangSiut != 0
+          ) {
             res.data.data.industrycChangSiut = 1;
+          } else {
+            res.data.data.industrycChangSiut = 0;
           }
-          if (res.data.data.hiddenTroubleSitu != 0) {
+
+          if (
+            !res.data.data.hiddenTroubleSitu ||
+            res.data.data.hiddenTroubleSitu != 0
+          ) {
             res.data.data.hiddenTroubleSitu = 1;
+          } else {
+            res.data.data.hiddenTroubleSitu = 0;
           }
-          if (res.data.data.planExpandSitu != 0) {
+
+          if (
+            !res.data.data.planExpandSitu ||
+            res.data.data.planExpandSitu != 0
+          ) {
             res.data.data.planExpandSitu = 1;
+          } else {
+            res.data.data.planExpandSitu = 0;
           }
 
           if (!res.data.data.cooperate) {
             res.data.data.cooperate = "1";
           }
-          if (res.data.data.useAmoutByContract != 1) {
+
+          if (
+            !res.data.data.useAmoutByContract ||
+            res.data.data.useAmoutByContract != 0
+          ) {
+            res.data.data.useAmoutByContract = 1;
+          } else {
             res.data.data.useAmoutByContract = 0;
           }
-          if (res.data.data.executeCon != 1) {
+
+          if (!res.data.data.executeCon || res.data.data.executeCon != 0) {
+            res.data.data.executeCon = 1;
+          } else {
             res.data.data.executeCon = 0;
           }
-          if (res.data.data.yearlyInspection != 0) {
+
+          if (
+            !res.data.data.yearlyInspection ||
+            res.data.data.yearlyInspection != 0
+          ) {
             res.data.data.yearlyInspection = 1;
+          } else {
+            res.data.data.yearlyInspection = 0;
           }
-          if (res.data.data.revalOfColl != 0) {
+
+          if (!res.data.data.revalOfColl || res.data.data.revalOfColl != 0) {
             res.data.data.revalOfColl = 1;
+          } else {
+            res.data.data.revalOfColl = 0;
           }
 
-          if (res.data.data.ownerStruSame != 0) {
+          if (
+            !res.data.data.ownerStruSame ||
+            res.data.data.ownerStruSame != 0
+          ) {
             res.data.data.ownerStruSame = 1;
+          } else {
+            res.data.data.ownerStruSame = 0;
           }
 
-          if (res.data.data.mainBusIsChanged != 0) {
+          if (
+            !res.data.data.mainBusIsChanged ||
+            res.data.data.mainBusIsChanged != 0
+          ) {
             res.data.data.mainBusIsChanged = 1;
+          } else {
+            res.data.data.mainBusIsChanged = 0;
           }
 
-          if (res.data.data.proAndOpeAbnormalSuit != 0) {
+          if (
+            !res.data.data.proAndOpeAbnormalSuit ||
+            res.data.data.proAndOpeAbnormalSuit != 0
+          ) {
             res.data.data.proAndOpeAbnormalSuit = 1;
-          }
-          if (res.data.data.addrIsChanged != 0) {
-            res.data.data.addrIsChanged = 1;
-          }
-          if (res.data.data.purchaseCost != 0) {
-            res.data.data.purchaseCost = 1;
-          }
-          if (res.data.data.orderDecline != 0) {
-            res.data.data.orderDecline = 1;
-          }
-          if (res.data.data.saleAbnormalSuit != 0) {
-            res.data.data.saleAbnormalSuit = 1;
-          }
-          if (res.data.data.chainChange != 0) {
-            res.data.data.chainChange = 1;
-          }
-          if (res.data.data.dailyCostDecline != 0) {
-            res.data.data.dailyCostDecline = 1;
+          } else {
+            res.data.data.proAndOpeAbnormalSuit = 0;
           }
 
-          if (res.data.data.cashDecline != 0) {
-            res.data.data.cashDecline = 1;
+          if (
+            !res.data.data.addrIsChanged ||
+            res.data.data.addrIsChanged != 0
+          ) {
+            res.data.data.addrIsChanged = 1;
+          } else {
+            res.data.data.addrIsChanged = 0;
           }
-          if (res.data.data.cashMatchesAndProAndOpe != 0) {
+
+          if (!res.data.data.purchaseCost || res.data.data.purchaseCost != 0) {
+            res.data.data.purchaseCost = 1;
+          } else {
+            res.data.data.purchaseCost = 0;
+          }
+
+          if (!res.data.data.orderDecline || res.data.data.orderDecline != 0) {
+            res.data.data.orderDecline = 1;
+          } else {
+            res.data.data.orderDecline = 0;
+          }
+
+          if (
+            !res.data.data.saleAbnormalSuit ||
+            res.data.data.saleAbnormalSuit != 0
+          ) {
+            res.data.data.saleAbnormalSuit = 1;
+          } else {
+            res.data.data.saleAbnormalSuit = 0;
+          }
+
+          if (!res.data.data.chainChange || res.data.data.chainChange != 0) {
+            res.data.data.chainChange = 1;
+          } else {
+            res.data.data.chainChange = 0;
+          }
+
+          if (
+            !res.data.data.dailyCostDecline ||
+            res.data.data.dailyCostDecline != 0
+          ) {
+            res.data.data.dailyCostDecline = 1;
+          } else {
+            res.data.data.dailyCostDecline = 0;
+          }
+
+          if (!res.data.data.cashDecline || res.data.data.cashDecline != 0) {
+            res.data.data.cashDecline = 1;
+          } else {
+            res.data.data.cashDecline = 0;
+          }
+
+          if (
+            !res.data.data.cashMatchesAndProAndOpe ||
+            res.data.data.cashMatchesAndProAndOpe != 0
+          ) {
             res.data.data.cashMatchesAndProAndOpe = 1;
+          } else {
+            res.data.data.cashMatchesAndProAndOpe = 0;
           }
 
           if (!res.data.data.assetCreditInfo) {
