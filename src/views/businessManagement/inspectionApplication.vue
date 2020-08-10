@@ -88,8 +88,7 @@
               el-col(:span="24")
                 el-form-item(label="是否存在风险预警信号:" class="formItem2")
                   el-select(v-model="approval.existRisk" placeholder="请选择" style='width:100%')
-                    el-option(label="是" value="1")
-                    el-option(label="否" value="0")
+                    el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
               el-col(:span="24")
                 el-form-item(label="发生阶段:" class="formItem2" v-if="form.bizType == 'm4'")
                   el-select(v-model="approval.riskStage" placeholder="请选择" style='width:100%')
@@ -181,6 +180,16 @@ export default {
         // card 1
         bizType: "m1" // 检查类型
       },
+      options: [
+        {
+          label: "是",
+          value: 1
+        },
+        {
+          label: "否",
+          value: 0
+        }
+      ],
       stageArr: [
         {
           label: "第一阶段",
@@ -205,7 +214,7 @@ export default {
         nextLinkName: "", // 业务上报至
         nextEmplName: "", // 业务接收人
         approveTime: dateTime, // 上报时间
-        existRisk: "1", // 是否存在风险预警信号
+        existRisk: 1, // 是否存在风险预警信号
         riskStage: "一", //
         riskMsg: "", // 预警信号说明
         suggest: "", // 检查结论及措施建议
@@ -1035,25 +1044,18 @@ export default {
           const currPost1 = this.currPost1;
           setTimeout(() => {
             approveDetail(this, { bizId: id }).then(res => {
+              this.routerMatch();
               this.activeName = "second";
+              if (this.approveContent) {
+                res.data.data.existRisk = 1;
+              }
               this.approval = res.data.data;
               if (sessionStorage.getItem("emplSign") !== "null") {
                 this.approval.empSign = sessionStorage.getItem("emplSign");
               }
               this.approval.bizId = id;
-              // if (res.data.data.existRisk != 1) {
-              //   this.approval.existRisk = 0;
-              // } else {
-              //   this.approval.existRisk = 1;
-              // }
-              // if (res.data.data.agreeResult != 1) {
-              //   this.approval.agreeResult = 0;
-              // } else {
-              //   this.approval.agreeResult = 1;
-              // }
               this.approvaList = res.data.data.aproveInfo || [];
               this.biggerThan500 = res.data.data.biggerThan500;
-              this.routerMatch();
               const { currPost } = this.$route.query;
               let pa;
               if (currPost) {
@@ -1071,6 +1073,9 @@ export default {
               }
               getNextEmplName(this, pa).then(ress => {
                 this.nextEmplNameList = ress.data.data.nextEmplNameList;
+                if (ress.data.data.nextEmplNameList.length) {
+                  this.approval.nextEmplName = this.nextEmplNameList[0];
+                }
               });
             });
           }, 500);
@@ -1252,26 +1257,18 @@ export default {
       const { bizId, currPost } = this.$route.query;
       if (this.activeName == "second") {
         approveDetail(this, { bizId }).then(res => {
+          this.routerMatch();
           this.activeName = "second";
+          if (this.approveContent) {
+            res.data.data.existRisk = 1;
+          }
           this.approval = res.data.data;
-          this.approval.bizId = bizId;
-          // if (res.data.data.existRisk != 1) {
-          //   this.approval.existRisk = 0;
-          // } else {
-          //   this.approval.existRisk = 1;
-          // }
-          // if (res.data.data.agreeResult != 1) {
-          //   this.approval.agreeResult = 0;
-          // } else {
-          //   this.approval.agreeResult = 1;
-          // }
-
           if (sessionStorage.getItem("emplSign") !== "null") {
             this.approval.empSign = sessionStorage.getItem("emplSign");
           }
+          this.approval.bizId = id;
           this.approvaList = res.data.data.aproveInfo || [];
           this.biggerThan500 = res.data.data.biggerThan500;
-          this.routerMatch();
           const pa = {
             orgName: res.data.data.custOrg,
             currPost,
@@ -1280,6 +1277,9 @@ export default {
           if (this.status == 1) {
             getNextEmplName(this, pa).then(ress => {
               this.nextEmplNameList = ress.data.data.nextEmplNameList;
+              if (ress.data.data.nextEmplNameList.length) {
+                this.approval.nextEmplName = this.nextEmplNameList[0];
+              }
             });
           }
         });

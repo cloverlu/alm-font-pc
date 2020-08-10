@@ -184,7 +184,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/style/global.scss";
 .login {
   width: 100%;
   height: 100%;
@@ -268,9 +267,10 @@ export default {
               background: rgba(244, 244, 248, 1);
             }
             /deep/.el-input__inner {
+              height: 100%;
+              line-height: 75px;
               background: rgba(244, 244, 248, 1);
               border: none;
-              height: 100%;
               font-size: 24px;
               color: rgba(158, 158, 166, 1);
             }
@@ -300,6 +300,25 @@ export default {
         }
       }
     }
+  }
+}
+</style>
+
+<style lang="scss">
+.userInfo {
+  .el-input-group__prepend {
+    height: 100%;
+    border: none;
+    background: rgba(244, 244, 248, 1);
+  }
+  .el-input__inner {
+    height: 75px !important;
+    line-height: 75px;
+    background: rgba(244, 244, 248, 1);
+    border: none;
+    font-size: 24px;
+    overflow: hidden;
+    color: rgba(158, 158, 166, 1);
   }
 }
 </style>
