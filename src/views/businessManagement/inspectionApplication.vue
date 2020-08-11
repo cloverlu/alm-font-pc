@@ -1045,6 +1045,7 @@ export default {
           const currPost1 = this.currPost1;
           setTimeout(() => {
             approveDetail(this, { bizId: id }).then(res => {
+              this.approvaList = res.data.data.aproveInfo || [];
               this.routerMatch();
               this.activeName = "second";
               if (this.approveContent) {
@@ -1055,7 +1056,6 @@ export default {
                 this.approval.empSign = sessionStorage.getItem("emplSign");
               }
               this.approval.bizId = id;
-              this.approvaList = res.data.data.aproveInfo || [];
               this.biggerThan500 = res.data.data.biggerThan500;
               const { currPost } = this.$route.query;
               let pa;
@@ -1258,6 +1258,7 @@ export default {
       const { bizId, currPost } = this.$route.query;
       if (this.activeName == "second") {
         approveDetail(this, { bizId }).then(res => {
+          this.approvaList = res.data.data.aproveInfo || [];
           this.routerMatch();
           this.activeName = "second";
           if (this.approveContent) {
@@ -1268,7 +1269,6 @@ export default {
             this.approval.empSign = sessionStorage.getItem("emplSign");
           }
           this.approval.bizId = bizId;
-          this.approvaList = res.data.data.aproveInfo || [];
           this.biggerThan500 = res.data.data.biggerThan500;
           const pa = {
             orgName: res.data.data.custOrg,
