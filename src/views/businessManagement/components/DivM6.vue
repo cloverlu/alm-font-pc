@@ -342,6 +342,25 @@
               span(class='title') 押品检查小结
             el-form-item(label=" " class="formItem2")
               el-input(v-model="form.summaryForAssit" :disabled="type == 2" type="textarea" :rows="3" clearable)
+      
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') 检查结论
+        .blueTitle1 检查结论(若有)
+        el-row(:gutter="20")
+          el-col(:span="12")
+            el-form-item(label="是否建议调整额度 :" class="formItem2")
+              el-select(v-model="form.isAdjustLine" :disabled="type == 2" style="width:100%" clearable)
+                el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
+          el-col(:span="12")
+            el-form-item(label="额度调整为 :" class="formItem2")
+              el-input(v-model="form.adjustLine" :disabled="type == 2" style="width:100%" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
+        el-row(:gutter="20")
+          el-col(:span="12")
+            el-form-item(label="检查结论及建议 " class="formItem2")
+              el-input(v-model="form.inspConAndSug" :disabled="type == 2" type="textarea" :rows="3" clearable)
     
       //- 影像维护
     el-card(class='card')
@@ -523,7 +542,9 @@ export default {
         assitChangeSuit: "", //押品价值及变现能力变动情况
         assitOtherSuit: "", //押品其他情况
         summaryForAssit: "", //押品检查小结
-
+        isAdjustLine: 1, //是否建议调整额度
+        adjustLine: "", //额度调整为
+        inspConAndSug: "",
         //
         assitInfoForPledge: [
           {
@@ -601,7 +622,7 @@ export default {
             assitName: "",
             cooperatStatus: "",
             assitFiveClass: "",
-            assitClassification: "1"
+            assitClassification: "2"
           }
         ];
       }

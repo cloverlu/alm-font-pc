@@ -263,9 +263,9 @@ export default {
         // emplCode: this.searchForm.emplCode
         //   ? this.searchForm.emplCode
         //   : sessionStorage.getItem("emplCode"),
-        orgCode: this.searchForm.orgCode
-          ? this.searchForm.orgCode
-          : sessionStorage.getItem("orgCode"),
+        orgName: this.searchForm.orgName
+          ? this.searchForm.orgName
+          : sessionStorage.getItem("orgName"),
         // emplName: this.searchForm.emplName
         //   ? this.searchForm.emplName
         //   : sessionStorage.getItem("emplName"),

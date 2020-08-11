@@ -269,158 +269,122 @@ export default {
       }).then(res => {
         this.currPost1 = res.data.data.currPost;
         if (res.data.returnCode == "200000") {
-          for (var key in res.data.data) {
-            if (res.data.data[key] == null) {
-              res.data.data[key] = "";
-            }
+          if (res.data.data.isAdjustLine == 0) {
+            res.data.data.isAdjustLine = 0;
+          } else {
+            res.data.data.isAdjustLine = 1;
           }
 
-          if (
-            !res.data.data.industrycChangSiut ||
-            res.data.data.industrycChangSiut != 0
-          ) {
-            res.data.data.industrycChangSiut = 1;
-          } else {
+          if (res.data.data.industrycChangSiut == 0) {
             res.data.data.industrycChangSiut = 0;
+          } else {
+            res.data.data.industrycChangSiut = 1;
           }
 
-          if (
-            !res.data.data.hiddenTroubleSitu ||
-            res.data.data.hiddenTroubleSitu != 0
-          ) {
-            res.data.data.hiddenTroubleSitu = 1;
-          } else {
+          if (res.data.data.hiddenTroubleSitu == 0) {
             res.data.data.hiddenTroubleSitu = 0;
+          } else {
+            res.data.data.hiddenTroubleSitu = 1;
           }
 
-          if (
-            !res.data.data.planExpandSitu ||
-            res.data.data.planExpandSitu != 0
-          ) {
-            res.data.data.planExpandSitu = 1;
-          } else {
+          if (res.data.data.planExpandSitu == 0) {
             res.data.data.planExpandSitu = 0;
+          } else {
+            res.data.data.planExpandSitu = 1;
           }
 
           if (!res.data.data.cooperate) {
             res.data.data.cooperate = "1";
           }
 
-          if (
-            !res.data.data.useAmoutByContract ||
-            res.data.data.useAmoutByContract != 0
-          ) {
-            res.data.data.useAmoutByContract = 1;
-          } else {
+          if (res.data.data.useAmoutByContract == 0) {
             res.data.data.useAmoutByContract = 0;
+          } else {
+            res.data.data.useAmoutByContract = 1;
           }
 
-          if (!res.data.data.executeCon || res.data.data.executeCon != 0) {
-            res.data.data.executeCon = 1;
-          } else {
+          if (res.data.data.executeCon == 0) {
             res.data.data.executeCon = 0;
+          } else {
+            res.data.data.executeCon = 1;
           }
 
-          if (
-            !res.data.data.yearlyInspection ||
-            res.data.data.yearlyInspection != 0
-          ) {
-            res.data.data.yearlyInspection = 1;
-          } else {
+          if (res.data.data.yearlyInspection == 0) {
             res.data.data.yearlyInspection = 0;
+          } else {
+            res.data.data.yearlyInspection = 1;
           }
 
-          if (!res.data.data.revalOfColl || res.data.data.revalOfColl != 0) {
-            res.data.data.revalOfColl = 1;
-          } else {
+          if (res.data.data.revalOfColl == 0) {
             res.data.data.revalOfColl = 0;
+          } else {
+            res.data.data.revalOfColl = 1;
           }
 
-          if (
-            !res.data.data.ownerStruSame ||
-            res.data.data.ownerStruSame != 0
-          ) {
-            res.data.data.ownerStruSame = 1;
-          } else {
+          if (res.data.data.ownerStruSame == 0) {
             res.data.data.ownerStruSame = 0;
+          } else {
+            res.data.data.ownerStruSame = 1;
           }
 
-          if (
-            !res.data.data.mainBusIsChanged ||
-            res.data.data.mainBusIsChanged != 0
-          ) {
-            res.data.data.mainBusIsChanged = 1;
-          } else {
+          if (res.data.data.mainBusIsChanged == 0) {
             res.data.data.mainBusIsChanged = 0;
+          } else {
+            res.data.data.mainBusIsChanged = 1;
           }
 
-          if (
-            !res.data.data.proAndOpeAbnormalSuit ||
-            res.data.data.proAndOpeAbnormalSuit != 0
-          ) {
-            res.data.data.proAndOpeAbnormalSuit = 1;
-          } else {
+          if (res.data.data.proAndOpeAbnormalSuit == 0) {
             res.data.data.proAndOpeAbnormalSuit = 0;
+          } else {
+            res.data.data.proAndOpeAbnormalSuit = 1;
           }
 
-          if (
-            !res.data.data.addrIsChanged ||
-            res.data.data.addrIsChanged != 0
-          ) {
-            res.data.data.addrIsChanged = 1;
-          } else {
+          if (res.data.data.addrIsChanged == 0) {
             res.data.data.addrIsChanged = 0;
+          } else {
+            res.data.data.addrIsChanged = 1;
           }
 
-          if (!res.data.data.purchaseCost || res.data.data.purchaseCost != 0) {
-            res.data.data.purchaseCost = 1;
-          } else {
+          if (res.data.data.purchaseCost == 0) {
             res.data.data.purchaseCost = 0;
+          } else {
+            res.data.data.purchaseCost = 1;
           }
 
-          if (!res.data.data.orderDecline || res.data.data.orderDecline != 0) {
-            res.data.data.orderDecline = 1;
-          } else {
+          if (res.data.data.orderDecline == 0) {
             res.data.data.orderDecline = 0;
+          } else {
+            res.data.data.orderDecline = 1;
           }
 
-          if (
-            !res.data.data.saleAbnormalSuit ||
-            res.data.data.saleAbnormalSuit != 0
-          ) {
-            res.data.data.saleAbnormalSuit = 1;
-          } else {
+          if (res.data.data.saleAbnormalSuit == 0) {
             res.data.data.saleAbnormalSuit = 0;
+          } else {
+            res.data.data.saleAbnormalSuit = 1;
           }
 
-          if (!res.data.data.chainChange || res.data.data.chainChange != 0) {
-            res.data.data.chainChange = 1;
-          } else {
+          if (res.data.data.chainChange == 0) {
             res.data.data.chainChange = 0;
+          } else {
+            res.data.data.chainChange = 1;
           }
 
-          if (
-            !res.data.data.dailyCostDecline ||
-            res.data.data.dailyCostDecline != 0
-          ) {
-            res.data.data.dailyCostDecline = 1;
-          } else {
+          if (res.data.data.dailyCostDecline == 0) {
             res.data.data.dailyCostDecline = 0;
+          } else {
+            res.data.data.dailyCostDecline = 1;
           }
 
-          if (!res.data.data.cashDecline || res.data.data.cashDecline != 0) {
-            res.data.data.cashDecline = 1;
-          } else {
+          if (res.data.data.cashDecline == 0) {
             res.data.data.cashDecline = 0;
+          } else {
+            res.data.data.cashDecline = 1;
           }
 
-          if (
-            !res.data.data.cashMatchesAndProAndOpe ||
-            res.data.data.cashMatchesAndProAndOpe != 0
-          ) {
-            res.data.data.cashMatchesAndProAndOpe = 1;
-          } else {
+          if (res.data.data.cashMatchesAndProAndOpe == 0) {
             res.data.data.cashMatchesAndProAndOpe = 0;
+          } else {
+            res.data.data.cashMatchesAndProAndOpe = 1;
           }
 
           if (!res.data.data.assetCreditInfo) {
@@ -444,7 +408,8 @@ export default {
               {
                 assitName: "",
                 CooperatStatus: "",
-                assitFiveClass: ""
+                assitFiveClass: "",
+                assitClassification: "2"
               }
             ];
           }
@@ -461,7 +426,8 @@ export default {
                 LastMortAndpleRate: "",
                 thisEstimateDate: "",
                 thisEstimateValue: "",
-                thisMortAndpleRate: ""
+                thisMortAndpleRate: "",
+                assitClassification: "1"
               }
             ];
           }
@@ -511,6 +477,12 @@ export default {
                 practicableMsg: "" // 还款资金落实情况说明
               }
             ];
+          }
+
+          for (var key in res.data.data) {
+            if (res.data.data[key] == null) {
+              res.data.data[key] = "";
+            }
           }
 
           this.form.bizType = res.data.data.bizType;
@@ -553,158 +525,122 @@ export default {
       }).then(res => {
         this.currPost1 = res.data.data.currPost;
         if (res.data.returnCode == "200000") {
-          for (var key in res.data.data) {
-            if (res.data.data[key] == null) {
-              res.data.data[key] = "";
-            }
+          if (res.data.data.isAdjustLine == 0) {
+            res.data.data.isAdjustLine = 0;
+          } else {
+            res.data.data.isAdjustLine = 1;
           }
 
-          if (
-            !res.data.data.industrycChangSiut ||
-            res.data.data.industrycChangSiut != 0
-          ) {
-            res.data.data.industrycChangSiut = 1;
-          } else {
+          if (res.data.data.industrycChangSiut == 0) {
             res.data.data.industrycChangSiut = 0;
+          } else {
+            res.data.data.industrycChangSiut = 1;
           }
 
-          if (
-            !res.data.data.hiddenTroubleSitu ||
-            res.data.data.hiddenTroubleSitu != 0
-          ) {
-            res.data.data.hiddenTroubleSitu = 1;
-          } else {
+          if (res.data.data.hiddenTroubleSitu == 0) {
             res.data.data.hiddenTroubleSitu = 0;
+          } else {
+            res.data.data.hiddenTroubleSitu = 1;
           }
 
-          if (
-            !res.data.data.planExpandSitu ||
-            res.data.data.planExpandSitu != 0
-          ) {
-            res.data.data.planExpandSitu = 1;
-          } else {
+          if (res.data.data.planExpandSitu == 0) {
             res.data.data.planExpandSitu = 0;
+          } else {
+            res.data.data.planExpandSitu = 1;
           }
 
           if (!res.data.data.cooperate) {
             res.data.data.cooperate = "1";
           }
 
-          if (
-            !res.data.data.useAmoutByContract ||
-            res.data.data.useAmoutByContract != 0
-          ) {
-            res.data.data.useAmoutByContract = 1;
-          } else {
+          if (res.data.data.useAmoutByContract == 0) {
             res.data.data.useAmoutByContract = 0;
+          } else {
+            res.data.data.useAmoutByContract = 1;
           }
 
-          if (!res.data.data.executeCon || res.data.data.executeCon != 0) {
-            res.data.data.executeCon = 1;
-          } else {
+          if (res.data.data.executeCon == 0) {
             res.data.data.executeCon = 0;
+          } else {
+            res.data.data.executeCon = 1;
           }
 
-          if (
-            !res.data.data.yearlyInspection ||
-            res.data.data.yearlyInspection != 0
-          ) {
-            res.data.data.yearlyInspection = 1;
-          } else {
+          if (res.data.data.yearlyInspection == 0) {
             res.data.data.yearlyInspection = 0;
+          } else {
+            res.data.data.yearlyInspection = 1;
           }
 
-          if (!res.data.data.revalOfColl || res.data.data.revalOfColl != 0) {
-            res.data.data.revalOfColl = 1;
-          } else {
+          if (res.data.data.revalOfColl == 0) {
             res.data.data.revalOfColl = 0;
+          } else {
+            res.data.data.revalOfColl = 1;
           }
 
-          if (
-            !res.data.data.ownerStruSame ||
-            res.data.data.ownerStruSame != 0
-          ) {
-            res.data.data.ownerStruSame = 1;
-          } else {
+          if (res.data.data.ownerStruSame == 0) {
             res.data.data.ownerStruSame = 0;
+          } else {
+            res.data.data.ownerStruSame = 1;
           }
 
-          if (
-            !res.data.data.mainBusIsChanged ||
-            res.data.data.mainBusIsChanged != 0
-          ) {
-            res.data.data.mainBusIsChanged = 1;
-          } else {
+          if (res.data.data.mainBusIsChanged == 0) {
             res.data.data.mainBusIsChanged = 0;
+          } else {
+            res.data.data.mainBusIsChanged = 1;
           }
 
-          if (
-            !res.data.data.proAndOpeAbnormalSuit ||
-            res.data.data.proAndOpeAbnormalSuit != 0
-          ) {
-            res.data.data.proAndOpeAbnormalSuit = 1;
-          } else {
+          if (res.data.data.proAndOpeAbnormalSuit == 0) {
             res.data.data.proAndOpeAbnormalSuit = 0;
+          } else {
+            res.data.data.proAndOpeAbnormalSuit = 1;
           }
 
-          if (
-            !res.data.data.addrIsChanged ||
-            res.data.data.addrIsChanged != 0
-          ) {
-            res.data.data.addrIsChanged = 1;
-          } else {
+          if (res.data.data.addrIsChanged == 0) {
             res.data.data.addrIsChanged = 0;
+          } else {
+            res.data.data.addrIsChanged = 1;
           }
 
-          if (!res.data.data.purchaseCost || res.data.data.purchaseCost != 0) {
-            res.data.data.purchaseCost = 1;
-          } else {
+          if (res.data.data.purchaseCost == 0) {
             res.data.data.purchaseCost = 0;
+          } else {
+            res.data.data.purchaseCost = 1;
           }
 
-          if (!res.data.data.orderDecline || res.data.data.orderDecline != 0) {
-            res.data.data.orderDecline = 1;
-          } else {
+          if (res.data.data.orderDecline == 0) {
             res.data.data.orderDecline = 0;
+          } else {
+            res.data.data.orderDecline = 1;
           }
 
-          if (
-            !res.data.data.saleAbnormalSuit ||
-            res.data.data.saleAbnormalSuit != 0
-          ) {
-            res.data.data.saleAbnormalSuit = 1;
-          } else {
+          if (res.data.data.saleAbnormalSuit == 0) {
             res.data.data.saleAbnormalSuit = 0;
+          } else {
+            res.data.data.saleAbnormalSuit = 1;
           }
 
-          if (!res.data.data.chainChange || res.data.data.chainChange != 0) {
-            res.data.data.chainChange = 1;
-          } else {
+          if (res.data.data.chainChange == 0) {
             res.data.data.chainChange = 0;
+          } else {
+            res.data.data.chainChange = 1;
           }
 
-          if (
-            !res.data.data.dailyCostDecline ||
-            res.data.data.dailyCostDecline != 0
-          ) {
-            res.data.data.dailyCostDecline = 1;
-          } else {
+          if (res.data.data.dailyCostDecline == 0) {
             res.data.data.dailyCostDecline = 0;
+          } else {
+            res.data.data.dailyCostDecline = 1;
           }
 
-          if (!res.data.data.cashDecline || res.data.data.cashDecline != 0) {
-            res.data.data.cashDecline = 1;
-          } else {
+          if (res.data.data.cashDecline == 0) {
             res.data.data.cashDecline = 0;
+          } else {
+            res.data.data.cashDecline = 1;
           }
 
-          if (
-            !res.data.data.cashMatchesAndProAndOpe ||
-            res.data.data.cashMatchesAndProAndOpe != 0
-          ) {
-            res.data.data.cashMatchesAndProAndOpe = 1;
-          } else {
+          if (res.data.data.cashMatchesAndProAndOpe == 0) {
             res.data.data.cashMatchesAndProAndOpe = 0;
+          } else {
+            res.data.data.cashMatchesAndProAndOpe = 1;
           }
 
           if (!res.data.data.assetCreditInfo) {
@@ -728,7 +664,8 @@ export default {
               {
                 assitName: "",
                 CooperatStatus: "",
-                assitFiveClass: ""
+                assitFiveClass: "",
+                assitClassification: "2"
               }
             ];
           }
@@ -745,7 +682,8 @@ export default {
                 LastMortAndpleRate: "",
                 thisEstimateDate: "",
                 thisEstimateValue: "",
-                thisMortAndpleRate: ""
+                thisMortAndpleRate: "",
+                assitClassification: "1"
               }
             ];
           }
@@ -794,6 +732,11 @@ export default {
                 practicableMsg: "" // 还款资金落实情况说明
               }
             ];
+          }
+          for (var key in res.data.data) {
+            if (res.data.data[key] == null) {
+              res.data.data[key] = "";
+            }
           }
           this.form.bizType = res.data.data.bizType;
           this.params = res.data.data;
@@ -1278,7 +1221,10 @@ export default {
           if (this.status == 1) {
             getNextEmplName(this, pa).then(ress => {
               this.nextEmplNameList = ress.data.data.nextEmplNameList;
-              if (ress.data.data.nextEmplNameList.length) {
+              if (
+                ress.data.data.nextEmplNameList &&
+                ress.data.data.nextEmplNameList.length
+              ) {
                 this.approval.nextEmplName = this.nextEmplNameList[0];
               }
             });
