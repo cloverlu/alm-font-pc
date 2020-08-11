@@ -77,7 +77,7 @@
                   span {{approval.nextLinkName}}
               el-col(:span="24" v-if="showNextEmplName")
                 el-form-item(label="业务接收人:" class="formItem2")
-                  el-select(v-model="approval.nextEmplName" placeholder="请选择" style='width:100%')
+                  el-select(v-model="approval.nextEmplName" placeholder="请选择" style='width:100%' @change="$forceUpdate()")
                     el-option(v-for="item in nextEmplNameList" :key="item" :label="item" :value="item")
               el-col(:span="24")
                 el-form-item(label="上报时间:" class="formItem2")
@@ -1017,7 +1017,10 @@ export default {
               }
               getNextEmplName(this, pa).then(ress => {
                 this.nextEmplNameList = ress.data.data.nextEmplNameList;
-                if (ress.data.data.nextEmplNameList.length) {
+                if (
+                  ress.data.data.nextEmplNameList &&
+                  ress.data.data.nextEmplNameList.length
+                ) {
                   this.approval.nextEmplName = this.nextEmplNameList[0];
                 }
               });
