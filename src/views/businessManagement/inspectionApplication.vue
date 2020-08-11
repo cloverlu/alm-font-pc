@@ -99,9 +99,10 @@
               el-col(:span="24")
                 el-form-item(label="检查结论及措施建议:" class="formItem2")
                   el-input(v-model="approval.suggest" type="textarea" :rows="2" clearable)
+          el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px;width:80%")
+            el-row
               el-col(:span="24")
                 el-form-item(label="检查人员:" class="formItem2")
-                  //- el-button(class="qianzi" @click="goSign" size='mini' type='primary') 签字
                   img(:src='approval.empSign' v-if='approval.empSign' class='imgContent')
                   img(:src='bg' v-if='!approval.empSign' class='imgContent')
       .footer(v-show='status==1')
