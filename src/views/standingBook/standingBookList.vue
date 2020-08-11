@@ -15,7 +15,6 @@
           :model="searchForm"
           :inline="true"
           label-position="left"
-          label-width="60px"
           size="mini"
           class="demo-form-inline formBox"
         >
@@ -30,7 +29,7 @@
                 <el-input v-model="searchForm.billNo" clearable></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
               <el-form-item label="客户名称" class="formItem5">
                 <el-input v-model="searchForm.custName" clearable></el-input>
               </el-form-item>
@@ -262,18 +261,16 @@ export default {
         .formItem5 {
           display: inline-block;
           width: 100%;
-          // max-width: 280px;
           margin: 0;
-          // padding-right: 10px;
-        }
-        /deep/.el-form-item {
-          margin-bottom: 0;
+          padding-right: 10px;
           /deep/.el-form-item__label {
             font-size: 12px;
           }
           /deep/.el-form-item__content {
-            margin-top: 13px;
-            width: calc(100% - 60px);
+            padding-top: 13px;
+            -webkit-padding-top: 13px;
+            -ms-padding-top: 13px;
+            width: calc(100% - 100px);
           }
         }
         .btn {

@@ -1,5 +1,12 @@
+/*
+ * @Date: 2020-07-02 20:07:27
+ * @Author: sunhua
+ * @Describe:
+ * @LastEditTime: 2020-08-05 14:47:37
+ * @FilePath: \alm-font-pc\vue.config.js
+ */
 const path = require("path");
-const apihost = "http://20.147.168.82:9001";
+const apihost = "http://20.147.168.82:9002";
 // 作为配置文件，直接导出配置对象即可
 module.exports = {
   // 基本路径

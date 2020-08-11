@@ -26,8 +26,8 @@
           el-input(v-model="form.lineAmout" :disabled="type == 2" clearable)
         el-form-item(label=" " class="formItem2" )
           el-input(v-model="form.otherSecurityKindMsg" v-if='securityKindMsgShow' type="textarea" :rows="3" clearable :disabled="type == 2")
-        el-form-item(label="授信余额 :" class="formItem2")
-          el-input(v-model="form.lineBalance" :disabled="type == 2" clearable)
+        el-form-item(label="贷款余额 :" class="formItem2")
+          el-input(v-model="form.loanBalance" disabled clearable)
         el-form-item(label="还款方式 :" class="formItem2")
           el-input(v-model="form.repayKind" clearable :disabled="type == 2")
 
@@ -341,7 +341,7 @@
         el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="征信记录是否有异常变化 :" style="width:96%")
-              el-select(v-model="form.creditInfo.existCreditChage6" :disabled="type == 2" placeholder="请选择" style="width:100%")
+              el-select(v-model="form.creditInfo.existCreditChager6" :disabled="type == 2" placeholder="请选择" style="width:100%")
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
         el-row(:gutter="20")
           el-col(:span="12")
@@ -384,12 +384,26 @@
             el-form-item(label="生产经营是否存在安全隐患 :" style="width:96%")
               el-select(v-model="form.hiddenTroubleSitu" :disabled="type == 2" placeholder="请选择" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
+        el-row(:gutter="20")
+          el-col(:span="12")
+            el-form-item(label="" style="width:96%")
+              el-input(v-model="form.industrycChangSiutMsg" type="textarea" :rows="3" :disabled="type == 2" placeholder="请输入" style="width:100%" clearable)
+          el-col(:span="12")
+            el-form-item(label="" style="width:96%")
+              el-input(v-model="form.hiddenTroubleSituMsg" type="textarea" :rows="3" :disabled="type == 2" placeholder="请输入" style="width:100%" clearable)
+        el-row(:gutter="20")
           el-col(:span="12")
             el-form-item(label="企业是否有与主业无关的扩张计划 :" style="width:96%")
               el-select(v-model="form.planExpandSitu" :disabled="type == 2" placeholder="请选择" style="width:100%" clearable)
                 el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
           el-col(:span="12")
-            el-form-item(label="其他 :" style="width:96%")
+            el-form-item(label="其他 :" style="width:96%;marginTop:20px")
+        el-row(:gutter="20")
+          el-col(:span="12")
+            el-form-item(label="" style="width:96%")
+              el-input(v-model="form.planExpandSituMsg" type="textarea" :rows="3" :disabled="type == 2" placeholder="请输入" style="width:100%" clearable)
+          el-col(:span="12")
+            el-form-item(label="" style="width:96%")
               el-input(v-model="form.otherSitu" :disabled="type == 2" type="textarea" :rows="3" clearable)
         .blueTitle1 担保情况
         el-row(:gutter="20")
@@ -539,7 +553,7 @@ export default {
         securityKind: [], //担保方式
         otherSecurityKindMsg: "", //担保方式说明
         lineAmout: "", //授信金额
-        lineBalance: "", //授信余额
+        loanBalance: "", //贷款余额
         repayKind: "", //还款方式
 
         // card 2
@@ -634,16 +648,18 @@ export default {
         msg: "", //近期负面信息情况
         // 企业财务情况
         financeInfo: {
-          financeClassification: "1",
-
-          // 现场检查其他要点
-          industrycChangSiut: "", //企业所在行业是否发生重大不利变化
-          hiddenTroubleSitu: "", //生产经营是否存在安全隐患
-          planExpandSitu: "", //企业是否有与主业无关的扩张计划
-          otherSitu: "", //其他
-          collEstimateDate: "", //上次抵质押物评估或重估日期
-          collEstimateValue: "" //上次抵质押物评估或重估金额
-        }
+          financeClassification: "1"
+        },
+        // 现场检查其他要点
+        industrycChangSiut: 1, //企业所在行业是否发生重大不利变化
+        industrycChangSiutMsg: "", //
+        hiddenTroubleSitu: 1, //生产经营是否存在安全隐患
+        hiddenTroubleSituMsg: "", //
+        planExpandSitu: 1, //企业是否有与主业无关的扩张计划
+        planExpandSituMsg: "", //
+        otherSitu: "", //其他
+        collEstimateDate: "", //上次抵质押物评估或重估日期
+        collEstimateValue: "" //上次抵质押物评估或重估金额
       },
       type: 1,
       params1: {},
@@ -659,7 +675,9 @@ export default {
   // 侦听器
   watch: {
     detail: function(newVal, oldVal) {
+      console.log(newVal);
       this.form = newVal;
+      this.form.bizType = "m3";
       if (newVal.securityKind.indexOf("5") != -1) {
         this.securityKindMsgShow = true;
       }
@@ -677,17 +695,6 @@ export default {
           existCreditChage5: 1,
           existCreditChager6: 1
         };
-        // this.form.creditInfo.queryDateForPer = "";
-        // this.form.creditInfo.queryDateForCom = "";
-        // this.form.creditInfo.existBadRecord = 1;
-        // this.form.creditInfo.existCreditChage1 = 1;
-        // this.form.creditInfo.existCreditChage2 = 1;
-        // this.form.creditInfo.existCreditChage3 = 1;
-        // this.form.creditInfo.existBadRecordCon = 1;
-        // this.form.creditInfo.existCreditChage4 = 1;
-        // this.form.creditInfo.existBadRecordJur = 1;
-        // this.form.creditInfo.existCreditChage5 = 1;
-        // this.form.creditInfo.existCreditChager6 = 1;
       }
       if (!newVal.securityKind) {
         this.form.securityKind = ["1"];
@@ -697,16 +704,9 @@ export default {
       }
       if (!newVal.financeInfo) {
         this.form.financeInfo = {
-          financeClassification: "1",
-          industrycChangSiut: 1, //企业所在行业是否发生重大不利变化
-          hiddenTroubleSitu: 1, //生产经营是否存在安全隐患
-          planExpandSitu: 1, //企业是否有与主业无关的扩张计划
-          otherSitu: "", //其他
-          collEstimateDate: "", //上次抵质押物评估或重估日期
-          collEstimateValue: "" //上次抵质押物评估或重估金额
+          financeClassification: "1"
         };
       }
-
       this.params = this.matchImage(newVal);
       this.params1 = newVal.financeInfo;
       this.params2 = newVal.financeInfo;

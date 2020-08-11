@@ -7,22 +7,31 @@
 <template>
   <div class="login" v-show="visible">
     <div class="content">
-      <div class="coName">
-        <i class="iconfont iconjiedaixiaofeirenzheng-01 leftIcon"></i>
-        <span>小企业无纸化贷后管理系统</span>
-      </div>
-      <div class="userInfo">
-        <el-input placeholder="请输入您的用户名" v-model="emplCode">
-          <i slot="prepend" class="iconfont iconwode-01"></i>
-        </el-input>
-      </div>
-      <div class="userInfo">
-        <el-input placeholder="请输入您的密码" v-model="password" show-passWord @change="enterLogin">
-          <i slot="prepend" class="iconfont iconmima-01"></i>
-        </el-input>
-      </div>
-      <div class="btn">
-        <el-button type="primary" @click="submit">安全登录</el-button>
+      <div class="position">
+        <div class="left">
+          <div class="imgbox">
+            <img src="../../assets/img/leftIcon.png" alt />
+          </div>
+        </div>
+        <div class="right">
+          <div class="coName">
+            <div class="title">小企业无纸化贷后管理系统</div>
+            <div class="subTitle">Small enterprises paperless after loan management system</div>
+          </div>
+          <div class="userInfo">
+            <el-input placeholder="账号" v-model="emplCode">
+              <i slot="prepend" class="iconfont iconwode-01"></i>
+            </el-input>
+          </div>
+          <div class="userInfo">
+            <el-input placeholder="密码" v-model="password" show-password @change="enterLogin">
+              <i slot="prepend" class="iconfont iconmima-01"></i>
+            </el-input>
+          </div>
+          <div class="btn">
+            <el-button type="info" @click="submit">立即登录</el-button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -64,25 +73,34 @@ export default {
     },
     submit() {
       const params = {
-        emplCode: this.emplCode,
-        password: this.password
+        // emplCode: this.$refs.emplCode.value,
+        // password: this.$refs.password.value
+        emplCode:
+          this.emplCode.replace(/^\s+|\s+$/g, "") ||
+          sessionStorage.getItem("emplCode"),
+        password:
+          this.password.replace(/^\s+|\s+$/g, "") ||
+          sessionStorage.getItem("emplPwd")
       };
       login(this, { ...params }).then(res => {
         if (res.data.returnCode === "200000") {
           const {
             emplCode,
             emplName,
+            emplPwd,
+            emplSign,
             menuList,
             noticeFlag,
             orgCode,
             orgName,
-            postCode
+            postCode,
+            id
           } = res.data.data;
-          // this.$cookies.set("emplCode", emplCode);
-          // this.$cookies.set("emplName", emplName);
-          // this.$cookies.set("menuList", JSON.stringify(menuList));
           sessionStorage.setItem("emplCode", emplCode);
           sessionStorage.setItem("emplName", emplName);
+          sessionStorage.setItem("id", id);
+          sessionStorage.setItem("emplPwd", emplPwd);
+          sessionStorage.setItem("emplSign", emplSign);
           sessionStorage.setItem("noticeFlag", noticeFlag);
           sessionStorage.setItem("orgCode", orgCode);
           sessionStorage.setItem("orgName", orgName);
@@ -120,14 +138,20 @@ export default {
           const {
             emplCode,
             emplName,
+            emplPwd,
+            emplSign,
             menuList,
             noticeFlag,
             orgCode,
             orgName,
-            postCode
+            postCode,
+            id
           } = res.data.data;
           sessionStorage.setItem("emplCode", emplCode);
           sessionStorage.setItem("emplName", emplName);
+          sessionStorage.setItem("id", id);
+          sessionStorage.setItem("emplPwd", emplPwd);
+          sessionStorage.setItem("emplSign", emplSign);
           sessionStorage.setItem("noticeFlag", noticeFlag);
           sessionStorage.setItem("orgCode", orgCode);
           sessionStorage.setItem("orgName", orgName);
@@ -160,7 +184,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/style/global.scss";
 .login {
   width: 100%;
   height: 100%;
@@ -172,66 +195,130 @@ export default {
   position: relative;
   .content {
     position: absolute;
-    width: 563px;
-    height: 400px;
+    box-sizing: border-box;
+    width: 1200px;
+    height: 600px;
     top: 0;
     right: 0;
     left: 0;
     bottom: 0;
     margin: auto;
-    background: linear-gradient(
-      3deg,
-      rgba(10, 52, 135, 1) 0%,
-      rgba(0, 136, 203, 1) 100%
-    );
+    background: rgba(255, 255, 255, 1);
     opacity: 1;
-    border-radius: 10px;
-    .coName {
-      text-align: center;
-      height: 36px;
-      font-size: 36px;
-      line-height: 36px;
-      color: rgba(255, 255, 255, 1);
-      opacity: 1;
-      margin-top: 51px;
-      margin-bottom: 40px;
-      .leftIcon {
-        margin-right: 10px;
+    border-radius: 20px;
+    padding-top: 88px;
+    .position {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      .left {
+        position: absolute;
+        left: 27px;
+        top: 20px;
+        .imgbox {
+          img {
+            vertical-align: middle;
+          }
+        }
+      }
+      .right {
+        position: absolute;
+        left: 600px;
+        top: 0;
+        width: 480px;
+        height: 460px;
+        .coName {
+          height: 98px;
+          .title {
+            display: block;
+            width: 480px;
+            height: 38px;
+            font-size: 38px;
+            text-align: center;
+            font-family: SourceHanSansCN-Medium;
+            line-height: 38px;
+            color: rgba(92, 95, 104, 1);
+            margin-bottom: 10px;
+            opacity: 1;
+          }
+          .subTitle {
+            width: 480px;
+            height: 18px;
+            font-size: 16px;
+            text-align: center;
+            font-family: SourceHanSansCN-Medium;
+            line-height: 18px;
+            color: rgba(92, 95, 104, 1);
+            opacity: 1;
+          }
+        }
+        .userInfo {
+          width: 480px;
+          height: 75px;
+          margin: 0 auto 40px;
+          border: none;
+          border-radius: 5px;
+          background: rgba(244, 244, 248, 1);
+          /deep/.el-input {
+            height: 100%;
+            background: rgba(244, 244, 248, 1);
+            /deep/.el-input-group__prepend {
+              border: none;
+              background: rgba(244, 244, 248, 1);
+            }
+            /deep/.el-input__inner {
+              height: 100%;
+              line-height: 75px;
+              background: rgba(244, 244, 248, 1);
+              border: none;
+              font-size: 24px;
+              color: rgba(158, 158, 166, 1);
+            }
+            .iconwode-01 {
+              color: rgba(158, 158, 171, 1);
+              font-size: 21px;
+            }
+            .iconmima-01 {
+              color: rgba(158, 158, 171, 1);
+              font-size: 21px;
+            }
+          }
+        }
+        .btn {
+          width: 298px;
+          height: 65px;
+          line-height: 65px;
+          margin: 70px auto 0;
+          /deep/.el-button {
+            width: 100%;
+            height: 100%;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 1);
+            background: rgba(88, 90, 98, 1);
+            border-radius: 15px;
+          }
+        }
       }
     }
-    .userInfo {
-      width: 450px;
-      margin: 20px auto 0;
-      border: 1px solid rgba(110, 239, 252, 1);
-      border-radius: 5px;
-      /deep/.el-input-group__prepend {
-        border: none;
-        background-color: #0e6cb0;
-      }
-      /deep/.el-input__inner {
-        background-color: #0e6cb0;
-        border: none;
-        color: rgba(255, 255, 255, 1);
-      }
-      .iconwode-01 {
-        color: rgba(255, 255, 255, 1);
-      }
-      .iconmima-01 {
-        color: rgba(255, 255, 255, 1);
-      }
-    }
-    .btn {
-      width: 450px;
-      height: 50px;
-      line-height: 50px;
-      margin: 70px auto 0;
-      /deep/.el-button {
-        width: 100%;
-        height: 100%;
-        font-size: 28px;
-        color: rgba(255, 255, 255, 1);
-      }
-    }
+  }
+}
+</style>
+
+<style lang="scss">
+.userInfo {
+  .el-input-group__prepend {
+    height: 100%;
+    border: none;
+    background: rgba(244, 244, 248, 1);
+  }
+  .el-input__inner {
+    height: 75px !important;
+    line-height: 75px;
+    background: rgba(244, 244, 248, 1);
+    border: none;
+    font-size: 24px;
+    overflow: hidden;
+    color: rgba(158, 158, 166, 1);
   }
 }
 </style>
