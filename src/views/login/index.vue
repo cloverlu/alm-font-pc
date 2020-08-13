@@ -15,8 +15,8 @@
         </div>
         <div class="right">
           <div class="coName">
-            <div class="title">小企业无纸化贷后管理系统</div>
-            <div class="subTitle">Small enterprises paperless after loan management system</div>
+            <div class="title">小企业贷后现场录入系统</div>
+            <div class="subTitle">Small Enterprises On-Site Entry After Loan System</div>
           </div>
           <div class="userInfo">
             <el-input placeholder="账号" v-model="emplCode">

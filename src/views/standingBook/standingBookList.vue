@@ -48,7 +48,7 @@
                   :on-success="sendSuccess"
                   :on-error="sendError"
                 >
-                  <el-button slot="trigger" size="small" type="primary" @click="submitUpload">导入</el-button>
+                  <el-button slot="trigger" size="mini" type="primary" @click="submitUpload">导入</el-button>
                 </el-upload>
               </div>
             </el-col>
