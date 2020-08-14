@@ -88,7 +88,7 @@ export default {
     menuArr.map(item => {
       if (item.children && item.children.length) {
         item.children.map(i => {
-          if (i.name == "管理岗报告下载") {
+          if (i.name == "客户经理报告下载") {
             this.flag = true;
           }
         });
@@ -163,7 +163,7 @@ export default {
     },
     link2(row) {
       this.$router.push({
-        path: "/processManagement/administrationDownload",
+        path: "/processManagement/managerDownload",
         query: { custName: row.custName }
       });
     }
