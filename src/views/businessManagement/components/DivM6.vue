@@ -342,6 +342,25 @@
               span(class='title') 押品检查小结
             el-form-item(label=" " class="formItem2")
               el-input(v-model="form.summaryForAssit" :disabled="type == 2" type="textarea" :rows="3" clearable)
+      
+      el-card(class='card')
+        .cardTitle1
+          span(class='blue')
+          span(class='title') 检查结论
+        .blueTitle1 检查结论(若有)
+        el-row(:gutter="20")
+          el-col(:span="12")
+            el-form-item(label="是否建议调整额度 :" class="formItem2")
+              el-select(v-model="form.isAdjustLine" :disabled="type == 2" style="width:100%" clearable)
+                el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
+          el-col(:span="12")
+            el-form-item(label="额度调整为 :" class="formItem2")
+              el-input(v-model="form.adjustLine" :disabled="type == 2" style="width:100%" clearable)
+                i(slot="suffix" style="font-style:normal") 万元
+        el-row(:gutter="20")
+          el-col(:span="12")
+            el-form-item(label="检查结论及建议 " class="formItem2")
+              el-input(v-model="form.inspConAndSug" :disabled="type == 2" type="textarea" :rows="3" clearable)
     
       //- 影像维护
     el-card(class='card')
@@ -466,8 +485,8 @@ export default {
         lineBalance: "", //授信余额
         cooperate: "1", // 检查配合程度
         securityKind: "", //担保方式
-        yearlyInspection: "", //额度年检
-        revalOfColl: "", //押品重估
+        yearlyInspection: 1, //额度年检
+        revalOfColl: 1, //押品重估
 
         assetCreditInfo: {
           queryDate: "", //征信报告查询日期
@@ -523,7 +542,9 @@ export default {
         assitChangeSuit: "", //押品价值及变现能力变动情况
         assitOtherSuit: "", //押品其他情况
         summaryForAssit: "", //押品检查小结
-
+        isAdjustLine: 1, //是否建议调整额度
+        adjustLine: "", //额度调整为
+        inspConAndSug: "",
         //
         assitInfoForPledge: [
           {
@@ -573,54 +594,6 @@ export default {
       if (!newVal.cooperate) {
         this.form.cooperate = "1";
       }
-      if (!newVal.yearlyInspection) {
-        this.form.yearlyInspection = 1;
-      }
-      if (!newVal.revalOfColl) {
-        this.form.revalOfColl = 1;
-      }
-      if (!newVal.ownerStruSame) {
-        this.form.ownerStruSame = 1;
-      }
-      if (!newVal.industrycChangSiut) {
-        this.form.industrycChangSiut = 1;
-      }
-      if (!newVal.mainBusIsChanged) {
-        this.form.mainBusIsChanged = 1;
-      }
-      if (!newVal.planExpandSitu) {
-        this.form.planExpandSitu = 1;
-      }
-      if (!newVal.proAndOpeAbnormalSuit) {
-        this.form.proAndOpeAbnormalSuit = 1;
-      }
-      if (!newVal.addrIsChanged) {
-        this.form.addrIsChanged = 1;
-      }
-      if (!newVal.purchaseCost) {
-        this.form.purchaseCost = 1;
-      }
-      if (!newVal.orderDecline) {
-        this.form.orderDecline = 1;
-      }
-      if (!newVal.saleAbnormalSuit) {
-        this.form.saleAbnormalSuit = 1;
-      }
-      if (!newVal.chainChange) {
-        this.form.chainChange = 1;
-      }
-      if (!newVal.dailyCostDecline) {
-        this.form.dailyCostDecline = 1;
-      }
-      if (!newVal.hiddenTroubleSitu) {
-        this.form.hiddenTroubleSitu = 1;
-      }
-      if (!newVal.cashDecline) {
-        this.form.cashDecline = 1;
-      }
-      if (!newVal.cashMatchesAndProAndOpe) {
-        this.form.cashMatchesAndProAndOpe = 1;
-      }
       if (!newVal.assitInfoForPledge || newVal.assitInfoForPledge.length == 0) {
         this.form.assitInfoForPledge = [
           {
@@ -649,7 +622,7 @@ export default {
             assitName: "",
             cooperatStatus: "",
             assitFiveClass: "",
-            assitClassification: "1"
+            assitClassification: "2"
           }
         ];
       }

@@ -233,6 +233,7 @@ export default {
       getTaskList(this, {
         ...filterParams(this.searchForm),
         emplName: sessionStorage.getItem("emplName"),
+        orgName: sessionStorage.getItem("orgName"),
         pageSize: 10,
         pageNo: 1,
         ...this.paramsDetail
@@ -259,27 +260,29 @@ export default {
     download() {
       const arr = this.multipleSelection.map(item => item.bizId);
       const bizIdString = arr.join(",");
-      var a = document.createElement("a");
+      // var a = document.createElement("a");
       const zipName =
         sessionStorage.getItem("emplName") +
         "_" +
         sessionStorage.getItem("emplCode");
       //需要下载的数据内容,我这里放的就是BLOB，如果你有下载链接就不需要了
       var url = `${this.host}/postLoan/model/downZipPdfFile?bizIds=${bizIdString}&zipName=${zipName}`;
-      var filename = "pdfFile.zip";
-      a.href = url;
-      a.download = filename;
-      a.click();
+      window.open(url, "_blank");
+      // var filename = "pdfFile.zip";
+      // a.href = url;
+      // a.download = filename;
+      // a.click();
       window.URL.revokeObjectURL(url);
     },
     // 单个pdf 文件下载
     handleDownload(row) {
       const id = row.bizId;
-      var a = document.createElement("a");
-      //需要下载的数据内容,我这里放的就是BLOB，如果你有下载链接就不需要了
       var url = `${this.host}/postLoan/model/downPdfFile?bizId=${id}`;
-      a.href = url;
-      a.click();
+      window.open(url, "_blank");
+      // var a = document.createElement("a");
+      // //需要下载的数据内容,我这里放的就是BLOB，如果你有下载链接就不需要了
+      // a.href = url;
+      // a.click();
       window.URL.revokeObjectURL(url);
     },
     handleSelectionChange(val) {

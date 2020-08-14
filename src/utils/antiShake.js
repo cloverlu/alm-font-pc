@@ -2,7 +2,7 @@
  * @Date: 2020-07-27 08:47:48
  * @Author: sunhua
  * @Describe:
- * @LastEditTime: 2020-08-03 09:14:14
+ * @LastEditTime: 2020-08-09 14:57:45
  * @FilePath: \alm-font-pc\src\utils\antiShake.js
  */
 

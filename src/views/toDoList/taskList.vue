@@ -186,6 +186,7 @@ export default {
       getTaskList(this, {
         ...filterParams(this.searchForm),
         emplName: sessionStorage.getItem("emplName"),
+        orgName:  sessionStorage.getItem("orgName"),
         pageSize: 10,
         pageNo: 1,
         ...this.paramsDetail

@@ -243,6 +243,9 @@ export default {
     onSubmit() {
       getReportFormList(this, {
         ...filterParams(this.searchForm),
+        orgName: this.searchForm.orgName
+          ? this.searchForm.orgName
+          : sessionStorage.getItem("orgName"),
         pageSize: 10,
         pageNo: 1,
         ...this.paramsDetail

@@ -65,8 +65,9 @@
                 //- el-input(v-model="item.agreeResult" disabled)
 
         el-card(class='card' v-if='status==1')
-          el-button(type="primary" v-antiShake="[() => { onSubmitApproval('0') }, 1000]" v-if="status==1" class='save') 保存
-          el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px")
+          .btnRight
+            el-button(type="primary" size='normal' v-antiShake="[() => { onSubmitApproval('0') }, 1000]" v-show="status==1" class='save') 保存
+          el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px;width:80%")
             el-row
               el-col(:span="24")
                 el-form-item(label="客户名称:" class="formItem2")
@@ -76,40 +77,47 @@
                   span {{approval.nextLinkName}}
               el-col(:span="24" v-if="showNextEmplName")
                 el-form-item(label="业务接收人:" class="formItem2")
-                  el-select(v-model="approval.nextEmplName" placeholder="请选择" style='width:100%')
+                  el-select(v-model="approval.nextEmplName" placeholder="请选择" style='width:100%' @change="$forceUpdate()")
                     el-option(v-for="item in nextEmplNameList" :key="item" :label="item" :value="item")
               el-col(:span="24")
                 el-form-item(label="上报时间:" class="formItem2")
                   span {{this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss")}}
-          components(:is="commpoentName" ref="commpoent" :approveDetail='approval' v-if='approveContent')
-          el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px" v-if='!approveContent')
-            el-form-item(label="是否存在风险预警信号:" class="formItem2")
-              el-select(v-model="approval.existRisk" placeholder="请选择" style='width:100%')
-                el-option(label="是" value="1")
-                el-option(label="否" value="0")
-            el-form-item(label="预警信号说明:" class="formItem2")
-              el-input(v-model="approval.riskMsg" type="textarea" :rows="2" clearable)
-            el-form-item(label="检查结论及措施建议:" class="formItem2")
-              el-input(v-model="approval.suggest" type="textarea" :rows="2" clearable)
-          el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px")
-            el-col(:span="24")
-              el-form-item(label="检查人员:" class="formItem2")
-                //- el-button(class="qianzi" @click="goSign" size='mini' type='primary') 签字
-                img(:src='approval.empSign' v-if='approval.empSign' class='imgContent')
-                img(:src='bg' v-if='!approval.empSign' class='imgContent')
-      .footer(v-if='status==1')
-          el-button(type="warning" v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="status==1 && approvaList.length == 0") 提交审批
-          el-button(type="warning" size='normal' v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-if="status==1 && approvaList.length !== 0") 提交
-          el-button(type="info" v-antiShake="[() => { onSubmitApproval('2') }, 1000]" v-if="status==1 && approvaList.length !== 0") 回退
-          el-button(type="primary" v-antiShake="[() => { onSubmitApproval('3') }, 1000]" v-if="status==1 && approvaList.length !== 0") 退回上一岗位
-    el-dialog(:visible.sync="dialogVisible" :append-to-body="true" width="800px" v-alterELDialogMarginTop="{marginTop:'30vh'}" ref="signArea")
-      .title
-        span 签名:
-      .boardBox(ref="boardBox")
-        canvas(ref="board" style="width:100%;height:100%" @mousedown="pcStart" @mousemove="pcMove" @mouseup="pcEnd" id="board")
-      .canvasBtn
-        el-button(type="primary" @click="saveCanvas") 确认签名
-        el-button(type="default" @click="clearCanvas" ref="clearCanvas") 重置签名
+          components(:is="commpoentName" ref="commpoent" :approveDetail='approval' v-if='!approveContent')
+          el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px;width:80%" v-if='approveContent')
+            el-row
+              el-col(:span="24")
+                el-form-item(label="是否存在风险预警信号:" class="formItem2")
+                  el-select(v-model="approval.existRisk" placeholder="请选择" style='width:100%')
+                    el-option(v-for="item in options" :key="item.value" :label="item.label" :value="item.value")
+              el-col(:span="24")
+                el-form-item(label="发生阶段:" class="formItem2" v-if="form.bizType == 'm4'")
+                  el-select(v-model="approval.riskStage" placeholder="请选择" style='width:100%')
+                    el-option(v-for="item in stageArr" :key="item.value" :label="item.label" :value="item.value")
+              el-col(:span="24")
+                el-form-item(label="预警信号说明:" class="formItem2")
+                  el-input(v-model="approval.riskMsg" type="textarea" :rows="2" clearable)
+              el-col(:span="24")
+                el-form-item(label="检查结论及措施建议:" class="formItem2")
+                  el-input(v-model="approval.suggest" type="textarea" :rows="2" clearable)
+          el-form(label-position="left" label-width="280px" :model="approval" style="marginTop:20px;width:80%")
+            el-row
+              el-col(:span="24")
+                el-form-item(label="检查人员:" class="formItem2")
+                  img(:src='approval.empSign' v-if='approval.empSign' class='imgContent')
+                  img(:src='bg' v-if='!approval.empSign' class='imgContent')
+      .footer(v-show='status==1')
+          el-button(type="warning" v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-show="status==1 && approvaList.length == 0") 提交审批
+          el-button(type="warning" size='normal' v-antiShake="[() => { onSubmitApproval('1') }, 1000]" v-show="status==1 && approvaList.length !== 0") 提交
+          el-button(type="info" v-antiShake="[() => { onSubmitApproval('2') }, 1000]" v-show="status==1 && approvaList.length !== 0") 回退
+          el-button(type="primary" size='normal' v-antiShake="[() => { onSubmitApproval('3') }, 1000]" v-show="status==1 && approvaList.length !== 0") 退回上一岗位
+    //- el-dialog(:visible.sync="dialogVisible" :append-to-body="true" width="800px" v-alterELDialogMarginTop="{marginTop:'30vh'}" ref="signArea")
+    //-   .title
+    //-     span 签名:
+    //-   .boardBox(ref="boardBox")
+    //-     canvas(ref="board" style="width:100%;height:100%" @mousedown="pcStart" @mousemove="pcMove" @mouseup="pcEnd" id="board")
+    //-   .canvasBtn
+    //-     el-button(type="primary" @click="saveCanvas") 确认签名
+    //-     el-button(type="default" @click="clearCanvas" ref="clearCanvas") 重置签名
 </template>
 
 <script>
@@ -173,6 +181,30 @@ export default {
         // card 1
         bizType: "m1" // 检查类型
       },
+      options: [
+        {
+          label: "是",
+          value: 1
+        },
+        {
+          label: "否",
+          value: 0
+        }
+      ],
+      stageArr: [
+        {
+          label: "第一阶段",
+          value: "一"
+        },
+        {
+          label: "第二阶段",
+          value: "二"
+        },
+        {
+          label: "第三阶段",
+          value: "三"
+        }
+      ],
       type: 1,
       bg: bg,
       canChange: 1,
@@ -183,7 +215,8 @@ export default {
         nextLinkName: "", // 业务上报至
         nextEmplName: "", // 业务接收人
         approveTime: dateTime, // 上报时间
-        existRisk: "", // 是否存在风险预警信号
+        existRisk: 1, // 是否存在风险预警信号
+        riskStage: "一", //
         riskMsg: "", // 预警信号说明
         suggest: "", // 检查结论及措施建议
         empSign: "" // 检查人员
@@ -201,7 +234,7 @@ export default {
       params: {},
       signName: "",
       allBtn: false,
-      approveContent: false,
+      approveContent: true,
       submitBtn: true,
       commpoentName: "",
       loanBusiness: {},
@@ -236,11 +269,124 @@ export default {
       }).then(res => {
         this.currPost1 = res.data.data.currPost;
         if (res.data.returnCode == "200000") {
-          for (var key in res.data.data) {
-            if (res.data.data[key] == null) {
-              res.data.data[key] = "";
-            }
+          if (res.data.data.isAdjustLine == 0) {
+            res.data.data.isAdjustLine = 0;
+          } else {
+            res.data.data.isAdjustLine = 1;
           }
+
+          if (res.data.data.industrycChangSiut == 0) {
+            res.data.data.industrycChangSiut = 0;
+          } else {
+            res.data.data.industrycChangSiut = 1;
+          }
+
+          if (res.data.data.hiddenTroubleSitu == 0) {
+            res.data.data.hiddenTroubleSitu = 0;
+          } else {
+            res.data.data.hiddenTroubleSitu = 1;
+          }
+
+          if (res.data.data.planExpandSitu == 0) {
+            res.data.data.planExpandSitu = 0;
+          } else {
+            res.data.data.planExpandSitu = 1;
+          }
+
+          if (!res.data.data.cooperate) {
+            res.data.data.cooperate = "1";
+          }
+
+          if (res.data.data.useAmoutByContract == 0) {
+            res.data.data.useAmoutByContract = 0;
+          } else {
+            res.data.data.useAmoutByContract = 1;
+          }
+
+          if (res.data.data.executeCon == 0) {
+            res.data.data.executeCon = 0;
+          } else {
+            res.data.data.executeCon = 1;
+          }
+
+          if (res.data.data.yearlyInspection == 0) {
+            res.data.data.yearlyInspection = 0;
+          } else {
+            res.data.data.yearlyInspection = 1;
+          }
+
+          if (res.data.data.revalOfColl == 0) {
+            res.data.data.revalOfColl = 0;
+          } else {
+            res.data.data.revalOfColl = 1;
+          }
+
+          if (res.data.data.ownerStruSame == 0) {
+            res.data.data.ownerStruSame = 0;
+          } else {
+            res.data.data.ownerStruSame = 1;
+          }
+
+          if (res.data.data.mainBusIsChanged == 0) {
+            res.data.data.mainBusIsChanged = 0;
+          } else {
+            res.data.data.mainBusIsChanged = 1;
+          }
+
+          if (res.data.data.proAndOpeAbnormalSuit == 0) {
+            res.data.data.proAndOpeAbnormalSuit = 0;
+          } else {
+            res.data.data.proAndOpeAbnormalSuit = 1;
+          }
+
+          if (res.data.data.addrIsChanged == 0) {
+            res.data.data.addrIsChanged = 0;
+          } else {
+            res.data.data.addrIsChanged = 1;
+          }
+
+          if (res.data.data.purchaseCost == 0) {
+            res.data.data.purchaseCost = 0;
+          } else {
+            res.data.data.purchaseCost = 1;
+          }
+
+          if (res.data.data.orderDecline == 0) {
+            res.data.data.orderDecline = 0;
+          } else {
+            res.data.data.orderDecline = 1;
+          }
+
+          if (res.data.data.saleAbnormalSuit == 0) {
+            res.data.data.saleAbnormalSuit = 0;
+          } else {
+            res.data.data.saleAbnormalSuit = 1;
+          }
+
+          if (res.data.data.chainChange == 0) {
+            res.data.data.chainChange = 0;
+          } else {
+            res.data.data.chainChange = 1;
+          }
+
+          if (res.data.data.dailyCostDecline == 0) {
+            res.data.data.dailyCostDecline = 0;
+          } else {
+            res.data.data.dailyCostDecline = 1;
+          }
+
+          if (res.data.data.cashDecline == 0) {
+            res.data.data.cashDecline = 0;
+          } else {
+            res.data.data.cashDecline = 1;
+          }
+
+          if (res.data.data.cashMatchesAndProAndOpe == 0) {
+            res.data.data.cashMatchesAndProAndOpe = 0;
+          } else {
+            res.data.data.cashMatchesAndProAndOpe = 1;
+          }
+
           if (!res.data.data.assetCreditInfo) {
             res.data.data.assetCreditInfo = {
               queryDate: "", //征信报告查询日期
@@ -262,7 +408,8 @@ export default {
               {
                 assitName: "",
                 CooperatStatus: "",
-                assitFiveClass: ""
+                assitFiveClass: "",
+                assitClassification: "2"
               }
             ];
           }
@@ -279,7 +426,8 @@ export default {
                 LastMortAndpleRate: "",
                 thisEstimateDate: "",
                 thisEstimateValue: "",
-                thisMortAndpleRate: ""
+                thisMortAndpleRate: "",
+                assitClassification: "1"
               }
             ];
           }
@@ -304,6 +452,7 @@ export default {
               existCreditChager6: 1
             };
           }
+
           if (!res.data.data.financeInfo) {
             res.data.data.financeInfo = {
               financeClassification: "1",
@@ -328,6 +477,12 @@ export default {
                 practicableMsg: "" // 还款资金落实情况说明
               }
             ];
+          }
+
+          for (var key in res.data.data) {
+            if (res.data.data[key] == null) {
+              res.data.data[key] = "";
+            }
           }
 
           this.form.bizType = res.data.data.bizType;
@@ -370,10 +525,122 @@ export default {
       }).then(res => {
         this.currPost1 = res.data.data.currPost;
         if (res.data.returnCode == "200000") {
-          for (var key in res.data.data) {
-            if (res.data.data[key] == null) {
-              res.data.data[key] = "";
-            }
+          if (res.data.data.isAdjustLine == 0) {
+            res.data.data.isAdjustLine = 0;
+          } else {
+            res.data.data.isAdjustLine = 1;
+          }
+
+          if (res.data.data.industrycChangSiut == 0) {
+            res.data.data.industrycChangSiut = 0;
+          } else {
+            res.data.data.industrycChangSiut = 1;
+          }
+
+          if (res.data.data.hiddenTroubleSitu == 0) {
+            res.data.data.hiddenTroubleSitu = 0;
+          } else {
+            res.data.data.hiddenTroubleSitu = 1;
+          }
+
+          if (res.data.data.planExpandSitu == 0) {
+            res.data.data.planExpandSitu = 0;
+          } else {
+            res.data.data.planExpandSitu = 1;
+          }
+
+          if (!res.data.data.cooperate) {
+            res.data.data.cooperate = "1";
+          }
+
+          if (res.data.data.useAmoutByContract == 0) {
+            res.data.data.useAmoutByContract = 0;
+          } else {
+            res.data.data.useAmoutByContract = 1;
+          }
+
+          if (res.data.data.executeCon == 0) {
+            res.data.data.executeCon = 0;
+          } else {
+            res.data.data.executeCon = 1;
+          }
+
+          if (res.data.data.yearlyInspection == 0) {
+            res.data.data.yearlyInspection = 0;
+          } else {
+            res.data.data.yearlyInspection = 1;
+          }
+
+          if (res.data.data.revalOfColl == 0) {
+            res.data.data.revalOfColl = 0;
+          } else {
+            res.data.data.revalOfColl = 1;
+          }
+
+          if (res.data.data.ownerStruSame == 0) {
+            res.data.data.ownerStruSame = 0;
+          } else {
+            res.data.data.ownerStruSame = 1;
+          }
+
+          if (res.data.data.mainBusIsChanged == 0) {
+            res.data.data.mainBusIsChanged = 0;
+          } else {
+            res.data.data.mainBusIsChanged = 1;
+          }
+
+          if (res.data.data.proAndOpeAbnormalSuit == 0) {
+            res.data.data.proAndOpeAbnormalSuit = 0;
+          } else {
+            res.data.data.proAndOpeAbnormalSuit = 1;
+          }
+
+          if (res.data.data.addrIsChanged == 0) {
+            res.data.data.addrIsChanged = 0;
+          } else {
+            res.data.data.addrIsChanged = 1;
+          }
+
+          if (res.data.data.purchaseCost == 0) {
+            res.data.data.purchaseCost = 0;
+          } else {
+            res.data.data.purchaseCost = 1;
+          }
+
+          if (res.data.data.orderDecline == 0) {
+            res.data.data.orderDecline = 0;
+          } else {
+            res.data.data.orderDecline = 1;
+          }
+
+          if (res.data.data.saleAbnormalSuit == 0) {
+            res.data.data.saleAbnormalSuit = 0;
+          } else {
+            res.data.data.saleAbnormalSuit = 1;
+          }
+
+          if (res.data.data.chainChange == 0) {
+            res.data.data.chainChange = 0;
+          } else {
+            res.data.data.chainChange = 1;
+          }
+
+          if (res.data.data.dailyCostDecline == 0) {
+            res.data.data.dailyCostDecline = 0;
+          } else {
+            res.data.data.dailyCostDecline = 1;
+          }
+
+          if (res.data.data.cashDecline == 0) {
+            res.data.data.cashDecline = 0;
+          } else {
+            res.data.data.cashDecline = 1;
+          }
+
+          if (res.data.data.cashMatchesAndProAndOpe == 0) {
+            res.data.data.cashMatchesAndProAndOpe = 0;
+          } else {
+            res.data.data.cashMatchesAndProAndOpe = 1;
           }
 
           if (!res.data.data.assetCreditInfo) {
@@ -397,7 +664,8 @@ export default {
               {
                 assitName: "",
                 CooperatStatus: "",
-                assitFiveClass: ""
+                assitFiveClass: "",
+                assitClassification: "2"
               }
             ];
           }
@@ -414,7 +682,8 @@ export default {
                 LastMortAndpleRate: "",
                 thisEstimateDate: "",
                 thisEstimateValue: "",
-                thisMortAndpleRate: ""
+                thisMortAndpleRate: "",
+                assitClassification: "1"
               }
             ];
           }
@@ -463,6 +732,11 @@ export default {
                 practicableMsg: "" // 还款资金落实情况说明
               }
             ];
+          }
+          for (var key in res.data.data) {
+            if (res.data.data[key] == null) {
+              res.data.data[key] = "";
+            }
           }
           this.form.bizType = res.data.data.bizType;
           this.params = res.data.data;
@@ -714,15 +988,18 @@ export default {
           const currPost1 = this.currPost1;
           setTimeout(() => {
             approveDetail(this, { bizId: id }).then(res => {
+              this.approvaList = res.data.data.aproveInfo || [];
+              this.routerMatch();
               this.activeName = "second";
+              if (this.approveContent) {
+                res.data.data.existRisk = 1;
+              }
               this.approval = res.data.data;
               if (sessionStorage.getItem("emplSign") !== "null") {
                 this.approval.empSign = sessionStorage.getItem("emplSign");
               }
               this.approval.bizId = id;
-              this.approvaList = res.data.data.aproveInfo || [];
               this.biggerThan500 = res.data.data.biggerThan500;
-              this.routerMatch();
               const { currPost } = this.$route.query;
               let pa;
               if (currPost) {
@@ -740,6 +1017,12 @@ export default {
               }
               getNextEmplName(this, pa).then(ress => {
                 this.nextEmplNameList = ress.data.data.nextEmplNameList;
+                if (
+                  ress.data.data.nextEmplNameList &&
+                  ress.data.data.nextEmplNameList.length
+                ) {
+                  this.approval.nextEmplName = this.nextEmplNameList[0];
+                }
               });
             });
           }, 500);
@@ -751,19 +1034,20 @@ export default {
         }
       });
     },
-    onSubmitApproval(type) {
+    onSubmitApproval(subType) {
       const { currPost } = this.$route.query;
       this.approval.approveTime = this.$moment(new Date()).format(
         "YYYY-MM-DD HH:mm:ss"
       );
-      this.approval.opType = type;
+      this.approval.opType = subType;
       let data;
       if (
         currPost == "220" ||
         currPost == "221" ||
         currPost == "222" ||
         currPost == "320" ||
-        currPost == "321"
+        currPost == "321" ||
+        currPost == "322"
       ) {
         data = {
           ...this.approval,
@@ -784,7 +1068,7 @@ export default {
             message: "操作成功",
             type: "success"
           });
-          if (type != "0") {
+          if (subType != "0") {
             setTimeout(() => {
               history.go(-1);
             }, 500);
@@ -811,14 +1095,18 @@ export default {
         bizType
       } = this.$route.query;
       // console.log(currPost, biggerThan500, belongBranch, bizType);
-      if (currPost) {
+      if (!currPost || currPost == "323" || currPost == "223") {
         this.approveContent = true;
+      } else {
+        this.approveContent = false;
       }
       if (currPost == "320" && biggerThan500 == 0) {
         this.showNextEmplName = false;
       }
-      console.log(this.approvaList);
-      if (currPost == "222" && this.approvaList.length == 3) {
+      if (currPost == "220") {
+        this.showNextEmplName = false;
+      }
+      if (currPost == "222" && this.approvaList.length >= 3) {
         this.showNextEmplName = false;
       }
 
@@ -916,15 +1204,18 @@ export default {
       const { bizId, currPost } = this.$route.query;
       if (this.activeName == "second") {
         approveDetail(this, { bizId }).then(res => {
+          this.approvaList = res.data.data.aproveInfo || [];
+          this.routerMatch();
           this.activeName = "second";
+          if (this.approveContent) {
+            res.data.data.existRisk = 1;
+          }
           this.approval = res.data.data;
-          this.approval.bizId = bizId;
           if (sessionStorage.getItem("emplSign") !== "null") {
             this.approval.empSign = sessionStorage.getItem("emplSign");
           }
-          this.approvaList = res.data.data.aproveInfo || [];
+          this.approval.bizId = bizId;
           this.biggerThan500 = res.data.data.biggerThan500;
-          this.routerMatch();
           const pa = {
             orgName: res.data.data.custOrg,
             currPost,
@@ -933,6 +1224,12 @@ export default {
           if (this.status == 1) {
             getNextEmplName(this, pa).then(ress => {
               this.nextEmplNameList = ress.data.data.nextEmplNameList;
+              if (
+                ress.data.data.nextEmplNameList &&
+                ress.data.data.nextEmplNameList.length
+              ) {
+                this.approval.nextEmplName = this.nextEmplNameList[0];
+              }
             });
           }
         });
@@ -1293,7 +1590,8 @@ export default {
     // }
     .formItem2 {
       box-sizing: border-box;
-      width: 542px;
+      width: 60%;
+      max-width: 542px;
       margin: 10px 0;
       padding-right: 20px;
       /deep/.el-form-item__label {
@@ -1330,10 +1628,24 @@ export default {
       width: 100%;
       margin-bottom: 10px;
       position: relative;
-      .save {
+      .btnRight {
         position: absolute;
-        right: 10%;
+        right: 5%;
+        width: 100px;
+        height: 55px;
+        line-height: 55px;
+        text-align: center;
+
+        .el-button {
+          span {
+            font-size: 16px;
+          }
+        }
       }
+      // .save {
+      //   position: absolute;
+      //   right: 10%;
+      // }
       .cardTitle {
         margin: 0;
         margin-bottom: 10px;
