@@ -35,8 +35,7 @@
             <el-table-column header-align="center" label="借据信息" min-width="25%">
               <template slot-scope="scope">
                 <el-button size="mini" type="primary" @click="link1(scope.row)">用户借据列表</el-button>
-                <el-button size="mini" type="warning" @click="link2(scope.row)">检查记录</el-button>
-                <!-- <span class="linkTo" @click="link(scope.row)">用户借据列表</span> -->
+                <el-button size="mini" type="warning" @click="link2(scope.row)" v-if="flag">检查记录</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -69,6 +68,7 @@ export default {
       pageSize: 10,
       total: 10,
       currentItem: 1,
+      flag: false,
       searchForm: {
         custName: "",
         queryType: "3",
@@ -84,6 +84,16 @@ export default {
   mounted() {
     // 进入页面先调用查询接口
     this.onSubmit();
+    const menuArr = JSON.parse(sessionStorage.getItem("menuList"));
+    menuArr.map(item => {
+      if (item.children && item.children.length) {
+        item.children.map(i => {
+          if (i.name == "管理岗报告下载") {
+            this.flag = true;
+          }
+        });
+      }
+    });
   },
   methods: {
     // 修改分页大小
@@ -152,28 +162,10 @@ export default {
       }
     },
     link2(row) {
-      let flag = false;
-      const menuArr = JSON.parse(sessionStorage.getItem("menuList"));
-      menuArr.map(item => {
-        if (item.children && item.children.length) {
-          item.children.map(i => {
-            if (i.name == "管理岗报告下载") {
-              flag = true;
-            }
-          });
-        }
+      this.$router.push({
+        path: "/processManagement/administrationDownload",
+        query: { custName: row.custName }
       });
-      if (flag) {
-        this.$router.push({
-          path: "/processManagement/administrationDownload",
-          query: { custName: row.custName }
-        });
-      } else {
-        this.$message({
-          message: "当前没有权限",
-          type: "warning"
-        });
-      }
     }
   }
 };
