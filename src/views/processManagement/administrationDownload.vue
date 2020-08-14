@@ -52,6 +52,8 @@
                   v-model="searchForm.queryBeginTime"
                   style="width:100%"
                   type="date"
+                  value-format="yyyy-MM-dd"
+                  format="yyyy-MM-dd"
                   placeholder="选择日期"
                   clearable
                 ></el-date-picker>
@@ -63,6 +65,8 @@
                   v-model="searchForm.queryEndTime"
                   style="width:100%"
                   type="date"
+                  value-format="yyyy-MM-dd"
+                  format="yyyy-MM-dd"
                   placeholder="选择日期"
                   clearable
                 ></el-date-picker>
