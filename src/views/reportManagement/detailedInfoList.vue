@@ -45,7 +45,18 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="机构名称" class="formItem4">
-                <el-input v-model="searchForm.orgName" clearable></el-input>
+                <!-- <el-input v-model="searchForm.orgName" clearable></el-input> -->
+                <el-cascader
+                  v-model="orgName"
+                  placeholder="选择机构"
+                  :options="OrgTree"
+                  :props="{ checkStrictly: true }"
+                  :show-all-levels="false"
+                  filterable
+                  clearable
+                  @change="selcetOrg"
+                  style="width:100%"
+                ></el-cascader>
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -62,8 +73,8 @@
                   <el-option label="小企业授信业务贷后例行检查" value="m2"></el-option>
                   <el-option label="小企业授信业务贷后全面检查" value="m3"></el-option>
                   <el-option label="小企业授信业务还款资金落实情况检查" value="m4"></el-option>
-                  <el-option label="小企业法人快捷贷首次检查" value="m5"></el-option>
-                  <el-option label="小企业法人快捷贷贷后日常检查" value="m6"></el-option>
+                  <!-- <el-option label="小企业法人快捷贷首次检查" value="m5"></el-option>
+                  <el-option label="小企业法人快捷贷贷后日常检查" value="m6"></el-option>-->
                 </el-select>
               </el-form-item>
             </el-col>
@@ -146,8 +157,10 @@
 </template>
 
 <script>
+import _ from "lodash";
 import { filterParams } from "../../utils/utils";
 import { getReportFormList } from "../../api/report";
+import { getOrgTree } from "../../api/customer";
 export default {
   name: "detailedInfoList",
   data() {
@@ -160,10 +173,12 @@ export default {
       currentItem: 1,
       label1: "开始日期",
       label2: "结束日期",
+      OrgTree: [],
+      orgName: [],
       searchForm: {
         beginDate: "",
         endDate: "",
-        orgName: "",
+        queryOrgName: [],
         emplName: "",
         bizType: "",
         bizStatus: "",
@@ -194,13 +209,13 @@ export default {
     }
     this.searchForm.workProgress = workProgress;
     const {
-      orgName,
+      queryOrgName,
       bizType,
       queryBeginTime,
       queryEndTime
     } = this.$route.query;
-    if (orgName && bizType) {
-      this.searchForm.orgName = orgName;
+    if (queryOrgName && bizType) {
+      this.orgName = queryOrgName;
       this.searchForm.bizType = bizType;
     }
     if (queryBeginTime) {
@@ -210,8 +225,24 @@ export default {
       this.searchForm.endDate = queryEndTime;
     }
     this.onSubmit();
+
+    this.getOrgList();
   },
   methods: {
+    // 获取机构
+    getOrgList() {
+      getOrgTree(this, {
+        postCode: sessionStorage.getItem("postCode"),
+        orgName: sessionStorage.getItem("orgName")
+      }).then(res => {
+        if (res.data.returnCode == "200000") {
+          this.OrgTree = res.data.data;
+        }
+      });
+    },
+    selcetOrg() {
+      this.searchForm.queryOrgName = this.orgName;
+    },
     // 修改分页大小
     handleSizeChange: function(e) {
       this.pageSize = e;
@@ -241,11 +272,18 @@ export default {
     },
     // 表单查询
     onSubmit() {
+      const form = _.cloneDeep(this.searchForm);
+      if (this.orgName) {
+        form.queryOrgName = this.orgName;
+      }
+      if (form.queryOrgName instanceof Array && form.queryOrgName.length) {
+        form.queryOrgName = form.queryOrgName.pop();
+      }
+      console.log("flag", form.queryOrgName);
       getReportFormList(this, {
-        ...filterParams(this.searchForm),
-        orgName: this.searchForm.orgName
-          ? this.searchForm.orgName
-          : sessionStorage.getItem("orgName"),
+        ...filterParams(form),
+        orgName: sessionStorage.getItem("orgName"),
+        flag: form.queryOrgName.length ? "true" : "false",
         pageSize: 10,
         pageNo: 1,
         ...this.paramsDetail
@@ -260,7 +298,7 @@ export default {
       this.searchForm = {
         beginDate: "",
         endDate: "",
-        orgName: "",
+        queryOrgName: [],
         emplName: "",
         bizType: "",
         bizStatus: "",
@@ -271,8 +309,14 @@ export default {
     },
     // 下载
     output() {
+      const form = _.cloneDeep(this.searchForm);
+      if (form.queryOrgName) {
+        form.queryOrgName = form.queryOrgName.pop();
+      }
       const queryFormValues = {
-        ...this.searchForm,
+        ...form,
+        orgName: sessionStorage.getItem("orgName"),
+        flag: form.queryOrgName ? "true" : "false",
         pageNo: 1,
         pageSize: this.total
       };
@@ -341,7 +385,15 @@ export default {
           this.label1 = "开始日期";
           this.label2 = "结束日期";
         }
-        this.searchForm.workProgress = workProgress;
+        this.searchForm = {
+          beginDate: "",
+          endDate: "",
+          queryOrgName: [],
+          emplName: "",
+          bizType: "",
+          bizStatus: "",
+          workProgress
+        };
         this.pageNo = 1;
         this.pageSize = 10;
         this.onSubmit();

@@ -18,7 +18,17 @@
           <el-row :gutter="20">
             <el-col :span="6">
               <el-form-item label="机构名称" class="formItem5">
-                <el-input v-model="searchForm.orgName" clearable></el-input>
+                <!-- <el-input v-model="searchForm.orgName" clearable></el-input> -->
+                <el-cascader
+                  v-model="searchForm.queryOrgName"
+                  placeholder="输入机构"
+                  :options="OrgTree"
+                  :props="{ checkStrictly: true }"
+                  :show-all-levels="false"
+                  filterable
+                  clearable
+                  style="width:100%"
+                ></el-cascader>
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -47,9 +57,14 @@
                 ></el-date-picker>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
-              <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
-              <el-button size="mini" @click="onClear">重置</el-button>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="24">
+              <div class="btn">
+                <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
+                <el-button size="mini" @click="onClear">重置</el-button>
+                <el-button type="primary" size="mini" @click="onOutPut">导出</el-button>
+              </div>
             </el-col>
           </el-row>
         </el-form>
@@ -216,7 +231,7 @@
               </el-table-column>
             </el-table-column>
 
-            <el-table-column header-align="center" label="快捷贷首次检查">
+            <!-- <el-table-column header-align="center" label="快捷贷首次检查">
               <el-table-column header-align="center" label="按时完成" min-width="8%">
                 <template slot-scope="scope">
                   <div slot="reference" class="name-wrapper" @click="link(scope.row,'m5','onTime')">
@@ -246,9 +261,9 @@
                   </div>
                 </template>
               </el-table-column>
-            </el-table-column>
+            </el-table-column>-->
 
-            <el-table-column header-align="center" label="快捷贷贷后日常检查">
+            <!-- <el-table-column header-align="center" label="快捷贷贷后日常检查">
               <el-table-column header-align="center" label="按时完成" min-width="8%">
                 <template slot-scope="scope">
                   <div slot="reference" class="name-wrapper" @click="link(scope.row,'m6','onTime')">
@@ -278,7 +293,7 @@
                   </div>
                 </template>
               </el-table-column>
-            </el-table-column>
+            </el-table-column>-->
           </el-table>
         </div>
         <div class="block">
@@ -298,22 +313,26 @@
 </template>
 
 <script>
+import _ from "lodash";
 import { filterParams } from "../../utils/utils";
 import { bizTypesTable } from "../../utils/dataMock";
 import { getReportFormStatistics } from "../../api/report";
+import { getOrgTree } from "../../api/customer";
 export default {
   name: "statisticalInfoList",
   data() {
     const bizTypesTable1 = bizTypesTable;
     return {
+      host: window.config.host.authorization,
       detailedInfoListTable: bizTypesTable1,
       tableData: [],
       pageNo: 1,
       pageSize: 10,
       total: 10,
       currentItem: 1,
+      OrgTree: [],
       searchForm: {
-        orgName: "",
+        queryOrgName: [],
         queryBeginTime: "",
         queryEndTime: ""
       },
@@ -327,8 +346,21 @@ export default {
   mounted() {
     // 进入页面先调用查询接口
     this.onSubmit();
+
+    this.getOrgList();
   },
   methods: {
+    // 获取机构
+    getOrgList() {
+      getOrgTree(this, {
+        postCode: sessionStorage.getItem("postCode"),
+        orgName: sessionStorage.getItem("orgName")
+      }).then(res => {
+        if (res.data.returnCode == "200000") {
+          this.OrgTree = res.data.data;
+        }
+      });
+    },
     // 修改分页大小
     handleSizeChange: function(e) {
       this.pageSize = e;
@@ -358,11 +390,14 @@ export default {
     },
     // 表单查询
     onSubmit: function() {
+      const form = _.cloneDeep(this.searchForm);
+      if (form.queryOrgName) {
+        form.queryOrgName = form.queryOrgName.pop();
+      }
       getReportFormStatistics(this, {
-        ...filterParams(this.searchForm),
-        orgName: this.searchForm.orgName
-          ? this.searchForm.orgName
-          : sessionStorage.getItem("orgName"),
+        ...filterParams(form),
+        orgName: sessionStorage.getItem("orgName"),
+        flag: form.queryOrgName ? "true" : "false",
         pageSize: this.pageSize,
         pageNo: this.pageNo,
         ...this.paramsDetail
@@ -373,12 +408,35 @@ export default {
     },
     onClear() {
       this.searchForm = {
-        orgName: "",
+        queryOrgName: [],
         queryBeginTime: "",
         queryEndTime: ""
       };
       this.pageSize = 10;
       this.pageNo = 1;
+    },
+    onOutPut() {
+      const form = _.cloneDeep(this.searchForm);
+      if (form.queryOrgName) {
+        form.queryOrgName = form.queryOrgName.pop();
+      }
+      const queryFormValues = {
+        ...form,
+        orgName: sessionStorage.getItem("orgName"),
+        flag: form.queryOrgName ? "true" : "false",
+        pageNo: 1,
+        pageSize: this.total
+      };
+      // 调用接口
+      let queryStr = "";
+      Object.keys(queryFormValues).forEach(key => {
+        if (Boolean(queryFormValues[key]) !== false) {
+          queryStr += `&${key}=${queryFormValues[key]}`;
+        }
+      });
+      const url = `${this.host}/postLoan/business/exportReportFormStatistics?${queryStr}`;
+      window.open(url, "_blank");
+      window.URL.revokeObjectURL(url);
     },
     returnBoolean(type) {
       switch (type) {
@@ -394,16 +452,12 @@ export default {
         path: `/reportManagement/detailedInfoList/${workProgress}`,
         query: {
           ...filterParams(this.searchForm),
-          orgName: row.orgName,
+          queryOrgName: row.orgName,
           bizType: type,
           workProgress
         }
       });
     }
-    // link(row, column, cellValue, index) {
-    //   console.log(row, column, cellValue, index);
-    //   return cellValue;
-    // }
   }
 };
 </script>
@@ -433,6 +487,35 @@ export default {
         font-weight: 500;
         color: rgba(102, 102, 102, 1);
         opacity: 1;
+        .btn {
+          display: inline-block;
+          box-sizing: border-box;
+          width: 100%;
+          text-align: right;
+          height: 47px;
+          line-height: 47px;
+          /deep/.el-button {
+            // width: 66px;
+            height: 28px;
+            margin-top: 13px;
+            // min-width: 30px;
+            margin-left: 0;
+            margin-right: 15px;
+            text-align: center;
+            .el-button--primary {
+              background: rgba(78, 120, 222, 1);
+              /deep/span {
+                font-size: 14px;
+                font-family: Segoe UI;
+                font-weight: 400;
+                color: rgba(255, 255, 255, 1);
+                opacity: 1;
+                text-align: center;
+                padding: 0;
+              }
+            }
+          }
+        }
         .formItem5 {
           display: inline-block;
           width: 100%;
@@ -445,27 +528,6 @@ export default {
             -webkit-padding-top: 13px;
             -ms-padding-top: 13px;
             width: calc(100% - 100px);
-          }
-        }
-        /deep/.el-button {
-          width: 66px;
-          height: 28px;
-          margin-top: 13px;
-          min-width: 30px;
-          margin-left: 0;
-          margin-right: 15px;
-          text-align: center;
-          .el-button--primary {
-            background: rgba(78, 120, 222, 1);
-            /deep/span {
-              font-size: 14px;
-              font-family: Segoe UI;
-              font-weight: 400;
-              color: rgba(255, 255, 255, 1);
-              opacity: 1;
-              text-align: center;
-              padding: 0;
-            }
           }
         }
       }

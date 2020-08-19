@@ -21,15 +21,25 @@
           <el-row :gutter="20">
             <el-col :span="8">
               <el-form-item label="机构名称" class="formItem5">
-                <el-input v-model="searchForm.orgName" clearable></el-input>
+                <!-- <el-input v-model="searchForm.queryOrgName" clearable></el-input> -->
+                <el-cascader
+                  v-model="searchForm.queryOrgName"
+                  placeholder="输入机构"
+                  :options="OrgTree"
+                  :props="{ checkStrictly: true }"
+                  :show-all-levels="false"
+                  filterable
+                  clearable
+                  style="width:100%"
+                ></el-cascader>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="6">
               <el-form-item label="借据编号" class="formItem5">
                 <el-input v-model="searchForm.billNo" clearable></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="6">
               <el-form-item label="客户名称" class="formItem5">
                 <el-input v-model="searchForm.custName" clearable></el-input>
               </el-form-item>
@@ -115,8 +125,9 @@
 </template>
 
 <script>
+import _ from "lodash";
 import { filterParams } from "../../utils/utils";
-import { getCustomers } from "../../api/customer";
+import { getCustomers, getOrgTree } from "../../api/customer";
 export default {
   name: "standingBookList",
   data() {
@@ -126,9 +137,10 @@ export default {
       pageNo: 1,
       pageSize: 10,
       total: 10,
+      OrgTree: [],
       searchForm: {
         queryType: "1",
-        orgName: "",
+        queryOrgName: [],
         billNo: "",
         custName: ""
       },
@@ -142,8 +154,22 @@ export default {
   mounted() {
     // 进入页面先调用查询接口
     this.onSubmit();
+    this.getOrgList();
   },
   methods: {
+    // 获取机构
+    getOrgList() {
+      getOrgTree(this, {
+        postCode: sessionStorage.getItem("postCode"),
+        orgName: sessionStorage.getItem("orgName")
+      }).then(res => {
+        if (res.data.returnCode == "200000") {
+          this.OrgTree = res.data.data;
+          console.log(this.OrgTree);
+          console.log(res.data.data);
+        }
+      });
+    },
     // 修改分页大小
     handleSizeChange: function(e) {
       this.pageSize = e;
@@ -173,8 +199,13 @@ export default {
     },
     // 表单查询
     onSubmit: function() {
+      const form = _.cloneDeep(this.searchForm);
+      if (form.queryOrgName) {
+        form.queryOrgName = form.queryOrgName.pop();
+      }
       getCustomers(this, {
-        ...filterParams(this.searchForm),
+        ...filterParams(form),
+        orgName: sessionStorage.getItem("orgName"),
         pageSize: this.pageSize,
         pageNo: this.pageNo,
         ...this.paramsDetail
@@ -186,7 +217,10 @@ export default {
     // 重置
     onClear() {
       this.searchForm = {
-        queryType: "1"
+        queryType: "1",
+        queryOrgName: [],
+        billNo: "",
+        custName: ""
       };
       this.pageNo = 1;
       this.pageSize = 10;

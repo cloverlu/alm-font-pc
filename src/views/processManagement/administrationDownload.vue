@@ -19,7 +19,17 @@
           <el-row :gutter="20">
             <el-col :span="8">
               <el-form-item label="机构名称" class="formItem5">
-                <el-input v-model="searchForm.orgName" clearable></el-input>
+                <!-- <el-input v-model="searchForm.orgName" clearable></el-input> -->
+                <el-cascader
+                  v-model="searchForm.queryOrgName"
+                  placeholder="选择机构"
+                  :options="OrgTree"
+                  :props="{ checkStrictly: true }"
+                  :show-all-levels="false"
+                  filterable
+                  clearable
+                  style="width:100%"
+                ></el-cascader>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -41,8 +51,8 @@
                   <el-option label="小企业授信业务贷后例行检查" value="m2"></el-option>
                   <el-option label="小企业授信业务贷后全面检查" value="m3"></el-option>
                   <el-option label="小企业授信业务还款资金落实情况检查" value="m4"></el-option>
-                  <el-option label="小企业法人快捷贷首次检查" value="m5"></el-option>
-                  <el-option label="小企业法人快捷贷贷后日常检查" value="m6"></el-option>
+                  <!-- <el-option label="小企业法人快捷贷首次检查" value="m5"></el-option>
+                  <el-option label="小企业法人快捷贷贷后日常检查" value="m6"></el-option>-->
                 </el-select>
               </el-form-item>
             </el-col>
@@ -184,9 +194,10 @@
 </template>
 
 <script>
+import _ from "lodash";
 import { filterParams } from "../../utils/utils";
-
 import { getTaskList } from "../../api/processManagement";
+import { getOrgTree } from "../../api/customer";
 export default {
   name: "processManagement",
   data() {
@@ -199,8 +210,9 @@ export default {
       ie: false,
       currentItem: 1,
       flag: true,
+      OrgTree: [],
       searchForm: {
-        orgName: "",
+        queryOrgName: [],
         emplName: "",
         emplCode: "",
         custName: "",
@@ -231,8 +243,20 @@ export default {
       };
     }
     this.onSubmit();
+    this.getOrgList();
   },
   methods: {
+    // 获取机构
+    getOrgList() {
+      getOrgTree(this, {
+        postCode: sessionStorage.getItem("postCode"),
+        orgName: sessionStorage.getItem("orgName")
+      }).then(res => {
+        if (res.data.returnCode == "200000") {
+          this.OrgTree = res.data.data;
+        }
+      });
+    },
     // 修改分页大小
     handleSizeChange: function(e) {
       this.pageSize = e;
@@ -262,17 +286,13 @@ export default {
     },
     // 表单查询
     onSubmit: function() {
+      const form = _.cloneDeep(this.searchForm);
+      if (form.queryOrgName) {
+        form.queryOrgName = form.queryOrgName.pop();
+      }
       getTaskList(this, {
-        ...filterParams(this.searchForm),
-        // emplCode: this.searchForm.emplCode
-        //   ? this.searchForm.emplCode
-        //   : sessionStorage.getItem("emplCode"),
-        orgName: this.searchForm.orgName
-          ? this.searchForm.orgName
-          : sessionStorage.getItem("orgName"),
-        // emplName: this.searchForm.emplName
-        //   ? this.searchForm.emplName
-        //   : sessionStorage.getItem("emplName"),
+        ...filterParams(form),
+        orgName: sessionStorage.getItem("orgName"),
         pageSize: 10,
         pageNo: 1,
         ...this.paramsDetail
@@ -284,7 +304,7 @@ export default {
     //
     onClear() {
       this.searchForm = {
-        orgName: "",
+        queryOrgName: [],
         emplName: "",
         emplCode: "",
         custName: "",

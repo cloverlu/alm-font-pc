@@ -21,7 +21,17 @@
           <el-row :gutter="20">
             <el-col :span="6">
               <el-form-item label="所属机构" class="formItem5">
-                <el-input v-model="searchForm.orgName" clearable></el-input>
+                <!-- <el-input v-model="searchForm.queryOrgName" clearable></el-input> -->
+                <el-cascader
+                  v-model="searchForm.queryOrgName"
+                  placeholder="输入机构"
+                  :options="OrgTree"
+                  :props="{ checkStrictly: true }"
+                  :show-all-levels="false"
+                  filterable
+                  clearable
+                  style="width:100%"
+                ></el-cascader>
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -143,6 +153,7 @@
 </template>
 
 <script>
+import _ from "lodash";
 import { filterParams } from "../../utils/utils";
 import {
   getUsers,
@@ -152,6 +163,7 @@ import {
   updateUser,
   deleteUser
 } from "../../api/users";
+import { getOrgTree } from "../../api/customer";
 export default {
   name: "userList",
   data() {
@@ -164,15 +176,10 @@ export default {
       type: 1,
       dialogFormVisible: false,
       dialogVisible: false,
-      postNameList: [
-        // { showName: "系统管理岗", subCode: "10" },
-        // { showName: "第二经营主责任人岗", subCode: "20" },
-        // { showName: "主管岗", subCode: "21" },
-        // { showName: "贷后管理岗", subCode: "22" },
-        // { showName: "贷后检查岗", subCode: "23" }
-      ],
+      OrgTree: [],
+      postNameList: [],
       searchForm: {
-        orgName: "",
+        queryOrgName: [],
         postCode: [],
         emplName: "",
         emplCode: ""
@@ -191,8 +198,20 @@ export default {
     this.getPostListArr();
     // // 进入页面先调用查询接口
     this.onSubmit();
+    this.getOrgList();
   },
   methods: {
+    // 获取机构
+    getOrgList() {
+      getOrgTree(this, {
+        postCode: sessionStorage.getItem("postCode"),
+        orgName: sessionStorage.getItem("orgName")
+      }).then(res => {
+        if (res.data.returnCode == "200000") {
+          this.OrgTree = res.data.data;
+        }
+      });
+    },
     // 修改分页大小
     handleSizeChange: function(e) {
       this.pageSize = e;
@@ -222,9 +241,14 @@ export default {
     },
     // 表单查询
     onSubmit: function() {
+      const form = _.cloneDeep(this.searchForm);
+      if (form.queryOrgName) {
+        form.queryOrgName = form.queryOrgName.pop();
+      }
       const params = {
-        ...this.searchForm,
+        ...form,
         postCode: this.searchForm.postCode.join(","),
+        orgName: sessionStorage.getItem("orgName"),
         pageSize: 10,
         pageNo: 1
       };
@@ -256,7 +280,10 @@ export default {
     // 重置
     onClear() {
       this.searchForm = {
-        postCode: []
+        queryOrgName: [],
+        postCode: [],
+        emplName: "",
+        emplCode: ""
       };
       this.pageNo = 1;
       this.pageSize = 10;
