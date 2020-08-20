@@ -256,6 +256,7 @@ export default {
       getCustomers(this, {
         ...filterParams(this.searchForm),
         orgName: sessionStorage.getItem("orgName"),
+        postCode: sessionStorage.getItem("postCode"),
         pageSize: 10,
         pageNo: 1,
         ...this.paramsDetail

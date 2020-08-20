@@ -342,6 +342,7 @@ export default {
       getTaskList(this, {
         ...filterParams(this.searchForm),
         orgName: sessionStorage.getItem("orgName"),
+        postCode: sessionStorage.getItem("postCode"),
         pageSize: 10,
         pageNo: 1,
         ...this.paramsDetail
@@ -381,7 +382,11 @@ export default {
         "_" +
         sessionStorage.getItem("emplCode");
       //需要下载的数据内容,我这里放的就是BLOB，如果你有下载链接就不需要了
-      var url = `${this.host}/postLoan/model/downZipPdfFile?bizIds=${bizIdString}&zipName=${zipName}`;
+      var url = `${
+        this.host
+      }/postLoan/model/downZipPdfFile?bizIds=${bizIdString}&zipName=${zipName}&postCode=${sessionStorage.getItem(
+        "postCode"
+      )}`;
       window.open(url, "_blank");
       // var filename = "pdfFile.zip";
       // a.href = url;

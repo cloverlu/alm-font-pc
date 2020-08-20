@@ -329,6 +329,7 @@ export default {
       getReportFormList(this, {
         ...filterParams(this.searchForm),
         orgName: sessionStorage.getItem("orgName"),
+        postCode: sessionStorage.getItem("postCode"),
         pageSize: 10,
         pageNo: 1,
         ...this.paramsDetail
@@ -361,6 +362,7 @@ export default {
       const queryFormValues = {
         ...this.searchForm,
         orgName: sessionStorage.getItem("orgName"),
+        postCode: sessionStorage.getItem("postCode"),
         pageNo: 1,
         pageSize: this.total
       };
@@ -425,7 +427,9 @@ export default {
           this.label1 = "开始日期";
           this.label2 = "结束日期";
         }
-        this.$refs.tree.setCheckedNodes([]);
+        if (this.$refs.tree) {
+          this.$refs.tree.setCheckedNodes([]);
+        }
         this.editArr = [];
         this.treeValue = "";
         this.searchForm = {

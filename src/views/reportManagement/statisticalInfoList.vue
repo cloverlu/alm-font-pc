@@ -457,6 +457,7 @@ export default {
       getReportFormStatistics(this, {
         ...filterParams(this.searchForm),
         orgName: sessionStorage.getItem("orgName"),
+        postCode: sessionStorage.getItem("postCode"),
         pageSize: this.pageSize,
         pageNo: this.pageNo,
         ...this.paramsDetail
@@ -482,6 +483,7 @@ export default {
       const queryFormValues = {
         ...this.searchForm,
         orgName: sessionStorage.getItem("orgName"),
+        postCode: sessionStorage.getItem("postCode"),
         pageNo: 1,
         pageSize: this.total
       };
