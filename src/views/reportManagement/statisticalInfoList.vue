@@ -18,8 +18,8 @@
           <el-row :gutter="20">
             <el-col :span="6">
               <el-form-item label="机构名称" class="formItem5">
-                <!-- <el-input v-model="searchForm.orgName" clearable></el-input> -->
-                <el-cascader
+                <el-input v-model="searchForm.queryOrgName" @focus="selectOrgName" clearable></el-input>
+                <!-- <el-cascader
                   v-model="searchForm.queryOrgName"
                   placeholder="输入机构"
                   :options="OrgTree"
@@ -28,7 +28,15 @@
                   filterable
                   clearable
                   style="width:100%"
-                ></el-cascader>
+                ></el-cascader>-->
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="是否查询下级机构" label-width="auto" class="formItem6">
+                <el-select v-model="searchForm.flag" clearable style="width:100%">
+                  <el-option label="是" value="false"></el-option>
+                  <el-option label="否" value="true"></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -309,11 +317,33 @@
         </div>
       </div>
     </div>
+    <el-dialog
+      class="tanchuang"
+      title="用户机构选择"
+      :visible="dialogFormVisible"
+      width="698px"
+      :append-to-body="true"
+      v-alterELDialogMarginTop="{marginTop:'30vh'}"
+      :before-close="closeDialog"
+    >
+      <el-tree
+        :data="OrgTree"
+        show-checkbox
+        :check-strictly="true"
+        ref="tree"
+        node-key="label"
+        :default-checked-keys="editArr"
+        @check="setSelectedNode"
+      ></el-tree>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="editOk">确 认</el-button>
+        <el-button @click="editCancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import _ from "lodash";
 import { filterParams } from "../../utils/utils";
 import { bizTypesTable } from "../../utils/dataMock";
 import { getReportFormStatistics } from "../../api/report";
@@ -330,9 +360,13 @@ export default {
       pageSize: 10,
       total: 10,
       currentItem: 1,
+      dialogFormVisible: false,
       OrgTree: [],
+      editArr: [],
+      treeValue: "",
       searchForm: {
-        queryOrgName: [],
+        queryOrgName: "",
+        flag: "",
         queryBeginTime: "",
         queryEndTime: ""
       },
@@ -350,6 +384,36 @@ export default {
     this.getOrgList();
   },
   methods: {
+    selectOrgName() {
+      this.dialogFormVisible = true;
+    },
+    editOk() {
+      this.dialogFormVisible = false;
+      this.searchForm.queryOrgName = this.treeValue;
+    },
+    editCancel() {
+      this.dialogFormVisible = false;
+      this.searchForm.queryOrgName = "";
+      this.treeValue = "";
+      this.$refs.tree.setCheckedNodes([]);
+      this.editArr = [];
+    },
+
+    closeDialog(done) {
+      this.$confirm("确认关闭？")
+        .then(_ => {
+          done();
+          this.editCancel();
+        })
+        .catch(_ => {});
+    },
+    setSelectedNode(data) {
+      this.$refs.tree.setCheckedNodes([data]);
+      const node = this.$refs.tree.getCheckedNodes();
+      console.log(node[0].label);
+      this.treeValue = data.label;
+      this.editArr = [node[0].label];
+    },
     // 获取机构
     getOrgList() {
       getOrgTree(this, {
@@ -390,14 +454,9 @@ export default {
     },
     // 表单查询
     onSubmit: function() {
-      const form = _.cloneDeep(this.searchForm);
-      if (form.queryOrgName) {
-        form.queryOrgName = form.queryOrgName.pop();
-      }
       getReportFormStatistics(this, {
-        ...filterParams(form),
+        ...filterParams(this.searchForm),
         orgName: sessionStorage.getItem("orgName"),
-        flag: form.queryOrgName ? "true" : "false",
         pageSize: this.pageSize,
         pageNo: this.pageNo,
         ...this.paramsDetail
@@ -407,8 +466,12 @@ export default {
       });
     },
     onClear() {
+      this.$refs.tree.setCheckedNodes([]);
+      this.editArr = [];
+      this.treeValue = "";
       this.searchForm = {
-        queryOrgName: [],
+        queryOrgName: "",
+        flag: "",
         queryBeginTime: "",
         queryEndTime: ""
       };
@@ -416,14 +479,9 @@ export default {
       this.pageNo = 1;
     },
     onOutPut() {
-      const form = _.cloneDeep(this.searchForm);
-      if (form.queryOrgName) {
-        form.queryOrgName = form.queryOrgName.pop();
-      }
       const queryFormValues = {
-        ...form,
+        ...this.searchForm,
         orgName: sessionStorage.getItem("orgName"),
-        flag: form.queryOrgName ? "true" : "false",
         pageNo: 1,
         pageSize: this.total
       };
@@ -528,6 +586,20 @@ export default {
             -webkit-padding-top: 13px;
             -ms-padding-top: 13px;
             width: calc(100% - 100px);
+          }
+        }
+        .formItem6 {
+          display: inline-block;
+          width: 100%;
+          margin: 0;
+          /deep/.el-form-item__label {
+            font-size: 12px;
+          }
+          /deep/.el-form-item__content {
+            padding-top: 13px;
+            -webkit-padding-top: 13px;
+            -ms-padding-top: 13px;
+            width: calc(100% - 130px);
           }
         }
       }

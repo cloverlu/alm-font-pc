@@ -17,34 +17,32 @@
           class="demo-form-inline formBox"
         >
           <el-row :gutter="20">
-            <el-col :span="8">
+            <el-col :span="6">
               <el-form-item label="机构名称" class="formItem5">
-                <!-- <el-input v-model="searchForm.orgName" clearable></el-input> -->
-                <el-cascader
-                  v-model="searchForm.queryOrgName"
-                  placeholder="选择机构"
-                  :options="OrgTree"
-                  :props="{ checkStrictly: true }"
-                  :show-all-levels="false"
-                  filterable
-                  clearable
-                  style="width:100%"
-                ></el-cascader>
+                <el-input v-model="searchForm.queryOrgName" @focus="selectOrgName" clearable></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="6">
+              <el-form-item label="是否查询下级机构" label-width="auto" class="formItem6">
+                <el-select v-model="searchForm.flag" clearable style="width:100%">
+                  <el-option label="是" value="false"></el-option>
+                  <el-option label="否" value="true"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
               <el-form-item label="客户经理名称" class="formItem5">
                 <el-input v-model="searchForm.emplName" clearable></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="6">
               <el-form-item label="客户经理工号" class="formItem5">
                 <el-input v-model="searchForm.emplCode" clearable></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
-            <el-col :span="8">
+            <el-col :span="6">
               <el-form-item label="检查类型" class="formItem5">
                 <el-select v-model="searchForm.bizType" clearable style="width:100%">
                   <el-option label="小企业授信业务首次跟踪检查" value="m1"></el-option>
@@ -56,7 +54,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="6">
               <el-form-item label="开始日期" class="formItem5">
                 <el-date-picker
                   v-model="searchForm.queryBeginTime"
@@ -69,7 +67,7 @@
                 ></el-date-picker>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="6">
               <el-form-item label="结束日期" class="formItem5">
                 <el-date-picker
                   v-model="searchForm.queryEndTime"
@@ -82,21 +80,19 @@
                 ></el-date-picker>
               </el-form-item>
             </el-col>
-          </el-row>
-
-          <el-row :gutter="20">
-            <el-col :span="8">
+            <el-col :span="6">
               <el-form-item label="客户名称" class="formItem5">
                 <el-input v-model="searchForm.custName" clearable></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-
-          <div class="btn">
-            <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
-            <el-button size="mini" @click="onClear">重置</el-button>
-            <el-button type="primary" size="mini" @click="download" :disabled="flag">下载</el-button>
-          </div>
+          <el-row :gutter="20">
+            <div class="btn">
+              <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
+              <el-button size="mini" @click="onClear">重置</el-button>
+              <el-button type="primary" size="mini" @click="download" :disabled="flag">下载</el-button>
+            </div>
+          </el-row>
         </el-form>
       </div>
       <div class="userTable">
@@ -190,6 +186,29 @@
         </div>
       </div>
     </div>
+    <el-dialog
+      class="tanchuang"
+      title="用户机构选择"
+      :visible="dialogFormVisible"
+      width="698px"
+      :append-to-body="true"
+      v-alterELDialogMarginTop="{marginTop:'30vh'}"
+      :before-close="closeDialog"
+    >
+      <el-tree
+        :data="OrgTree"
+        show-checkbox
+        :check-strictly="true"
+        ref="tree"
+        node-key="label"
+        :default-checked-keys="editArr"
+        @check="setSelectedNode"
+      ></el-tree>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="editOk">确 认</el-button>
+        <el-button @click="editCancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -210,9 +229,13 @@ export default {
       ie: false,
       currentItem: 1,
       flag: true,
+      dialogFormVisible: false,
+      editArr: [],
+      treeValue: "",
       OrgTree: [],
       searchForm: {
-        queryOrgName: [],
+        queryOrgName: "",
+        flag: "",
         emplName: "",
         emplCode: "",
         custName: "",
@@ -246,6 +269,36 @@ export default {
     this.getOrgList();
   },
   methods: {
+    selectOrgName() {
+      this.dialogFormVisible = true;
+    },
+    editOk() {
+      this.dialogFormVisible = false;
+      this.searchForm.queryOrgName = this.treeValue;
+    },
+    editCancel() {
+      this.dialogFormVisible = false;
+      this.searchForm.queryOrgName = "";
+      this.treeValue = "";
+      this.$refs.tree.setCheckedNodes([]);
+      this.editArr = [];
+    },
+
+    closeDialog(done) {
+      this.$confirm("确认关闭？")
+        .then(_ => {
+          done();
+          this.editCancel();
+        })
+        .catch(_ => {});
+    },
+    setSelectedNode(data) {
+      this.$refs.tree.setCheckedNodes([data]);
+      const node = this.$refs.tree.getCheckedNodes();
+      console.log(node[0].label);
+      this.treeValue = data.label;
+      this.editArr = [node[0].label];
+    },
     // 获取机构
     getOrgList() {
       getOrgTree(this, {
@@ -286,12 +339,8 @@ export default {
     },
     // 表单查询
     onSubmit: function() {
-      const form = _.cloneDeep(this.searchForm);
-      if (form.queryOrgName) {
-        form.queryOrgName = form.queryOrgName.pop();
-      }
       getTaskList(this, {
-        ...filterParams(form),
+        ...filterParams(this.searchForm),
         orgName: sessionStorage.getItem("orgName"),
         pageSize: 10,
         pageNo: 1,
@@ -303,8 +352,12 @@ export default {
     },
     //
     onClear() {
+      this.$refs.tree.setCheckedNodes([]);
+      this.editArr = [];
+      this.treeValue = "";
       this.searchForm = {
-        queryOrgName: [],
+        queryOrgName: "",
+        flag: "",
         emplName: "",
         emplCode: "",
         custName: "",
@@ -519,14 +572,26 @@ export default {
             width: calc(100% - 120px);
           }
         }
+        .formItem6 {
+          display: inline-block;
+          width: 100%;
+          margin: 0;
+          /deep/.el-form-item__label {
+            font-size: 12px;
+          }
+          /deep/.el-form-item__content {
+            padding-top: 13px;
+            -webkit-padding-top: 13px;
+            -ms-padding-top: 13px;
+            width: calc(100% - 130px);
+          }
+        }
         .btn {
-          position: absolute;
-          right: 15px;
-          bottom: 0;
           display: inline-block;
           text-align: right;
           box-sizing: border-box;
-          width: 30%;
+          padding-right: 15px;
+          width: 100%;
           height: 47px;
           line-height: 47px;
           /deep/.el-button {
