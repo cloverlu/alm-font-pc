@@ -160,7 +160,12 @@
       :append-to-body="true"
       v-alterELDialogMarginTop="{marginTop:'30vh'}"
       :before-close="closeDialog"
+      center
     >
+      <span>
+        当前机构为
+        <span style="color:red;margin:10px">{{currentPostName}}</span>
+      </span>
       <el-tree
         :data="OrgTree"
         show-checkbox
@@ -195,6 +200,7 @@ export default {
   data() {
     return {
       tableData: [],
+      currentPostName: sessionStorage.getItem("orgName"),
       pageNo: 1,
       pageSize: 10,
       total: 10,
