@@ -506,6 +506,13 @@ export default {
     if (bizStatus === "alreadyDo" || bizStatus === "inReview") {
       this.type = 2;
     }
+    const postCodeArr = sessionStorage.getItem("postCode").split(",");
+    if (postCodeArr.includes("323") || postCodeArr.includes("223")) {
+      this.type = 1;
+    } else {
+      this.type = 2;
+    }
+
     if (bizStatus === "alreadyDo" || this.status == 2) {
       this.allBtn = true;
     }
