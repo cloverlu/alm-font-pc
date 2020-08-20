@@ -1,10 +1,17 @@
+/*
+ * @Date: 2020-08-19 15:20:13
+ * @Author: sunhua
+ * @Describe:
+ * @LastEditTime: 2020-08-20 16:48:37
+ * @FilePath: \alm-font-pc\src\api\users.js
+ */
 // 获取邮储用户信息
 const getUserInfo = ({ $axios }, data) =>
   $axios.get(`/alm/employee/getUserInfo`, { params: data });
 
 //用户列表
 const getUsers = ({ $axios }, data) =>
-  $axios.get(`/alm/employee/getListByParams`, { params: data });
+  $axios.get(`/alm/employee/getListByParamsForPc`, { params: data });
 
 // 增加用户
 const addUser = ({ $axios }, data) => $axios.post(`/alm/employee/save`, data);

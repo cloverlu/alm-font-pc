@@ -15,21 +15,30 @@
           :model="searchForm"
           :inline="true"
           label-position="left"
+          label-width="100px"
           size="mini"
           class="demo-form-inline formBox"
         >
           <el-row :gutter="20">
-            <el-col :span="8">
+            <el-col :span="6">
               <el-form-item label="机构名称" class="formItem5">
-                <el-input v-model="searchForm.orgName" clearable></el-input>
+                <el-input v-model="searchForm.queryOrgName" @focus="selectOrgName" clearable></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="6">
+              <el-form-item label="是否查询下级机构" label-width="120px" class="formItem6">
+                <el-select v-model="searchForm.flag" clearable style="width:100%">
+                  <el-option label="是" value="false"></el-option>
+                  <el-option label="否" value="true"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
               <el-form-item label="借据编号" class="formItem5">
                 <el-input v-model="searchForm.billNo" clearable></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="6">
               <el-form-item label="客户名称" class="formItem5">
                 <el-input v-model="searchForm.custName" clearable></el-input>
               </el-form-item>
@@ -111,24 +120,59 @@
         </div>
       </div>
     </div>
+    <el-dialog
+      class="tanchuang"
+      title="用户机构选择"
+      :visible="dialogORGVisible"
+      width="698px"
+      :append-to-body="true"
+      v-alterELDialogMarginTop="{marginTop:'30vh'}"
+      :before-close="closeDialog"
+      center
+    >
+      <span>
+        当前机构为
+        <span style="color:red;margin:10px">{{currentPostName}}</span>
+      </span>
+      <el-tree
+        :data="OrgTree"
+        show-checkbox
+        :check-strictly="true"
+        ref="tree"
+        node-key="label"
+        :default-checked-keys="editArr"
+        @check="setSelectedNode"
+      ></el-tree>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="editOkORG">确 认</el-button>
+        <el-button @click="editCancelORG">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import _ from "lodash";
 import { filterParams } from "../../utils/utils";
-import { getCustomers } from "../../api/customer";
+import { getCustomers, getOrgTree } from "../../api/customer";
 export default {
   name: "standingBookList",
   data() {
     return {
       host: window.config.host.authorization,
       tableData: [],
+      currentPostName: sessionStorage.getItem("orgName"),
       pageNo: 1,
       pageSize: 10,
       total: 10,
+      dialogORGVisible: false,
+      OrgTree: [],
+      editArr: [],
+      treeValue: "",
       searchForm: {
         queryType: "1",
-        orgName: "",
+        queryOrgName: "",
+        flag: "",
         billNo: "",
         custName: ""
       },
@@ -142,8 +186,51 @@ export default {
   mounted() {
     // 进入页面先调用查询接口
     this.onSubmit();
+    this.getOrgList();
   },
   methods: {
+    selectOrgName() {
+      this.dialogORGVisible = true;
+    },
+    editOkORG() {
+      this.dialogORGVisible = false;
+      this.searchForm.queryOrgName = this.treeValue;
+    },
+    editCancelORG() {
+      this.dialogORGVisible = false;
+      this.searchForm.queryOrgName = "";
+      this.treeValue = "";
+      this.$refs.tree.setCheckedNodes([]);
+      this.editArr = [];
+    },
+    closeDialog(done) {
+      this.$confirm("确认关闭？")
+        .then(_ => {
+          done();
+          this.editCancelORG();
+        })
+        .catch(_ => {});
+    },
+    setSelectedNode(data) {
+      this.$refs.tree.setCheckedNodes([data]);
+      const node = this.$refs.tree.getCheckedNodes();
+      console.log(node[0].label);
+      this.treeValue = data.label;
+      this.editArr = [node[0].label];
+    },
+    // 获取机构
+    getOrgList() {
+      getOrgTree(this, {
+        postCode: sessionStorage.getItem("postCode"),
+        orgName: sessionStorage.getItem("orgName")
+      }).then(res => {
+        if (res.data.returnCode == "200000") {
+          this.OrgTree = res.data.data;
+          console.log(this.OrgTree);
+          console.log(res.data.data);
+        }
+      });
+    },
     // 修改分页大小
     handleSizeChange: function(e) {
       this.pageSize = e;
@@ -175,8 +262,10 @@ export default {
     onSubmit: function() {
       getCustomers(this, {
         ...filterParams(this.searchForm),
-        pageSize: this.pageSize,
-        pageNo: this.pageNo,
+        orgName: sessionStorage.getItem("orgName"),
+        postCode: sessionStorage.getItem("postCode"),
+        pageSize: 10,
+        pageNo: 1,
         ...this.paramsDetail
       }).then(res => {
         this.tableData = res.data.data;
@@ -185,8 +274,15 @@ export default {
     },
     // 重置
     onClear() {
+      this.$refs.tree.setCheckedNodes([]);
+      this.editArr = [];
+      this.treeValue = "";
       this.searchForm = {
-        queryType: "1"
+        queryType: "1",
+        queryOrgName: "",
+        flag: "",
+        billNo: "",
+        custName: ""
       };
       this.pageNo = 1;
       this.pageSize = 10;
@@ -271,6 +367,21 @@ export default {
             -webkit-padding-top: 13px;
             -ms-padding-top: 13px;
             width: calc(100% - 100px);
+          }
+        }
+        .formItem6 {
+          display: inline-block;
+          width: 100%;
+          margin: 0;
+          padding-right: 10px;
+          /deep/.el-form-item__label {
+            font-size: 12px;
+          }
+          /deep/.el-form-item__content {
+            padding-top: 13px;
+            -webkit-padding-top: 13px;
+            -ms-padding-top: 13px;
+            width: calc(100% - 130px);
           }
         }
         .btn {

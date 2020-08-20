@@ -15,13 +15,22 @@
           :model="searchForm"
           :inline="true"
           label-position="left"
+          label-width="100px"
           size="mini"
           class="demo-form-inline formBox"
         >
           <el-row :gutter="20">
             <el-col :span="6">
               <el-form-item label="所属机构" class="formItem5">
-                <el-input v-model="searchForm.orgName" clearable></el-input>
+                <el-input v-model="searchForm.queryOrgName" @focus="selectOrgName" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="是否查询下级机构" label-width="120px" class="formItem6">
+                <el-select v-model="searchForm.flag" clearable style="width:100%">
+                  <el-option label="是" value="false"></el-option>
+                  <el-option label="否" value="true"></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -41,17 +50,21 @@
                 <el-input v-model="searchForm.emplName" clearable></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+          <el-row :gutter="20">
             <el-col :span="6">
               <el-form-item label="用户编码" class="formItem5">
                 <el-input v-model="searchForm.emplCode" clearable></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="18">
+              <div class="btn">
+                <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
+                <el-button size="mini" @click="onClear">重置</el-button>
+                <el-button type="primary" size="mini" @click="() => add()">新增</el-button>
+              </div>
+            </el-col>
           </el-row>
-          <div class="btn">
-            <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
-            <el-button size="mini" @click="onClear">重置</el-button>
-            <el-button type="primary" size="mini" @click="() => add()">新增</el-button>
-          </div>
         </el-form>
       </div>
       <div class="userTable">
@@ -139,10 +152,39 @@
         <el-button @click="deleteCancel()">取 消</el-button>
       </div>
     </el-dialog>
+    <el-dialog
+      class="tanchuang"
+      title="用户机构选择"
+      :visible="dialogORGVisible"
+      width="698px"
+      :append-to-body="true"
+      v-alterELDialogMarginTop="{marginTop:'30vh'}"
+      :before-close="closeDialog"
+      center
+    >
+      <span>
+        当前机构为
+        <span style="color:red;margin:10px">{{currentPostName}}</span>
+      </span>
+      <el-tree
+        :data="OrgTree"
+        show-checkbox
+        :check-strictly="true"
+        ref="tree"
+        node-key="label"
+        :default-checked-keys="editArr"
+        @check="setSelectedNode"
+      ></el-tree>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="editOkORG">确 认</el-button>
+        <el-button @click="editCancelORG">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import _ from "lodash";
 import { filterParams } from "../../utils/utils";
 import {
   getUsers,
@@ -152,11 +194,13 @@ import {
   updateUser,
   deleteUser
 } from "../../api/users";
+import { getOrgTree } from "../../api/customer";
 export default {
   name: "userList",
   data() {
     return {
       tableData: [],
+      currentPostName: sessionStorage.getItem("orgName"),
       pageNo: 1,
       pageSize: 10,
       total: 10,
@@ -164,15 +208,14 @@ export default {
       type: 1,
       dialogFormVisible: false,
       dialogVisible: false,
-      postNameList: [
-        // { showName: "系统管理岗", subCode: "10" },
-        // { showName: "第二经营主责任人岗", subCode: "20" },
-        // { showName: "主管岗", subCode: "21" },
-        // { showName: "贷后管理岗", subCode: "22" },
-        // { showName: "贷后检查岗", subCode: "23" }
-      ],
+      dialogORGVisible: false,
+      OrgTree: [],
+      editArr: [],
+      treeValue: "",
+      postNameList: [],
       searchForm: {
-        orgName: "",
+        queryOrgName: "",
+        flag: "",
         postCode: [],
         emplName: "",
         emplCode: ""
@@ -191,8 +234,49 @@ export default {
     this.getPostListArr();
     // // 进入页面先调用查询接口
     this.onSubmit();
+    this.getOrgList();
   },
   methods: {
+    selectOrgName() {
+      this.dialogORGVisible = true;
+    },
+    editOkORG() {
+      this.dialogORGVisible = false;
+      this.searchForm.queryOrgName = this.treeValue;
+    },
+    editCancelORG() {
+      this.dialogORGVisible = false;
+      this.searchForm.queryOrgName = "";
+      this.treeValue = "";
+      this.$refs.tree.setCheckedNodes([]);
+      this.editArr = [];
+    },
+    closeDialog(done) {
+      this.$confirm("确认关闭？")
+        .then(_ => {
+          done();
+          this.editCancelORG();
+        })
+        .catch(_ => {});
+    },
+    setSelectedNode(data) {
+      this.$refs.tree.setCheckedNodes([data]);
+      const node = this.$refs.tree.getCheckedNodes();
+      console.log(node[0].label);
+      this.treeValue = data.label;
+      this.editArr = [node[0].label];
+    },
+    // 获取机构
+    getOrgList() {
+      getOrgTree(this, {
+        postCode: sessionStorage.getItem("postCode"),
+        orgName: sessionStorage.getItem("orgName")
+      }).then(res => {
+        if (res.data.returnCode == "200000") {
+          this.OrgTree = res.data.data;
+        }
+      });
+    },
     // 修改分页大小
     handleSizeChange: function(e) {
       this.pageSize = e;
@@ -225,6 +309,7 @@ export default {
       const params = {
         ...this.searchForm,
         postCode: this.searchForm.postCode.join(","),
+        orgName: sessionStorage.getItem("orgName"),
         pageSize: 10,
         pageNo: 1
       };
@@ -255,8 +340,15 @@ export default {
     },
     // 重置
     onClear() {
+      this.$refs.tree.setCheckedNodes([]);
+      this.editArr = [];
+      this.treeValue = "";
       this.searchForm = {
-        postCode: []
+        queryOrgName: "",
+        flag: "",
+        postCode: [],
+        emplName: "",
+        emplCode: ""
       };
       this.pageNo = 1;
       this.pageSize = 10;
@@ -443,6 +535,21 @@ export default {
             -webkit-padding-top: 13px;
             -ms-padding-top: 13px;
             width: calc(100% - 100px);
+          }
+        }
+        .formItem6 {
+          display: inline-block;
+          width: 100%;
+          margin: 0;
+          padding-right: 10px;
+          /deep/.el-form-item__label {
+            font-size: 12px;
+          }
+          /deep/.el-form-item__content {
+            padding-top: 13px;
+            -webkit-padding-top: 13px;
+            -ms-padding-top: 13px;
+            width: calc(100% - 130px);
           }
         }
 

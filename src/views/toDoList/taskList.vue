@@ -23,8 +23,8 @@
                   <el-option label="小企业授信业务贷后例行检查" value="m2"></el-option>
                   <el-option label="小企业授信业务贷后全面检查" value="m3"></el-option>
                   <el-option label="小企业授信业务还款资金落实情况检查" value="m4"></el-option>
-                  <el-option label="小企业法人快捷贷首次检查" value="m5"></el-option>
-                  <el-option label="小企业法人快捷贷贷后日常检查" value="m6"></el-option>
+                  <!-- <el-option label="小企业法人快捷贷首次检查" value="m5"></el-option>
+                  <el-option label="小企业法人快捷贷贷后日常检查" value="m6"></el-option>-->
                 </el-select>
               </el-form-item>
             </el-col>
@@ -186,7 +186,7 @@ export default {
       getTaskList(this, {
         ...filterParams(this.searchForm),
         emplName: sessionStorage.getItem("emplName"),
-        orgName:  sessionStorage.getItem("orgName"),
+        orgName: sessionStorage.getItem("orgName"),
         pageSize: 10,
         pageNo: 1,
         ...this.paramsDetail

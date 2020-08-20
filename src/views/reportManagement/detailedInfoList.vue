@@ -45,16 +45,24 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="机构名称" class="formItem4">
-                <el-input v-model="searchForm.orgName" clearable></el-input>
+                <el-input v-model="searchForm.queryOrgName" @focus="selectOrgName" clearable></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="6">
+              <el-form-item label="是否查询下级机构" label-width="120px" class="formItem6">
+                <el-select v-model="searchForm.flag" clearable style="width:100%">
+                  <el-option label="是" value="false"></el-option>
+                  <el-option label="否" value="true"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
             <el-col :span="6">
               <el-form-item label="管户名称" class="formItem4">
                 <el-input v-model="searchForm.emplName" clearable></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row :gutter="20">
             <el-col :span="6">
               <el-form-item label="检查类型" class="formItem4">
                 <el-select v-model="searchForm.bizType" clearable style="width:100%">
@@ -62,8 +70,8 @@
                   <el-option label="小企业授信业务贷后例行检查" value="m2"></el-option>
                   <el-option label="小企业授信业务贷后全面检查" value="m3"></el-option>
                   <el-option label="小企业授信业务还款资金落实情况检查" value="m4"></el-option>
-                  <el-option label="小企业法人快捷贷首次检查" value="m5"></el-option>
-                  <el-option label="小企业法人快捷贷贷后日常检查" value="m6"></el-option>
+                  <!-- <el-option label="小企业法人快捷贷首次检查" value="m5"></el-option>
+                  <el-option label="小企业法人快捷贷贷后日常检查" value="m6"></el-option>-->
                 </el-select>
               </el-form-item>
             </el-col>
@@ -76,7 +84,9 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="12" class="rightBottom">
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="24">
               <div class="btn">
                 <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
                 <el-button size="mini" @click="onClear">重置</el-button>
@@ -142,28 +152,64 @@
         </div>
       </div>
     </div>
+    <el-dialog
+      class="tanchuang"
+      title="用户机构选择"
+      :visible="dialogORGVisible"
+      width="698px"
+      :append-to-body="true"
+      v-alterELDialogMarginTop="{marginTop:'30vh'}"
+      :before-close="closeDialog"
+      center
+    >
+      <span>
+        当前机构为
+        <span style="color:red;margin:10px">{{currentPostName}}</span>
+      </span>
+      <el-tree
+        :data="OrgTree"
+        show-checkbox
+        :check-strictly="true"
+        ref="tree"
+        node-key="label"
+        :default-checked-keys="editArr"
+        @check="setSelectedNode"
+      ></el-tree>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="editOkORG">确 认</el-button>
+        <el-button @click="editCancelORG">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import _ from "lodash";
 import { filterParams } from "../../utils/utils";
 import { getReportFormList } from "../../api/report";
+import { getOrgTree } from "../../api/customer";
 export default {
   name: "detailedInfoList",
   data() {
     return {
       host: window.config.host.authorization,
       tableData: [],
+      currentPostName: sessionStorage.getItem("orgName"),
       pageNo: 1,
       pageSize: 10,
       total: 10,
       currentItem: 1,
       label1: "开始日期",
       label2: "结束日期",
+      OrgTree: [],
+      dialogORGVisible: false,
+      editArr: [],
+      treeValue: "",
       searchForm: {
         beginDate: "",
         endDate: "",
-        orgName: "",
+        queryOrgName: "",
+        flag: "",
         emplName: "",
         bizType: "",
         bizStatus: "",
@@ -194,14 +240,18 @@ export default {
     }
     this.searchForm.workProgress = workProgress;
     const {
-      orgName,
+      queryOrgName,
       bizType,
       queryBeginTime,
-      queryEndTime
+      queryEndTime,
+      flag
     } = this.$route.query;
-    if (orgName && bizType) {
-      this.searchForm.orgName = orgName;
+    if (queryOrgName && bizType) {
+      this.searchForm.queryOrgName = queryOrgName;
       this.searchForm.bizType = bizType;
+    }
+    if (flag) {
+      this.searchForm.flag = flag;
     }
     if (queryBeginTime) {
       this.searchForm.beginDate = queryBeginTime;
@@ -210,8 +260,50 @@ export default {
       this.searchForm.endDate = queryEndTime;
     }
     this.onSubmit();
+
+    this.getOrgList();
   },
   methods: {
+    selectOrgName() {
+      this.dialogORGVisible = true;
+    },
+    editOkORG() {
+      this.dialogORGVisible = false;
+      this.searchForm.queryOrgName = this.treeValue;
+    },
+    editCancelORG() {
+      this.dialogORGVisible = false;
+      this.searchForm.queryOrgName = "";
+      this.treeValue = "";
+      this.$refs.tree.setCheckedNodes([]);
+      this.editArr = [];
+    },
+    closeDialog(done) {
+      this.$confirm("确认关闭？")
+        .then(_ => {
+          done();
+          this.editCancelORG();
+        })
+        .catch(_ => {});
+    },
+    setSelectedNode(data) {
+      this.$refs.tree.setCheckedNodes([data]);
+      const node = this.$refs.tree.getCheckedNodes();
+      console.log(node[0].label);
+      this.treeValue = data.label;
+      this.editArr = [node[0].label];
+    },
+    // 获取机构
+    getOrgList() {
+      getOrgTree(this, {
+        postCode: sessionStorage.getItem("postCode"),
+        orgName: sessionStorage.getItem("orgName")
+      }).then(res => {
+        if (res.data.returnCode == "200000") {
+          this.OrgTree = res.data.data;
+        }
+      });
+    },
     // 修改分页大小
     handleSizeChange: function(e) {
       this.pageSize = e;
@@ -243,9 +335,8 @@ export default {
     onSubmit() {
       getReportFormList(this, {
         ...filterParams(this.searchForm),
-        orgName: this.searchForm.orgName
-          ? this.searchForm.orgName
-          : sessionStorage.getItem("orgName"),
+        orgName: sessionStorage.getItem("orgName"),
+        postCode: sessionStorage.getItem("postCode"),
         pageSize: 10,
         pageNo: 1,
         ...this.paramsDetail
@@ -257,10 +348,14 @@ export default {
     // 重置
     onClear() {
       const { workProgress } = this.$route.params;
+      this.$refs.tree.setCheckedNodes([]);
+      this.editArr = [];
+      this.treeValue = "";
       this.searchForm = {
         beginDate: "",
         endDate: "",
-        orgName: "",
+        queryOrgName: "",
+        flag: "",
         emplName: "",
         bizType: "",
         bizStatus: "",
@@ -273,6 +368,8 @@ export default {
     output() {
       const queryFormValues = {
         ...this.searchForm,
+        orgName: sessionStorage.getItem("orgName"),
+        postCode: sessionStorage.getItem("postCode"),
         pageNo: 1,
         pageSize: this.total
       };
@@ -284,12 +381,8 @@ export default {
         }
       });
       const url = `${this.host}/postLoan/business/exportReportFormList?${queryStr}`;
-      window.location.href = url;
-      // outPutReport(this, {
-      //   ...filterParams(queryFormValues)
-      // }).then(res => {
-      //   console.log(res);
-      // });
+      window.open(url, "_blank");
+      window.URL.revokeObjectURL(url);
     },
     returnType(row) {
       switch (row.bizType) {
@@ -341,7 +434,21 @@ export default {
           this.label1 = "开始日期";
           this.label2 = "结束日期";
         }
-        this.searchForm.workProgress = workProgress;
+        if (this.$refs.tree) {
+          this.$refs.tree.setCheckedNodes([]);
+        }
+        this.editArr = [];
+        this.treeValue = "";
+        this.searchForm = {
+          beginDate: "",
+          endDate: "",
+          queryOrgName: "",
+          flag: "",
+          emplName: "",
+          bizType: "",
+          bizStatus: "",
+          workProgress
+        };
         this.pageNo = 1;
         this.pageSize = 10;
         this.onSubmit();
@@ -363,7 +470,7 @@ export default {
     width: 100%;
     .userForm {
       box-sizing: border-box;
-      height: 100px;
+      height: 150px;
       width: 100%;
       .formBox {
         box-sizing: border-box;
@@ -378,11 +485,6 @@ export default {
         font-weight: 500;
         color: rgba(102, 102, 102, 1);
         opacity: 1;
-        .rightBottom {
-          position: absolute;
-          right: 0;
-          bottom: 0;
-        }
         .formItem4 {
           display: inline-block;
           width: 100%;
@@ -397,13 +499,28 @@ export default {
             width: calc(100% - 100px);
           }
         }
+        .formItem6 {
+          display: inline-block;
+          width: 100%;
+          margin: 0;
+          padding-right: 10px;
+          /deep/.el-form-item__label {
+            font-size: 12px;
+          }
+          /deep/.el-form-item__content {
+            padding-top: 13px;
+            -webkit-padding-top: 13px;
+            -ms-padding-top: 13px;
+            width: calc(100% - 130px);
+          }
+        }
         .btn {
           display: inline-block;
           box-sizing: border-box;
           width: 100%;
           text-align: right;
-          height: 100%;
-          line-height: 50px;
+          height: 47px;
+          line-height: 47px;
           // padding-left: 20px;
           /deep/.el-button {
             width: 66px;
@@ -434,7 +551,7 @@ export default {
     }
     .userTable {
       box-sizing: border-box;
-      min-height: calc(100% - 53px);
+      min-height: calc(100% - 150px);
       width: 100%;
       padding: 10px 14px;
       .tableBox {

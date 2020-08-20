@@ -19,8 +19,8 @@
               el-option(label="小企业授信业务贷后例行检查" value="m2")
               el-option(label="小企业授信业务贷后全面检查" value="m3")
               el-option(label="小企业授信业务还款资金落实情况检查" value="m4")
-              el-option(label="小企业法人快捷贷首次检查" value="m5")
-              el-option(label="小企业法人快捷贷贷后日常检查" value="m6")
+              //- el-option(label="小企业法人快捷贷首次检查" value="m5")
+              //- el-option(label="小企业法人快捷贷贷后日常检查" value="m6")
           el-button(type="primary" size="mini" v-antiShake="[() => { onSave() }, 1000]" class="btn" v-if='status==1 && type==1') 保存
       .contentBody
         .type(v-show="form.bizType == 'm1'")
@@ -506,6 +506,13 @@ export default {
     if (bizStatus === "alreadyDo" || bizStatus === "inReview") {
       this.type = 2;
     }
+    const postCodeArr = sessionStorage.getItem("postCode").split(",");
+    if (postCodeArr.includes("323") || postCodeArr.includes("223")) {
+      this.type = 1;
+    } else {
+      this.type = 2;
+    }
+
     if (bizStatus === "alreadyDo" || this.status == 2) {
       this.allBtn = true;
     }

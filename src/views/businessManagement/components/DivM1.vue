@@ -103,9 +103,8 @@ export default {
     const definte17 = () => {
       const definite17Array = [];
       const valueArray = [
-        "《小企业授信业务额度借款支用单》",
+        "《小企业授信业务额度借款支用单》或《用款申请》",
         "《小企业贷款受托支付申请书》或自主支付清单",
-        "《小企业贷款受托支付申请书》",
         "汇款凭证",
         "账户流水",
         "受托支付合同",
@@ -258,7 +257,7 @@ export default {
       var forBizDetail = data;
       var obj2 = {};
       //  this.mVmodel(num)的num参数为各个类型所需字段的个数
-      obj2 = this.mVmodel(12);
+      obj2 = this.mVmodel(11);
       Object.keys(obj2).forEach(key => {
         if (forBizDetail) {
           obj2[key] = forBizDetail[key];
