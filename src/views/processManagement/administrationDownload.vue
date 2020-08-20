@@ -23,7 +23,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="是否查询下级机构" label-width="auto" class="formItem6">
+              <el-form-item label="是否查询下级机构" label-width="120px" class="formItem6">
                 <el-select v-model="searchForm.flag" clearable style="width:100%">
                   <el-option label="是" value="false"></el-option>
                   <el-option label="否" value="true"></el-option>
